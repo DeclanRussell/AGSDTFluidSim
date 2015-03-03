@@ -14,7 +14,6 @@
 #include <QEvent>
 #include <QResizeEvent>
 #include <QMessageBox>
-#include <Camera.h>
 #include <ngl/Mat4.h>
 #include <ngl/Camera.h>
 

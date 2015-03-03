@@ -8,6 +8,8 @@
 #include <ngl/Random.h>
 #include <ngl/VertexArrayObject.h>
 
+#include <cuda_runtime.h>
+#include "hellocuda.h"
 
 
 
@@ -57,48 +59,6 @@ void OpenGLWidget::initializeGL(){
 
     // Initialise the model matrix
     m_modelMatrix = ngl::Mat4(1.0);
-    ngl::ShaderLib *shader=ngl::ShaderLib::instance();
-    //first lets add out deformation shader to our program
-    //create the program
-    shader->createShaderProgram("DeformationShader");
-    //add our shaders
-    shader->attachShader("DeformationVert",ngl::VERTEX);
-    shader->attachShader("DeformationGeom",ngl::GEOMETRY);
-    shader->attachShader("DeformationFrag",ngl::FRAGMENT);
-    //load the source
-    shader->loadShaderSource("DeformationVert","shaders/DeformationVert.glsl");
-    shader->loadShaderSource("DeformationGeom","shaders/DeformationGeom.glsl");
-    shader->loadShaderSource("DeformationFrag","shaders/DeformationFrag.glsl");
-    //compile them
-    shader->compileShader("DeformationVert");
-    shader->compileShader("DeformationGeom");
-    shader->compileShader("DeformationFrag");
-    //attach them to our program
-    shader->attachShaderToProgram("DeformationShader","DeformationVert");
-    shader->attachShaderToProgram("DeformationShader","DeformationGeom");
-    shader->attachShaderToProgram("DeformationShader","DeformationFrag");
-    //link our shader to opengl
-    shader->linkProgramObject("DeformationShader");
-    //set our shader uniforms
-    (*shader)["DeformationShader"]->use();
-    shader->setShaderParam3f("light.position",-1,-1,-1);
-    shader->setShaderParam3f("light.intensity",0.8,0.8,0.8);
-    shader->setShaderParam3f("Kd",0.5, 0.5, 0.5);
-    shader->setShaderParam3f("Ka",0.5, 0.5, 0.5);
-    shader->setShaderParam3f("Ks",1.0,1.0,1.0);
-    shader->setShaderParam1f("shininess",100.0);
-
-
-    (*shader)["nglDiffuseShader"]->use();
-    shader->setShaderParam4f("Colour",1,1,0,1);
-    shader->setShaderParam3f("lightPos",1,1,1);
-    shader->setShaderParam4f("lightDiffuse",1,1,1,1);
-
-    //create our sphere primative VAO
-    ngl::VAOPrimitives *prim=ngl::VAOPrimitives::instance();
-    prim->createSphere("sphere",0.1,10);
-
-
 
     // Initialize the camera
     // Now we will create a basic Camera from the graphics library
@@ -111,6 +71,41 @@ void OpenGLWidget::initializeGL(){
     // set the shape using FOV 45 Aspect Ratio based on Width and Height
     // The final two are near and far clipping planes of 0.5 and 10
     m_cam->setShape(45,(float)width()/height(),0.5,150);
+
+    //Lets test some cuda stuff
+
+    int count;
+    if (cudaGetDeviceCount(&count))
+        return;
+    std::cout << "Found" << count << "CUDA device(s)" << std::endl;
+    for (int i=0; i < count; i++) {
+
+        cudaDeviceProp prop;
+        cudaGetDeviceProperties(&prop, i);
+        QString deviceString = QString("* %1, Compute capability: %2.%3").arg(prop.name).arg(prop.major).arg(prop.minor);
+        QString propString1 = QString("  Global mem: %1M, Shared mem per block: %2k, Registers per block: %3").arg(prop.totalGlobalMem / 1024 / 1024)
+                .arg(prop.sharedMemPerBlock / 1024).arg(prop.regsPerBlock);
+        QString propString2 = QString("  Warp size: %1 threads, Max threads per block: %2, Multiprocessor count: %3")
+                .arg(prop.warpSize).arg(prop.maxThreadsPerBlock).arg(prop.multiProcessorCount);
+        std::cout << deviceString.toStdString() << std::endl;
+        std::cout << propString1.toStdString() << std::endl;
+        std::cout << propString2.toStdString() << std::endl;
+    }
+
+    //some more tests with cuda
+    float* gpuFloatArray;
+    cudaMalloc(&gpuFloatArray, 128 * sizeof(float));
+
+    fillGpuArray(gpuFloatArray, 128);
+
+    float floats[128];
+    cudaMemcpy(floats, gpuFloatArray, 128 * sizeof(float), cudaMemcpyDeviceToHost);
+
+    for (int i=0; i < 128; i++)
+        std::cout<<floats[i]<<std::endl;
+
+    cudaFree(gpuFloatArray);
+
     startTimer(0);
 
 }

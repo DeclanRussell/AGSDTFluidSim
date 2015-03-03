@@ -21,7 +21,12 @@ SOURCES += \
 HEADERS += \
     include/mainwindow.h \
     include/OpenGLWidget.h \
-    include/ui_mainwindow.h
+    include/ui_mainwindow.h \
+    include/hellocuda.h
+
+FORMS += \
+    ui/mainwindow.ui
+
 
 INCLUDEPATH +=./include /opt/local/include $$(HOME)/NGL/include/
 LIBS += -L/opt/local/lib -lGLEW
@@ -52,8 +57,47 @@ DEPENDPATH+=include
 # if we are on a mac define DARWIN
 macx:DEFINES += DARWIN
 
+#----------------------------------------------------------------
+#-------------------------Cuda setup-----------------------------
+#----------------------------------------------------------------
 
-FORMS += \
-    ui/mainwindow.ui
+#set out cuda sources
+CUDA_SOURCES += cudaSrc/hellocuda.cu
 
-OTHER_FILES +=
+# Path to cuda SDK install
+macx:CUDA_DIR = /Developer/NVIDIA/CUDA-6.5
+linux:CUDA_DIR = /usr/local/cuda-6.5
+# Path to cuda toolkit install
+macx:CUDA_SDK = /Developer/NVIDIA/CUDA-6.5/samples
+linux:CUDA_SDK = /usr/local/cuda-6.5/samples
+
+#Cuda include paths
+INCLUDEPATH += $$CUDA_DIR/include
+INCLUDEPATH += $$CUDA_DIR/common/inc/
+INCLUDEPATH += $$CUDA_DIR/../shared/inc/
+
+
+#cuda libs
+macx:QMAKE_LIBDIR += $$CUDA_DIR/lib
+linux:QMAKE_LIBDIR += $$CUDA_DIR/lib64
+QMAKE_LIBDIR += $$CUDA_SDK/common/lib
+LIBS += -lcudart
+
+# join the includes in a line
+CUDA_INC = $$join(INCLUDEPATH,' -I','-I',' ')
+
+# nvcc flags (ptxas option verbose is always useful)
+NVCCFLAGS = --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v
+
+# Prepare the extra compiler configuration
+cuda.input = CUDA_SOURCES
+cuda.output = ${OBJECTS_DIR}${QMAKE_FILE_BASE}_cuda.o
+
+# Tweak arch according to your hw's compute capability
+cuda.commands = $$CUDA_DIR/bin/nvcc -m64 -g -G -gencode arch=compute_52,code=sm_52 -gencode arch=compute_30,code=sm_30 -c $$NVCCFLAGS $$CUDA_INC $$LIBS  ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
+
+cuda.dependency_type = TYPE_C
+cuda.depend_command = $$CUDA_DIR/bin/nvcc -g -G -M $$CUDA_INC $$NVCCFLAGS   ${QMAKE_FILE_NAME}
+# Tell Qt that we want add more stuff to the Makefile
+QMAKE_EXTRA_UNIX_COMPILERS += cuda
+
