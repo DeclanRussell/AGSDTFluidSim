@@ -22,7 +22,7 @@ HEADERS += \
     include/mainwindow.h \
     include/OpenGLWidget.h \
     include/ui_mainwindow.h \
-    include/hellocuda.h
+    include/CudaSPHKernals.h
 
 FORMS += \
     ui/mainwindow.ui
@@ -64,7 +64,7 @@ macx:DEFINES += DARWIN
 #----------------------------------------------------------------
 
 #set out cuda sources
-CUDA_SOURCES += cudaSrc/hellocuda.cu
+CUDA_SOURCES += cudaSrc/*.cu
 
 # Path to cuda SDK install
 macx:CUDA_DIR = /Developer/NVIDIA/CUDA-6.5

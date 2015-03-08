@@ -15,7 +15,7 @@
 #include <assimp/postprocess.h>
 #include <assimp/Importer.hpp>
 
-#include "hellocuda.h"
+#include "CudaSPHKernals.h"
 
 
 
@@ -38,6 +38,9 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     m_spinXFace=0;
     m_spinYFace=0;
     m_modelPos=ngl::Vec3(0.0);
+    //set our defualt number of particles
+    m_numParticles = 3000000;
+    m_hashTableSize = nextPrimeNum(m_numParticles);
     // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
     this->resize(_parent->size());
 }
@@ -48,6 +51,7 @@ OpenGLWidget::~OpenGLWidget(){
     Init->NGLQuit();
     // Make sure we remember to unregister our cuda resource
     cudaGraphicsUnregisterResource(m_cudaBufferPtr);
+    cudaFree(m_dhashKeys);
     glDeleteBuffers(1,&m_VBO);
     glDeleteVertexArrays(1,&m_VAO);
 }
@@ -125,7 +129,7 @@ void OpenGLWidget::initializeGL(){
     ngl::Random *rnd = ngl::Random::instance();
     ngl::Vec3 tempPoint;
     float3 tempF3;
-    for(int i=0; i<300000000; i++){
+    for(int i=0; i<m_numParticles; i++){
         tempPoint = rnd->getRandomPoint(20,20,20);
         tempF3.x = tempPoint.m_x;
         tempF3.y = tempPoint.m_y;
@@ -161,6 +165,9 @@ void OpenGLWidget::initializeGL(){
     //set our point size
     glPointSize(10);
 
+    //allocate space for our hash table
+    cudaMalloc(&m_dhashKeys, m_numParticles*sizeof(unsigned int));
+
 
     //Lets test some cuda stuff
     int count;
@@ -189,7 +196,6 @@ void OpenGLWidget::initializeGL(){
 
     m_currentTime = m_currentTime.currentTime();
     startTimer(0);
-
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::resizeGL(const int _w, const int _h){
@@ -210,14 +216,44 @@ void OpenGLWidget::updateParticles(){
     size_t d_posSize;
     cudaGraphicsMapResources(1,&m_cudaBufferPtr,0);
     cudaGraphicsResourceGetMappedPointer((void**)&d_posPtr,&d_posSize,m_cudaBufferPtr);
+    //calculate our hash keys
+    createHashTable(m_dhashKeys,d_posPtr,m_numParticles, 1, m_hashTableSize, m_numThreadsPerBlock);
 
-    calcPositions(d_posPtr,time(NULL),300000000, m_numThreadsPerBlock);
+    calcPositions(d_posPtr,time(NULL),m_numParticles, m_numThreadsPerBlock);
     // Make sure all threads have finished that calculations
     cudaThreadSynchronize();
     //unmap our buffer pointer and set it free into the wild
     cudaGraphicsUnmapResources(1,&m_cudaBufferPtr,0);
 
 }
+//----------------------------------------------------------------------------------------------------------------------
+unsigned int OpenGLWidget::nextPrimeNum(int _x){
+    int nextPrime = _x;
+    bool Prime = false;
+    if(_x<=0){
+        std::cerr<<"The number input is less than or equal to zero"<<std::endl;
+        return 1;
+    }
+    if(_x==2){
+        return 2;
+    }
+    if((_x % 2 ) == 0){
+        nextPrime+=1;
+    }
+    while(!Prime){
+        Prime = true;
+        for(int i = 3; i<sqrt(nextPrime); i+=2){
+            if((nextPrime % i)==0){
+                Prime = false;
+            }
+        }
+        if(!Prime){
+            nextPrime+=2;
+        }
+    }
+    return nextPrime;
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::paintGL(){
 
@@ -245,7 +281,7 @@ void OpenGLWidget::paintGL(){
     loadMatricesToShader();
 
     glBindVertexArray(m_VAO);
-    glDrawArrays(GL_POINTS, 0, 30000);
+    glDrawArrays(GL_POINTS, 0, m_numParticles);
     glBindVertexArray(0);
 
     QString text;
