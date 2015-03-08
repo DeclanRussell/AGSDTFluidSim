@@ -27,9 +27,11 @@ HEADERS += \
 FORMS += \
     ui/mainwindow.ui
 
+OTHER_FILES += shaders/*glsl
+
 
 INCLUDEPATH +=./include /opt/local/include $$(HOME)/NGL/include/
-LIBS += -L/opt/local/lib -lGLEW
+LIBS += -L/opt/local/lib -lGLEW -lassimp
 DESTDIR=./
 
 CONFIG += console
