@@ -48,7 +48,7 @@ OpenGLWidget::~OpenGLWidget(){
     Init->NGLQuit();
     // Make sure we remember to unregister our cuda resource
     cudaGraphicsUnregisterResource(m_cudaBufferPtr);
-    glDeleteBuffers(3,m_VBO);
+    glDeleteBuffers(1,&m_VBO);
     glDeleteVertexArrays(1,&m_VAO);
 }
 //----------------------------------------------------------------------------------------------------------------------
@@ -118,28 +118,14 @@ void OpenGLWidget::initializeGL(){
     shader->setShaderParam4f("color",0,1,1,1);
 
 
-    //load in our sphere model to represent our particles
-    Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile("models/sphere.obj", aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
-    aiMesh* mesh = scene->mMeshes[0];
 
-    glGenBuffers(3, m_VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, m_VBO[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(aiVector3D)*mesh->mNumVertices, &mesh->mVertices[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, m_VBO[1]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(aiVector3D)*mesh->mNumVertices, &mesh->mNormals[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     //create some points just for testing our instancing
-
-
     std::vector<float3> particles;
     ngl::Random *rnd = ngl::Random::instance();
     ngl::Vec3 tempPoint;
     float3 tempF3;
-    for(int i=0; i<30000; i++){
+    for(int i=0; i<300000000; i++){
         tempPoint = rnd->getRandomPoint(20,20,20);
         tempF3.x = tempPoint.m_x;
         tempF3.y = tempPoint.m_y;
@@ -147,13 +133,14 @@ void OpenGLWidget::initializeGL(){
         particles.push_back(tempF3);
     }
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_VBO[2]);
-    //dynamic draw as we will probably be writting to this alot
+
+    glGenBuffers(1, &m_VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float3)*particles.size(), &particles[0].x, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     //register our particle postion buffer with cuda
-    cudaGraphicsGLRegisterBuffer(&m_cudaBufferPtr, m_VBO[2], cudaGraphicsRegisterFlagsWriteDiscard);
+    cudaGraphicsGLRegisterBuffer(&m_cudaBufferPtr, m_VBO, cudaGraphicsRegisterFlagsWriteDiscard);
 
     //set up our VAO
     // create a vao
@@ -165,20 +152,14 @@ void OpenGLWidget::initializeGL(){
     glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_VBO[0]);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(aiVector3D), (GLvoid*)(0*sizeof(GL_FLOAT)));
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, m_VBO[1]);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(aiVector3D), (GLvoid*)(0*sizeof(GL_FLOAT)));
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, m_VBO[2]);
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(float3), (GLvoid*)(0*sizeof(GL_FLOAT)));
-    glVertexAttribDivisor(2, 1);
+    glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float3), (GLvoid*)(0*sizeof(GL_FLOAT)));
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glBindVertexArray(0);
+
+    //set our point size
+    glPointSize(10);
 
 
     //Lets test some cuda stuff
@@ -230,8 +211,9 @@ void OpenGLWidget::updateParticles(){
     cudaGraphicsMapResources(1,&m_cudaBufferPtr,0);
     cudaGraphicsResourceGetMappedPointer((void**)&d_posPtr,&d_posSize,m_cudaBufferPtr);
 
-    calcPositions(d_posPtr,time(NULL),30000, m_numThreadsPerBlock);
-
+    calcPositions(d_posPtr,time(NULL),300000000, m_numThreadsPerBlock);
+    // Make sure all threads have finished that calculations
+    cudaThreadSynchronize();
     //unmap our buffer pointer and set it free into the wild
     cudaGraphicsUnmapResources(1,&m_cudaBufferPtr,0);
 
@@ -263,7 +245,7 @@ void OpenGLWidget::paintGL(){
     loadMatricesToShader();
 
     glBindVertexArray(m_VAO);
-    glDrawArraysInstanced(GL_TRIANGLES, 0, 2280, 30000);
+    glDrawArrays(GL_POINTS, 0, 30000);
     glBindVertexArray(0);
 
     QString text;
@@ -282,17 +264,12 @@ void OpenGLWidget::loadMatricesToShader(){
     ngl::Mat4 P = m_cam->getProjectionMatrix();
     ngl::Mat4 MV = m_mouseGlobalTX * m_cam->getViewMatrix();
 
-    ngl::Mat3 normalMatrix = ngl::Mat3(MV);
-    normalMatrix.inverse();
-    normalMatrix.transpose();
-
     ngl::Mat4 MVP = MV * P;
 
     //Here is where we will ultimately load our matricies to shader once written
     ngl::ShaderLib *shader=ngl::ShaderLib::instance();
     (*shader)["InstancedPhong"]->use();
     shader->setUniform("MV",MV);
-    shader->setUniform("normalMatrix",normalMatrix);
     shader->setUniform("MVP",MVP);
 
 }
