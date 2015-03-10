@@ -15,14 +15,16 @@ QT+=gui opengl core
 SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
-    src/OpenGLWidget.cpp
+    src/OpenGLWidget.cpp \
+    src/SPHEngine.cpp
 
 
 HEADERS += \
     include/mainwindow.h \
     include/OpenGLWidget.h \
     include/ui_mainwindow.h \
-    include/CudaSPHKernals.h
+    include/CudaSPHKernals.h \
+    include/SPHEngine.h
 
 FORMS += \
     ui/mainwindow.ui
@@ -31,7 +33,7 @@ OTHER_FILES += shaders/*glsl
 
 
 INCLUDEPATH +=./include /opt/local/include $$(HOME)/NGL/include/
-LIBS += -L/opt/local/lib -lGLEW -lassimp
+LIBS += -L/opt/local/lib -lGLEW
 DESTDIR=./
 
 CONFIG += console
@@ -96,7 +98,7 @@ cuda.input = CUDA_SOURCES
 cuda.output = ${OBJECTS_DIR}${QMAKE_FILE_BASE}_cuda.o
 
 # Tweak arch according to your hw's compute capability
-cuda.commands = $$CUDA_DIR/bin/nvcc -m64 -g -G -gencode arch=compute_52,code=sm_52 -gencode arch=compute_30,code=sm_30 -c $$NVCCFLAGS $$CUDA_INC $$LIBS  ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
+cuda.commands = $$CUDA_DIR/bin/nvcc -m64 -g -G -gencode arch=compute_52,code=sm_52 -c $$NVCCFLAGS $$CUDA_INC $$LIBS  ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
 
 cuda.dependency_type = TYPE_C
 cuda.depend_command = $$CUDA_DIR/bin/nvcc -g -G -M $$CUDA_INC $$NVCCFLAGS   ${QMAKE_FILE_NAME}
