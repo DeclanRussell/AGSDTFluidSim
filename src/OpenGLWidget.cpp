@@ -107,9 +107,8 @@ void OpenGLWidget::initializeGL(){
     shader->setShaderParam4f("color",0,1,1,1);
 
     //allocate some space for our SPHEngine
-    m_SPHEngine = new SPHEngine(3000);
+    m_SPHEngine = new SPHEngine(30000);
     m_SPHEngine->update(0);
-
 
     m_currentTime = m_currentTime.currentTime();
     startTimer(0);

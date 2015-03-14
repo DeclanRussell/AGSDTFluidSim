@@ -3,6 +3,9 @@
 #include <thrust/fill.h>
 #include <thrust/device_ptr.h>
 #include "CudaSPHKernals.h"
+#include "cutil_math.h"  //< some math operations with cuda types
+
+#define pi 3.14159265359f
 //----------------------------------------------------------------------------------------------------------------------
 __global__ void fillKernel(float* array) {
     array[threadIdx.x] = threadIdx.x * 0.5;
@@ -41,6 +44,53 @@ __global__ void countCellOccKernal(unsigned int *d_hashArray, unsigned int *d_ce
     if ((idx < _numPoints) && (d_hashArray[idx] < _hashTableSize)) {
         atomicAdd(&(d_cellOccArray[d_hashArray[idx]]), 1);
     }
+}
+//----------------------------------------------------------------------------------------------------------------------
+/// @brief This is our desity weighting kernal used in our navier stokes equations
+/// @param _currentPos - the postions of the particle we are solving for
+/// @param _neighPos - the position of the neighbouring particle we wish to calculate the weighting for
+/// @param _smoothingLength - the smoothing length of our simulation. Can be thought of a hash cell size.
+/// @return return the weighting that our neighbouring particle has on our current particle
+__device__ float densityWeighting(float3 _currentPos, float3 _neighPos,float _smoothingLength){
+    float3 r = _currentPos - _neighPos;
+    float rLength = length(r);
+    float weighting = (315/(64*pi*pow(_smoothingLength,9))) * pow(((_smoothingLength*_smoothingLength) - (rLength*rLength)),3);
+    //if length of r is larger than our smoothing length we want the weighting to be zero
+    //However branching conditions are slow so here is a neat little trick so we dont need one
+    //false also being 0 and true being 1 solves removes the need for branching
+    return weighting * (float)(rLength<_smoothingLength);
+}
+//----------------------------------------------------------------------------------------------------------------------
+/// @brief This is our desity weighting kernal used in our navier stokes equations
+/// @param _currentPos - the postions of the particle we are solving for
+/// @param _neighPos - the position of the neighbouring particle we wish to calculate the weighting for
+/// @param _smoothingLength - the smoothing length of our simulation. Can be thought of a hash cell size.
+/// @return return the weighting that our neighbouring particle has on our current particle
+__device__ float3 pressureWeighting(float3 _currentPos, float3 _neighPos,float _smoothingLength){
+    float3 r = _currentPos - _neighPos;
+    float rLength = length(r);
+    float weighting = -(945/(32*pi*pow(_smoothingLength,9))) * pow(((_smoothingLength*_smoothingLength) - (rLength*rLength)),3);
+    r *= weighting;
+    //if length of r is larger than our smoothing length we want the weighting to be zero
+    //However branching conditions are slow so here is a neat little trick so we dont need one
+    //false also being 0 and true being 1 solves removes the need for branching
+    return r * (float)(rLength<_smoothingLength);
+}
+//----------------------------------------------------------------------------------------------------------------------
+/// @brief This is our viscosty weighting kernal used in our navier stokes equations
+/// @param _currentPos - the postions of the particle we are solving for
+/// @param _neighPos - the position of the neighbouring particle we wish to calculate the weighting for
+/// @param _smoothingLength - the smoothing length of our simulation. Can be thought of a hash cell size.
+/// @return return the weighting that our neighbouring particle has on our current particle
+__device__ float3 viscosityWeighting(float3 _currentPos, float3 _neighPos,float _smoothingLength){
+    float3 r = _currentPos - _neighPos;
+    float rLength = length(r);
+    float weighting = -(945/(32*pi*pow(_smoothingLength,9))) * pow(((_smoothingLength*_smoothingLength) - (rLength*rLength)),3) * ((3*(_smoothingLength*_smoothingLength)) - 7*(_smoothingLength*_smoothingLength));
+    r *= weighting;
+    //if length of r is larger than our smoothing length we want the weighting to be zero
+    //However branching conditions are slow so here is a neat little trick so we dont need one
+    //false also being 0 and true being 1 solves removes the need for branching
+    return r * (float)(rLength<_smoothingLength);
 }
 //----------------------------------------------------------------------------------------------------------------------
 __global__ void fluidSolverKernal(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray,float _timestep){
