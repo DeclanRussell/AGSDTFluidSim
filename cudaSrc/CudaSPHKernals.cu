@@ -57,7 +57,7 @@ __global__ void fluidSolverKernal(float3 *d_posArray, float3 *d_velArray, float3
     // The extern keyword means we can dynamically size our shared memory
     // in the third argument when we call our kernal.
     extern __shared__ float3 nParticlePos[];
-    //now lets sycronise our threads so our memory is ready to be queried
+    //now lets sycronise our threads so our memory is ready
     __syncthreads();
 
 
@@ -68,8 +68,7 @@ __global__ void fluidSolverKernal(float3 *d_posArray, float3 *d_velArray, float3
         //Threads we may have to sacrifice some particles to sample for less
         //overhead but hopefully we can keep this under control by having a
         //good cell size (smoothing length) in our hash function.
-        nParticlePos[threadIdx.x] = make_float3(0.0f,0.0f,0.0f);//d_posArray[particleIdx];
-        printf("here");
+        nParticlePos[threadIdx.x] = d_posArray[particleIdx];
         //Once this is done we can finally do some navier-stokes!!
         d_posArray[particleIdx].y += 0.01;
     }
@@ -163,7 +162,7 @@ void fluidSolver(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, uns
     /// @todo this is very basic at the moment, need to load cell of particles into shared block memory to do actual sph calculations
     /// @todo You can find an example of shared memory stuff in richards tesselation demo
 
-    fluidSolverKernal<<<_hashTableSize, _maxNumThreads,_maxNumThreads>>>(d_posArray,d_velArray,d_accArray,d_cellOccArray,d_cellIndxArray,_timestep);
+    fluidSolverKernal<<<_hashTableSize, _maxNumThreads,_maxNumThreads*sizeof(float3)>>>(d_posArray,d_velArray,d_accArray,d_cellOccArray,d_cellIndxArray,_timestep);
 
     // check for error
     cudaError_t error = cudaGetLastError();
