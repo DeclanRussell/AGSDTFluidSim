@@ -10,6 +10,8 @@ SPHEngine::~SPHEngine(){
     // Make sure we remember to unregister our cuda resource
     cudaGraphicsUnregisterResource(m_cudaBufferPtr);
     cudaFree(m_dhashKeys);
+    cudaFree(m_dCellIndexBuffer);
+    cudaFree(m_dCellOccBuffer);
     glDeleteBuffers(1,&m_VBO);
     glDeleteVertexArrays(1,&m_VAO);
 }
@@ -23,7 +25,7 @@ void SPHEngine::init(){
     ngl::Vec3 tempPoint;
     float3 tempF3;
     for(unsigned int i=0; i<m_numParticles; i++){
-        tempPoint = rnd->getRandomPoint(20,20,20);
+        tempPoint = rnd->getRandomPoint(5,5,5);
         tempF3.x = tempPoint.m_x;
         tempF3.y = tempPoint.m_y;
         tempF3.z = tempPoint.m_z;
@@ -59,14 +61,19 @@ void SPHEngine::init(){
     glPointSize(10);
 
     //set the size of our hash table based on how many particles we have
-    m_hashTableSize = nextPrimeNum(m_numParticles);
+    m_hashTableSize = nextPrimeNum(2*m_numParticles);
+    std::cout<<"hash table size: "<<m_hashTableSize<<std::endl;
     //allocate space for our hash table
     cudaMalloc(&m_dhashKeys, m_numParticles*sizeof(unsigned int));
     //allocate space for our cell occupancy array
     cudaMalloc(&m_dCellOccBuffer, m_hashTableSize*sizeof(unsigned int));
     //initialize it with zeros
-    thrustFill<unsigned int>(m_dCellOccBuffer,m_hashTableSize,0);
-
+    fillUint(m_dCellOccBuffer,m_hashTableSize,0);
+    //allocate space for our cell index buffer
+    cudaMalloc(&m_dCellIndexBuffer, m_hashTableSize*sizeof(unsigned int));
+    //initialize it with zeros
+    //not really that necesary but might reduce errors, nice to be safe
+    fillUint(m_dCellIndexBuffer,m_hashTableSize,0);
 
     //Lets test some cuda stuff
     int count;
@@ -102,14 +109,63 @@ void SPHEngine::update(unsigned int _timeStep){
     cudaGraphicsMapResources(1,&m_cudaBufferPtr,0);
     cudaGraphicsResourceGetMappedPointer((void**)&d_posPtr,&d_posSize,m_cudaBufferPtr);
     //calculate our hash keys
-    createHashTable(m_dhashKeys,d_posPtr,m_numParticles, 1, m_hashTableSize, m_numThreadsPerBlock);
+    createHashTable(m_dhashKeys,d_posPtr,m_numParticles,0.001, m_hashTableSize, m_numThreadsPerBlock);
+    // Wait for all the threads to be finished
+    // if we are still reseting our occupancy buffer from a previous update this will also give it a
+    // chance to finish
+    cudaThreadSynchronize();
     //sort our particle postions based on there key to make
     //points of the same key occupy contiguous memory
     sortByKey(m_dhashKeys,d_posPtr,m_numParticles);
-    //random test function
-    calcPositions(d_posPtr,time(NULL),m_numParticles, m_numThreadsPerBlock);
+    // Wait for all the threads to be finished
+    cudaThreadSynchronize();
+    //total up our cell occupancy
+    countCellOccupancy(m_dhashKeys,m_dCellOccBuffer,m_hashTableSize,m_numParticles,m_numThreadsPerBlock);
     // Make sure all threads have finished that calculations
     cudaThreadSynchronize();
+    //count our cell occupancy to create our cell index buffer.
+    //this being a serial operation will probably be quicker done by the CPU rather than the GPU
+    //should try and think of a better way to do this because copying data to and from the device
+    //is really slow! This will add overhead to the simulation.
+    /// @todo Might be worth doing some tests to see what is faster, cpu with memCpy overhead or
+    /// @todo just doing it all on the cpu even though its a serial operation.
+    unsigned int cellOcc[m_hashTableSize];
+    unsigned int cellIdx[m_hashTableSize];
+    cudaMemcpy(cellOcc, m_dCellOccBuffer, m_hashTableSize * sizeof(unsigned int), cudaMemcpyDeviceToHost);
+    unsigned int sum = 0;
+    for(unsigned int i=0; i<m_hashTableSize;i++){
+        cellIdx[i] = sum;
+        sum+=cellOcc[i];
+    }
+//    if(sum==0){
+//        std::cout<<"no particles ";
+//        for(unsigned int i=0; i<m_hashTableSize;i++){
+//            std::cout<<cellOcc[i]<<" ";
+//        }
+//        std::cout<<std::endl;
+//    }
+    //copy our index's to our device
+    cudaMemcpy(m_dCellIndexBuffer, cellIdx, m_hashTableSize * sizeof(unsigned int), cudaMemcpyHostToDevice);
+    /// @todo start the actual sph calculations for movement here
+
+
+    float3* x,*y;
+    fluidSolver(d_posPtr,x,y,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_numThreadsPerBlock,0);
+
+//    float3 pos[m_numParticles];
+//    cudaMemcpy(pos, d_posPtr, m_numParticles * sizeof(float3), cudaMemcpyDeviceToHost);
+//    for(unsigned int i=0; i<m_numParticles;i++){
+//        printf("pos: %f,%f,%f\n",pos[i].x,pos[i].y,pos[i].z);
+//    }
+//    printf("\n");
+//    //random test function
+//    calcPositions(d_posPtr,time(NULL),m_numParticles, m_numThreadsPerBlock);
+    // Make sure all threads have finished that calculations
+    cudaThreadSynchronize();
+    //now we've updated our positions lets set reset our occupancy buffer to zero ready for next update
+    fillUint(m_dCellOccBuffer,m_hashTableSize,0);
+
+
     //unmap our buffer pointer and set it free into the wild
     cudaGraphicsUnmapResources(1,&m_cudaBufferPtr,0);
 
