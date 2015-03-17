@@ -24,13 +24,10 @@ class SPHEngine
 {
 public:
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our default lazy constructor
+    /// @brief defualt constructor
+    /// @param _numParticles how many particles we want to have on simulation initialisation.
     //----------------------------------------------------------------------------------------------------------------------
-    SPHEngine():m_numParticles(0){}
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief constructor which allows us to declare how many particles we want to have on simulation initialisation.
-    //----------------------------------------------------------------------------------------------------------------------
-    SPHEngine(unsigned int _numParticles):m_numParticles(_numParticles){init();}
+    SPHEngine(unsigned int _numParticles = 0);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief default destructor
     //----------------------------------------------------------------------------------------------------------------------
@@ -49,13 +46,49 @@ public:
     //----------------------------------------------------------------------------------------------------------------------
     void drawArrays();
     //----------------------------------------------------------------------------------------------------------------------
+    /// @brief Mutator for the volume of our fluid. This in turn effects the mass of our particles.
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setVolume(float _volume){m_volume = _volume; calcMass();}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief Mutator for the desity of our fluid. This in turn effects the mass of our particles.
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setDesity(float _density){m_density = _density; calcMass();}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief Mutator for the smoothing length of our simulation. Can also be thought of as hash cell size.
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setSmoothingLength(float _length){m_smoothingLength = _length;}
+    //----------------------------------------------------------------------------------------------------------------------
+private:
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief the smoothing length of our simulation. Can also be thought of as hash cell size.
+    //----------------------------------------------------------------------------------------------------------------------
+    float m_smoothingLength;
+    //----------------------------------------------------------------------------------------------------------------------
     /// @brief a simple function to caluclate next prime number of the inpur variable
     /// @param _x - vaule you wish to calculate next prime number for
     /// @return the next lowest prime number higher than our input value _X
     //----------------------------------------------------------------------------------------------------------------------
     unsigned int nextPrimeNum(int _x);
     //----------------------------------------------------------------------------------------------------------------------
-private:
+    /// @brief A function to calculate the mass of our particles based on density, volume and number of particles in our simulation.
+    /// @brief mass = density ( volume / number of particles )
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void calcMass(){m_mass = m_density * (m_volume/m_numParticles);}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief The mass of our fluid.
+    /// @value Defaults to 1. User can modify density and volume to change this.
+    //----------------------------------------------------------------------------------------------------------------------
+    float m_mass;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief the density of our fluid.
+    /// @value Defaults to 1. User may modify this.
+    //----------------------------------------------------------------------------------------------------------------------
+    float m_density;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief the volume of our fluid.
+    /// @value Defaults to the number of particles in simulation. User may modify this.
+    //----------------------------------------------------------------------------------------------------------------------
+    float m_volume;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief the number of particles in our simulation
     //----------------------------------------------------------------------------------------------------------------------

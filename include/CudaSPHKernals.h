@@ -61,9 +61,13 @@ void fillUint(unsigned int *_pointer, unsigned int _arraySize, unsigned int _fil
 /// @param d_cellIndxArray - pointer to our gpu buffer that holds the cell index's of our particles
 /// @param _hashTableSize - the size of our hash table. This is used to calculate how many blocks we need to launch our kernal with
 /// @param _maxNumThreads - the maximum nuber of threads we need to launch per block
+/// @param _smoothingLength - smoothing length of our simulation. Can also be thought of as cell size.
 /// @param _timeStep - the timestep that we want to increment our particles positions in our solver
+/// @param _particleMass - the mass of each particle. Defaults to 1.
+/// @param _restDensity - the density of each particle at rest. Defaults to 1.
+/// @param _gasConstant - the gas constant of our fluid. Used for calculating pressure. Defaults to 1.
 //----------------------------------------------------------------------------------------------------------------------
-void fluidSolver(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray,unsigned int _hashTableSize, unsigned int _maxNumThreads, float _timestep);
+void fluidSolver(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass = 1, float _restDensity = 1, float _gasConstant = 1);
 //----------------------------------------------------------------------------------------------------------------------
 
 #endif // HELLOCUDA_H

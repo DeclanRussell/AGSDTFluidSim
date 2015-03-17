@@ -69,7 +69,7 @@ __device__ float densityWeighting(float3 _currentPos, float3 _neighPos,float _sm
 __device__ float3 pressureWeighting(float3 _currentPos, float3 _neighPos,float _smoothingLength){
     float3 r = _currentPos - _neighPos;
     float rLength = length(r);
-    float weighting = -(945/(32*pi*pow(_smoothingLength,9))) * pow(((_smoothingLength*_smoothingLength) - (rLength*rLength)),3);
+    float weighting = -(45/(pi*pow(_smoothingLength,6)*rLength)) * (_smoothingLength-rLength) * (_smoothingLength-rLength);
     r *= weighting;
     //if length of r is larger than our smoothing length we want the weighting to be zero
     //However branching conditions are slow so here is a neat little trick so we dont need one
@@ -93,7 +93,7 @@ __device__ float3 viscosityWeighting(float3 _currentPos, float3 _neighPos,float 
     return r * (float)(rLength<_smoothingLength);
 }
 //----------------------------------------------------------------------------------------------------------------------
-__global__ void fluidSolverKernal(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray,float _timestep){
+__global__ void fluidSolverKernal(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray,float _smoothingLength, float _timestep, float _particleMass, float _restDensity, float _gasConstant){
 
     // Read in our how many particles our cell holds
     unsigned int cellOcc = d_cellOccArray[blockIdx.x];
@@ -107,6 +107,10 @@ __global__ void fluidSolverKernal(float3 *d_posArray, float3 *d_velArray, float3
     // The extern keyword means we can dynamically size our shared memory
     // in the third argument when we call our kernal.
     extern __shared__ float3 nParticlePos[];
+    /// @todo this will end up pointing to the same array as nParticlePos, thats why
+    /// @todo you're getting weird results. You need to have these stored in the
+    /// @todo same array. This may also help with the illegam memory access.
+    extern __shared__ float nParticleDensity[];
     //now lets sycronise our threads so our memory is ready
     __syncthreads();
 
@@ -118,8 +122,41 @@ __global__ void fluidSolverKernal(float3 *d_posArray, float3 *d_velArray, float3
         //Threads we may have to sacrifice some particles to sample for less
         //overhead but hopefully we can keep this under control by having a
         //good cell size (smoothing length) in our hash function.
-        nParticlePos[threadIdx.x] = d_posArray[particleIdx];
+        //While we're at it lets store our current particle position.
+        float3 curPartPos = d_posArray[particleIdx];
+        nParticlePos[threadIdx.x] = curPartPos;
+        //make sure all our threads are at the same point
+        __syncthreads();
+        //calculate the density of our particle
+        float density = 0;
+        int i;
+        for(i=0;i<cellOcc; i++){
+            density += _particleMass * densityWeighting(curPartPos,nParticlePos[i],_smoothingLength);
+        }
+        nParticleDensity[threadIdx.x] = density;
+        //make sure all our threads are at the same point as we need to access all
+        //the calculated densities as well
+        __syncthreads();
         //Once this is done we can finally do some navier-stokes!!
+        float sameCheck;
+        float3 pressureForce=make_float3(0,0,0);
+        float nPartDenTemp;
+        float currPressTemp,nPressTemp;
+        float3 nPartPosTemp;
+        for(i=0;i<cellOcc;i++){
+            //if our neightbour particle is our current particle then we dont
+            //want it to be effect our calculations. If we use this we can
+            //discard any calculations with it without creating branching
+            //conditions
+            nPartPosTemp = nParticlePos[i];
+            sameCheck = (float)((curPartPos.x!=nPartPosTemp.x)&&(curPartPos.y!=nPartPosTemp.y)&&(curPartPos.z!=nPartPosTemp.z));
+            //calculate the pressure force
+            currPressTemp = (_gasConstant * (density - _restDensity));
+            nPressTemp = (_gasConstant* (nPartDenTemp - _restDensity));
+            pressureForce += ( currPressTemp/(currPressTemp*currPressTemp) + nPressTemp/(nPressTemp*nPressTemp)) * _particleMass * pressureWeighting(curPartPos,nPartPosTemp,_smoothingLength) * sameCheck;
+        }
+        printf("pressureForce: %d,%d,%d\n",pressureForce.x,pressureForce.y,pressureForce.z);
+
         d_posArray[particleIdx].y += 0.01;
     }
 }
@@ -208,11 +245,11 @@ void fillUint(unsigned int *_pointer, unsigned int _arraySize, unsigned int _fil
 
 }
 //----------------------------------------------------------------------------------------------------------------------
-void fluidSolver(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray,unsigned int _hashTableSize,unsigned int _maxNumThreads, float _timestep){
+void fluidSolver(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray,unsigned int _hashTableSize,unsigned int _maxNumThreads,float _smoothingLength, float _timestep, float _particleMass, float _restDensity, float _gasConstant){
     /// @todo this is very basic at the moment, need to load cell of particles into shared block memory to do actual sph calculations
     /// @todo You can find an example of shared memory stuff in richards tesselation demo
 
-    fluidSolverKernal<<<_hashTableSize, _maxNumThreads,_maxNumThreads*sizeof(float3)>>>(d_posArray,d_velArray,d_accArray,d_cellOccArray,d_cellIndxArray,_timestep);
+    fluidSolverKernal<<<_hashTableSize, _maxNumThreads,_maxNumThreads*(sizeof(float3)+sizeof(float))>>>(d_posArray,d_velArray,d_accArray,d_cellOccArray,d_cellIndxArray,_smoothingLength,_timestep, _particleMass, _restDensity,_gasConstant);
 
     // check for error
     cudaError_t error = cudaGetLastError();

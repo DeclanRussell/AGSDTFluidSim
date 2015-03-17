@@ -4,6 +4,15 @@
 #include <QString>
 #include "CudaSPHKernals.h"
 
+//----------------------------------------------------------------------------------------------------------------------
+SPHEngine::SPHEngine(unsigned int _numParticles) : m_numParticles(_numParticles),
+                                                   m_volume(m_numParticles),
+                                                   m_density(1),
+                                                   m_mass(1),
+                                                   m_smoothingLength(1)
+{
+    init();
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 SPHEngine::~SPHEngine(){
@@ -109,7 +118,7 @@ void SPHEngine::update(unsigned int _timeStep){
     cudaGraphicsMapResources(1,&m_cudaBufferPtr,0);
     cudaGraphicsResourceGetMappedPointer((void**)&d_posPtr,&d_posSize,m_cudaBufferPtr);
     //calculate our hash keys
-    createHashTable(m_dhashKeys,d_posPtr,m_numParticles,0.001, m_hashTableSize, m_numThreadsPerBlock);
+    createHashTable(m_dhashKeys,d_posPtr,m_numParticles,m_smoothingLength, m_hashTableSize, m_numThreadsPerBlock);
     // Wait for all the threads to be finished
     // if we are still reseting our occupancy buffer from a previous update this will also give it a
     // chance to finish
@@ -150,7 +159,7 @@ void SPHEngine::update(unsigned int _timeStep){
 
 
     float3* x,*y;
-    fluidSolver(d_posPtr,x,y,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_numThreadsPerBlock,0);
+    fluidSolver(d_posPtr,x,y,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_numThreadsPerBlock,m_smoothingLength,0);
 
 //    float3 pos[m_numParticles];
 //    cudaMemcpy(pos, d_posPtr, m_numParticles * sizeof(float3), cudaMemcpyDeviceToHost);
