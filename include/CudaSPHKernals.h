@@ -16,7 +16,21 @@ void fillGpuArray(float* array, int count);
 
 //just a function that moves our particles with some wave functions
 void calcPositions(float3* d_pos, int timeStep, int numParticles, int maxNumThreads);
-
+//----------------------------------------------------------------------------------------------------------------------
+/// @brief a structure to hold the properties of our particle
+//----------------------------------------------------------------------------------------------------------------------
+struct particleProp {
+    float3 pos;
+    float3 vel;
+    float density;
+};
+//----------------------------------------------------------------------------------------------------------------------
+/// @brief Creates an index array for our cells using thrusts exclusive scan
+/// @param d_cellOccArray - pointer to our hash table cell occupancy buffer on our device
+/// @param _size - the size of our buffer on our divice
+/// @param d_cellIdxArray - our output buffer on our device to store our index's
+//----------------------------------------------------------------------------------------------------------------------
+void createCellIdx(unsigned int* d_cellOccArray, unsigned int _size, unsigned int *d_cellIdxArray);
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Creates a spatial hash key based on our particle postion
 /// @brief This is taken from Optimized Spatial Hashing for Collision Detection of Deformable Objects.
@@ -30,11 +44,12 @@ void calcPositions(float3* d_pos, int timeStep, int numParticles, int maxNumThre
 void createHashTable(unsigned int* d_hashArray, float3* d_posArray, unsigned int numParticles, float smoothingLegnth,unsigned int hashTableSize, int maxNumThreads);
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Sorts our hash key buffer and postion buffer such that points of the same key occupy contiguous memory
-/// @param d_hashArrayPtr - pointer to our hash key buffer
-/// @param d_posArrayPtr - pointer to our particle position buffer
+/// @param d_hashArray - pointer to our hash key buffer
+/// @param d_posArray - pointer to our particle position buffer
+/// @param d_velArray - pointer to our particle velocity buffer
 /// @param _numParticles - the number of particels in our buffer
 //----------------------------------------------------------------------------------------------------------------------
-void sortByKey(unsigned int* d_hashArray, float3* d_posArray, unsigned int _numParticles);
+void sortByKey(unsigned int* d_hashArray, float3* d_posArray, float3 *d_velArray, unsigned int _numParticles);
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Computes the particle occupancy of our hash cell
 /// @param d_hashArray - pointer to our hash key buffer
@@ -56,7 +71,6 @@ void fillUint(unsigned int *_pointer, unsigned int _arraySize, unsigned int _fil
 /// @brief our fluid simulation.
 /// @param d_posArray - pointer to our gpu buffer that holds the postions of our particles
 /// @param d_velArray - pointer to our gpu buffer that holds the velocities of our particles
-/// @param d_accArray - pointer to our gpu buffer that holds the acceleration of our particles
 /// @param d_cellOccArray - pointer to our gpu buffer that holds the cell occupancy count of our hash table
 /// @param d_cellIndxArray - pointer to our gpu buffer that holds the cell index's of our particles
 /// @param _hashTableSize - the size of our hash table. This is used to calculate how many blocks we need to launch our kernal with
@@ -66,8 +80,12 @@ void fillUint(unsigned int *_pointer, unsigned int _arraySize, unsigned int _fil
 /// @param _particleMass - the mass of each particle. Defaults to 1.
 /// @param _restDensity - the density of each particle at rest. Defaults to 1.
 /// @param _gasConstant - the gas constant of our fluid. Used for calculating pressure. Defaults to 1.
+/// @param _visCoef - the coeficient of viscosity in our fluid simulation. Defaults to 1.
+/// @param _densKernConst - constant part of the density kernal. Faster to compute once on CPU and load in.
+/// @param _pressKernConst - constant part of the pressure kernal. Faster to compute once on CPU and load in.
+/// @param _viscKernConst - constant part of the viscosity kernal. Faster to compute once on CPU and load in.
 //----------------------------------------------------------------------------------------------------------------------
-void fluidSolver(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass = 1, float _restDensity = 1, float _gasConstant = 1);
+void fluidSolver(float3 *d_posArray, float3 *d_velArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass = 1, float _restDensity = 1, float _gasConstant = 1, float _visCoef = 1, float _densKernConst = 1, float _pressKernConst = 1, float _viscKernConst = 1);
 //----------------------------------------------------------------------------------------------------------------------
 
 #endif // HELLOCUDA_H

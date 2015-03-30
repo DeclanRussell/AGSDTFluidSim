@@ -2,6 +2,7 @@
 #include <thrust/sort.h>
 #include <thrust/fill.h>
 #include <thrust/device_ptr.h>
+#include <thrust/scan.h>
 #include "CudaSPHKernals.h"
 #include "cutil_math.h"  //< some math operations with cuda types
 
@@ -50,11 +51,12 @@ __global__ void countCellOccKernal(unsigned int *d_hashArray, unsigned int *d_ce
 /// @param _currentPos - the postions of the particle we are solving for
 /// @param _neighPos - the position of the neighbouring particle we wish to calculate the weighting for
 /// @param _smoothingLength - the smoothing length of our simulation. Can be thought of a hash cell size.
+/// @param _densKernCosnt - constant part of our kernal. Easier to calculate once on CPU and have loaded into device kernal.
 /// @return return the weighting that our neighbouring particle has on our current particle
-__device__ float densityWeighting(float3 _currentPos, float3 _neighPos,float _smoothingLength){
-    float3 r = _currentPos - _neighPos;
-    float rLength = length(r);
-    float weighting = (315/(64*pi*pow(_smoothingLength,9))) * pow(((_smoothingLength*_smoothingLength) - (rLength*rLength)),3);
+__device__ float densityWeighting(float3 _currentPos, float3 _neighPos,float _smoothingLength, float _densKernConst){
+    float rLength = length(_currentPos - _neighPos);
+    float smoothMinDist = (_smoothingLength - rLength);
+    float weighting = _densKernConst * smoothMinDist * smoothMinDist * smoothMinDist;
     //if length of r is larger than our smoothing length we want the weighting to be zero
     //However branching conditions are slow so here is a neat little trick so we dont need one
     //false also being 0 and true being 1 solves removes the need for branching
@@ -65,11 +67,13 @@ __device__ float densityWeighting(float3 _currentPos, float3 _neighPos,float _sm
 /// @param _currentPos - the postions of the particle we are solving for
 /// @param _neighPos - the position of the neighbouring particle we wish to calculate the weighting for
 /// @param _smoothingLength - the smoothing length of our simulation. Can be thought of a hash cell size.
+/// @param _pressKernCosnt - constant part of our kernal. Easier to calculate once on CPU and have loaded into device kernal.
 /// @return return the weighting that our neighbouring particle has on our current particle
-__device__ float3 pressureWeighting(float3 _currentPos, float3 _neighPos,float _smoothingLength){
+__device__ float3 pressureWeighting(float3 _currentPos, float3 _neighPos,float _smoothingLength, float _pressKernConst){
     float3 r = _currentPos - _neighPos;
     float rLength = length(r);
-    float weighting = -(45/(pi*pow(_smoothingLength,6)*rLength)) * (_smoothingLength-rLength) * (_smoothingLength-rLength);
+    float weighting = _pressKernConst * (_smoothingLength-rLength) * (_smoothingLength-rLength);
+    r /= rLength;
     r *= weighting;
     //if length of r is larger than our smoothing length we want the weighting to be zero
     //However branching conditions are slow so here is a neat little trick so we dont need one
@@ -81,11 +85,12 @@ __device__ float3 pressureWeighting(float3 _currentPos, float3 _neighPos,float _
 /// @param _currentPos - the postions of the particle we are solving for
 /// @param _neighPos - the position of the neighbouring particle we wish to calculate the weighting for
 /// @param _smoothingLength - the smoothing length of our simulation. Can be thought of a hash cell size.
+/// @param _viscKernCosnt - constant part of our kernal. Easier to calculate once on CPU and have loaded into device kernal.
 /// @return return the weighting that our neighbouring particle has on our current particle
-__device__ float3 viscosityWeighting(float3 _currentPos, float3 _neighPos,float _smoothingLength){
+__device__ float3 viscosityWeighting(float3 _currentPos, float3 _neighPos,float _smoothingLength, float _viscKernConst){
     float3 r = _currentPos - _neighPos;
     float rLength = length(r);
-    float weighting = -(945/(32*pi*pow(_smoothingLength,9))) * pow(((_smoothingLength*_smoothingLength) - (rLength*rLength)),3) * ((3*(_smoothingLength*_smoothingLength)) - 7*(_smoothingLength*_smoothingLength));
+    float weighting = _viscKernConst * (1.0/rLength) * (_smoothingLength - rLength) * (_smoothingLength - rLength);
     r *= weighting;
     //if length of r is larger than our smoothing length we want the weighting to be zero
     //However branching conditions are slow so here is a neat little trick so we dont need one
@@ -93,7 +98,7 @@ __device__ float3 viscosityWeighting(float3 _currentPos, float3 _neighPos,float 
     return r * (float)(rLength<_smoothingLength);
 }
 //----------------------------------------------------------------------------------------------------------------------
-__global__ void fluidSolverKernal(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray,float _smoothingLength, float _timestep, float _particleMass, float _restDensity, float _gasConstant){
+__global__ void fluidSolverKernal(float3 *d_posArray, float3 *d_velArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray,float _smoothingLength, float _timestep, float _particleMass, float _restDensity, float _gasConstant, float _visCoef, float densKernConst, float pressKernConst, float viscKernConst){
 
     // Read in our how many particles our cell holds
     unsigned int cellOcc = d_cellOccArray[blockIdx.x];
@@ -106,17 +111,11 @@ __global__ void fluidSolverKernal(float3 *d_posArray, float3 *d_velArray, float3
     // Firstly lets declare our shared piece of memory
     // The extern keyword means we can dynamically size our shared memory
     // in the third argument when we call our kernal.
-    extern __shared__ float3 nParticlePos[];
-    /// @todo this will end up pointing to the same array as nParticlePos, thats why
-    /// @todo you're getting weird results. You need to have these stored in the
-    /// @todo same array. This may also help with the illegam memory access.
-    extern __shared__ float nParticleDensity[];
-    //now lets sycronise our threads so our memory is ready
-    __syncthreads();
+    __shared__ particleProp nParticleData[30];
 
 
     //make sure we're not doing anything to particles that are not in our cell
-    if(threadIdx.x<cellOcc){
+    if(threadIdx.x<30/*cellOcc*/){
         //lets load in our particles properties to our peice of shared memory
         //Due to limits on threads if we have more particles to this key than
         //Threads we may have to sacrifice some particles to sample for less
@@ -124,40 +123,77 @@ __global__ void fluidSolverKernal(float3 *d_posArray, float3 *d_velArray, float3
         //good cell size (smoothing length) in our hash function.
         //While we're at it lets store our current particle position.
         float3 curPartPos = d_posArray[particleIdx];
-        nParticlePos[threadIdx.x] = curPartPos;
-        //make sure all our threads are at the same point
+        nParticleData[threadIdx.x].pos = curPartPos;
+        float3 curPartVel = d_velArray[particleIdx];
+        nParticleData[threadIdx.x].vel = curPartVel;
+        //sync our threads to make sure all our particle info has been copied
+        //to shared memory
         __syncthreads();
+
         //calculate the density of our particle
         float density = 0;
-        int i;
-        for(i=0;i<cellOcc; i++){
-            density += _particleMass * densityWeighting(curPartPos,nParticlePos[i],_smoothingLength);
-        }
-        nParticleDensity[threadIdx.x] = density;
-        //make sure all our threads are at the same point as we need to access all
-        //the calculated densities as well
-        __syncthreads();
-        //Once this is done we can finally do some navier-stokes!!
         float sameCheck;
-        float3 pressureForce=make_float3(0,0,0);
-        float nPartDenTemp;
-        float currPressTemp,nPressTemp;
         float3 nPartPosTemp;
-        for(i=0;i<cellOcc;i++){
+        int i;
+        for(i=0;i<cellOcc&&i<30; i++){
             //if our neightbour particle is our current particle then we dont
             //want it to be effect our calculations. If we use this we can
             //discard any calculations with it without creating branching
             //conditions
-            nPartPosTemp = nParticlePos[i];
-            sameCheck = (float)((curPartPos.x!=nPartPosTemp.x)&&(curPartPos.y!=nPartPosTemp.y)&&(curPartPos.z!=nPartPosTemp.z));
+            nPartPosTemp = nParticleData[i].pos;
+            sameCheck = (float)!(threadIdx.x == i);
+            density += _particleMass * densityWeighting(curPartPos,nPartPosTemp,_smoothingLength,densKernConst) * sameCheck;
+        }
+        nParticleData[threadIdx.x].density = density;
+
+        //sync threads so we know that all our particles densitys have been calculated
+        __syncthreads();
+
+        //Once this is done we can finally do some navier-stokes!!
+        float3 pressureForce = make_float3(0,0,0);
+        float3 viscosityForce = make_float3(0,0,0);
+        float nPartDenTemp;
+        float currPressTemp,nPressTemp;
+        for(i=0;i<cellOcc&&i<30;i++){
+            nPartPosTemp = nParticleData[i].pos;
+            nPartDenTemp = nParticleData[i].density;
+            //if our particle is in exacly the same position as our current particle
+            //then we dont want to do calculations, being not physically possible we can get errors
+            if((curPartPos.x==nPartPosTemp.x)&&(curPartPos.y==nPartPosTemp.y)&&(curPartPos.z==nPartPosTemp.z)) continue;
             //calculate the pressure force
             currPressTemp = (_gasConstant * (density - _restDensity));
-            nPressTemp = (_gasConstant* (nPartDenTemp - _restDensity));
-            pressureForce += ( currPressTemp/(currPressTemp*currPressTemp) + nPressTemp/(nPressTemp*nPressTemp)) * _particleMass * pressureWeighting(curPartPos,nPartPosTemp,_smoothingLength) * sameCheck;
+            nPressTemp = (_gasConstant * (nPartDenTemp - _restDensity));
+            pressureForce += ( (currPressTemp/(currPressTemp*currPressTemp)) + (nPressTemp/(nPressTemp*nPressTemp)) ) * _particleMass * pressureWeighting(curPartPos,nPartPosTemp,_smoothingLength,pressKernConst);
+            //calculate our viscosity force
+            viscosityForce += (curPartVel - nParticleData[i].vel) * (_particleMass/nPartDenTemp) * viscosityWeighting(curPartPos,nPartPosTemp,_smoothingLength,viscKernConst);
         }
-        printf("pressureForce: %d,%d,%d\n",pressureForce.x,pressureForce.y,pressureForce.z);
+        pressureForce *= -density;
+        viscosityForce *= _visCoef;
 
-        d_posArray[particleIdx].y += 0.01;
+        //calculate our acceleration
+        float3 gravity = make_float3(0.0,-9.8,0.0);
+        float3 acc = gravity + pressureForce + viscosityForce;
+        //calculate our new velocity
+
+        //euler intergration
+        float3 newVel = curPartVel + (acc * _timestep);
+        float3 newPos = curPartPos + (newVel * _timestep);
+
+        //leap frog integration
+//        float3 velHalfBack = curPartVel - ( acc * _timestep * 0.5);
+//        float3 velHalfForward = velHalfBack + (acc * _timestep);
+//        float3 newVel = (velHalfBack + velHalfForward) * 0.5;
+//        float3 newPos = curPartPos + (newVel * _timestep);
+
+        //printf("vel: %f,%f,%f\n",newVel.x,newVel.y,newVel.z);
+
+        //printf("vel: %f,%f,%f\n",newVel.x,newVel.y,newVel.z);
+
+
+        //update our particle positin and velocity
+        d_velArray[particleIdx] = newVel;
+        d_posArray[particleIdx] = newPos;
+        //d_posArray[particleIdx].y+=0.1;
     }
 }
 
@@ -173,6 +209,7 @@ void calcPositions(float3 *d_pos, int timeStep, int numParticles, int maxNumThre
 }
 //----------------------------------------------------------------------------------------------------------------------
 void createHashTable(unsigned int* d_hashArray, float3* d_posArray, unsigned int numParticles, float smoothingLegnth, unsigned int hashTableSize, int maxNumThreads){
+    //std::cout<<"createHashTable"<<std::endl;
     //calculate how many blocks we want
     int blocks = ceil(numParticles/maxNumThreads)+1;
     pointHash<<<blocks,maxNumThreads>>>(d_hashArray,d_posArray,numParticles,smoothingLegnth,hashTableSize);
@@ -187,13 +224,17 @@ void createHashTable(unsigned int* d_hashArray, float3* d_posArray, unsigned int
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
-void sortByKey(unsigned int *d_hashArray, float3 *d_posArray, unsigned int _numParticles){
+void sortByKey(unsigned int *d_hashArray, float3 *d_posArray,float3 *d_velArray, unsigned int _numParticles){
+    //std::cout<<"sortByKey"<<std::endl;
     //Turn our raw pointers into thrust pointers so we can use
     //thrusts sort algorithm
     thrust::device_ptr<unsigned int> t_hashPtr = thrust::device_pointer_cast(d_hashArray);
     thrust::device_ptr<float3> t_posPtr = thrust::device_pointer_cast(d_posArray);
+    thrust::device_ptr<float3> t_velPtr = thrust::device_pointer_cast(d_velArray);
+
     //sort our buffers
-    thrust::sort_by_key(t_hashPtr,t_hashPtr+_numParticles, t_posPtr);
+    thrust::sort_by_key(t_hashPtr,t_hashPtr+_numParticles, thrust::make_zip_iterator(thrust::make_tuple(t_posPtr,t_velPtr)));
+
 
     //DEBUG: uncomment to print out sorted hash keys
     //thrust::copy(t_hashPtr, t_hashPtr+_numParticles, std::ostream_iterator<unsigned int>(std::cout, " "));
@@ -209,14 +250,15 @@ void sortByKey(unsigned int *d_hashArray, float3 *d_posArray, unsigned int _numP
 }
 //----------------------------------------------------------------------------------------------------------------------
 void countCellOccupancy(unsigned int *d_hashArray, unsigned int *d_cellOccArray,unsigned int _hashTableSize, unsigned int _numPoints, unsigned int _maxNumThreads){
+    //std::cout<<"countCellOccupancy"<<std::endl;
     //calculate how many blocks we want
     int blocks = ceil(_hashTableSize/_maxNumThreads)+1;
     countCellOccKernal<<<blocks,_maxNumThreads>>>(d_hashArray,d_cellOccArray,_hashTableSize,_numPoints);
 
 
     //DEBUG: uncomment to print out counted cell occupancy
-    //thrust::device_ptr<unsigned int> t_occPtr = thrust::device_pointer_cast(d_cellOccArray);
-    //thrust::copy(t_occPtr, t_occPtr+_hashTableSize, std::ostream_iterator<unsigned int>(std::cout, " "));
+    thrust::device_ptr<unsigned int> t_occPtr = thrust::device_pointer_cast(d_cellOccArray);
+    thrust::copy(t_occPtr, t_occPtr+_hashTableSize, std::ostream_iterator<unsigned int>(std::cout, " "));
     // check for error
     cudaError_t error = cudaGetLastError();
     if(error != cudaSuccess)
@@ -228,6 +270,7 @@ void countCellOccupancy(unsigned int *d_hashArray, unsigned int *d_cellOccArray,
 }
 //----------------------------------------------------------------------------------------------------------------------
 void fillUint(unsigned int *_pointer, unsigned int _arraySize, unsigned int _fill){
+    //std::cout<<"fillUint"<<std::endl;
     //Turn our raw pointers into thrust pointers so we can use
     //them in thrust fill
     thrust::device_ptr<unsigned int> t_Ptr = thrust::device_pointer_cast(_pointer);
@@ -245,11 +288,31 @@ void fillUint(unsigned int *_pointer, unsigned int _arraySize, unsigned int _fil
 
 }
 //----------------------------------------------------------------------------------------------------------------------
-void fluidSolver(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray,unsigned int _hashTableSize,unsigned int _maxNumThreads,float _smoothingLength, float _timestep, float _particleMass, float _restDensity, float _gasConstant){
-    /// @todo this is very basic at the moment, need to load cell of particles into shared block memory to do actual sph calculations
-    /// @todo You can find an example of shared memory stuff in richards tesselation demo
+void createCellIdx(unsigned int* d_cellOccArray, unsigned int _size,unsigned int* d_cellIdxArray){
+    //std::cout<<"createCellIdx"<<std::endl;
+    //Turn our raw pointers into thrust pointers so we can use
+    //them in thrust
+    thrust::device_ptr<unsigned int> t_cellOccPtr = thrust::device_pointer_cast(d_cellOccArray);
+    thrust::device_ptr<unsigned int> t_cellIdxPtr = thrust::device_pointer_cast(d_cellIdxArray);
+    //run an excludive scan on our arrays
+    thrust::exclusive_scan(t_cellOccPtr,t_cellOccPtr+_size,t_cellIdxPtr);
 
-    fluidSolverKernal<<<_hashTableSize, _maxNumThreads,_maxNumThreads*(sizeof(float3)+sizeof(float))>>>(d_posArray,d_velArray,d_accArray,d_cellOccArray,d_cellIndxArray,_smoothingLength,_timestep, _particleMass, _restDensity,_gasConstant);
+    //DEBUG: uncomment to print out cell index buffer
+    //thrust::copy(t_cellIdxPtr, t_cellIdxPtr+_size, std::ostream_iterator<unsigned int>(std::cout, " "));
+    // check for error
+    cudaError_t error = cudaGetLastError();
+    if(error != cudaSuccess)
+    {
+      // print the CUDA error message and exit
+      printf("createCellIdx CUDA error: %s\n", cudaGetErrorString(error));
+      exit(-1);
+    }
+}
+//----------------------------------------------------------------------------------------------------------------------
+void fluidSolver(float3 *d_posArray, float3 *d_velArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass, float _restDensity, float _gasConstant, float _visCoef, float _densKernConst, float _pressKernConst, float _viscKernConst){
+    //std::cout<<"fluidSolver"<<std::endl;
+    //printf("memory allocated: %d",_maxNumThreads*(sizeof(particleProp)));
+    fluidSolverKernal<<<_hashTableSize, 30>>>(d_posArray,d_velArray,d_cellOccArray,d_cellIndxArray,_smoothingLength,_timestep, _particleMass, _restDensity,_gasConstant,_visCoef, _densKernConst, _pressKernConst, _viscKernConst);
 
     // check for error
     cudaError_t error = cudaGetLastError();

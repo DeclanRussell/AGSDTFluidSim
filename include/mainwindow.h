@@ -7,6 +7,7 @@
 #include <QGridLayout>
 #include <QSpacerItem>
 #include "OpenGLWidget.h"
+#include <iostream>
 namespace Ui {
 class MainWindow;
 }

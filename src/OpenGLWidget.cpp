@@ -108,8 +108,10 @@ void OpenGLWidget::initializeGL(){
 
     //allocate some space for our SPHEngine
     m_SPHEngine = new SPHEngine(30000);
-    m_SPHEngine->update(0);
-
+    m_SPHEngine->setDesity(900);
+    m_SPHEngine->setVolume(10);
+    m_SPHEngine->setSmoothingLength(1.5);
+//    m_SPHEngine->update(10);
     m_currentTime = m_currentTime.currentTime();
     startTimer(0);
 }
@@ -122,7 +124,6 @@ void OpenGLWidget::resizeGL(const int _w, const int _h){
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::timerEvent(QTimerEvent *){
-    m_SPHEngine->update(0);
     updateGL();
 }
 //----------------------------------------------------------------------------------------------------------------------
@@ -132,6 +133,9 @@ void OpenGLWidget::paintGL(){
     QTime newTime = m_currentTime.currentTime();
     int msecsPassed = m_currentTime.msecsTo(newTime);
     m_currentTime = m_currentTime.currentTime();
+
+    //update our fluid simulation with our time step
+    m_SPHEngine->update((float)msecsPassed/1000.0);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //Initialise the model matrix

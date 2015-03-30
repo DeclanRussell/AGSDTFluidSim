@@ -1,9 +1,12 @@
 #include "SPHEngine.h"
 
-#include <ngl/Random.h>
 #include <QString>
+#include <vector>
+#include <iostream>
+#include <cmath>
 #include "CudaSPHKernals.h"
 
+#define pi 3.14159265359f
 //----------------------------------------------------------------------------------------------------------------------
 SPHEngine::SPHEngine(unsigned int _numParticles) : m_numParticles(_numParticles),
                                                    m_volume(m_numParticles),
@@ -21,6 +24,7 @@ SPHEngine::~SPHEngine(){
     cudaFree(m_dhashKeys);
     cudaFree(m_dCellIndexBuffer);
     cudaFree(m_dCellOccBuffer);
+    cudaFree(m_dVelBuffer);
     glDeleteBuffers(1,&m_VBO);
     glDeleteVertexArrays(1,&m_VAO);
 }
@@ -30,15 +34,18 @@ void SPHEngine::init(){
 
     //create some points just for testing our instancing
     std::vector<float3> particles;
-    ngl::Random *rnd = ngl::Random::instance();
-    ngl::Vec3 tempPoint;
     float3 tempF3;
+    float tx,ty,tz;
+    tx=ty=tz=-5.0;
     for(unsigned int i=0; i<m_numParticles; i++){
-        tempPoint = rnd->getRandomPoint(5,5,5);
-        tempF3.x = tempPoint.m_x;
-        tempF3.y = tempPoint.m_y;
-        tempF3.z = tempPoint.m_z;
+        if(tx>5){ tx=-5.0; tz+=0.5;}
+        if(tz>5){ tz=-5.0; ty+=0.5;}
+
+        tempF3.x = tx;
+        tempF3.y = ty;
+        tempF3.z = tz;
         particles.push_back(tempF3);
+        tx+=0.5;
     }
 
 
@@ -72,12 +79,15 @@ void SPHEngine::init(){
     //set the size of our hash table based on how many particles we have
     m_hashTableSize = nextPrimeNum(2*m_numParticles);
     std::cout<<"hash table size: "<<m_hashTableSize<<std::endl;
-    //allocate space for our hash table
+    //allocate space for our hash table,cell occupancy array and velocity array.
     cudaMalloc(&m_dhashKeys, m_numParticles*sizeof(unsigned int));
-    //allocate space for our cell occupancy array
     cudaMalloc(&m_dCellOccBuffer, m_hashTableSize*sizeof(unsigned int));
-    //initialize it with zeros
+    cudaMalloc(&m_dVelBuffer, m_numParticles*sizeof(float3));
+    //initialize them with zeros
     fillUint(m_dCellOccBuffer,m_hashTableSize,0);
+    float3 x[m_numParticles];
+    for(int i=0;i<m_numParticles;i++)x[i]=make_float3(0,0,0);
+    cudaMemcpy(m_dVelBuffer, x, m_numParticles * sizeof(float3), cudaMemcpyHostToDevice);
     //allocate space for our cell index buffer
     cudaMalloc(&m_dCellIndexBuffer, m_hashTableSize*sizeof(unsigned int));
     //initialize it with zeros
@@ -111,72 +121,39 @@ void SPHEngine::init(){
 
 }
 //----------------------------------------------------------------------------------------------------------------------
-void SPHEngine::update(unsigned int _timeStep){
+void SPHEngine::update(float _timeStep){
+    std::cout<<"update"<<std::endl;
     //map our buffer pointer
     float3* d_posPtr;
     size_t d_posSize;
-    cudaGraphicsMapResources(1,&m_cudaBufferPtr,0);
+    cudaGraphicsMapResources(1,&m_cudaBufferPtr);
     cudaGraphicsResourceGetMappedPointer((void**)&d_posPtr,&d_posSize,m_cudaBufferPtr);
+    std::cout<<"d_posPointer is "<<d_posPtr<<std::endl;
     //calculate our hash keys
     createHashTable(m_dhashKeys,d_posPtr,m_numParticles,m_smoothingLength, m_hashTableSize, m_numThreadsPerBlock);
-    // Wait for all the threads to be finished
-    // if we are still reseting our occupancy buffer from a previous update this will also give it a
-    // chance to finish
-    cudaThreadSynchronize();
+
     //sort our particle postions based on there key to make
     //points of the same key occupy contiguous memory
-    sortByKey(m_dhashKeys,d_posPtr,m_numParticles);
-    // Wait for all the threads to be finished
-    cudaThreadSynchronize();
+    sortByKey(m_dhashKeys,d_posPtr,m_dVelBuffer,m_numParticles);
+
     //total up our cell occupancy
     countCellOccupancy(m_dhashKeys,m_dCellOccBuffer,m_hashTableSize,m_numParticles,m_numThreadsPerBlock);
-    // Make sure all threads have finished that calculations
-    cudaThreadSynchronize();
-    //count our cell occupancy to create our cell index buffer.
-    //this being a serial operation will probably be quicker done by the CPU rather than the GPU
-    //should try and think of a better way to do this because copying data to and from the device
-    //is really slow! This will add overhead to the simulation.
-    /// @todo Might be worth doing some tests to see what is faster, cpu with memCpy overhead or
-    /// @todo just doing it all on the cpu even though its a serial operation.
-    unsigned int cellOcc[m_hashTableSize];
-    unsigned int cellIdx[m_hashTableSize];
-    cudaMemcpy(cellOcc, m_dCellOccBuffer, m_hashTableSize * sizeof(unsigned int), cudaMemcpyDeviceToHost);
-    unsigned int sum = 0;
-    for(unsigned int i=0; i<m_hashTableSize;i++){
-        cellIdx[i] = sum;
-        sum+=cellOcc[i];
-    }
-//    if(sum==0){
-//        std::cout<<"no particles ";
-//        for(unsigned int i=0; i<m_hashTableSize;i++){
-//            std::cout<<cellOcc[i]<<" ";
-//        }
-//        std::cout<<std::endl;
-//    }
-    //copy our index's to our device
-    cudaMemcpy(m_dCellIndexBuffer, cellIdx, m_hashTableSize * sizeof(unsigned int), cudaMemcpyHostToDevice);
-    /// @todo start the actual sph calculations for movement here
 
+    //Uses exclusive scan to count our cell occupancy and create our cell index buffer.
+    createCellIdx(m_dCellOccBuffer,m_hashTableSize,m_dCellIndexBuffer);
 
-    float3* x,*y;
-    fluidSolver(d_posPtr,x,y,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_numThreadsPerBlock,m_smoothingLength,0);
+    //update our particle positions with navier stokes equations
+    fluidSolver(d_posPtr,m_dVelBuffer,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_numThreadsPerBlock,m_smoothingLength,_timeStep,m_mass,m_density,1,1,m_densWeightConst,m_pressWeightConst,m_viscWeightConst);
 
-//    float3 pos[m_numParticles];
-//    cudaMemcpy(pos, d_posPtr, m_numParticles * sizeof(float3), cudaMemcpyDeviceToHost);
-//    for(unsigned int i=0; i<m_numParticles;i++){
-//        printf("pos: %f,%f,%f\n",pos[i].x,pos[i].y,pos[i].z);
-//    }
-//    printf("\n");
-//    //random test function
-//    calcPositions(d_posPtr,time(NULL),m_numParticles, m_numThreadsPerBlock);
-    // Make sure all threads have finished that calculations
-    cudaThreadSynchronize();
-    //now we've updated our positions lets set reset our occupancy buffer to zero ready for next update
+    //fill our occupancy buffer back up with zeros
     fillUint(m_dCellOccBuffer,m_hashTableSize,0);
 
+    //make sure all our threads are done
+    cudaThreadSynchronize();
 
     //unmap our buffer pointer and set it free into the wild
-    cudaGraphicsUnmapResources(1,&m_cudaBufferPtr,0);
+    cudaGraphicsUnmapResources(1,&m_cudaBufferPtr);
+    //std::cout<<"update finished numParticles"<<m_numParticles<<" hash table size "<<m_hashTableSize<<std::endl;
 
 }
 //----------------------------------------------------------------------------------------------------------------------
@@ -185,7 +162,13 @@ void SPHEngine::drawArrays(){
     glDrawArrays(GL_POINTS, 0, m_numParticles);
     glBindVertexArray(0);
 }
-
+//----------------------------------------------------------------------------------------------------------------------
+void SPHEngine::calcKernalConsts()
+{
+    m_densWeightConst = (15.0f/(pi*m_smoothingLength*m_smoothingLength*m_smoothingLength*m_smoothingLength*m_smoothingLength*m_smoothingLength));
+    m_pressWeightConst = -(45.0f/(pi*pow(m_smoothingLength,6)));
+    m_viscWeightConst = -(90/(pi*pow(m_smoothingLength,6)));
+}
 //----------------------------------------------------------------------------------------------------------------------
 unsigned int SPHEngine::nextPrimeNum(int _x){
     int nextPrime = _x;
