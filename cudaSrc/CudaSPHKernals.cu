@@ -115,7 +115,7 @@ __global__ void fluidSolverKernal(float3 *d_posArray, float3 *d_velArray, unsign
 
 
     //make sure we're not doing anything to particles that are not in our cell
-    if(threadIdx.x<30/*cellOcc*/){
+    if(threadIdx.x<10&&threadIdx.x<cellOcc){
         //lets load in our particles properties to our peice of shared memory
         //Due to limits on threads if we have more particles to this key than
         //Threads we may have to sacrifice some particles to sample for less
@@ -135,14 +135,13 @@ __global__ void fluidSolverKernal(float3 *d_posArray, float3 *d_velArray, unsign
         float sameCheck;
         float3 nPartPosTemp;
         int i;
-        for(i=0;i<cellOcc&&i<30; i++){
+        for(i=0;i<cellOcc&&i<10; i++){
             //if our neightbour particle is our current particle then we dont
             //want it to be effect our calculations. If we use this we can
             //discard any calculations with it without creating branching
             //conditions
             nPartPosTemp = nParticleData[i].pos;
-            sameCheck = (float)!(threadIdx.x == i);
-            density += _particleMass * densityWeighting(curPartPos,nPartPosTemp,_smoothingLength,densKernConst) * sameCheck;
+            density += _particleMass * densityWeighting(curPartPos,nPartPosTemp,_smoothingLength,densKernConst);
         }
         nParticleData[threadIdx.x].density = density;
 
@@ -154,7 +153,7 @@ __global__ void fluidSolverKernal(float3 *d_posArray, float3 *d_velArray, unsign
         float3 viscosityForce = make_float3(0,0,0);
         float nPartDenTemp;
         float currPressTemp,nPressTemp;
-        for(i=0;i<cellOcc&&i<30;i++){
+        for(i=0;i<cellOcc&&i<10;i++){
             nPartPosTemp = nParticleData[i].pos;
             nPartDenTemp = nParticleData[i].density;
             //if our particle is in exacly the same position as our current particle
@@ -178,6 +177,7 @@ __global__ void fluidSolverKernal(float3 *d_posArray, float3 *d_velArray, unsign
         //euler intergration
         float3 newVel = curPartVel + (acc * _timestep);
         float3 newPos = curPartPos + (newVel * _timestep);
+        if(newPos.y<0) newPos.y = 0;
 
         //leap frog integration
 //        float3 velHalfBack = curPartVel - ( acc * _timestep * 0.5);
@@ -185,7 +185,7 @@ __global__ void fluidSolverKernal(float3 *d_posArray, float3 *d_velArray, unsign
 //        float3 newVel = (velHalfBack + velHalfForward) * 0.5;
 //        float3 newPos = curPartPos + (newVel * _timestep);
 
-        //printf("vel: %f,%f,%f\n",newVel.x,newVel.y,newVel.z);
+        printf("pos: %f,%f,%f\n",newPos.x,newPos.y,newPos.z);
 
         //printf("vel: %f,%f,%f\n",newVel.x,newVel.y,newVel.z);
 
@@ -257,8 +257,8 @@ void countCellOccupancy(unsigned int *d_hashArray, unsigned int *d_cellOccArray,
 
 
     //DEBUG: uncomment to print out counted cell occupancy
-    thrust::device_ptr<unsigned int> t_occPtr = thrust::device_pointer_cast(d_cellOccArray);
-    thrust::copy(t_occPtr, t_occPtr+_hashTableSize, std::ostream_iterator<unsigned int>(std::cout, " "));
+    //thrust::device_ptr<unsigned int> t_occPtr = thrust::device_pointer_cast(d_cellOccArray);
+    //thrust::copy(t_occPtr, t_occPtr+_hashTableSize, std::ostream_iterator<unsigned int>(std::cout, " "));
     // check for error
     cudaError_t error = cudaGetLastError();
     if(error != cudaSuccess)
@@ -313,6 +313,8 @@ void fluidSolver(float3 *d_posArray, float3 *d_velArray, unsigned int *d_cellOcc
     //std::cout<<"fluidSolver"<<std::endl;
     //printf("memory allocated: %d",_maxNumThreads*(sizeof(particleProp)));
     fluidSolverKernal<<<_hashTableSize, 30>>>(d_posArray,d_velArray,d_cellOccArray,d_cellIndxArray,_smoothingLength,_timestep, _particleMass, _restDensity,_gasConstant,_visCoef, _densKernConst, _pressKernConst, _viscKernConst);
+
+    std::cout<<std::endl;
 
     // check for error
     cudaError_t error = cudaGetLastError();

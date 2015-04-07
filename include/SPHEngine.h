@@ -27,7 +27,7 @@ public:
     /// @brief defualt constructor
     /// @param _numParticles how many particles we want to have on simulation initialisation.
     //----------------------------------------------------------------------------------------------------------------------
-    SPHEngine(unsigned int _numParticles = 0);
+    SPHEngine(unsigned int _numParticles = 0, unsigned int _volume = 1, float _density = 1000, unsigned int _particlesPerCell = 20);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief default destructor
     //----------------------------------------------------------------------------------------------------------------------
@@ -60,6 +60,10 @@ public:
     //----------------------------------------------------------------------------------------------------------------------
 private:
     //----------------------------------------------------------------------------------------------------------------------
+    /// @brief a function that calculates our cell size based on the the density, volume and number of particles in our scene
+    //----------------------------------------------------------------------------------------------------------------------
+    void calcCellSize();
+    //----------------------------------------------------------------------------------------------------------------------
     /// @brief calculate our kernal constance which depends on our hash cell size
     //----------------------------------------------------------------------------------------------------------------------
     void calcKernalConsts();
@@ -79,6 +83,10 @@ private:
     /// @brief the smoothing length of our simulation. Can also be thought of as hash cell size.
     //----------------------------------------------------------------------------------------------------------------------
     float m_smoothingLength;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief the maximum number of particles per cell
+    //----------------------------------------------------------------------------------------------------------------------
+    unsigned int m_numParticlePerCell;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a simple function to caluclate next prime number of the inpur variable
     /// @param _x - vaule you wish to calculate next prime number for

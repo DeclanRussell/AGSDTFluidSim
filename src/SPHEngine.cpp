@@ -8,12 +8,14 @@
 
 #define pi 3.14159265359f
 //----------------------------------------------------------------------------------------------------------------------
-SPHEngine::SPHEngine(unsigned int _numParticles) : m_numParticles(_numParticles),
-                                                   m_volume(m_numParticles),
-                                                   m_density(1),
-                                                   m_mass(1),
-                                                   m_smoothingLength(1)
+SPHEngine::SPHEngine(unsigned int _numParticles, unsigned int _volume, float _density, unsigned int _particlesPerCell) : m_numParticles(_numParticles),
+                                                                                                                         m_volume(_volume),
+                                                                                                                         m_numParticlePerCell(_particlesPerCell),
+                                                                                                                         m_density(_density)
+
 {
+    calcMass();
+    calcCellSize();
     init();
 }
 
@@ -36,10 +38,11 @@ void SPHEngine::init(){
     std::vector<float3> particles;
     float3 tempF3;
     float tx,ty,tz;
-    tx=ty=tz=-5.0;
+    tx=tz=-10.0;
+    ty = 1.0;
     for(unsigned int i=0; i<m_numParticles; i++){
-        if(tx>5){ tx=-5.0; tz+=0.5;}
-        if(tz>5){ tz=-5.0; ty+=0.5;}
+        if(tx>10){ tx=-10.0; tz+=0.5;}
+        if(tz>10){ tz=-10.0; ty+=0.5;}
 
         tempF3.x = tx;
         tempF3.y = ty;
@@ -128,7 +131,7 @@ void SPHEngine::update(float _timeStep){
     size_t d_posSize;
     cudaGraphicsMapResources(1,&m_cudaBufferPtr);
     cudaGraphicsResourceGetMappedPointer((void**)&d_posPtr,&d_posSize,m_cudaBufferPtr);
-    std::cout<<"d_posPointer is "<<d_posPtr<<std::endl;
+
     //calculate our hash keys
     createHashTable(m_dhashKeys,d_posPtr,m_numParticles,m_smoothingLength, m_hashTableSize, m_numThreadsPerBlock);
 
@@ -161,6 +164,11 @@ void SPHEngine::drawArrays(){
     glBindVertexArray(m_VAO);
     glDrawArrays(GL_POINTS, 0, m_numParticles);
     glBindVertexArray(0);
+}
+//----------------------------------------------------------------------------------------------------------------------
+void SPHEngine::calcCellSize(){
+    m_smoothingLength = (m_numParticlePerCell*m_mass)/ m_density;
+    std::cout<<"Cell Size: "<<m_smoothingLength<<std::endl;
 }
 //----------------------------------------------------------------------------------------------------------------------
 void SPHEngine::calcKernalConsts()

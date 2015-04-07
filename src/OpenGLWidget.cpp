@@ -31,6 +31,8 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     m_spinXFace=0;
     m_spinYFace=0;
     m_modelPos=ngl::Vec3(0.0);
+    //init our point size
+    m_pointSize = 5.0f;
     // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
     this->resize(_parent->size());
 }
@@ -39,6 +41,13 @@ OpenGLWidget::~OpenGLWidget(){
     ngl::NGLInit *Init = ngl::NGLInit::instance();
     std::cout<<"Shutting down NGL, removing VAO's and Shaders\n";
     Init->NGLQuit();
+
+    //clean up everything
+    glDeleteVertexArrays(1,&m_billboardVAO);
+    glDeleteTextures(1,&m_depthRender);
+    glDeleteFramebuffers(1,&m_staticFrameBuffer);
+    glDeleteRenderbuffers(1,&m_staticDepthBuffer);
+
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::initializeGL(){
@@ -47,11 +56,14 @@ void OpenGLWidget::initializeGL(){
     // gl commands from the lib, if this is not done program will crash
     ngl::NGLInit::instance();
 
-    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+    glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
     // enable depth testing for drawing
     glEnable(GL_DEPTH_TEST);
     // enable multisampling for smoother drawing
-    //glEnable(GL_MULTISAMPLE);
+    glEnable(GL_MULTISAMPLE);
+    //enable point sprites
+    glEnable(GL_POINT_SPRITE);
+    glEnable(GL_PROGRAM_POINT_SIZE);
 
     // as re-size is not explicitly called we need to do this.
     glViewport(0,0,width(),height());
@@ -68,50 +80,150 @@ void OpenGLWidget::initializeGL(){
     // Now we will create a basic Camera from the graphics library
     // This is a static camera so it only needs to be set once
     // First create Values for the camera position
-    ngl::Vec3 from(0,0,40);
+    ngl::Vec3 from(0,0,20);
     ngl::Vec3 to(0,0,0);
     ngl::Vec3 up(0,1,0);
     m_cam= new ngl::Camera(from,to,up);
     // set the shape using FOV 45 Aspect Ratio based on Width and Height
-    // The final two are near and far clipping planes of 0.5 and 10
-    m_cam->setShape(45,(float)width()/height(),0.5,150);
+    // The final two are near and far clipping planes of 0.1 and 100
+    m_cam->setShape(45,(float)width()/height(),0.1,10);
 
-    //set up our instancing shader
+    //create our local frame buffer
+    glGenFramebuffers(1,&m_staticFrameBuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, m_staticFrameBuffer);
+
+    // The depth buffer so that we have a depth test when we render to texture
+    glGenRenderbuffers(1, &m_staticDepthBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, m_staticDepthBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width(), height());
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_staticDepthBuffer);
+
+    //Create our depth texture to render to on the GPU
+    glGenTextures(1, &m_depthRender);
+    glBindTexture(GL_TEXTURE_2D, m_depthRender);
+    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, width(), height(), 0,GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+    // Set our render target to colour attachment 1
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, m_depthRender, 0);
+    // Set the list of draw buffers.
+    GLenum DrawBuffers[1] = {GL_COLOR_ATTACHMENT1};
+    glDrawBuffers(1, DrawBuffers);
+
+    //check to see if the frame buffer is ok
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE){
+        std::cerr<<"Local framebuffer could not be created"<<std::endl;
+        exit(-1);
+    }
+
+    //create our billboard geomtry
+    float vertex[]={
+        //bottom left
+        -1.0f,-1.0f,
+        //top left
+        -1.0f,1.0f,
+        //bottom right
+        1.0f,-1.0f,
+        //top left
+        -1.0f,1.0f,
+        //top right
+        1.0f,1.0f,
+        //bottom right
+        1.0f,-1.0f
+    };
+    float texCoords[]={
+        //bottom left
+        0.0,0.0f,
+        //top left
+        0.0f,1.0f,
+        //bottom right
+        1.0f,0.0f,
+        //top left
+        0.0f,1.0f,
+        //top right
+        1.0f,1.0f,
+        //bottom right
+        1.0f,0.0f
+    };
+
+    glGenVertexArrays(1,&m_billboardVAO);
+    glBindVertexArray(m_billboardVAO);
+    GLuint billboardVBO[2];
+    glGenBuffers(2, billboardVBO);
+    glBindBuffer(GL_ARRAY_BUFFER,billboardVBO[0]);
+    glBufferData(GL_ARRAY_BUFFER,sizeof(vertex),vertex,GL_STATIC_DRAW);
+    glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE,sizeof(float)*2.0,(GLvoid*)(0*sizeof(GL_FLOAT)));
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER,billboardVBO[1]);
+    glBufferData(GL_ARRAY_BUFFER,sizeof(texCoords),texCoords,GL_STATIC_DRAW);
+    glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,sizeof(float)*2.0,(GLvoid*)(0*sizeof(GL_FLOAT)));
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER,0);
+    glBindVertexArray(0);
+
+
+    //set up our particle shader to render depth information to a texture
     ngl::ShaderLib *shader=ngl::ShaderLib::instance();
     //first lets add out deformation shader to our program
     //create the program
-    shader->createShaderProgram("InstancedPhong");
+    shader->createShaderProgram("ParticleDepth");
     //add our shaders
-    shader->attachShader("InstancedPhongVert",ngl::VERTEX);
-    shader->attachShader("InstancedPhongFrag",ngl::FRAGMENT);
+    shader->attachShader("particleDepthVert",ngl::VERTEX);
+    shader->attachShader("particleDepthFrag",ngl::FRAGMENT);
     //load the source
-    shader->loadShaderSource("InstancedPhongVert","shaders/instancedPhongVert.glsl");
-    shader->loadShaderSource("InstancedPhongFrag","shaders/instancedPhongFrag.glsl");
+    shader->loadShaderSource("particleDepthVert","shaders/particleDepthVert.glsl");
+    shader->loadShaderSource("particleDepthFrag","shaders/particleDepthFrag.glsl");
     //compile them
-    shader->compileShader("InstancedPhongVert");
-    shader->compileShader("InstancedPhongFrag");
+    shader->compileShader("particleDepthVert");
+    shader->compileShader("particleDepthFrag");
     //attach them to our program
-    shader->attachShaderToProgram("InstancedPhong","InstancedPhongVert");
-    shader->attachShaderToProgram("InstancedPhong","InstancedPhongFrag");
+    shader->attachShaderToProgram("ParticleDepth","particleDepthVert");
+    shader->attachShaderToProgram("ParticleDepth","particleDepthFrag");
     //link our shader to opengl
-    shader->linkProgramObject("InstancedPhong");
+    shader->linkProgramObject("ParticleDepth");
+
+
+    //create our water shader
+    //create program
+    shader->createShaderProgram("FluidShader");
+    //add shaders
+    shader->attachShader("fluidShaderVert",ngl::VERTEX);
+    shader->attachShader("fluidShaderFrag",ngl::FRAGMENT);
+    //load source
+    shader->loadShaderSource("fluidShaderVert","shaders/fluidShaderVert.glsl");
+    shader->loadShaderSource("fluidShaderFrag","shaders/fluidShaderFrag.glsl");
+    //compile them
+    shader->compileShader("fluidShaderVert");
+    shader->compileShader("fluidShaderFrag");
+    //attach them to our program
+    shader->attachShaderToProgram("FluidShader","fluidShaderVert");
+    shader->attachShaderToProgram("FluidShader","fluidShaderFrag");
+    //link our shader to openGL
+    shader->linkProgramObject("FluidShader");
 
     //set some uniforms
-    (*shader)["InstancedPhong"]->use();
+    (*shader)["ParticleDepth"]->use();
+
+    (*shader)["FluidShader"]->use();
+    //set our inverse projection matrix
+    ngl::Mat4 P = m_cam->getProjectionMatrix();
+    ngl::Mat4 PInv = P.inverse();
+    shader->setUniform("PInv",PInv);
+    shader->setUniform("depthTex",0);
+    shader->setUniform("texelSizeX",1.0f/width());
+    shader->setUniform("texelSizeY",1.0f/height());
+
+    //to be used later with phone shading
     shader->setShaderParam3f("light.position",-1,-1,-1);
     shader->setShaderParam3f("light.intensity",0.8,0.8,0.8);
     shader->setShaderParam3f("Kd",0.5, 0.5, 0.5);
     shader->setShaderParam3f("Ka",0.5, 0.5, 0.5);
     shader->setShaderParam3f("Ks",1.0,1.0,1.0);
     shader->setShaderParam1f("shininess",100.0);
-    shader->setShaderParam4f("color",0,1,1,1);
 
     //allocate some space for our SPHEngine
-    m_SPHEngine = new SPHEngine(30000);
-    m_SPHEngine->setDesity(900);
-    m_SPHEngine->setVolume(10);
-    m_SPHEngine->setSmoothingLength(1.5);
-//    m_SPHEngine->update(10);
+    m_SPHEngine = new SPHEngine(3000);
     m_currentTime = m_currentTime.currentTime();
     startTimer(0);
 }
@@ -120,7 +232,16 @@ void OpenGLWidget::resizeGL(const int _w, const int _h){
     // set the viewport for openGL
     glViewport(0,0,_w,_h);
     m_cam->setShape(45,(float)_w/_h, 0.5,150);
-
+    //resize our render targets
+    glBindTexture(GL_TEXTURE_2D, m_depthRender);
+    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, _w, _h, 0,GL_RGBA, GL_UNSIGNED_BYTE, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, m_staticDepthBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width(), height());
+    //update our texel sizes
+    ngl::ShaderLib *shader=ngl::ShaderLib::instance();
+    (*shader)["FluidShader"]->use();
+    shader->setUniform("texelSizeX",1.0f/_w);
+    shader->setUniform("texelSizeY",1.0f/_h);
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::timerEvent(QTimerEvent *){
@@ -135,15 +256,13 @@ void OpenGLWidget::paintGL(){
     m_currentTime = m_currentTime.currentTime();
 
     //update our fluid simulation with our time step
-    m_SPHEngine->update((float)msecsPassed/1000.0);
+    //m_SPHEngine->update((float)msecsPassed/1000.0);
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //Initialise the model matrix
 
+    // create the rotation matrices
     ngl::Mat4 rotX;
     ngl::Mat4 rotY;
 
-    // create the rotation matrices
     rotX.rotateX(m_spinXFace);
     rotY.rotateY(m_spinYFace);
     // multiply the rotations
@@ -153,9 +272,50 @@ void OpenGLWidget::paintGL(){
     m_mouseGlobalTX.m_m[3][1] = m_modelPos.m_y;
     m_mouseGlobalTX.m_m[3][2] = m_modelPos.m_z;
 
-    loadMatricesToShader();
+
+    // Calculate MVP matricies
+    ngl::Mat4 P = m_cam->getProjectionMatrix();
+//    std::cout<<"Projection martix:"<<std::endl;
+//    std::cout<<P.m_m[0][0]<<" "<<P.m_m[1][0]<<" "<<P.m_m[2][0]<<" "<<P.m_m[3][0]<<std::endl;
+//    std::cout<<P.m_m[0][1]<<" "<<P.m_m[1][1]<<" "<<P.m_m[2][1]<<" "<<P.m_m[3][1]<<std::endl;
+//    std::cout<<P.m_m[0][2]<<" "<<P.m_m[1][2]<<" "<<P.m_m[2][2]<<" "<<P.m_m[3][2]<<std::endl;
+//    std::cout<<P.m_m[0][3]<<" "<<P.m_m[1][3]<<" "<<P.m_m[2][3]<<" "<<P.m_m[3][3]<<std::endl;
+    ngl::Mat4 MV = m_mouseGlobalTX * m_cam->getViewMatrix();
+    ngl::Mat4 MVP = MV * P;
+
+    //Here is where we will ultimately load our matricies to shader once written
+    ngl::ShaderLib *shader=ngl::ShaderLib::instance();
+    (*shader)["ParticleDepth"]->use();
+    float pointSize = sqrt(m_pointSize);
+    shader->setUniform("screenWidth",width());
+    shader->setUniform("pointRadius",pointSize);
+    shader->setUniform("P",P);
+    shader->setUniform("MV",MV);
+    shader->setUniform("MVP",MVP);
+
+
+    // Render to our framebuffer
+    glBindFramebuffer(GL_FRAMEBUFFER, m_staticFrameBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, m_staticDepthBuffer);
+    //clear our frame buffer
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     m_SPHEngine->drawArrays();
 
+    //unbind our local static frame buffer
+    glBindFramebuffer(GL_FRAMEBUFFER,0);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //bind our fluid shader
+    (*shader)["FluidShader"]->use();
+    //bind our shader and billboard
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D,m_depthRender);
+    glBindVertexArray(m_billboardVAO);
+    //draw our billboard
+    glDrawArrays(GL_TRIANGLES,0,6);
+
+
+    //write our framerate
     QString text;
     if(msecsPassed==0){
         text.sprintf("framerate is faster than we can calculate lul :')");
@@ -167,25 +327,17 @@ void OpenGLWidget::paintGL(){
 
 }
 //----------------------------------------------------------------------------------------------------------------------
-void OpenGLWidget::loadMatricesToShader(){
-    // Calculate MVP matricies
-    ngl::Mat4 P = m_cam->getProjectionMatrix();
-    ngl::Mat4 MV = m_mouseGlobalTX * m_cam->getViewMatrix();
-
-    ngl::Mat4 MVP = MV * P;
-
-    //Here is where we will ultimately load our matricies to shader once written
-    ngl::ShaderLib *shader=ngl::ShaderLib::instance();
-    (*shader)["InstancedPhong"]->use();
-    shader->setUniform("MV",MV);
-    shader->setUniform("MVP",MVP);
-
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::keyPressEvent(QKeyEvent *_event){
     if(_event->key()==Qt::Key_Escape){
         QGuiApplication::exit();
+    }
+    if(_event->key()==Qt::Key_Plus){
+        m_pointSize+=1.0f;
+        std::cout<<"particle size: "<<m_pointSize<<std::endl;
+    }
+    if(_event->key()==Qt::Key_Minus){
+        m_pointSize-=1.0f;
+        std::cout<<"particle size: "<<m_pointSize<<std::endl;
     }
 }
 //----------------------------------------------------------------------------------------------------------------------

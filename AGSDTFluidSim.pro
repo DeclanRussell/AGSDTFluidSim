@@ -30,7 +30,9 @@ HEADERS += \
 FORMS += \
     ui/mainwindow.ui
 
-OTHER_FILES += shaders/*glsl
+OTHER_FILES += shaders/*glsl \
+    shaders/fluidShaderFrag.glsl \
+    shaders/fluidShaderVert.glsl
 
 
 INCLUDEPATH +=./include /opt/local/include $$(HOME)/NGL/include/
