@@ -86,7 +86,7 @@ void OpenGLWidget::initializeGL(){
     m_cam= new ngl::Camera(from,to,up);
     // set the shape using FOV 45 Aspect Ratio based on Width and Height
     // The final two are near and far clipping planes of 0.1 and 100
-    m_cam->setShape(45,(float)width()/height(),0.1,10);
+    m_cam->setShape(45,(float)width()/height(),1,1000);
 
     //create our local frame buffer
     glGenFramebuffers(1,&m_staticFrameBuffer);
@@ -231,7 +231,7 @@ void OpenGLWidget::initializeGL(){
 void OpenGLWidget::resizeGL(const int _w, const int _h){
     // set the viewport for openGL
     glViewport(0,0,_w,_h);
-    m_cam->setShape(45,(float)_w/_h, 0.5,150);
+    m_cam->setShape(45,(float)_w/_h, 1,1000);
     //resize our render targets
     glBindTexture(GL_TEXTURE_2D, m_depthRender);
     glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, _w, _h, 0,GL_RGBA, GL_UNSIGNED_BYTE, 0);
@@ -240,6 +240,9 @@ void OpenGLWidget::resizeGL(const int _w, const int _h){
     //update our texel sizes
     ngl::ShaderLib *shader=ngl::ShaderLib::instance();
     (*shader)["FluidShader"]->use();
+    ngl::Mat4 P = m_cam->getProjectionMatrix();
+    ngl::Mat4 PInv = P.inverse();
+    shader->setUniform("PInv",PInv);
     shader->setUniform("texelSizeX",1.0f/_w);
     shader->setUniform("texelSizeY",1.0f/_h);
 }
@@ -275,20 +278,22 @@ void OpenGLWidget::paintGL(){
 
     // Calculate MVP matricies
     ngl::Mat4 P = m_cam->getProjectionMatrix();
-//    std::cout<<"Projection martix:"<<std::endl;
-//    std::cout<<P.m_m[0][0]<<" "<<P.m_m[1][0]<<" "<<P.m_m[2][0]<<" "<<P.m_m[3][0]<<std::endl;
-//    std::cout<<P.m_m[0][1]<<" "<<P.m_m[1][1]<<" "<<P.m_m[2][1]<<" "<<P.m_m[3][1]<<std::endl;
-//    std::cout<<P.m_m[0][2]<<" "<<P.m_m[1][2]<<" "<<P.m_m[2][2]<<" "<<P.m_m[3][2]<<std::endl;
-//    std::cout<<P.m_m[0][3]<<" "<<P.m_m[1][3]<<" "<<P.m_m[2][3]<<" "<<P.m_m[3][3]<<std::endl;
     ngl::Mat4 MV = m_mouseGlobalTX * m_cam->getViewMatrix();
     ngl::Mat4 MVP = MV * P;
+    ngl::Mat4 Pinv = P.inverse();
 
     //Here is where we will ultimately load our matricies to shader once written
     ngl::ShaderLib *shader=ngl::ShaderLib::instance();
     (*shader)["ParticleDepth"]->use();
-    float pointSize = sqrt(m_pointSize);
+
+    //calculate the eyespace radius of our points
+    ngl::Vec4 esr(m_pointSize*0.5,0,0,1.0);
+    esr = Pinv * esr;
+    //std::cout<<"real world size: "<<esr.m_x<<" "<<esr.m_y<<" "<<esr.m_y<<" "<<esr.m_w<<std::endl;
+
     shader->setUniform("screenWidth",width());
-    shader->setUniform("pointRadius",pointSize);
+    shader->setUniform("pointSize",m_pointSize);
+    shader->setUniform("pointRadius",esr.m_x/esr.m_w);
     shader->setUniform("P",P);
     shader->setUniform("MV",MV);
     shader->setUniform("MVP",MVP);

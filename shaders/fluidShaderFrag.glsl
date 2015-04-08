@@ -39,7 +39,7 @@ out vec4 FragColor;
 vec3 uvToEye(vec2 _uv, float _depth){
     vec2 normUV = (_uv*2) - 1.0;
 
-    //float d = -0.1 / (-1.0 + _depth * ((10.0-0.1)/10.0));
+    //float d = -1 / (-0 + _depth * ((1000.0-1)/1000.0));
     //return vec3(normUV,_depth) * d;
     return vec3(PInv * vec4(normUV,_depth,1.0));
 
@@ -59,18 +59,18 @@ void main(void)
     vec3 posEye = vec3(uvToEye(VTexCoord,depth));
 
     // calculate differences
-    vec2 tempTextCoord = VTexCoord + vec2(texelSizeX, 0);
+    vec2 tempTextCoord = VTexCoord + vec2(texelSizeX*3, 0);
     vec3 ddx = uvToEye(tempTextCoord,texture(depthTex,tempTextCoord).x) - posEye;
-    tempTextCoord = VTexCoord + vec2(-texelSizeX, 0);
+    tempTextCoord = VTexCoord + vec2(-texelSizeX*3, 0);
     vec3 ddx2 = posEye - uvToEye(tempTextCoord,texture(depthTex,tempTextCoord).x);
 
     if (abs(ddx.z) > abs(ddx2.z)) {
         ddx = ddx2;
     }
 
-    tempTextCoord = VTexCoord + vec2(0,texelSizeY);
+    tempTextCoord = VTexCoord + vec2(0,texelSizeY*3);
     vec3 ddy = uvToEye(tempTextCoord,texture(depthTex,tempTextCoord).x) - posEye;
-    tempTextCoord = VTexCoord + vec2(0,-texelSizeY);
+    tempTextCoord = VTexCoord + vec2(0,-texelSizeY*3);
     vec3 ddy2 = posEye - uvToEye(tempTextCoord,texture(depthTex,tempTextCoord).x);
 
     if (abs(ddy2.z) < abs(ddy.z)) {
@@ -79,16 +79,15 @@ void main(void)
 
     // calculate normal
     vec3 n1 = cross(ddx, ddy);
-//    vec3 n2 = cross(ddy,ddx2);
-//    vec3 n3 = cross(ddx2,ddy2);
-//    vec3 n4 = cross(ddy2,ddx);
-
-    vec3 n = normalize(n1/* + n2 + n3 + n4*/);
+    vec3 n = normalize(n1);
 
 
-
+    //phong shading
     //FragColor = vec4(ads(posEye,n)*vec3(0,1,1),1.0);
-    //FragColor = vec4(depth,0.0,0.0,1.0);
+
+    //normals shading
     FragColor = vec4(n,1.0);
+
+    //raw input generally depth
     //FragColor = texture(depthTex, VTexCoord);
 }
