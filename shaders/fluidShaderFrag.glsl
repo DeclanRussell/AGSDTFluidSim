@@ -59,18 +59,18 @@ void main(void)
     vec3 posEye = vec3(uvToEye(VTexCoord,depth));
 
     // calculate differences
-    vec2 tempTextCoord = VTexCoord + vec2(texelSizeX*3, 0);
+    vec2 tempTextCoord = VTexCoord + vec2(texelSizeX, 0);
     vec3 ddx = uvToEye(tempTextCoord,texture(depthTex,tempTextCoord).x) - posEye;
-    tempTextCoord = VTexCoord + vec2(-texelSizeX*3, 0);
+    tempTextCoord = VTexCoord + vec2(-texelSizeX, 0);
     vec3 ddx2 = posEye - uvToEye(tempTextCoord,texture(depthTex,tempTextCoord).x);
 
     if (abs(ddx.z) > abs(ddx2.z)) {
         ddx = ddx2;
     }
 
-    tempTextCoord = VTexCoord + vec2(0,texelSizeY*3);
+    tempTextCoord = VTexCoord + vec2(0,texelSizeY);
     vec3 ddy = uvToEye(tempTextCoord,texture(depthTex,tempTextCoord).x) - posEye;
-    tempTextCoord = VTexCoord + vec2(0,-texelSizeY*3);
+    tempTextCoord = VTexCoord + vec2(0,-texelSizeY);
     vec3 ddy2 = posEye - uvToEye(tempTextCoord,texture(depthTex,tempTextCoord).x);
 
     if (abs(ddy2.z) < abs(ddy.z)) {
