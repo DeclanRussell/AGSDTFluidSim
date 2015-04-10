@@ -32,7 +32,7 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     m_spinYFace=0;
     m_modelPos=ngl::Vec3(0.0);
     //init our point size
-    m_pointSize = 5.0f;
+    m_pointSize = 1.0f;
     // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
     this->resize(_parent->size());
 }
@@ -80,7 +80,7 @@ void OpenGLWidget::initializeGL(){
     // Now we will create a basic Camera from the graphics library
     // This is a static camera so it only needs to be set once
     // First create Values for the camera position
-    ngl::Vec3 from(0,0,20);
+    ngl::Vec3 from(0,10,40);
     ngl::Vec3 to(0,0,0);
     ngl::Vec3 up(0,1,0);
     m_cam= new ngl::Camera(from,to,up);

@@ -56,6 +56,7 @@ __global__ void countCellOccKernal(unsigned int *d_hashArray, unsigned int *d_ce
 __device__ float densityWeighting(float3 _currentPos, float3 _neighPos,float _smoothingLength, float _densKernConst){
     float rLength = length(_currentPos - _neighPos);
     float smoothMinDist = (_smoothingLength - rLength);
+//    printf("const %f\n",_densKernConst);
     float weighting = _densKernConst * smoothMinDist * smoothMinDist * smoothMinDist;
     //if length of r is larger than our smoothing length we want the weighting to be zero
     //However branching conditions are slow so here is a neat little trick so we dont need one
@@ -72,6 +73,7 @@ __device__ float densityWeighting(float3 _currentPos, float3 _neighPos,float _sm
 __device__ float3 pressureWeighting(float3 _currentPos, float3 _neighPos,float _smoothingLength, float _pressKernConst){
     float3 r = _currentPos - _neighPos;
     float rLength = length(r);
+//    printf("const %f\n",_pressKernConst);
     float weighting = _pressKernConst * (_smoothingLength-rLength) * (_smoothingLength-rLength);
     r /= rLength;
     r *= weighting;
@@ -131,18 +133,20 @@ __global__ void fluidSolverPerParticleKernal(float3 *d_posArray, float3 *d_velAr
         //to shared memory
         __syncthreads();
 
-        //calculate the density of our particle
+        // Calculate the density of our particle
+        // Possibly could optimise this with more dynamic parralism.
+        // However for such a small loop this may not actually make
+        // much difference. We also will have to take into count
+        // kernal launch times & memory access.
         float density = 0;
         float3 nPartPosTemp;
         int i;
-        for(i=0;i<_cellOcc&&i<10; i++){
-            //if our neightbour particle is our current particle then we dont
-            //want it to be effect our calculations. If we use this we can
-            //discard any calculations with it without creating branching
-            //conditions
+        int sameples = min(_cellOcc,10);
+        for(i=0;i<sameples; i++){
             nPartPosTemp = nParticleData[i].pos;
             density += _particleMass * densityWeighting(curPartPos,nPartPosTemp,_smoothingLength,densKernConst);
         }
+
         if(idx<10){
             nParticleData[idx].density = density;
         }
@@ -150,9 +154,14 @@ __global__ void fluidSolverPerParticleKernal(float3 *d_posArray, float3 *d_velAr
         //Once this is done we can finally do some navier-stokes!!
         float3 pressureForce = make_float3(0,0,0);
         float3 viscosityForce = make_float3(0,0,0);
+        float3 pressWeightTemp, viscWeightTemp;
+        float3 tensionSum = make_float3(0);
+        float3 tensionSumTwo = make_float3(0) ;
+
         float nPartDenTemp;
+        float massDivDen;
         float currPressTemp,nPressTemp;
-        for(i=0;i<_cellOcc&&i<10;i++){
+        for(i=0;i<sameples;i++){
             nPartPosTemp = nParticleData[i].pos;
             nPartDenTemp = nParticleData[i].density;
             //if our particle is in exacly the same position as our current particle
@@ -161,27 +170,53 @@ __global__ void fluidSolverPerParticleKernal(float3 *d_posArray, float3 *d_velAr
             //calculate the pressure force
             currPressTemp = (_gasConstant * (density - _restDensity));
             nPressTemp = (_gasConstant * (nPartDenTemp - _restDensity));
-            pressureForce += ( (currPressTemp/(currPressTemp*currPressTemp)) + (nPressTemp/(nPressTemp*nPressTemp)) ) * _particleMass * pressureWeighting(curPartPos,nPartPosTemp,_smoothingLength,pressKernConst);
+            pressWeightTemp = pressureWeighting(curPartPos,nPartPosTemp,_smoothingLength,pressKernConst);
+            pressureForce += ( (currPressTemp/(currPressTemp*currPressTemp)) + (nPressTemp/(nPressTemp*nPressTemp)) ) * _particleMass * pressWeightTemp;
             //calculate our viscosity force
-            viscosityForce += (curPartVel - nParticleData[i].vel) * (_particleMass/nPartDenTemp) * viscosityWeighting(curPartPos,nPartPosTemp,_smoothingLength,viscKernConst);
+            //if the density is zero then we will get NAN's in our devide
+            if(nPartDenTemp==0.0)continue;
+            viscWeightTemp = viscosityWeighting(curPartPos,nPartPosTemp,_smoothingLength,viscKernConst);
+            viscosityForce += (curPartVel - nParticleData[i].vel) * (_particleMass/nPartDenTemp) * viscWeightTemp;
+
+            //this is needed for surface tension
+            massDivDen = _particleMass/nPartDenTemp;
+            tensionSum += massDivDen * pressWeightTemp;
+            tensionSumTwo += massDivDen * viscWeightTemp;
         }
+
+        //finish our fource calculations
         pressureForce *= -density;
         viscosityForce *= _visCoef;
+        //calculate our surface tension
+        float nLength = length(tensionSumTwo);
+        float3 tensionForce = make_float3(0);
+        //1.0 is currently our threshold as tension becomes very unstable as n approaches 0
+        if(nLength>0.5){
+            //this also needs to be multipied by our tension contant
+            tensionForce = (tensionSumTwo/nLength) * tensionSum;
+        }
 
 
         //calculate our acceleration
         float3 gravity = make_float3(0.0,-9.8,0.0);
-        float3 acc = gravity + pressureForce + viscosityForce;
+        float3 acc = gravity + pressureForce + viscosityForce - tensionForce;
         //calculate our new velocity
 
         //euler intergration
         float3 newVel = curPartVel + (acc * _timestep);
         float3 newPos = curPartPos + (newVel * _timestep);
-        if(newPos.y<0) newPos.y = 0;
+
+        // A bit of collision detection until we have a proper kernal for this
+        if(newPos.y<0){
+            newPos.y = 0;
+            newVel = newVel - 2.0f * dot(newVel,make_float3(0.0,1.0,0.0))*make_float3(0.0,1.0,0.0);
+        }
 
         //update our particle positin and velocity
         d_velArray[particleIdx] = newVel;
         d_posArray[particleIdx] = newPos;
+
+        //printf("pos: %f,%f,%f\n",newVel.x,newVel.y,newVel.z);
     }
 
 
@@ -203,10 +238,10 @@ __global__ void fluidSolverKernalDP(float3 *d_posArray, float3 *d_velArray, unsi
         threads = _maxNumThreads;
     }
 
-    // Now lets use some dynamic parralelism! *Gasps*
-    if(cellOcc>0)
+    // Now lets use some dynamic parallism! *Gasps*
+    if(cellOcc>0){
         fluidSolverPerParticleKernal<<<blocks,threads>>>(d_posArray,d_velArray,d_cellOccArray,d_cellIndxArray,particleIdx,cellOcc,_smoothingLength, _timestep,_particleMass,_restDensity,_gasConstant,_visCoef,densKernConst,pressKernConst,viscKernConst);
-
+    }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -367,6 +402,7 @@ void countCellOccupancy(unsigned int *d_hashArray, unsigned int *d_cellOccArray,
     //DEBUG: uncomment to print out counted cell occupancy
     //thrust::device_ptr<unsigned int> t_occPtr = thrust::device_pointer_cast(d_cellOccArray);
     //thrust::copy(t_occPtr, t_occPtr+_hashTableSize, std::ostream_iterator<unsigned int>(std::cout, " "));
+    //std::cout<<std::endl;
     // check for error
     cudaError_t error = cudaGetLastError();
     if(error != cudaSuccess)
@@ -407,6 +443,7 @@ void createCellIdx(unsigned int* d_cellOccArray, unsigned int _size,unsigned int
 
     //DEBUG: uncomment to print out cell index buffer
     //thrust::copy(t_cellIdxPtr, t_cellIdxPtr+_size, std::ostream_iterator<unsigned int>(std::cout, " "));
+    //std::cout<<std::endl;
     // check for error
     cudaError_t error = cudaGetLastError();
     if(error != cudaSuccess)

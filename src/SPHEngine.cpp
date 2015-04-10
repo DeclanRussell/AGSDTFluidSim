@@ -12,10 +12,12 @@ SPHEngine::SPHEngine(unsigned int _numParticles, unsigned int _volume, float _de
                                                                                                                          m_volume(_volume),
                                                                                                                          m_numParticlePerCell(_particlesPerCell),
                                                                                                                          m_density(_density),
-                                                                                                                         m_smoothingLength(0.001)
+                                                                                                                         m_smoothingLength(1)
 
 {
     calcMass();
+    std::cout<<"Particle Mass: "<<m_mass<<std::endl;
+    calcKernalConsts();
     calcCellSize();
     init();
 }
@@ -42,8 +44,8 @@ void SPHEngine::init(){
     tx=tz=-10.0;
     ty = 1.0;
     for(unsigned int i=0; i<m_numParticles; i++){
-        if(tx>10){ tx=-10.0; tz+=0.5;}
-        if(tz>10){ tz=-10.0; ty+=0.5;}
+        if(tx>10){ tx=-10.0; tz+=0.05;}
+        if(tz>10){ tz=-10.0; ty+=0.05;}
 
         tempF3.x = tx;
         tempF3.y = ty;
@@ -90,7 +92,7 @@ void SPHEngine::init(){
     //initialize them with zeros
     fillUint(m_dCellOccBuffer,m_hashTableSize,0);
     float3 x[m_numParticles];
-    for(int i=0;i<m_numParticles;i++)x[i]=make_float3(0,0,0);
+    for(unsigned int i=0;i<m_numParticles;i++)x[i]=make_float3(0,0,0);
     cudaMemcpy(m_dVelBuffer, x, m_numParticles * sizeof(float3), cudaMemcpyHostToDevice);
     //allocate space for our cell index buffer
     cudaMalloc(&m_dCellIndexBuffer, m_hashTableSize*sizeof(unsigned int));
@@ -147,7 +149,7 @@ void SPHEngine::update(float _timeStep){
     createCellIdx(m_dCellOccBuffer,m_hashTableSize,m_dCellIndexBuffer);
 
     //update our particle positions with navier stokes equations
-    fluidSolver(d_posPtr,m_dVelBuffer,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_numThreadsPerBlock,m_smoothingLength,_timeStep,m_mass,m_density,1,1,m_densWeightConst,m_pressWeightConst,m_viscWeightConst);
+    fluidSolver(d_posPtr,m_dVelBuffer,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_numThreadsPerBlock,m_smoothingLength*8,_timeStep,m_mass,m_density,1000,1,m_densWeightConst,m_pressWeightConst,m_viscWeightConst);
 
     //fill our occupancy buffer back up with zeros
     fillUint(m_dCellOccBuffer,m_hashTableSize,0);
@@ -175,6 +177,7 @@ void SPHEngine::calcCellSize(){
 void SPHEngine::calcKernalConsts()
 {
     m_densWeightConst = (15.0f/(pi*m_smoothingLength*m_smoothingLength*m_smoothingLength*m_smoothingLength*m_smoothingLength*m_smoothingLength));
+    std::cout<<"Density Const: "<<m_densWeightConst<<std::endl;
     m_pressWeightConst = -(45.0f/(pi*pow(m_smoothingLength,6)));
     m_viscWeightConst = -(90/(pi*pow(m_smoothingLength,6)));
 }
