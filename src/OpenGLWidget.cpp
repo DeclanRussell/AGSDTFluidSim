@@ -223,7 +223,7 @@ void OpenGLWidget::initializeGL(){
     shader->setShaderParam1f("shininess",100.0);
 
     //allocate some space for our SPHEngine
-    m_SPHEngine = new SPHEngine(3000);
+    m_SPHEngine = new SPHEngine(30000);
     m_currentTime = m_currentTime.currentTime();
     startTimer(0);
 }
@@ -259,8 +259,7 @@ void OpenGLWidget::paintGL(){
     m_currentTime = m_currentTime.currentTime();
 
     //update our fluid simulation with our time step
-    //m_SPHEngine->update((float)msecsPassed/1000.0);
-
+    m_SPHEngine->update((float)msecsPassed/1000.0);
 
     // create the rotation matrices
     ngl::Mat4 rotX;
@@ -343,6 +342,9 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *_event){
     if(_event->key()==Qt::Key_Minus){
         m_pointSize-=1.0f;
         std::cout<<"particle size: "<<m_pointSize<<std::endl;
+    }
+    if(_event->key()==Qt::Key_E){
+        m_SPHEngine->update(0.01);
     }
 }
 //----------------------------------------------------------------------------------------------------------------------

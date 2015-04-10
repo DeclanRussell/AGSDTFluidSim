@@ -12,7 +12,6 @@
 
 #include <stdio.h>
 
-void fillGpuArray(float* array, int count);
 
 //just a function that moves our particles with some wave functions
 void calcPositions(float3* d_pos, int timeStep, int numParticles, int maxNumThreads);

@@ -11,7 +11,8 @@
 SPHEngine::SPHEngine(unsigned int _numParticles, unsigned int _volume, float _density, unsigned int _particlesPerCell) : m_numParticles(_numParticles),
                                                                                                                          m_volume(_volume),
                                                                                                                          m_numParticlePerCell(_particlesPerCell),
-                                                                                                                         m_density(_density)
+                                                                                                                         m_density(_density),
+                                                                                                                         m_smoothingLength(0.001)
 
 {
     calcMass();
@@ -125,7 +126,7 @@ void SPHEngine::init(){
 }
 //----------------------------------------------------------------------------------------------------------------------
 void SPHEngine::update(float _timeStep){
-    std::cout<<"update"<<std::endl;
+    //std::cout<<"update"<<std::endl;
     //map our buffer pointer
     float3* d_posPtr;
     size_t d_posSize;
@@ -167,8 +168,8 @@ void SPHEngine::drawArrays(){
 }
 //----------------------------------------------------------------------------------------------------------------------
 void SPHEngine::calcCellSize(){
-    m_smoothingLength = (m_numParticlePerCell*m_mass)/ m_density;
-    std::cout<<"Cell Size: "<<m_smoothingLength<<std::endl;
+    //m_smoothingLength = (m_numParticlePerCell*m_mass)/ m_density;
+    //std::cout<<"Cell Size: "<<m_smoothingLength<<std::endl;
 }
 //----------------------------------------------------------------------------------------------------------------------
 void SPHEngine::calcKernalConsts()
