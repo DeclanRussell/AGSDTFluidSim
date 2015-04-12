@@ -32,7 +32,7 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     m_spinYFace=0;
     m_modelPos=ngl::Vec3(0.0);
     //init our point size
-    m_pointSize = 1.0f;
+    m_pointSize = 0.5f;
     // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
     this->resize(_parent->size());
 }
@@ -45,7 +45,7 @@ OpenGLWidget::~OpenGLWidget(){
     //clean up everything
     glDeleteVertexArrays(1,&m_billboardVAO);
     glDeleteTextures(1,&m_depthRender);
-    glDeleteFramebuffers(1,&m_staticFrameBuffer);
+    glDeleteFramebuffers(1,&m_depthFrameBuffer);
     glDeleteRenderbuffers(1,&m_staticDepthBuffer);
 
 }
@@ -88,9 +88,9 @@ void OpenGLWidget::initializeGL(){
     // The final two are near and far clipping planes of 0.1 and 100
     m_cam->setShape(45,(float)width()/height(),1,1000);
 
-    //create our local frame buffer
-    glGenFramebuffers(1,&m_staticFrameBuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, m_staticFrameBuffer);
+    //create our local frame buffer for our depth pass
+    glGenFramebuffers(1,&m_depthFrameBuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, m_depthFrameBuffer);
 
     // The depth buffer so that we have a depth test when we render to texture
     glGenRenderbuffers(1, &m_staticDepthBuffer);
@@ -102,6 +102,7 @@ void OpenGLWidget::initializeGL(){
     glGenTextures(1, &m_depthRender);
     glBindTexture(GL_TEXTURE_2D, m_depthRender);
     glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, width(), height(), 0,GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    //note poor filtering is needed to be accurate with pixels and have no smoothing
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
@@ -116,6 +117,29 @@ void OpenGLWidget::initializeGL(){
         std::cerr<<"Local framebuffer could not be created"<<std::endl;
         exit(-1);
     }
+
+    //create our local frame buffer for our bilateral filter pass
+    glGenFramebuffers(1,&m_bilateralFrameBuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, m_bilateralFrameBuffer);
+
+    //create our bilateral texture on to render to on the GPU
+    glGenTextures(1, &m_bilateralRender);
+    glBindTexture(GL_TEXTURE_2D, m_bilateralRender);
+    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, width(), height(), 0,GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+    // Set our render target to colour attachment 1
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, m_bilateralRender, 0);
+    // Set the list of draw buffers.
+    glDrawBuffers(1, DrawBuffers);
+
+    //check to see if the frame buffer is ok
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE){
+        std::cerr<<"Local framebuffer could not be created"<<std::endl;
+        exit(-1);
+    }
+
 
     //create our billboard geomtry
     float vertex[]={
@@ -183,6 +207,23 @@ void OpenGLWidget::initializeGL(){
     //link our shader to opengl
     shader->linkProgramObject("ParticleDepth");
 
+    //create our bilateral filter shader
+    //creat program
+    shader->createShaderProgram("BilateralFilter");
+    //ass shaders
+    shader->attachShader("bilateralFilterVert",ngl::VERTEX);
+    shader->attachShader("bilateralFilterFrag",ngl::FRAGMENT);
+    //load source
+    shader->loadShaderSource("bilateralFilterVert","shaders/bilateralFilterVert.glsl");
+    shader->loadShaderSource("bilateralFilterFrag","shaders/bilateralFilterFrag.glsl");
+    //compile them
+    shader->compileShader("bilateralFilterVert");
+    shader->compileShader("bilateralFilterFrag");
+    //attach them to our program
+    shader->attachShaderToProgram("BilateralFilter","bilateralFilterVert");
+    shader->attachShaderToProgram("BilateralFilter","bilateralFilterFrag");
+    //link our shader to openGL
+    shader->linkProgramObject("BilateralFilter");
 
     //create our water shader
     //create program
@@ -205,6 +246,13 @@ void OpenGLWidget::initializeGL(){
     //set some uniforms
     (*shader)["ParticleDepth"]->use();
 
+    (*shader)["BilateralFilter"]->use();
+    shader->setUniform("depthTex",0);
+    shader->setUniform("blurDir",1.0f,0.0f);
+    shader->setUniform("blurDepthFalloff",0.1f);
+    shader->setUniform("filterRadius",2.0f/width());
+    shader->setUniform("texelSize",1.0f/width());
+
     (*shader)["FluidShader"]->use();
     //set our inverse projection matrix
     ngl::Mat4 P = m_cam->getProjectionMatrix();
@@ -222,8 +270,17 @@ void OpenGLWidget::initializeGL(){
     shader->setShaderParam3f("Ks",1.0,1.0,1.0);
     shader->setShaderParam1f("shininess",100.0);
 
+
     //allocate some space for our SPHEngine
     m_SPHEngine = new SPHEngine(30000);
+    m_SPHEngine->setVolume(10);
+    //add some walls to our simulation
+    m_SPHEngine->addWall(make_float3(0.0f,0.0f,0.0f),make_float3(0.0f,1.0f,0.0f));      //floor
+    //m_SPHEngine->addWall(make_float3(-12.0f,0.0f,0.0f),make_float3(1.0f,0.0f,0.0f));    //left
+    //m_SPHEngine->addWall(make_float3(12.0f,0.0f,0.0f),make_float3(-1.0f,0.0f,0.0f));    //right
+    //m_SPHEngine->addWall(make_float3(0.0f,0.0f,12.0f),make_float3(0.0f,0.0f,-1.0f));    //front
+    //m_SPHEngine->addWall(make_float3(0.0f,0.0f,-12.0f),make_float3(0.0f,0.0f,1.0f));    //back
+
     m_currentTime = m_currentTime.currentTime();
     startTimer(0);
 }
@@ -232,8 +289,10 @@ void OpenGLWidget::resizeGL(const int _w, const int _h){
     // set the viewport for openGL
     glViewport(0,0,_w,_h);
     m_cam->setShape(45,(float)_w/_h, 1,1000);
-    //resize our render targets
+    //resize our render targets and depth buffer
     glBindTexture(GL_TEXTURE_2D, m_depthRender);
+    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, _w, _h, 0,GL_RGBA, GL_UNSIGNED_BYTE, 0);
+    glBindTexture(GL_TEXTURE_2D, m_bilateralRender);
     glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, _w, _h, 0,GL_RGBA, GL_UNSIGNED_BYTE, 0);
     glBindRenderbuffer(GL_RENDERBUFFER, m_staticDepthBuffer);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width(), height());
@@ -245,6 +304,10 @@ void OpenGLWidget::resizeGL(const int _w, const int _h){
     shader->setUniform("PInv",PInv);
     shader->setUniform("texelSizeX",1.0f/_w);
     shader->setUniform("texelSizeY",1.0f/_h);
+
+    (*shader)["BilateralFilter"]->use();
+    shader->setUniform("filterRadius",5.0f/width());
+    shader->setUniform("texelSize",1.0f/width());
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::timerEvent(QTimerEvent *){
@@ -298,23 +361,43 @@ void OpenGLWidget::paintGL(){
     shader->setUniform("MVP",MVP);
 
 
-    // Render to our framebuffer
-    glBindFramebuffer(GL_FRAMEBUFFER, m_staticFrameBuffer);
+    // Render to our depth framebuffer
+    glBindFramebuffer(GL_FRAMEBUFFER, m_depthFrameBuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, m_staticDepthBuffer);
     //clear our frame buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     m_SPHEngine->drawArrays();
 
-    //unbind our local static frame buffer
+
+    // Render to our bilateral filter framebuffer
+    glBindFramebuffer(GL_FRAMEBUFFER, m_bilateralFrameBuffer);
+    //clear our frame buffer
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //bind our fluid shader
+    (*shader)["BilateralFilter"]->use();
+    //set our blur direction
+    shader->setUniform("blurDir",1.0f,0.0f);
+    shader->setUniform("filterRadius",2.0f/height());
+    //bind our billboard and texture
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D,m_depthRender);
+    glBindVertexArray(m_billboardVAO);
+    glDrawArrays(GL_TRIANGLES,0,6);
+
+    glBindTexture(GL_TEXTURE_2D,m_bilateralRender);
+    shader->setUniform("filterRadius",2.0f/width());
+    shader->setUniform("blurDir",0.0f,1.0f);
+    //chagne our blur direction
+    glDrawArrays(GL_TRIANGLES,0,6);
+
+    //unbind our local static frame buffer so we now render to the screen
     glBindFramebuffer(GL_FRAMEBUFFER,0);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //bind our fluid shader
     (*shader)["FluidShader"]->use();
-    //bind our shader and billboard
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D,m_depthRender);
-    glBindVertexArray(m_billboardVAO);
+    //bind our bilateral render texture
+    glBindTexture(GL_TEXTURE_2D,m_bilateralRender);
     //draw our billboard
     glDrawArrays(GL_TRIANGLES,0,6);
 
@@ -336,11 +419,11 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *_event){
         QGuiApplication::exit();
     }
     if(_event->key()==Qt::Key_Plus){
-        m_pointSize+=1.0f;
+        m_pointSize+=0.5f;
         std::cout<<"particle size: "<<m_pointSize<<std::endl;
     }
     if(_event->key()==Qt::Key_Minus){
-        m_pointSize-=1.0f;
+        m_pointSize-=0.5f;
         std::cout<<"particle size: "<<m_pointSize<<std::endl;
     }
     if(_event->key()==Qt::Key_E){

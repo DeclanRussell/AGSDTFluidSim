@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <cmath>
-#include "CudaSPHKernals.h"
+
 
 #define pi 3.14159265359f
 //----------------------------------------------------------------------------------------------------------------------
@@ -12,13 +12,14 @@ SPHEngine::SPHEngine(unsigned int _numParticles, unsigned int _volume, float _de
                                                                                                                          m_volume(_volume),
                                                                                                                          m_numParticlePerCell(_particlesPerCell),
                                                                                                                          m_density(_density),
-                                                                                                                         m_smoothingLength(1)
+                                                                                                                         m_smoothingLength(0.2),
+                                                                                                                         m_cellSize(5),
+                                                                                                                         m_numPlanes(0)
 
 {
     calcMass();
     std::cout<<"Particle Mass: "<<m_mass<<std::endl;
     calcKernalConsts();
-    calcCellSize();
     init();
 }
 
@@ -26,10 +27,12 @@ SPHEngine::SPHEngine(unsigned int _numParticles, unsigned int _volume, float _de
 SPHEngine::~SPHEngine(){
     // Make sure we remember to unregister our cuda resource
     cudaGraphicsUnregisterResource(m_cudaBufferPtr);
+    // Free all our memory
     cudaFree(m_dhashKeys);
     cudaFree(m_dCellIndexBuffer);
     cudaFree(m_dCellOccBuffer);
     cudaFree(m_dVelBuffer);
+    cudaFree(m_dPlaneBuffer);
     glDeleteBuffers(1,&m_VBO);
     glDeleteVertexArrays(1,&m_VAO);
 }
@@ -44,8 +47,8 @@ void SPHEngine::init(){
     tx=tz=-10.0;
     ty = 1.0;
     for(unsigned int i=0; i<m_numParticles; i++){
-        if(tx>10){ tx=-10.0; tz+=0.05;}
-        if(tz>10){ tz=-10.0; ty+=0.05;}
+        if(tx>10){ tx=-10.0; tz+=0.5;}
+        if(tz>10){ tz=-10.0; ty+=0.5;}
 
         tempF3.x = tx;
         tempF3.y = ty;
@@ -89,11 +92,13 @@ void SPHEngine::init(){
     cudaMalloc(&m_dhashKeys, m_numParticles*sizeof(unsigned int));
     cudaMalloc(&m_dCellOccBuffer, m_hashTableSize*sizeof(unsigned int));
     cudaMalloc(&m_dVelBuffer, m_numParticles*sizeof(float3));
+    cudaMalloc(&m_dAccBuffer, m_numParticles*sizeof(float3));
     //initialize them with zeros
     fillUint(m_dCellOccBuffer,m_hashTableSize,0);
     float3 x[m_numParticles];
     for(unsigned int i=0;i<m_numParticles;i++)x[i]=make_float3(0,0,0);
     cudaMemcpy(m_dVelBuffer, x, m_numParticles * sizeof(float3), cudaMemcpyHostToDevice);
+    cudaMemcpy(m_dAccBuffer, x, m_numParticles * sizeof(float3), cudaMemcpyHostToDevice);
     //allocate space for our cell index buffer
     cudaMalloc(&m_dCellIndexBuffer, m_hashTableSize*sizeof(unsigned int));
     //initialize it with zeros
@@ -136,26 +141,42 @@ void SPHEngine::update(float _timeStep){
     cudaGraphicsResourceGetMappedPointer((void**)&d_posPtr,&d_posSize,m_cudaBufferPtr);
 
     //calculate our hash keys
-    createHashTable(m_dhashKeys,d_posPtr,m_numParticles,m_smoothingLength, m_hashTableSize, m_numThreadsPerBlock);
+    createHashTable(m_dhashKeys,d_posPtr,m_numParticles,m_cellSize, m_hashTableSize, m_numThreadsPerBlock);
 
     //sort our particle postions based on there key to make
     //points of the same key occupy contiguous memory
-    sortByKey(m_dhashKeys,d_posPtr,m_dVelBuffer,m_numParticles);
+    sortByKey(m_dhashKeys,d_posPtr,m_dVelBuffer,m_dAccBuffer,m_numParticles);
+
+    //make sure all our threads are done
+    cudaThreadSynchronize();
 
     //total up our cell occupancy
     countCellOccupancy(m_dhashKeys,m_dCellOccBuffer,m_hashTableSize,m_numParticles,m_numThreadsPerBlock);
 
+    //make sure all our threads are done
+    cudaThreadSynchronize();
+
     //Uses exclusive scan to count our cell occupancy and create our cell index buffer.
     createCellIdx(m_dCellOccBuffer,m_hashTableSize,m_dCellIndexBuffer);
 
+    //make sure all our threads are done
+    cudaThreadSynchronize();
+
     //update our particle positions with navier stokes equations
-    fluidSolver(d_posPtr,m_dVelBuffer,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_numThreadsPerBlock,m_smoothingLength*8,_timeStep,m_mass,m_density,1000,1,m_densWeightConst,m_pressWeightConst,m_viscWeightConst);
+    fluidSolver(d_posPtr,m_dVelBuffer,m_dAccBuffer,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_numThreadsPerBlock,m_smoothingLength*5,_timeStep,m_mass,m_density,1000,1,m_densWeightConst,m_pressWeightConst,m_viscWeightConst);
+
+    //make sure all our threads are done
+    cudaThreadSynchronize();
+
+    //Test our particles for collision with our walls
+    collisionDetectionSolver(m_dPlaneBuffer,m_numPlanes,d_posPtr,m_dVelBuffer,_timeStep,m_numParticles,m_numThreadsPerBlock);
+
+    //make sure all our threads are done
+    cudaThreadSynchronize();
 
     //fill our occupancy buffer back up with zeros
     fillUint(m_dCellOccBuffer,m_hashTableSize,0);
 
-    //make sure all our threads are done
-    cudaThreadSynchronize();
 
     //unmap our buffer pointer and set it free into the wild
     cudaGraphicsUnmapResources(1,&m_cudaBufferPtr);
@@ -169,17 +190,15 @@ void SPHEngine::drawArrays(){
     glBindVertexArray(0);
 }
 //----------------------------------------------------------------------------------------------------------------------
-void SPHEngine::calcCellSize(){
-    //m_smoothingLength = (m_numParticlePerCell*m_mass)/ m_density;
-    //std::cout<<"Cell Size: "<<m_smoothingLength<<std::endl;
-}
-//----------------------------------------------------------------------------------------------------------------------
 void SPHEngine::calcKernalConsts()
 {
     m_densWeightConst = (15.0f/(pi*m_smoothingLength*m_smoothingLength*m_smoothingLength*m_smoothingLength*m_smoothingLength*m_smoothingLength));
-    std::cout<<"Density Const: "<<m_densWeightConst<<std::endl;
     m_pressWeightConst = -(45.0f/(pi*pow(m_smoothingLength,6)));
     m_viscWeightConst = -(90/(pi*pow(m_smoothingLength,6)));
+
+    std::cout<<"Density Const: "<<m_densWeightConst<<std::endl;
+    std::cout<<"Pressure Const: "<<m_pressWeightConst<<std::endl;
+    std::cout<<"Viscosity Const: "<<m_viscWeightConst<<std::endl;
 }
 //----------------------------------------------------------------------------------------------------------------------
 unsigned int SPHEngine::nextPrimeNum(int _x){
@@ -207,6 +226,50 @@ unsigned int SPHEngine::nextPrimeNum(int _x){
         }
     }
     return nextPrime;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void SPHEngine::addWall(float3 _pos, float3 _norm){
+    if(m_numPlanes==0){
+        //increment our count
+        m_numPlanes++;
+        //allocate some space onto our device for our planes
+        cudaMalloc(&m_dPlaneBuffer, sizeof(planeProp));
+        //create our plane
+        planeProp p;
+        p.pos = _pos;
+        p.normal = _norm;
+        //copy our data onto our device
+        cudaMemcpy(m_dPlaneBuffer, &p, sizeof(planeProp), cudaMemcpyHostToDevice);
+    }
+    else{
+        //increment our count
+        m_numPlanes++;
+        //create a new larger buffer
+        planeProp *tempBuffer;
+        cudaMalloc(&tempBuffer, m_numPlanes * sizeof(planeProp));
+
+        //can make this faster by copying across with a kernal but we're not
+        //really going to be doing it that much so this is fine
+
+        //copy our original data back to the host
+        planeProp pArray[m_numPlanes];
+        cudaMemcpy(pArray, m_dPlaneBuffer, (m_numPlanes-1u) * sizeof(planeProp), cudaMemcpyDeviceToHost);
+
+        //create our new wall
+        pArray[m_numPlanes-1].pos = _pos;
+        pArray[m_numPlanes-1].normal = _norm;
+
+        //copy our data onto our device
+        cudaMemcpy(tempBuffer, pArray, m_numPlanes * sizeof(planeProp), cudaMemcpyHostToDevice);
+
+        //delete our old buffer
+        cudaFree(m_dPlaneBuffer);
+
+        //set our pointer to our new buffer
+        m_dPlaneBuffer = tempBuffer;
+
+    }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

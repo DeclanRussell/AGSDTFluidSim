@@ -32,7 +32,9 @@ FORMS += \
 
 OTHER_FILES += shaders/*glsl \
     shaders/fluidShaderFrag.glsl \
-    shaders/fluidShaderVert.glsl
+    shaders/fluidShaderVert.glsl \
+    shaders/bilateralFilterFrag.glsl \
+    shaders/bilateralFilterVert.glsl
 
 
 INCLUDEPATH +=./include /opt/local/include $$(HOME)/NGL/include/

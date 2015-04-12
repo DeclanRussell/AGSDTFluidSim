@@ -23,7 +23,7 @@ void  main(){
 
     // calculate depth
     // point radius calculated from inverse projection * 0.5*pointSize
-    vec4 pixelPos = vec4(position + normal * pointRadius, 1.0);
+    vec4 pixelPos = vec4(position + normal * pointRadius*2, 1.0);
     vec4 clipSpacePos = P * pixelPos;
     vec3 depth = vec3(clipSpacePos.z / clipSpacePos.w);
 
