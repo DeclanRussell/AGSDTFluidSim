@@ -36,7 +36,9 @@ OTHER_FILES += shaders/*glsl \
     shaders/bilateralFilterFrag.glsl \
     shaders/bilateralFilterVert.glsl \
     shaders/thicknessFrag.glsl \
-    shaders/thicknessVert.glsl
+    shaders/thicknessVert.glsl \
+    shaders/skyBoxFrag.glsl \
+    shaders/skyBoxVert.glsl
 
 
 INCLUDEPATH +=./include /opt/local/include $$(HOME)/NGL/include/

@@ -4,13 +4,22 @@
 uniform sampler2D depthTex;
 //texture for holding the thickness pass
 uniform sampler2D thicknessTex;
+//texture for holding the cube map
+uniform samplerCube cubeMapTex;
 //the size of each texel
 uniform float texelSizeX;
 uniform float texelSizeY;
 //inverse projection matrix'
 uniform mat4 PInv;
+//our fresnal power
+uniform float fresnalPower;
+//refraction ratio
+uniform float refractRatio;
+//fresnal constant
+uniform float fresnalConst;
 //texture coordinates of billboard
 in vec2 VTexCoord;
+
 
 struct lightInfo{
    vec4 position;
@@ -86,8 +95,26 @@ void main(void)
 
     float thickness = texture(thicknessTex,VTexCoord).x;
 
+    vec3 i = normalize(posEye);
+    float fresnalRatio = fresnalConst + (1.0 - fresnalConst) * pow((1.0 - dot(-i, n)), fresnalPower);
+
+    vec3 Refract = refract(i, n, refractRatio);
+
+    vec3 Reflect = reflect(i, n);
+
+    vec3 refractColor = vec3(texture(cubeMapTex, Refract));
+    vec3 reflectColor = vec3(texture(cubeMapTex, Reflect));
+
+
+    vec3 phong = ads(posEye,n)*vec3(0,1,1);
+
+    refractColor = mix(refractColor,phong,thickness);
+
+    vec3 color  = mix(refractColor, reflectColor, fresnalRatio);
+
+
     //phong shading
-    FragColor = vec4(ads(posEye,n)*vec3(0,1,1),thickness);
+    FragColor = vec4(color,1.0);
 
     //normals shading
     //FragColor = vec4(n,1.0);

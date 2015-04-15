@@ -3,6 +3,7 @@
 #include "OpenGLWidget.h"
 #include <iostream>
 #include <time.h>
+#include <QRect>
 
 #include <ngl/NGLInit.h>
 #include <ngl/ShaderLib.h>
@@ -33,6 +34,9 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     m_modelPos=ngl::Vec3(0.0);
     //init our point size
     m_pointSize = 0.2f;
+    //init refraction and fresnal powers
+    setRefractionRatio(0.2f);
+    m_fresnalPower = 10;
     // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
     this->resize(_parent->size());
 }
@@ -44,7 +48,9 @@ OpenGLWidget::~OpenGLWidget(){
 
     //clean up everything
     glDeleteVertexArrays(1,&m_billboardVAO);
+    glDeleteVertexArrays(1,&m_cubeVAO);
     glDeleteTextures(1,&m_depthRender);
+    glDeleteTextures(1,&m_cubeMapTex);
     glDeleteTextures(1,&m_bilateralRender);
     glDeleteTextures(1,&m_thicknessRender);
 
@@ -167,6 +173,71 @@ void OpenGLWidget::initializeGL(){
         exit(-1);
     }
 
+    //create our cube geometry for our cube map
+    float cubeVertex[] = {
+      -10.0f,  10.0f, -10.0f,
+      -10.0f, -10.0f, -10.0f,
+       10.0f, -10.0f, -10.0f,
+       10.0f, -10.0f, -10.0f,
+       10.0f,  10.0f, -10.0f,
+      -10.0f,  10.0f, -10.0f,
+
+      -10.0f, -10.0f,  10.0f,
+      -10.0f, -10.0f, -10.0f,
+      -10.0f,  10.0f, -10.0f,
+      -10.0f,  10.0f, -10.0f,
+      -10.0f,  10.0f,  10.0f,
+      -10.0f, -10.0f,  10.0f,
+
+       10.0f, -10.0f, -10.0f,
+       10.0f, -10.0f,  10.0f,
+       10.0f,  10.0f,  10.0f,
+       10.0f,  10.0f,  10.0f,
+       10.0f,  10.0f, -10.0f,
+       10.0f, -10.0f, -10.0f,
+
+      -10.0f, -10.0f,  10.0f,
+      -10.0f,  10.0f,  10.0f,
+       10.0f,  10.0f,  10.0f,
+       10.0f,  10.0f,  10.0f,
+       10.0f, -10.0f,  10.0f,
+      -10.0f, -10.0f,  10.0f,
+
+      -10.0f,  10.0f, -10.0f,
+       10.0f,  10.0f, -10.0f,
+       10.0f,  10.0f,  10.0f,
+       10.0f,  10.0f,  10.0f,
+      -10.0f,  10.0f,  10.0f,
+      -10.0f,  10.0f, -10.0f,
+
+      -10.0f, -10.0f, -10.0f,
+      -10.0f, -10.0f,  10.0f,
+       10.0f, -10.0f, -10.0f,
+       10.0f, -10.0f, -10.0f,
+      -10.0f, -10.0f,  10.0f,
+       10.0f, -10.0f,  10.0f
+    };
+
+    glGenVertexArrays (1, &m_cubeVAO);
+    glBindVertexArray (m_cubeVAO);
+
+    GLuint cubeVBO;
+    glGenBuffers (1, &cubeVBO);
+    glBindBuffer (GL_ARRAY_BUFFER, cubeVBO);
+    glBufferData (GL_ARRAY_BUFFER, 3 * 36 * sizeof (float), &cubeVertex, GL_STATIC_DRAW);
+    glBindBuffer (GL_ARRAY_BUFFER, cubeVBO);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer (0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+    //load our default environment map
+    if(loadCubeMap("textures/skyCubeMap.png")){
+        std::cerr<<"Environment map loaded"<<std::endl;
+    }
+    else{
+        std::cerr<<"Error: Environment map could not be loaded!"<<std::endl;
+    }
+
+
     //create our billboard geomtry
     float vertex[]={
         //bottom left
@@ -215,7 +286,26 @@ void OpenGLWidget::initializeGL(){
 
     //set up our particle shader to render depth information to a texture
     ngl::ShaderLib *shader=ngl::ShaderLib::instance();
-    //first lets add out depth shader to our program
+
+    //Create our sky box shader
+    //create the program
+    shader->createShaderProgram("SkyBoxShader");
+    //add our shaders
+    shader->attachShader("skyBoxVert",ngl::VERTEX);
+    shader->attachShader("skyBoxFrag",ngl::FRAGMENT);
+    //load the source
+    shader->loadShaderSource("skyBoxVert","shaders/skyBoxVert.glsl");
+    shader->loadShaderSource("skyBoxFrag","shaders/skyBoxFrag.glsl");
+    //compile them
+    shader->compileShader("skyBoxVert");
+    shader->compileShader("skyBoxFrag");
+    //attach them to our program
+    shader->attachShaderToProgram("SkyBoxShader","skyBoxVert");
+    shader->attachShaderToProgram("SkyBoxShader","skyBoxFrag");
+    //link our shader to opengl
+    shader->linkProgramObject("SkyBoxShader");
+
+    //lets add out depth shader to our program
     //create the program
     shader->createShaderProgram("ParticleDepth");
     //add our shaders
@@ -289,11 +379,15 @@ void OpenGLWidget::initializeGL(){
     //link our shader to openGL
     shader->linkProgramObject("FluidShader");
 
+
+
     //set some uniforms
+    (*shader)["SkyBoxShader"]->use();
+    shader->setUniform("cubeMapTex",2);
+
     (*shader)["ParticleDepth"]->use();
     shader->setUniform("screenWidth",width());
 
-    //set some uniforms
     (*shader)["ThicknessShader"]->use();
     shader->setUniform("screenWidth",width());
     shader->setUniform("thicknessScaler",0.02f);
@@ -312,6 +406,10 @@ void OpenGLWidget::initializeGL(){
     shader->setUniform("PInv",PInv);
     shader->setUniform("depthTex",0);
     shader->setUniform("thicknessTex",1);
+    shader->setUniform("cubeMapTex",2);
+    shader->setUniform("fresnalPower",m_fresnalPower);
+    shader->setUniform("refractRatio",m_refractionRatio);
+    shader->setUniform("fresnalConst",m_fresnalConst);
     shader->setUniform("texelSizeX",1.0f/width());
     shader->setUniform("texelSizeY",1.0f/height());
 
@@ -491,6 +589,29 @@ void OpenGLWidget::paintGL(){
     glBindFramebuffer(GL_FRAMEBUFFER,0);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    //Draw our sky box
+    (*shader)["SkyBoxShader"]->use();
+    //load our matricies to shader
+    ngl::Mat4 M = rotY * rotX;
+    //move to where our camera is located
+    M.m_m[3][0] = m_cam->getEye().m_x;
+    M.m_m[3][1] = m_cam->getEye().m_y;
+    M.m_m[3][2] = m_cam->getEye().m_z;
+
+    //set our MVP matrix
+    ngl::Mat4 sbMVP = M  *m_cam->getVPMatrix();
+    shader->setUniform("MVP",sbMVP);
+
+    glDepthMask (GL_FALSE);
+    glActiveTexture (GL_TEXTURE2);
+    glBindTexture (GL_TEXTURE_CUBE_MAP, m_cubeMapTex);
+    glBindVertexArray (m_cubeVAO);
+    //draw our cube
+    glDrawArrays (GL_TRIANGLES, 0, 36);
+    glDepthMask (GL_TRUE);
+
+
     //bind our fluid shader
     (*shader)["FluidShader"]->use();
     //bind our bilateral render texture
@@ -500,11 +621,9 @@ void OpenGLWidget::paintGL(){
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D,m_thicknessRender);
     //draw our billboard
-    //enable alpha blending for transparent fluid
-    glEnable(GL_BLEND);
-    glBlendFunc (GL_SRC_ALPHA, GL_SRC_ALPHA);
+    glBindVertexArray (m_billboardVAO);
     glDrawArrays(GL_TRIANGLES,0,6);
-    glDisable(GL_BLEND);
+
 
 
 
@@ -519,6 +638,50 @@ void OpenGLWidget::paintGL(){
     m_text->renderText(10,20,text);
 
 }
+//----------------------------------------------------------------------------------------------------------------------
+bool OpenGLWidget::loadCubeMap(QString _loc){
+    //seperate our cube map texture our into its 6 side textures
+    QImage img(_loc);
+    img = img.mirrored(false,true);
+    //some error checking
+    if(img.isNull()){
+        return false;
+    }
+
+    int wStep = img.width()/4;
+    int hStep = img.height()/3;
+
+    QImage front = QGLWidget::convertToGLFormat( img.copy(wStep,hStep,wStep,hStep));
+    QImage bottom = QGLWidget::convertToGLFormat( img.copy(wStep,2*hStep,wStep,hStep));
+    QImage top = QGLWidget::convertToGLFormat( img.copy(wStep,0,wStep,hStep));
+    QImage left = QGLWidget::convertToGLFormat( img.copy(0,hStep,wStep,hStep));
+    QImage right = QGLWidget::convertToGLFormat( img.copy(2*wStep,hStep,wStep,hStep));
+    QImage back = QGLWidget::convertToGLFormat( img.copy(3*wStep,hStep,wStep,hStep));
+
+
+    //find out if we have already generated our GPU texture
+
+   //if no texture on GPU then create one
+   glGenTextures (1, &m_cubeMapTex);
+   glBindTexture (GL_TEXTURE_CUBE_MAP, m_cubeMapTex);
+   // format cube map texture
+   glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+   glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+   glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+   glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+   glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    // copy image data into 'target' side of cube map
+    glTexImage2D ( GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA, wStep, hStep, 0, GL_RGBA, GL_UNSIGNED_BYTE, front.bits());
+    glTexImage2D ( GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA, wStep, hStep, 0, GL_RGBA, GL_UNSIGNED_BYTE, back.bits());
+    glTexImage2D ( GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA, wStep, hStep, 0, GL_RGBA, GL_UNSIGNED_BYTE, top.bits());
+    glTexImage2D ( GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA, wStep, hStep, 0, GL_RGBA, GL_UNSIGNED_BYTE, bottom.bits());
+    glTexImage2D ( GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA, wStep, hStep, 0, GL_RGBA, GL_UNSIGNED_BYTE, left.bits());
+    glTexImage2D ( GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA, wStep, hStep, 0, GL_RGBA, GL_UNSIGNED_BYTE, right.bits());
+
+    return true;
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::keyPressEvent(QKeyEvent *_event){
     if(_event->key()==Qt::Key_Escape){
