@@ -70,18 +70,18 @@ void main(void)
     vec3 posEye = vec3(uvToEye(VTexCoord,depth));
 
     // calculate differences
-    vec2 tempTextCoord = VTexCoord + vec2(texelSizeX*2, 0);
+    vec2 tempTextCoord = VTexCoord + vec2(texelSizeX, 0);
     vec3 ddx = uvToEye(tempTextCoord,texture(depthTex,tempTextCoord).x) - posEye;
-    tempTextCoord = VTexCoord + vec2(-texelSizeX*2, 0);
+    tempTextCoord = VTexCoord + vec2(-texelSizeX, 0);
     vec3 ddx2 = posEye - uvToEye(tempTextCoord,texture(depthTex,tempTextCoord).x);
 
     if (abs(ddx.z) > abs(ddx2.z)) {
         ddx = ddx2;
     }
 
-    tempTextCoord = VTexCoord + vec2(0,texelSizeY*2);
+    tempTextCoord = VTexCoord + vec2(0,texelSizeY);
     vec3 ddy = uvToEye(tempTextCoord,texture(depthTex,tempTextCoord).x) - posEye;
-    tempTextCoord = VTexCoord + vec2(0,-texelSizeY*2);
+    tempTextCoord = VTexCoord + vec2(0,-texelSizeY);
     vec3 ddy2 = posEye - uvToEye(tempTextCoord,texture(depthTex,tempTextCoord).x);
 
     if (abs(ddy2.z) < abs(ddy.z)) {
@@ -91,7 +91,6 @@ void main(void)
     // calculate normal
     vec3 n1 = cross(ddx, ddy);
     vec3 n = normalize(n1);
-
 
     float thickness = texture(thicknessTex,VTexCoord).x;
 

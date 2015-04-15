@@ -219,7 +219,7 @@ __global__ void fluidSolverPerParticleKernal(float3 *d_posArray, float3 *d_velAr
 
         //calculate our acceleration
         float3 gravity = make_float3(0.0f,-9.8f,0.0f);
-        float3 acc = gravity + pressureForce + viscosityForce /*- tensionForce*/ + make_float3(0.0f,0.0f,0.0f);
+        float3 acc = gravity + pressureForce + viscosityForce /*- tensionForce*/;// + make_float3(0.0f,0.0f,0.0f);
         //calculate our new velocity
 
         //euler intergration (Rubbish over large time steps)
@@ -294,7 +294,7 @@ __global__ void collisionDetKernal(planeProp *d_planeArray, unsigned int _numPla
             if(dot(B-planes[i].pos,planes[i].normal)<0.0f){
                 //test for intersection with plane
                 r = dot(planes[i].normal,(planes[i].pos - A)) / dot(planes[i].normal,(B-A));
-                if(r>0.0f && r<minDst){
+                if(r>=0.0f && r<minDst){
                 intersect = true;
                 //if(r>maxDst && r<=1.0f){
                     //get our first closest intersection point

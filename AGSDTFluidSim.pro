@@ -110,8 +110,8 @@ cudaIntr.output = ${OBJECTS_DIR}${QMAKE_FILE_BASE}.o
 ## Tweak arch according to your hw's compute capability
 cudaIntr.commands = $$CUDA_DIR/bin/nvcc -m64 -g -G -gencode arch=compute_52,code=sm_52 -dc $$NVCCFLAGS $$CUDA_INC $$LIBS  ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
 
-#CUDA_OBJ = cudaIntrObj/*.o
-
+#Set our variable out. These obj files need to be used to create the link obj file
+#and used in our final gcc compilation
 cudaIntr.variable_out = CUDA_OBJ
 cudaIntr.variable_out += OBJECTS
 cudaIntr.clean = cudaIntrObj/*.o
@@ -119,7 +119,7 @@ cudaIntr.clean = cudaIntrObj/*.o
 QMAKE_EXTRA_UNIX_COMPILERS += cudaIntr
 
 
-# Prepare the extra compiler configuration
+# Prepare the linking compiler step
 cuda.input = CUDA_OBJ
 cuda.output = ${QMAKE_FILE_BASE}_link.o
 

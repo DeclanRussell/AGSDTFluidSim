@@ -37,6 +37,7 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     //init refraction and fresnal powers
     setRefractionRatio(0.2f);
     m_fresnalPower = 10;
+    m_update = true;
     // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
     this->resize(_parent->size());
 }
@@ -395,9 +396,9 @@ void OpenGLWidget::initializeGL(){
     (*shader)["BilateralFilter"]->use();
     shader->setUniform("depthTex",0);
     shader->setUniform("blurDir",1.0f,0.0f);
-    shader->setUniform("blurDepthFalloff",0.1f);
-    shader->setUniform("filterRadius",2.0f/width());
-    shader->setUniform("texelSize",1.0f/width());
+    shader->setUniform("blurDepthFalloff",1.0f);
+    shader->setUniform("filterRadius",100.0f/*/width()*/);
+    shader->setUniform("texelSize",1.0f/(float)width());
 
     (*shader)["FluidShader"]->use();
     //set our inverse projection matrix
@@ -470,7 +471,7 @@ void OpenGLWidget::resizeGL(const int _w, const int _h){
     shader->setUniform("texelSizeY",1.0f/_h);
 
     (*shader)["BilateralFilter"]->use();
-    shader->setUniform("filterRadius",5.0f/width());
+    shader->setUniform("filterRadius",100.0f/*/width()*/);
     shader->setUniform("texelSize",1.0f/width());
 }
 //----------------------------------------------------------------------------------------------------------------------
@@ -485,8 +486,10 @@ void OpenGLWidget::paintGL(){
     int msecsPassed = m_currentTime.msecsTo(newTime);
     m_currentTime = m_currentTime.currentTime();
 
-    //update our fluid simulation with our time step
-    m_SPHEngine->update((float)msecsPassed/1000.0);
+    if(m_update){
+        //update our fluid simulation with our time step
+        m_SPHEngine->update((float)msecsPassed/1000.0);
+    }
 
     // create the rotation matrices
     ngl::Mat4 rotX;
@@ -571,19 +574,14 @@ void OpenGLWidget::paintGL(){
     //bind our bilateral filter shader
     (*shader)["BilateralFilter"]->use();
     //set our blur direction
-    shader->setUniform("blurDir",1.0f,0.0f);
-    shader->setUniform("filterRadius",2.0f/height());
+    shader->setUniform("blurDir",0.0f,1.0f);
+    shader->setUniform("filterRadius",10.0f/height());
     //bind our billboard and texture
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,m_depthRender);
     glBindVertexArray(m_billboardVAO);
     glDrawArrays(GL_TRIANGLES,0,6);
 
-    glBindTexture(GL_TEXTURE_2D,m_bilateralRender);
-    shader->setUniform("filterRadius",2.0f/width());
-    shader->setUniform("blurDir",0.0f,1.0f);
-    //chagne our blur direction
-    glDrawArrays(GL_TRIANGLES,0,6);
 
     //unbind our local static frame buffer so we now render to the screen
     glBindFramebuffer(GL_FRAMEBUFFER,0);
@@ -697,6 +695,9 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *_event){
     }
     if(_event->key()==Qt::Key_E){
         m_SPHEngine->update(0.001);
+    }
+    if(_event->key()==Qt::Key_Space){
+        m_update = !m_update;
     }
 }
 //----------------------------------------------------------------------------------------------------------------------

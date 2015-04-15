@@ -11,7 +11,7 @@
 SPHEngine::SPHEngine(unsigned int _numParticles, unsigned int _volume, float _density) : m_numParticles(_numParticles),
                                                                                          m_volume(_volume),
                                                                                          m_density(_density),
-                                                                                         m_smoothingLength(1.1),
+                                                                                         m_smoothingLength(1.2),
                                                                                          m_numPlanes(0),
                                                                                          m_gasConstant(10.0f),
                                                                                          m_viscCoef(0.003f)
