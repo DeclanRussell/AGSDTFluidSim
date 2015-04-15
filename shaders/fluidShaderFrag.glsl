@@ -2,6 +2,8 @@
 
 //texture for holding the depth pass
 uniform sampler2D depthTex;
+//texture for holding the thickness pass
+uniform sampler2D thicknessTex;
 //the size of each texel
 uniform float texelSizeX;
 uniform float texelSizeY;
@@ -82,8 +84,10 @@ void main(void)
     vec3 n = normalize(n1);
 
 
+    float thickness = texture(thicknessTex,VTexCoord).x;
+
     //phong shading
-    FragColor = vec4(ads(posEye,n)*vec3(0,1,1),1.0);
+    FragColor = vec4(ads(posEye,n)*vec3(0,1,1),thickness);
 
     //normals shading
     //FragColor = vec4(n,1.0);

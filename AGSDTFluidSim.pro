@@ -34,7 +34,9 @@ OTHER_FILES += shaders/*glsl \
     shaders/fluidShaderFrag.glsl \
     shaders/fluidShaderVert.glsl \
     shaders/bilateralFilterFrag.glsl \
-    shaders/bilateralFilterVert.glsl
+    shaders/bilateralFilterVert.glsl \
+    shaders/thicknessFrag.glsl \
+    shaders/thicknessVert.glsl
 
 
 INCLUDEPATH +=./include /opt/local/include $$(HOME)/NGL/include/

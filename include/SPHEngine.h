@@ -29,7 +29,7 @@ public:
     /// @brief defualt constructor
     /// @param _numParticles how many particles we want to have on simulation initialisation.
     //----------------------------------------------------------------------------------------------------------------------
-    SPHEngine(unsigned int _numParticles = 0, unsigned int _volume = 1, float _density = 1000, unsigned int _particlesPerCell = 20);
+    SPHEngine(unsigned int _numParticles = 0, unsigned int _volume = 1, float _density = 1000);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief default destructor
     //----------------------------------------------------------------------------------------------------------------------
@@ -60,11 +60,20 @@ public:
     //----------------------------------------------------------------------------------------------------------------------
     inline void setSmoothingLength(float _length){m_smoothingLength = _length; calcKernalConsts();}
     //----------------------------------------------------------------------------------------------------------------------
+    /// @brief Mutator for the gas constant of our fluid
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setGasConstant(float _gasConst){m_gasConstant = _gasConst;}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief Mutator for our viscosity coeficient of our fluid
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setViscCoef(float _viscCoef){m_viscCoef = _viscCoef;}
+    //----------------------------------------------------------------------------------------------------------------------
     /// @brief adds a colllision plane to our simulation
     /// @param _pos - the position of our plane
     /// @param _norm - the normal of our plane
+    /// @param _resrCoef - coeficient of restitution of our plane
     //----------------------------------------------------------------------------------------------------------------------
-    void addWall(float3 _pos, float3 _norm);
+    void addWall(float3 _pos, float3 _norm, float _restCoef = 1.0);
     //----------------------------------------------------------------------------------------------------------------------
 private:
     //----------------------------------------------------------------------------------------------------------------------
@@ -113,7 +122,7 @@ private:
     /// @brief A function to calculate the mass of our particles based on density, volume and number of particles in our simulation.
     /// @brief mass = density ( volume / number of particles )
     //----------------------------------------------------------------------------------------------------------------------
-    inline void calcMass(){m_mass = m_density * (m_volume/m_numParticles);}
+    inline void calcMass(){m_mass = m_density * (m_volume/(float)m_numParticles);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief The mass of our fluid.
     /// @value Defaults to 1. User can modify density and volume to change this.
@@ -129,6 +138,14 @@ private:
     /// @value Defaults to the number of particles in simulation. User may modify this.
     //----------------------------------------------------------------------------------------------------------------------
     float m_volume;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief our gas constant for our fluid solving
+    //----------------------------------------------------------------------------------------------------------------------
+    float m_gasConstant;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief our viscosity coeficient for our fluid solving
+    //----------------------------------------------------------------------------------------------------------------------
+    float m_viscCoef;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief the number of particles in our simulation
     //----------------------------------------------------------------------------------------------------------------------

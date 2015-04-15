@@ -29,6 +29,7 @@ struct particleProp {
 struct planeProp{
     float3 pos;
     float3 normal;
+    float restCoef;
 };
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Creates an index array for our cells using thrusts exclusive scan
@@ -106,4 +107,6 @@ void fluidSolver(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, uns
 //----------------------------------------------------------------------------------------------------------------------
 void collisionDetectionSolver(planeProp* d_planeArray, unsigned int _numPlanes, float3 *d_posArray, float3 *d_velArray, float _timeStep, unsigned int _numParticles, unsigned int _maxNumThreads);
 //----------------------------------------------------------------------------------------------------------------------
+void test(float _const);
+
 #endif // HELLOCUDA_H

@@ -32,7 +32,7 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     m_spinYFace=0;
     m_modelPos=ngl::Vec3(0.0);
     //init our point size
-    m_pointSize = 0.5f;
+    m_pointSize = 0.2f;
     // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
     this->resize(_parent->size());
 }
@@ -45,7 +45,12 @@ OpenGLWidget::~OpenGLWidget(){
     //clean up everything
     glDeleteVertexArrays(1,&m_billboardVAO);
     glDeleteTextures(1,&m_depthRender);
+    glDeleteTextures(1,&m_bilateralRender);
+    glDeleteTextures(1,&m_thicknessRender);
+
     glDeleteFramebuffers(1,&m_depthFrameBuffer);
+    glDeleteFramebuffers(1,&m_bilateralFrameBuffer);
+    glDeleteFramebuffers(1,&m_thicknessFrameBuffer);
     glDeleteRenderbuffers(1,&m_staticDepthBuffer);
 
 }
@@ -80,13 +85,13 @@ void OpenGLWidget::initializeGL(){
     // Now we will create a basic Camera from the graphics library
     // This is a static camera so it only needs to be set once
     // First create Values for the camera position
-    ngl::Vec3 from(0,10,40);
-    ngl::Vec3 to(0,0,0);
+    ngl::Vec3 from(5,15,15);
+    ngl::Vec3 to(5,0,0);
     ngl::Vec3 up(0,1,0);
     m_cam= new ngl::Camera(from,to,up);
     // set the shape using FOV 45 Aspect Ratio based on Width and Height
     // The final two are near and far clipping planes of 0.1 and 100
-    m_cam->setShape(45,(float)width()/height(),1,1000);
+    m_cam->setShape(45,(float)width()/height(),0.001,100);
 
     //create our local frame buffer for our depth pass
     glGenFramebuffers(1,&m_depthFrameBuffer);
@@ -140,6 +145,27 @@ void OpenGLWidget::initializeGL(){
         exit(-1);
     }
 
+    //create our local frame buffer for our thickness render pass to
+    glGenFramebuffers(1,&m_thicknessFrameBuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, m_thicknessFrameBuffer);
+
+    //create our bilateral texture on to render to on the GPU
+    glGenTextures(1, &m_thicknessRender);
+    glBindTexture(GL_TEXTURE_2D, m_thicknessRender);
+    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, width(), height(), 0,GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+    // Set our render target to colour attachment 1
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, m_thicknessRender, 0);
+    // Set the list of draw buffers.
+    glDrawBuffers(1, DrawBuffers);
+
+    //check to see if the frame buffer is ok
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE){
+        std::cerr<<"Local framebuffer could not be created"<<std::endl;
+        exit(-1);
+    }
 
     //create our billboard geomtry
     float vertex[]={
@@ -189,7 +215,7 @@ void OpenGLWidget::initializeGL(){
 
     //set up our particle shader to render depth information to a texture
     ngl::ShaderLib *shader=ngl::ShaderLib::instance();
-    //first lets add out deformation shader to our program
+    //first lets add out depth shader to our program
     //create the program
     shader->createShaderProgram("ParticleDepth");
     //add our shaders
@@ -206,6 +232,26 @@ void OpenGLWidget::initializeGL(){
     shader->attachShaderToProgram("ParticleDepth","particleDepthFrag");
     //link our shader to opengl
     shader->linkProgramObject("ParticleDepth");
+
+
+    //lets add out thickness shader to our program
+    //create the program
+    shader->createShaderProgram("ThicknessShader");
+    //add our shaders
+    shader->attachShader("thicknessVert",ngl::VERTEX);
+    shader->attachShader("thicknessFrag",ngl::FRAGMENT);
+    //load the source
+    shader->loadShaderSource("thicknessVert","shaders/thicknessVert.glsl");
+    shader->loadShaderSource("thicknessFrag","shaders/thicknessFrag.glsl");
+    //compile them
+    shader->compileShader("thicknessVert");
+    shader->compileShader("thicknessFrag");
+    //attach them to our program
+    shader->attachShaderToProgram("ThicknessShader","thicknessVert");
+    shader->attachShaderToProgram("ThicknessShader","thicknessFrag");
+    //link our shader to opengl
+    shader->linkProgramObject("ThicknessShader");
+
 
     //create our bilateral filter shader
     //creat program
@@ -245,6 +291,12 @@ void OpenGLWidget::initializeGL(){
 
     //set some uniforms
     (*shader)["ParticleDepth"]->use();
+    shader->setUniform("screenWidth",width());
+
+    //set some uniforms
+    (*shader)["ThicknessShader"]->use();
+    shader->setUniform("screenWidth",width());
+    shader->setUniform("thicknessScaler",0.02f);
 
     (*shader)["BilateralFilter"]->use();
     shader->setUniform("depthTex",0);
@@ -259,6 +311,7 @@ void OpenGLWidget::initializeGL(){
     ngl::Mat4 PInv = P.inverse();
     shader->setUniform("PInv",PInv);
     shader->setUniform("depthTex",0);
+    shader->setUniform("thicknessTex",1);
     shader->setUniform("texelSizeX",1.0f/width());
     shader->setUniform("texelSizeY",1.0f/height());
 
@@ -273,13 +326,16 @@ void OpenGLWidget::initializeGL(){
 
     //allocate some space for our SPHEngine
     m_SPHEngine = new SPHEngine(30000);
-    m_SPHEngine->setVolume(10);
+    m_SPHEngine->setVolume(2);
+    m_SPHEngine->setDesity(998.2);
+    m_SPHEngine->setGasConstant(100);
+
     //add some walls to our simulation
-    m_SPHEngine->addWall(make_float3(0.0f,0.0f,0.0f),make_float3(0.0f,1.0f,0.0f));      //floor
-    //m_SPHEngine->addWall(make_float3(-12.0f,0.0f,0.0f),make_float3(1.0f,0.0f,0.0f));    //left
-    //m_SPHEngine->addWall(make_float3(12.0f,0.0f,0.0f),make_float3(-1.0f,0.0f,0.0f));    //right
-    //m_SPHEngine->addWall(make_float3(0.0f,0.0f,12.0f),make_float3(0.0f,0.0f,-1.0f));    //front
-    //m_SPHEngine->addWall(make_float3(0.0f,0.0f,-12.0f),make_float3(0.0f,0.0f,1.0f));    //back
+    m_SPHEngine->addWall(make_float3(0.0f,0.0f,0.0f),make_float3(0.0f,1.0f,0.0f),0.2f);      //floor
+    m_SPHEngine->addWall(make_float3(0.0f,0.0f,0.0f),make_float3(1.0f,0.0f,0.0f),0.2f);    //left
+    m_SPHEngine->addWall(make_float3(10.0f,0.0f,0.0f),make_float3(-1.0f,0.0f,0.0f),0.2f);    //right
+    m_SPHEngine->addWall(make_float3(0.0f,0.0f,10.0f),make_float3(0.0f,0.0f,-1.0f),0.2f);    //front
+    m_SPHEngine->addWall(make_float3(0.0f,0.0f,0.0f),make_float3(0.0f,0.0f,1.0f),0.2f);    //back
 
     m_currentTime = m_currentTime.currentTime();
     startTimer(0);
@@ -294,10 +350,20 @@ void OpenGLWidget::resizeGL(const int _w, const int _h){
     glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, _w, _h, 0,GL_RGBA, GL_UNSIGNED_BYTE, 0);
     glBindTexture(GL_TEXTURE_2D, m_bilateralRender);
     glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, _w, _h, 0,GL_RGBA, GL_UNSIGNED_BYTE, 0);
+    glBindTexture(GL_TEXTURE_2D, m_thicknessRender);
+    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, _w, _h, 0,GL_RGBA, GL_UNSIGNED_BYTE, 0);
     glBindRenderbuffer(GL_RENDERBUFFER, m_staticDepthBuffer);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width(), height());
     //update our texel sizes
     ngl::ShaderLib *shader=ngl::ShaderLib::instance();
+
+    (*shader)["ParticleDepth"]->use();
+    shader->setUniform("screenWidth",width());
+
+    //set some uniforms
+    (*shader)["ThicknessShader"]->use();
+    shader->setUniform("screenWidth",width());
+
     (*shader)["FluidShader"]->use();
     ngl::Mat4 P = m_cam->getProjectionMatrix();
     ngl::Mat4 PInv = P.inverse();
@@ -361,6 +427,7 @@ void OpenGLWidget::paintGL(){
     shader->setUniform("MVP",MVP);
 
 
+
     // Render to our depth framebuffer
     glBindFramebuffer(GL_FRAMEBUFFER, m_depthFrameBuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, m_staticDepthBuffer);
@@ -369,11 +436,41 @@ void OpenGLWidget::paintGL(){
     m_SPHEngine->drawArrays();
 
 
-    // Render to our bilateral filter framebuffer
-    glBindFramebuffer(GL_FRAMEBUFFER, m_bilateralFrameBuffer);
+    //render our thickness pass
+    glBindFramebuffer(GL_FRAMEBUFFER,m_thicknessFrameBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+
+    //bind our thickness shader
+    (*shader)["ThicknessShader"]->use();
+    shader->setUniform("screenWidth",width());
+    shader->setUniform("pointSize",m_pointSize);
+    shader->setUniform("P",P);
+    shader->setUniform("MV",MV);
+    shader->setUniform("MVP",MVP);
+
+
     //clear our frame buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //bind our fluid shader
+    //disable our depth test
+    glDisable(GL_DEPTH_TEST);
+    //enable additive blending to accumilate thickness
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    m_SPHEngine->drawArrays();
+
+    glEnable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
+    //resizeGL(width(),height());
+
+
+
+    // Render to our bilateral filter framebuffer
+    glBindFramebuffer(GL_FRAMEBUFFER, m_bilateralFrameBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, m_staticDepthBuffer);
+    //clear our frame buffer
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //bind our bilateral filter shader
     (*shader)["BilateralFilter"]->use();
     //set our blur direction
     shader->setUniform("blurDir",1.0f,0.0f);
@@ -397,9 +494,18 @@ void OpenGLWidget::paintGL(){
     //bind our fluid shader
     (*shader)["FluidShader"]->use();
     //bind our bilateral render texture
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,m_bilateralRender);
+    //bind our thickess texture
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D,m_thicknessRender);
     //draw our billboard
+    //enable alpha blending for transparent fluid
+    glEnable(GL_BLEND);
+    glBlendFunc (GL_SRC_ALPHA, GL_SRC_ALPHA);
     glDrawArrays(GL_TRIANGLES,0,6);
+    glDisable(GL_BLEND);
+
 
 
     //write our framerate
@@ -419,15 +525,15 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *_event){
         QGuiApplication::exit();
     }
     if(_event->key()==Qt::Key_Plus){
-        m_pointSize+=0.5f;
+        m_pointSize+=0.1f;
         std::cout<<"particle size: "<<m_pointSize<<std::endl;
     }
     if(_event->key()==Qt::Key_Minus){
-        m_pointSize-=0.5f;
+        m_pointSize-=0.1f;
         std::cout<<"particle size: "<<m_pointSize<<std::endl;
     }
     if(_event->key()==Qt::Key_E){
-        m_SPHEngine->update(0.01);
+        m_SPHEngine->update(0.001);
     }
 }
 //----------------------------------------------------------------------------------------------------------------------

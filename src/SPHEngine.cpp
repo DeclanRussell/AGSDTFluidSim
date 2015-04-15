@@ -4,22 +4,23 @@
 #include <vector>
 #include <iostream>
 #include <cmath>
-
+#include "cutil_math.h"  //< some math operations with cuda types
 
 #define pi 3.14159265359f
 //----------------------------------------------------------------------------------------------------------------------
-SPHEngine::SPHEngine(unsigned int _numParticles, unsigned int _volume, float _density, unsigned int _particlesPerCell) : m_numParticles(_numParticles),
-                                                                                                                         m_volume(_volume),
-                                                                                                                         m_numParticlePerCell(_particlesPerCell),
-                                                                                                                         m_density(_density),
-                                                                                                                         m_smoothingLength(0.2),
-                                                                                                                         m_cellSize(5),
-                                                                                                                         m_numPlanes(0)
+SPHEngine::SPHEngine(unsigned int _numParticles, unsigned int _volume, float _density) : m_numParticles(_numParticles),
+                                                                                         m_volume(_volume),
+                                                                                         m_density(_density),
+                                                                                         m_smoothingLength(1.1),
+                                                                                         m_numPlanes(0),
+                                                                                         m_gasConstant(10.0f),
+                                                                                         m_viscCoef(0.003f)
 
 {
     calcMass();
     std::cout<<"Particle Mass: "<<m_mass<<std::endl;
     calcKernalConsts();
+    test(m_pressWeightConst);
     init();
 }
 
@@ -44,17 +45,17 @@ void SPHEngine::init(){
     std::vector<float3> particles;
     float3 tempF3;
     float tx,ty,tz;
-    tx=tz=-10.0;
+    tx=tz=1;
     ty = 1.0;
     for(unsigned int i=0; i<m_numParticles; i++){
-        if(tx>10){ tx=-10.0; tz+=0.5;}
-        if(tz>10){ tz=-10.0; ty+=0.5;}
+        if(tx>9){ tx=1; tz+=0.1f;}
+        if(tz>9){ tz=1; ty+=0.1f;}
 
         tempF3.x = tx;
         tempF3.y = ty;
         tempF3.z = tz;
         particles.push_back(tempF3);
-        tx+=0.5;
+        tx+=0.1f;
     }
 
 
@@ -82,11 +83,9 @@ void SPHEngine::init(){
 
     glBindVertexArray(0);
 
-    //set our point size
-    glPointSize(10);
 
     //set the size of our hash table based on how many particles we have
-    m_hashTableSize = nextPrimeNum(2*m_numParticles);
+    m_hashTableSize = nextPrimeNum(m_numParticles);
     std::cout<<"hash table size: "<<m_hashTableSize<<std::endl;
     //allocate space for our hash table,cell occupancy array and velocity array.
     cudaMalloc(&m_dhashKeys, m_numParticles*sizeof(unsigned int));
@@ -141,7 +140,7 @@ void SPHEngine::update(float _timeStep){
     cudaGraphicsResourceGetMappedPointer((void**)&d_posPtr,&d_posSize,m_cudaBufferPtr);
 
     //calculate our hash keys
-    createHashTable(m_dhashKeys,d_posPtr,m_numParticles,m_cellSize, m_hashTableSize, m_numThreadsPerBlock);
+    createHashTable(m_dhashKeys,d_posPtr,m_numParticles,0.5f/m_smoothingLength, m_hashTableSize, m_numThreadsPerBlock);
 
     //sort our particle postions based on there key to make
     //points of the same key occupy contiguous memory
@@ -163,7 +162,7 @@ void SPHEngine::update(float _timeStep){
     cudaThreadSynchronize();
 
     //update our particle positions with navier stokes equations
-    fluidSolver(d_posPtr,m_dVelBuffer,m_dAccBuffer,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_numThreadsPerBlock,m_smoothingLength*5,_timeStep,m_mass,m_density,1000,1,m_densWeightConst,m_pressWeightConst,m_viscWeightConst);
+    fluidSolver(d_posPtr,m_dVelBuffer,m_dAccBuffer,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_numThreadsPerBlock,m_smoothingLength*5,_timeStep,m_mass,m_density,m_gasConstant,m_viscCoef,m_densWeightConst,m_pressWeightConst,m_viscWeightConst);
 
     //make sure all our threads are done
     cudaThreadSynchronize();
@@ -192,9 +191,9 @@ void SPHEngine::drawArrays(){
 //----------------------------------------------------------------------------------------------------------------------
 void SPHEngine::calcKernalConsts()
 {
-    m_densWeightConst = (15.0f/(pi*m_smoothingLength*m_smoothingLength*m_smoothingLength*m_smoothingLength*m_smoothingLength*m_smoothingLength));
-    m_pressWeightConst = -(45.0f/(pi*pow(m_smoothingLength,6)));
-    m_viscWeightConst = -(90/(pi*pow(m_smoothingLength,6)));
+    m_densWeightConst = (15.0f/(pi*pow(m_smoothingLength,6)));
+    m_pressWeightConst = (-45.0f/(pi*pow(m_smoothingLength,6)));
+    m_viscWeightConst = (-90/(pi*pow(m_smoothingLength,6)));
 
     std::cout<<"Density Const: "<<m_densWeightConst<<std::endl;
     std::cout<<"Pressure Const: "<<m_pressWeightConst<<std::endl;
@@ -229,7 +228,7 @@ unsigned int SPHEngine::nextPrimeNum(int _x){
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void SPHEngine::addWall(float3 _pos, float3 _norm){
+void SPHEngine::addWall(float3 _pos, float3 _norm, float _restCoef){
     if(m_numPlanes==0){
         //increment our count
         m_numPlanes++;
@@ -238,7 +237,8 @@ void SPHEngine::addWall(float3 _pos, float3 _norm){
         //create our plane
         planeProp p;
         p.pos = _pos;
-        p.normal = _norm;
+        p.normal = normalize(_norm);
+        p.restCoef = _restCoef;
         //copy our data onto our device
         cudaMemcpy(m_dPlaneBuffer, &p, sizeof(planeProp), cudaMemcpyHostToDevice);
     }
@@ -259,6 +259,7 @@ void SPHEngine::addWall(float3 _pos, float3 _norm){
         //create our new wall
         pArray[m_numPlanes-1].pos = _pos;
         pArray[m_numPlanes-1].normal = _norm;
+        pArray[m_numPlanes-1].restCoef = _restCoef;
 
         //copy our data onto our device
         cudaMemcpy(tempBuffer, pArray, m_numPlanes * sizeof(planeProp), cudaMemcpyHostToDevice);
