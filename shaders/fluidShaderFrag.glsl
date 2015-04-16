@@ -17,6 +17,8 @@ uniform float fresnalPower;
 uniform float refractRatio;
 //fresnal constant
 uniform float fresnalConst;
+//color of our fluid
+uniform vec3 color;
 //texture coordinates of billboard
 in vec2 VTexCoord;
 
@@ -31,7 +33,7 @@ uniform vec3 Kd;
 uniform vec3 Ka;
 uniform vec3 Ks;
 uniform float shininess;
-uniform vec4 color;
+
 
 //to be used later with phong shading
 vec3 ads(vec3 position, vec3 normal){
@@ -105,15 +107,15 @@ void main(void)
     vec3 reflectColor = vec3(texture(cubeMapTex, Reflect));
 
 
-    vec3 phong = ads(posEye,n)*vec3(0,1,1);
+    vec3 phong = ads(posEye,n)*color;
 
     refractColor = mix(refractColor,phong,thickness);
 
-    vec3 color  = mix(refractColor, reflectColor, fresnalRatio);
 
 
-    //phong shading
-    FragColor = vec4(color,1.0);
+    //our final colour
+    FragColor  = vec4(mix(refractColor, reflectColor, fresnalRatio),1.0);
+
 
     //normals shading
     //FragColor = vec4(n,1.0);

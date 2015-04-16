@@ -42,6 +42,8 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     m_blurFalloff = 0.5f;
     m_blurRadius = 10.f;
     m_cubeMapCreated = false;
+    //set our fluid color to something nice
+    m_fluidColor = QColor(0,255,255);
     // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
     this->resize(_parent->size());
 }
@@ -621,6 +623,7 @@ void OpenGLWidget::paintGL(){
     shader->setUniform("fresnalPower",m_fresnalPower);
     shader->setUniform("refractRatio",m_refractionRatio);
     shader->setUniform("fresnalConst",m_fresnalConst);
+    shader->setUniform("color",(float)m_fluidColor.redF(),(float)m_fluidColor.greenF(),(float)m_fluidColor.blueF());
     //bind our bilateral render texture
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,m_bilateralRender);

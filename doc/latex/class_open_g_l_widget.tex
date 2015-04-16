@@ -1,0 +1,312 @@
+\hypertarget{class_open_g_l_widget}{\section{Open\-G\-L\-Widget Class Reference}
+\label{class_open_g_l_widget}\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}}
+}
+
+
+Basic Qt widget that holds a Open\-G\-L context.  
+
+
+
+
+{\ttfamily \#include $<$Open\-G\-L\-Widget.\-h$>$}
+
+Inheritance diagram for Open\-G\-L\-Widget\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_open_g_l_widget}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_open_g_l_widget_af84cea3a80d4880fe6cf3e10f469bbdb}{void \hyperlink{class_open_g_l_widget_af84cea3a80d4880fe6cf3e10f469bbdb}{set\-Refraction\-Ratio} (double \-\_\-eta)}\label{class_open_g_l_widget_af84cea3a80d4880fe6cf3e10f469bbdb}
+
+\begin{DoxyCompactList}\small\item\em mutator for rafraction ratio. This effects the refraction of our fluid \end{DoxyCompactList}\item 
+\hypertarget{class_open_g_l_widget_a6422eaacd015444b7813a1ce683bea19}{void \hyperlink{class_open_g_l_widget_a6422eaacd015444b7813a1ce683bea19}{set\-Fresnal\-Power} (double \-\_\-power)}\label{class_open_g_l_widget_a6422eaacd015444b7813a1ce683bea19}
+
+\begin{DoxyCompactList}\small\item\em mutator for the fresnal power. this effects the reflection of our fluid \end{DoxyCompactList}\item 
+bool \hyperlink{class_open_g_l_widget_ae26021ef3dd9a8f6a9fd68d4ce44a6ee}{load\-Cube\-Map} (Q\-String \-\_\-loc)
+\begin{DoxyCompactList}\small\item\em slot to load cube maps to for our enironment map \end{DoxyCompactList}\item 
+void \hyperlink{class_open_g_l_widget_a83bd4b62dc32eac33e84d570e31ddc1c}{set\-Particle\-Size} (double \-\_\-size)
+\begin{DoxyCompactList}\small\item\em a slot to change our particle size \end{DoxyCompactList}\item 
+void \hyperlink{class_open_g_l_widget_aef63bb4f820d5909837330d8cd220c20}{set\-Particle\-Thickness} (double \-\_\-thickness)
+\begin{DoxyCompactList}\small\item\em a slot to change our particle thickess \end{DoxyCompactList}\item 
+void \hyperlink{class_open_g_l_widget_a18386d03c765a2b49d947573d5e98561}{set\-Blur\-Falloff} (double \-\_\-falloff)
+\begin{DoxyCompactList}\small\item\em a slot to change our bilateral filter blur falloff \end{DoxyCompactList}\item 
+void \hyperlink{class_open_g_l_widget_a9115db4eeda180baaa8d14fae56d4ad2}{set\-Blur\-Radius} (double \-\_\-radius)
+\begin{DoxyCompactList}\small\item\em a slot to change our bilateral filter blur radius \end{DoxyCompactList}\item 
+\hypertarget{class_open_g_l_widget_a1b2f1e0736d69c0970823f9d31d908f7}{void \hyperlink{class_open_g_l_widget_a1b2f1e0736d69c0970823f9d31d908f7}{play\-Toggle} ()}\label{class_open_g_l_widget_a1b2f1e0736d69c0970823f9d31d908f7}
+
+\begin{DoxyCompactList}\small\item\em play/pause toggle slot \end{DoxyCompactList}\item 
+void \hyperlink{class_open_g_l_widget_a4f9cc5b8135515ea87870585dfdf194b}{set\-Volume} (double \-\_\-vol)
+\begin{DoxyCompactList}\small\item\em set volume of our fluid slot \end{DoxyCompactList}\item 
+void \hyperlink{class_open_g_l_widget_a2b1f58185ccc07782cc8c1d6f8f73863}{set\-Density} (double \-\_\-den)
+\begin{DoxyCompactList}\small\item\em set density of our fluid slot \end{DoxyCompactList}\item 
+void \hyperlink{class_open_g_l_widget_a2476342258d25fafecb7e784373141e4}{set\-Visc\-Coef} (double \-\_\-visc)
+\begin{DoxyCompactList}\small\item\em set viscoty coeficient of our fluid slot \end{DoxyCompactList}\item 
+void \hyperlink{class_open_g_l_widget_a5e4e0ff0bd8f6fad5fd1fb53265dc814}{set\-Gas\-Const} (double \-\_\-gas\-Const)
+\begin{DoxyCompactList}\small\item\em set gas constant of our fluid slot \end{DoxyCompactList}\item 
+void \hyperlink{class_open_g_l_widget_a0806c995ed218e055cab1f9c177a6818}{set\-Smoothing\-Length} (double \-\_\-len)
+\begin{DoxyCompactList}\small\item\em set smoothing length of our fluid slot \end{DoxyCompactList}\item 
+\hypertarget{class_open_g_l_widget_aba6ed78cded62034694d981d1e2e2219}{void \hyperlink{class_open_g_l_widget_aba6ed78cded62034694d981d1e2e2219}{set\-Fluid\-Color} (Q\-Color \-\_\-col)}\label{class_open_g_l_widget_aba6ed78cded62034694d981d1e2e2219}
+
+\begin{DoxyCompactList}\small\item\em set the color of our fluid slot \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_open_g_l_widget_a60b9008fd7762190918d5e2528a57248}{Open\-G\-L\-Widget} (const Q\-G\-L\-Format \-\_\-format, Q\-Widget $\ast$\-\_\-parent=0)
+\begin{DoxyCompactList}\small\item\em ctor for our N\-G\-L drawing class \end{DoxyCompactList}\item 
+\hypertarget{class_open_g_l_widget_a293847f6a7e6c40344a1acfca3e9eb51}{\hyperlink{class_open_g_l_widget_a293847f6a7e6c40344a1acfca3e9eb51}{$\sim$\-Open\-G\-L\-Widget} ()}\label{class_open_g_l_widget_a293847f6a7e6c40344a1acfca3e9eb51}
+
+\begin{DoxyCompactList}\small\item\em dtor must close down and release Open\-G\-L resources \end{DoxyCompactList}\item 
+\hypertarget{class_open_g_l_widget_a570df546f7206455c57addb624906576}{void \hyperlink{class_open_g_l_widget_a570df546f7206455c57addb624906576}{initialize\-G\-L} ()}\label{class_open_g_l_widget_a570df546f7206455c57addb624906576}
+
+\begin{DoxyCompactList}\small\item\em the virtual initialize class is called once when the window is created and we have a valid G\-L context use this to setup any default G\-L stuff \end{DoxyCompactList}\item 
+\hypertarget{class_open_g_l_widget_a260a543726f601659cbd1809b90f9e4b}{void \hyperlink{class_open_g_l_widget_a260a543726f601659cbd1809b90f9e4b}{paint\-G\-L} ()}\label{class_open_g_l_widget_a260a543726f601659cbd1809b90f9e4b}
+
+\begin{DoxyCompactList}\small\item\em this is called everytime we want to draw the scene \end{DoxyCompactList}\item 
+\hypertarget{class_open_g_l_widget_a55cf4659a7f10207fb6ab3fcf9273abc}{void \hyperlink{class_open_g_l_widget_a55cf4659a7f10207fb6ab3fcf9273abc}{resize\-G\-L} (const int \-\_\-w, const int \-\_\-h)}\label{class_open_g_l_widget_a55cf4659a7f10207fb6ab3fcf9273abc}
+
+\begin{DoxyCompactList}\small\item\em called to resize the window \end{DoxyCompactList}\item 
+\hypertarget{class_open_g_l_widget_a4f3770bd262b22162296fd49e45fbafd}{void \hyperlink{class_open_g_l_widget_a4f3770bd262b22162296fd49e45fbafd}{set\-Point\-Size} (float \-\_\-size)}\label{class_open_g_l_widget_a4f3770bd262b22162296fd49e45fbafd}
+
+\begin{DoxyCompactList}\small\item\em mutator for our point size \end{DoxyCompactList}\item 
+\hypertarget{class_open_g_l_widget_a2e7ec0372fb6b2a0eb85a9524cfdd7fd}{void \hyperlink{class_open_g_l_widget_a2e7ec0372fb6b2a0eb85a9524cfdd7fd}{key\-Press\-Event} (Q\-Key\-Event $\ast$\-\_\-event)}\label{class_open_g_l_widget_a2e7ec0372fb6b2a0eb85a9524cfdd7fd}
+
+\begin{DoxyCompactList}\small\item\em keyboard press event \end{DoxyCompactList}\item 
+\hypertarget{class_open_g_l_widget_aa6d543f552c813df3b3a78dc5c4899fd}{void \hyperlink{class_open_g_l_widget_aa6d543f552c813df3b3a78dc5c4899fd}{mouse\-Move\-Event} (Q\-Mouse\-Event $\ast$\-\_\-event)}\label{class_open_g_l_widget_aa6d543f552c813df3b3a78dc5c4899fd}
+
+\begin{DoxyCompactList}\small\item\em mouse move \end{DoxyCompactList}\item 
+\hypertarget{class_open_g_l_widget_aa3f5541e5da2d5c52ca16b99f40dfd75}{void \hyperlink{class_open_g_l_widget_aa3f5541e5da2d5c52ca16b99f40dfd75}{mouse\-Release\-Event} (Q\-Mouse\-Event $\ast$\-\_\-event)}\label{class_open_g_l_widget_aa3f5541e5da2d5c52ca16b99f40dfd75}
+
+\begin{DoxyCompactList}\small\item\em mouse button release \end{DoxyCompactList}\item 
+\hypertarget{class_open_g_l_widget_adaab83f0bed689b0765d42b6ae760220}{void \hyperlink{class_open_g_l_widget_adaab83f0bed689b0765d42b6ae760220}{mouse\-Press\-Event} (Q\-Mouse\-Event $\ast$\-\_\-event)}\label{class_open_g_l_widget_adaab83f0bed689b0765d42b6ae760220}
+
+\begin{DoxyCompactList}\small\item\em mouse button press \end{DoxyCompactList}\item 
+void \hyperlink{class_open_g_l_widget_a0682546d360b7ce9ae1dce31a090cfca}{wheel\-Event} (Q\-Wheel\-Event $\ast$\-\_\-event)
+\begin{DoxyCompactList}\small\item\em this method is called everytime the mouse wheel is moved inherited from Q\-Object and overridden here. \end{DoxyCompactList}\item 
+\hypertarget{class_open_g_l_widget_a11473cec64e843211458fd83f9d6ad72}{void \hyperlink{class_open_g_l_widget_a11473cec64e843211458fd83f9d6ad72}{timer\-Event} (Q\-Timer\-Event $\ast$)}\label{class_open_g_l_widget_a11473cec64e843211458fd83f9d6ad72}
+
+\begin{DoxyCompactList}\small\item\em a timer event function from the Q\-\_\-object \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Basic Qt widget that holds a Open\-G\-L context. 
+
+\begin{DoxyAuthor}{Author}
+Declan Russell 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1.\-0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2/3/15 Initial version 
+\end{DoxyDate}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_open_g_l_widget_a60b9008fd7762190918d5e2528a57248}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!Open\-G\-L\-Widget@{Open\-G\-L\-Widget}}
+\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{Open\-G\-L\-Widget}]{\setlength{\rightskip}{0pt plus 5cm}Open\-G\-L\-Widget\-::\-Open\-G\-L\-Widget (
+\begin{DoxyParamCaption}
+\item[{const Q\-G\-L\-Format}]{\-\_\-format, }
+\item[{Q\-Widget $\ast$}]{\-\_\-parent = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [explicit]}}}\label{class_open_g_l_widget_a60b9008fd7762190918d5e2528a57248}
+
+
+ctor for our N\-G\-L drawing class 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em parent} & the parent window to the class \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_open_g_l_widget_ae26021ef3dd9a8f6a9fd68d4ce44a6ee}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!load\-Cube\-Map@{load\-Cube\-Map}}
+\index{load\-Cube\-Map@{load\-Cube\-Map}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{load\-Cube\-Map}]{\setlength{\rightskip}{0pt plus 5cm}bool Open\-G\-L\-Widget\-::load\-Cube\-Map (
+\begin{DoxyParamCaption}
+\item[{Q\-String}]{\-\_\-loc}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}}\label{class_open_g_l_widget_ae26021ef3dd9a8f6a9fd68d4ce44a6ee}
+
+
+slot to load cube maps to for our enironment map 
+
+this function pressumes that all our cube map textures are in one texture 
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-loc} & -\/ the location of our cube map texture \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+If the texture has been loaded correctly 
+\end{DoxyReturn}
+\hypertarget{class_open_g_l_widget_a18386d03c765a2b49d947573d5e98561}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Blur\-Falloff@{set\-Blur\-Falloff}}
+\index{set\-Blur\-Falloff@{set\-Blur\-Falloff}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{set\-Blur\-Falloff}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Blur\-Falloff (
+\begin{DoxyParamCaption}
+\item[{double}]{\-\_\-falloff}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a18386d03c765a2b49d947573d5e98561}
+
+
+a slot to change our bilateral filter blur falloff 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-falloff} & -\/ bilateral blur falloff \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_open_g_l_widget_a9115db4eeda180baaa8d14fae56d4ad2}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Blur\-Radius@{set\-Blur\-Radius}}
+\index{set\-Blur\-Radius@{set\-Blur\-Radius}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{set\-Blur\-Radius}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Blur\-Radius (
+\begin{DoxyParamCaption}
+\item[{double}]{\-\_\-radius}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a9115db4eeda180baaa8d14fae56d4ad2}
+
+
+a slot to change our bilateral filter blur radius 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-radius} & -\/ bilateral blur radius \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_open_g_l_widget_a2b1f58185ccc07782cc8c1d6f8f73863}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Density@{set\-Density}}
+\index{set\-Density@{set\-Density}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{set\-Density}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Density (
+\begin{DoxyParamCaption}
+\item[{double}]{\-\_\-den}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a2b1f58185ccc07782cc8c1d6f8f73863}
+
+
+set density of our fluid slot 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-den} & -\/ density \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_open_g_l_widget_a5e4e0ff0bd8f6fad5fd1fb53265dc814}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Gas\-Const@{set\-Gas\-Const}}
+\index{set\-Gas\-Const@{set\-Gas\-Const}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{set\-Gas\-Const}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Gas\-Const (
+\begin{DoxyParamCaption}
+\item[{double}]{\-\_\-gas\-Const}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a5e4e0ff0bd8f6fad5fd1fb53265dc814}
+
+
+set gas constant of our fluid slot 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-gas\-Const} & -\/ gas constant \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_open_g_l_widget_a83bd4b62dc32eac33e84d570e31ddc1c}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Particle\-Size@{set\-Particle\-Size}}
+\index{set\-Particle\-Size@{set\-Particle\-Size}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{set\-Particle\-Size}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Particle\-Size (
+\begin{DoxyParamCaption}
+\item[{double}]{\-\_\-size}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a83bd4b62dc32eac33e84d570e31ddc1c}
+
+
+a slot to change our particle size 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-size} & -\/ particle size \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_open_g_l_widget_aef63bb4f820d5909837330d8cd220c20}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Particle\-Thickness@{set\-Particle\-Thickness}}
+\index{set\-Particle\-Thickness@{set\-Particle\-Thickness}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{set\-Particle\-Thickness}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Particle\-Thickness (
+\begin{DoxyParamCaption}
+\item[{double}]{\-\_\-thickness}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_aef63bb4f820d5909837330d8cd220c20}
+
+
+a slot to change our particle thickess 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-thickness} & -\/ particle thickness \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_open_g_l_widget_a0806c995ed218e055cab1f9c177a6818}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Smoothing\-Length@{set\-Smoothing\-Length}}
+\index{set\-Smoothing\-Length@{set\-Smoothing\-Length}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{set\-Smoothing\-Length}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Smoothing\-Length (
+\begin{DoxyParamCaption}
+\item[{double}]{\-\_\-len}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a0806c995ed218e055cab1f9c177a6818}
+
+
+set smoothing length of our fluid slot 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-len} & -\/ smoothing length \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_open_g_l_widget_a2476342258d25fafecb7e784373141e4}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Visc\-Coef@{set\-Visc\-Coef}}
+\index{set\-Visc\-Coef@{set\-Visc\-Coef}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{set\-Visc\-Coef}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Visc\-Coef (
+\begin{DoxyParamCaption}
+\item[{double}]{\-\_\-visc}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a2476342258d25fafecb7e784373141e4}
+
+
+set viscoty coeficient of our fluid slot 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-visc} & -\/ viscosity coeficient \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_open_g_l_widget_a4f9cc5b8135515ea87870585dfdf194b}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Volume@{set\-Volume}}
+\index{set\-Volume@{set\-Volume}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{set\-Volume}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Volume (
+\begin{DoxyParamCaption}
+\item[{double}]{\-\_\-vol}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a4f9cc5b8135515ea87870585dfdf194b}
+
+
+set volume of our fluid slot 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-vol} & -\/ volume \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_open_g_l_widget_a0682546d360b7ce9ae1dce31a090cfca}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!wheel\-Event@{wheel\-Event}}
+\index{wheel\-Event@{wheel\-Event}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{wheel\-Event}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::wheel\-Event (
+\begin{DoxyParamCaption}
+\item[{Q\-Wheel\-Event $\ast$}]{\-\_\-event}
+\end{DoxyParamCaption}
+)}}\label{class_open_g_l_widget_a0682546d360b7ce9ae1dce31a090cfca}
+
+
+this method is called everytime the mouse wheel is moved inherited from Q\-Object and overridden here. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-event} & the Qt Event structure \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{_open_g_l_widget_8h}{Open\-G\-L\-Widget.\-h}\item 
+src/Open\-G\-L\-Widget.\-cpp\end{DoxyCompactItemize}

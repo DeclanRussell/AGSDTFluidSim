@@ -6,6 +6,7 @@
 #include <QSpacerItem>
 #include <QPushButton>
 #include <QFileDialog>
+#include <QColorDialog>
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
@@ -29,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     //add a spacer to keep everything tidy
     QSpacerItem* shadPropSpcr = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    shadPropLayout->addItem(shadPropSpcr,10,0,1,1);
+    shadPropLayout->addItem(shadPropSpcr,11,0,1,1);
 
     //add a field to edit particle size
     QLabel *partSizeLbl = new QLabel("Particle size:",shaderProperties);
@@ -103,13 +104,21 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(refRatSpnBx,SIGNAL(valueChanged(double)), m_openGLWidget, SLOT(setRefractionRatio(double)));
     shadPropLayout->addWidget(refRatSpnBx,7,1,1,1);
 
+    //color wheel
+    QLabel *colorLbl = new QLabel("Set Fluid Color:",shaderProperties);
+    shadPropLayout->addWidget(colorLbl,8,0,1,1);
+    QColorDialog *colorWheel = new QColorDialog(QColor(0,255,255),shaderProperties);
+    connect(colorWheel,SIGNAL(currentColorChanged(QColor)),m_openGLWidget,SLOT(setFluidColor(QColor)));
+    QPushButton *colorBtn = new QPushButton("Select Fluid Color",shaderProperties);
+    connect(colorBtn,SIGNAL(clicked(bool)),colorWheel,SLOT(setHidden(bool)));
+    shadPropLayout->addWidget(colorBtn,8,1,1,1);
+
     //Environment map button
     QLabel *envLbl = new QLabel("Set Environment Map:",shaderProperties);
-    shadPropLayout->addWidget(envLbl,8,0,1,1);
+    shadPropLayout->addWidget(envLbl,9,0,1,1);
     QPushButton *envBtn = new QPushButton("Import Environment Map",shaderProperties);
     connect(envBtn,SIGNAL(pressed()),this,SLOT(importEnvMap()));
-    shadPropLayout->addWidget(envBtn,8,1,1,1);
-
+    shadPropLayout->addWidget(envBtn,9,1,1,1);
 
     //Group box for our fluid simulation properties
     QGroupBox *fluidSimProp = new QGroupBox("Fluid Simulation Properties",this);

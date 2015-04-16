@@ -1,0 +1,130 @@
+\hypertarget{class_s_p_h_engine}{\section{S\-P\-H\-Engine Class Reference}
+\label{class_s_p_h_engine}\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}}
+}
+
+
+This class uses cuda and parralel algorithms to manage particles in a fluid simulation.  
+
+
+
+
+{\ttfamily \#include $<$S\-P\-H\-Engine.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_s_p_h_engine_a7ac2d6cd3692ce0c0521435384ad3869}{S\-P\-H\-Engine} (unsigned int \-\_\-num\-Particles=0, unsigned int \-\_\-volume=1, float \-\_\-density=1000)
+\begin{DoxyCompactList}\small\item\em defualt constructor \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a0969407c141667c1147d409a0397257d}{\hyperlink{class_s_p_h_engine_a0969407c141667c1147d409a0397257d}{$\sim$\-S\-P\-H\-Engine} ()}\label{class_s_p_h_engine_a0969407c141667c1147d409a0397257d}
+
+\begin{DoxyCompactList}\small\item\em default destructor \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a0df6d1b33d50afb152e2992de5af5700}{void \hyperlink{class_s_p_h_engine_a0df6d1b33d50afb152e2992de5af5700}{init} ()}\label{class_s_p_h_engine_a0df6d1b33d50afb152e2992de5af5700}
+
+\begin{DoxyCompactList}\small\item\em Initialises our class. This allocates all memory needed for the simulation. \end{DoxyCompactList}\item 
+void \hyperlink{class_s_p_h_engine_a1a17b5c04756850b68cf95b917019241}{update} (float \-\_\-time\-Step)
+\begin{DoxyCompactList}\small\item\em updates our particles positions with navier-\/stokes equations based on timestep of the update. \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a91f224d67175615716059dba23c38a98}{void \hyperlink{class_s_p_h_engine_a91f224d67175615716059dba23c38a98}{draw\-Arrays} ()}\label{class_s_p_h_engine_a91f224d67175615716059dba23c38a98}
+
+\begin{DoxyCompactList}\small\item\em Draws our V\-A\-O. This contatins a buffer of positions mapped to vertex\-Attri\-B\-Array 0. \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_add241056dc1719b3a11486da48c3724c}{void \hyperlink{class_s_p_h_engine_add241056dc1719b3a11486da48c3724c}{set\-Volume} (float \-\_\-volume)}\label{class_s_p_h_engine_add241056dc1719b3a11486da48c3724c}
+
+\begin{DoxyCompactList}\small\item\em Mutator for the volume of our fluid. This in turn effects the mass of our particles. \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_acbc638f7ab8fa2ab356dadf677df10c6}{void \hyperlink{class_s_p_h_engine_acbc638f7ab8fa2ab356dadf677df10c6}{set\-Desity} (float \-\_\-density)}\label{class_s_p_h_engine_acbc638f7ab8fa2ab356dadf677df10c6}
+
+\begin{DoxyCompactList}\small\item\em Mutator for the desity of our fluid. This in turn effects the mass of our particles. \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a196e04ba23d9d9c73924f3af8a8240ed}{void \hyperlink{class_s_p_h_engine_a196e04ba23d9d9c73924f3af8a8240ed}{set\-Smoothing\-Length} (float \-\_\-length)}\label{class_s_p_h_engine_a196e04ba23d9d9c73924f3af8a8240ed}
+
+\begin{DoxyCompactList}\small\item\em Mutator for the smoothing length of our simulation. Can also be thought of as hash cell size. \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a293fc06859e21473b03626a55c5c3a69}{void \hyperlink{class_s_p_h_engine_a293fc06859e21473b03626a55c5c3a69}{set\-Gas\-Constant} (float \-\_\-gas\-Const)}\label{class_s_p_h_engine_a293fc06859e21473b03626a55c5c3a69}
+
+\begin{DoxyCompactList}\small\item\em Mutator for the gas constant of our fluid. \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a296c06a01cb0a93dfa150c3acea64493}{void \hyperlink{class_s_p_h_engine_a296c06a01cb0a93dfa150c3acea64493}{set\-Visc\-Coef} (float \-\_\-visc\-Coef)}\label{class_s_p_h_engine_a296c06a01cb0a93dfa150c3acea64493}
+
+\begin{DoxyCompactList}\small\item\em Mutator for our viscosity coeficient of our fluid. \end{DoxyCompactList}\item 
+void \hyperlink{class_s_p_h_engine_aa53becc41023eb45601eb3060860193a}{add\-Wall} (float3 \-\_\-pos, float3 \-\_\-norm, float \-\_\-rest\-Coef=1.\-0)
+\begin{DoxyCompactList}\small\item\em adds a colllision plane to our simulation \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a387ab48532ca20b2eb31319e862e243b}{int \hyperlink{class_s_p_h_engine_a387ab48532ca20b2eb31319e862e243b}{get\-Num\-Particles} ()}\label{class_s_p_h_engine_a387ab48532ca20b2eb31319e862e243b}
+
+\begin{DoxyCompactList}\small\item\em accessor to number of particles in simulation \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class uses cuda and parralel algorithms to manage particles in a fluid simulation. 
+
+\begin{DoxyAuthor}{Author}
+Declan Russell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+09/03/2015 
+\end{DoxyDate}
+\begin{DoxyVersion}{Version}
+1.\-0 Our fluid simulation uses smoothed particle hydrodynamics and true navier stokes equations to compute our particle positions in our simulation. This class also manages its own open\-G\-L buffer storing postions of particles in vertex attrip pointer 0. In case you wish to draw these particles. 
+\end{DoxyVersion}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_s_p_h_engine_a7ac2d6cd3692ce0c0521435384ad3869}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!S\-P\-H\-Engine@{S\-P\-H\-Engine}}
+\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!SPHEngine@{S\-P\-H\-Engine}}
+\subsubsection[{S\-P\-H\-Engine}]{\setlength{\rightskip}{0pt plus 5cm}S\-P\-H\-Engine\-::\-S\-P\-H\-Engine (
+\begin{DoxyParamCaption}
+\item[{unsigned int}]{\-\_\-num\-Particles = {\ttfamily 0}, }
+\item[{unsigned int}]{\-\_\-volume = {\ttfamily 1}, }
+\item[{float}]{\-\_\-density = {\ttfamily 1000}}
+\end{DoxyParamCaption}
+)}}\label{class_s_p_h_engine_a7ac2d6cd3692ce0c0521435384ad3869}
+
+
+defualt constructor 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-num\-Particles} & how many particles we want to have on simulation initialisation. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_s_p_h_engine_aa53becc41023eb45601eb3060860193a}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!add\-Wall@{add\-Wall}}
+\index{add\-Wall@{add\-Wall}!SPHEngine@{S\-P\-H\-Engine}}
+\subsubsection[{add\-Wall}]{\setlength{\rightskip}{0pt plus 5cm}void S\-P\-H\-Engine\-::add\-Wall (
+\begin{DoxyParamCaption}
+\item[{float3}]{\-\_\-pos, }
+\item[{float3}]{\-\_\-norm, }
+\item[{float}]{\-\_\-rest\-Coef = {\ttfamily 1.0}}
+\end{DoxyParamCaption}
+)}}\label{class_s_p_h_engine_aa53becc41023eb45601eb3060860193a}
+
+
+adds a colllision plane to our simulation 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-pos} & -\/ the position of our plane \\
+\hline
+{\em \-\_\-norm} & -\/ the normal of our plane \\
+\hline
+{\em \-\_\-resr\-Coef} & -\/ coeficient of restitution of our plane \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_s_p_h_engine_a1a17b5c04756850b68cf95b917019241}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!update@{update}}
+\index{update@{update}!SPHEngine@{S\-P\-H\-Engine}}
+\subsubsection[{update}]{\setlength{\rightskip}{0pt plus 5cm}void S\-P\-H\-Engine\-::update (
+\begin{DoxyParamCaption}
+\item[{float}]{\-\_\-time\-Step}
+\end{DoxyParamCaption}
+)}}\label{class_s_p_h_engine_a1a17b5c04756850b68cf95b917019241}
+
+
+updates our particles positions with navier-\/stokes equations based on timestep of the update. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-time\-Step} & -\/ the timestep we wish to update our particles with. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{_s_p_h_engine_8h}{S\-P\-H\-Engine.\-h}\item 
+src/S\-P\-H\-Engine.\-cpp\end{DoxyCompactItemize}
