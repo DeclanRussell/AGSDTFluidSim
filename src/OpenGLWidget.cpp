@@ -37,7 +37,11 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     //init refraction and fresnal powers
     setRefractionRatio(0.2f);
     m_fresnalPower = 10;
+    m_pointThickness = 0.02f;
     m_update = true;
+    m_blurFalloff = 0.5f;
+    m_blurRadius = 10.f;
+    m_cubeMapCreated = false;
     // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
     this->resize(_parent->size());
 }
@@ -391,14 +395,14 @@ void OpenGLWidget::initializeGL(){
 
     (*shader)["ThicknessShader"]->use();
     shader->setUniform("screenWidth",width());
-    shader->setUniform("thicknessScaler",0.02f);
+    shader->setUniform("thicknessScaler",m_pointThickness);
 
     (*shader)["BilateralFilter"]->use();
     shader->setUniform("depthTex",0);
     shader->setUniform("blurDir",1.0f,0.0f);
-    shader->setUniform("blurDepthFalloff",1.0f);
+    shader->setUniform("blurDepthFalloff",m_blurFalloff);
     shader->setUniform("filterRadius",100.0f/*/width()*/);
-    shader->setUniform("texelSize",1.0f/(float)width());
+    shader->setUniform("texelSize",2.0f/((float)width()+height()));
 
     (*shader)["FluidShader"]->use();
     //set our inverse projection matrix
@@ -444,6 +448,7 @@ void OpenGLWidget::resizeGL(const int _w, const int _h){
     // set the viewport for openGL
     glViewport(0,0,_w,_h);
     m_cam->setShape(45,(float)_w/_h, 1,1000);
+    m_text->setScreenSize(_w,_h);
     //resize our render targets and depth buffer
     glBindTexture(GL_TEXTURE_2D, m_depthRender);
     glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, _w, _h, 0,GL_RGBA, GL_UNSIGNED_BYTE, 0);
@@ -472,7 +477,7 @@ void OpenGLWidget::resizeGL(const int _w, const int _h){
 
     (*shader)["BilateralFilter"]->use();
     shader->setUniform("filterRadius",100.0f/*/width()*/);
-    shader->setUniform("texelSize",1.0f/width());
+    shader->setUniform("texelSize",2.0f/(width()+height()));
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::timerEvent(QTimerEvent *){
@@ -544,6 +549,7 @@ void OpenGLWidget::paintGL(){
 
     //bind our thickness shader
     (*shader)["ThicknessShader"]->use();
+    shader->setUniform("thicknessScaler",m_pointThickness);
     shader->setUniform("screenWidth",width());
     shader->setUniform("pointSize",m_pointSize);
     shader->setUniform("P",P);
@@ -573,9 +579,9 @@ void OpenGLWidget::paintGL(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //bind our bilateral filter shader
     (*shader)["BilateralFilter"]->use();
-    //set our blur direction
-    shader->setUniform("blurDir",0.0f,1.0f);
-    shader->setUniform("filterRadius",10.0f/height());
+    shader->setUniform("blurDepthFalloff",m_blurFalloff);
+    float radius = (m_blurRadius/((height()+width())*0.5));
+    shader->setUniform("filterRadius",radius);
     //bind our billboard and texture
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,m_depthRender);
@@ -612,6 +618,9 @@ void OpenGLWidget::paintGL(){
 
     //bind our fluid shader
     (*shader)["FluidShader"]->use();
+    shader->setUniform("fresnalPower",m_fresnalPower);
+    shader->setUniform("refractRatio",m_refractionRatio);
+    shader->setUniform("fresnalConst",m_fresnalConst);
     //bind our bilateral render texture
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,m_bilateralRender);
@@ -634,6 +643,8 @@ void OpenGLWidget::paintGL(){
         text.sprintf("framerate is %f",(float)(1000.0/msecsPassed));
     }
     m_text->renderText(10,20,text);
+    text.sprintf("Number of particles: %d",m_SPHEngine->getNumParticles());
+    m_text->renderText(10,40,text);
 
 }
 //----------------------------------------------------------------------------------------------------------------------
@@ -660,7 +671,10 @@ bool OpenGLWidget::loadCubeMap(QString _loc){
     //find out if we have already generated our GPU texture
 
    //if no texture on GPU then create one
-   glGenTextures (1, &m_cubeMapTex);
+   if(!m_cubeMapCreated){
+       glGenTextures (1, &m_cubeMapTex);
+       m_cubeMapCreated = true;
+   }
    glBindTexture (GL_TEXTURE_CUBE_MAP, m_cubeMapTex);
    // format cube map texture
    glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
