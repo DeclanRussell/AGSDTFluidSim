@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QFileDialog>
 #include <QColorDialog>
+#include <QDesktopServices>
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
@@ -16,9 +17,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     format.setVersion(4,1);
     format.setProfile(QGLFormat::CoreProfile);
 
+    //do this so everything isnt so bunched up
+    this->setMinimumHeight(600);
+
     //add our openGL context to our scene
     m_openGLWidget = new OpenGLWidget(format,this);
-    ui->gridLayout->addWidget(m_openGLWidget,0,0,3,1);
+    ui->gridLayout->addWidget(m_openGLWidget,0,0,4,1);
 
     //QObjects manage there children and will delete them when they are deleted
     //therefore no need to keep them all as members
@@ -193,11 +197,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(playPauseBtn,SIGNAL(pressed()),m_openGLWidget,SLOT(playToggle()));
     playBckLayout->addWidget(playPauseBtn,0,0,1,1);
 
+    //Group box for our documentation
+    QGroupBox *docGrb = new QGroupBox("Documentation:",this);
+    ui->gridLayout->addWidget(docGrb,3,1,1,1);
+    QGridLayout *docLayout = new QGridLayout(docGrb);
+    docGrb->setLayout(docLayout);
 
-
-
-
-
+    //open Documation button
+    QPushButton *openDocBtn = new QPushButton("Open Documentation",docGrb);
+    connect(openDocBtn,SIGNAL(pressed()),this,SLOT(openDoc()));
+    docLayout->addWidget(openDocBtn,0,0,1,1);
 }
 
 void MainWindow::importEnvMap(){
@@ -208,6 +217,10 @@ void MainWindow::importEnvMap(){
 
     m_openGLWidget->loadCubeMap(location);
 
+}
+
+void MainWindow::openDoc(){
+    QDesktopServices::openUrl(QUrl(QDir::currentPath() + "/doc/html/index.html"));
 }
 
 MainWindow::~MainWindow(){

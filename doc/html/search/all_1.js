@@ -1,8 +1,6 @@
 var searchData=
 [
-  ['collisiondetectionsolver',['collisionDetectionSolver',['../_cuda_s_p_h_kernals_8h.html#a21ea2a200d5d727e0fd1d459fe27118a',1,'CudaSPHKernals.h']]],
-  ['countcelloccupancy',['countCellOccupancy',['../_cuda_s_p_h_kernals_8h.html#a07f9ac02673aedd19b3dec84e24180d5',1,'CudaSPHKernals.h']]],
-  ['createcellidx',['createCellIdx',['../_cuda_s_p_h_kernals_8h.html#a5ef63636297ac3ddbc0866064a75e12d',1,'CudaSPHKernals.h']]],
-  ['createhashtable',['createHashTable',['../_cuda_s_p_h_kernals_8h.html#a74b195a988479a037d731bbf2da30a5f',1,'CudaSPHKernals.h']]],
-  ['cudasphkernals_2eh',['CudaSPHKernals.h',['../_cuda_s_p_h_kernals_8h.html',1,'']]]
+  ['bilateralfilterfrag_2eglsl',['bilateralFilterFrag.glsl',['../bilateral_filter_frag_8glsl.html',1,'']]],
+  ['bilateralfiltervert_2eglsl',['bilateralFilterVert.glsl',['../bilateral_filter_vert_8glsl.html',1,'']]],
+  ['blurdepthfalloff',['blurDepthFalloff',['../bilateral_filter_frag_8glsl.html#a834f840f0604abea8d2500555d4fb854',1,'bilateralFilterFrag.glsl']]]
 ];

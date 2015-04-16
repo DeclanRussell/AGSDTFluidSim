@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['openglwidget_2eh',['OpenGLWidget.h',['../_open_g_l_widget_8h.html',1,'']]]
+  ['cudasphkernals_2eh',['CudaSPHKernals.h',['../_cuda_s_p_h_kernals_8h.html',1,'']]]
 ];

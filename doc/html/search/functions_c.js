@@ -15,6 +15,6 @@ var searchData=
   ['setsmoothinglength',['setSmoothingLength',['../class_open_g_l_widget.html#a0806c995ed218e055cab1f9c177a6818',1,'OpenGLWidget::setSmoothingLength()'],['../class_s_p_h_engine.html#a196e04ba23d9d9c73924f3af8a8240ed',1,'SPHEngine::setSmoothingLength()']]],
   ['setvisccoef',['setViscCoef',['../class_open_g_l_widget.html#a2476342258d25fafecb7e784373141e4',1,'OpenGLWidget::setViscCoef()'],['../class_s_p_h_engine.html#a296c06a01cb0a93dfa150c3acea64493',1,'SPHEngine::setViscCoef()']]],
   ['setvolume',['setVolume',['../class_open_g_l_widget.html#a4f9cc5b8135515ea87870585dfdf194b',1,'OpenGLWidget::setVolume()'],['../class_s_p_h_engine.html#add241056dc1719b3a11486da48c3724c',1,'SPHEngine::setVolume()']]],
-  ['sortbykey',['sortByKey',['../_cuda_s_p_h_kernals_8h.html#adabb9ae527f09f6a5a5bd794a3d6228c',1,'CudaSPHKernals.h']]],
+  ['sortbykey',['sortByKey',['../_cuda_s_p_h_kernals_8h.html#adabb9ae527f09f6a5a5bd794a3d6228c',1,'CudaSPHKernals.cu']]],
   ['sphengine',['SPHEngine',['../class_s_p_h_engine.html#a7ac2d6cd3692ce0c0521435384ad3869',1,'SPHEngine']]]
 ];

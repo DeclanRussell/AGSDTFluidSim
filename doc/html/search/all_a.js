@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['paintgl',['paintGL',['../class_open_g_l_widget.html#a260a543726f601659cbd1809b90f9e4b',1,'OpenGLWidget']]],
-  ['particleprop',['particleProp',['../structparticle_prop.html',1,'']]],
-  ['planeprop',['planeProp',['../structplane_prop.html',1,'']]],
-  ['playtoggle',['playToggle',['../class_open_g_l_widget.html#a1b2f1e0736d69c0970823f9d31d908f7',1,'OpenGLWidget']]]
+  ['opendoc',['openDoc',['../class_main_window.html#a452fc3db76653e3355cd9eb81bc4f0cf',1,'MainWindow']]],
+  ['openglwidget',['OpenGLWidget',['../class_open_g_l_widget.html',1,'OpenGLWidget'],['../class_open_g_l_widget.html#a60b9008fd7762190918d5e2528a57248',1,'OpenGLWidget::OpenGLWidget()']]],
+  ['openglwidget_2eh',['OpenGLWidget.h',['../_open_g_l_widget_8h.html',1,'']]]
 ];
