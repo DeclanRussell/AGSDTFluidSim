@@ -463,17 +463,3 @@ void collisionDetectionSolver(planeProp *d_planeArray, unsigned int _numPlanes, 
 
 }
 //----------------------------------------------------------------------------------------------------------------------
-
-void test(float _const){
-
-
-    float3 r = make_float3(0.1,0.0,0.0);
-    float rLength = length(r);
-    float weighting = _const * (0.3f-rLength) * (0.3f-rLength);
-    r /= rLength;
-    r *= weighting;
-    r = r * (float)(rLength<0.3);
-
-
-    printf("weighting:  %f,%f,%f",r.x,r.y,r.z);
-}

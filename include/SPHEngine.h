@@ -90,6 +90,9 @@ private:
     planeProp* m_dPlaneBuffer;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief calculate our kernal constance which depends on our hash cell size
+    /// @brief smoothing kernals taken from M¨uller, M., Charypar, D. and Gross, M. (2003).
+    /// @brief Particle-based fluid simulation for interactive applications,
+    /// @brief SCA ’03: Proceedings of the 2003 ACM SIGGRAPH
     //----------------------------------------------------------------------------------------------------------------------
     void calcKernalConsts();
     //----------------------------------------------------------------------------------------------------------------------

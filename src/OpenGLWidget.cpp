@@ -3,7 +3,6 @@
 #include "OpenGLWidget.h"
 #include <iostream>
 #include <time.h>
-#include <QRect>
 
 #include <ngl/NGLInit.h>
 #include <ngl/ShaderLib.h>

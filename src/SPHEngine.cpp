@@ -20,7 +20,6 @@ SPHEngine::SPHEngine(unsigned int _numParticles, unsigned int _volume, float _de
     calcMass();
     std::cout<<"Particle Mass: "<<m_mass<<std::endl;
     calcKernalConsts();
-    test(m_pressWeightConst);
     init();
 }
 

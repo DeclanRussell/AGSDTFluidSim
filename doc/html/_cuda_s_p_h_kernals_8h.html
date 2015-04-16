@@ -136,9 +136,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>calcPositions</b> (fl
 <tr class="memitem:a21ea2a200d5d727e0fd1d459fe27118a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_cuda_s_p_h_kernals_8h.html#a21ea2a200d5d727e0fd1d459fe27118a">collisionDetectionSolver</a> (<a class="el" href="structplane_prop.html">planeProp</a> *d_planeArray, unsigned int _numPlanes, float3 *d_posArray, float3 *d_velArray, float _timeStep, unsigned int _numParticles, unsigned int _maxNumThreads)</td></tr>
 <tr class="memdesc:a21ea2a200d5d727e0fd1d459fe27118a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collision detection between particles and planes.  <a href="#a21ea2a200d5d727e0fd1d459fe27118a">More...</a><br/></td></tr>
 <tr class="separator:a21ea2a200d5d727e0fd1d459fe27118a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d27e085230ed3de546f56c0c80eeb04"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8d27e085230ed3de546f56c0c80eeb04"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>test</b> (float _const)</td></tr>
-<tr class="separator:a8d27e085230ed3de546f56c0c80eeb04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Used for prototyping our our functions used for our SPH simulation calculations. </p>
@@ -363,14 +360,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>test</b> (float _cons
 </div><div class="memdoc">
 
 <p>Creates a spatial hash key based on our particle postion. </p>
-<p>This is taken from Optimized Spatial Hashing for Collision Detection of Deformable Objects. </p>
+<p>This is taken from Teschner, M., Heidelberger, B., Mueller, M., Pomeranets, D. and Gross, M. (2003). Optimized spatial hashing for collision detection of deformable objects </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">d_hashArray</td><td>- a pointer to the cuda buffer that we wish to store our hash keys </td></tr>
     <tr><td class="paramname">d_posArray</td><td>- pointer to the cuda buffer that holds the particle postions we wish to hash </td></tr>
-    <tr><td class="paramname">numParticles</td><td>- the number of particles </td></tr>
-    <tr><td class="paramname">smoothingLength</td><td>- smoothing length of our hash. You can think of this as how many different hash keys availible. </td></tr>
-    <tr><td class="paramname">hashTableSize</td><td>- size of our hash table </td></tr>
+    <tr><td class="paramname">numParticles</td><td>- the number of particles. Used to calculate how many kernals to launch </td></tr>
+    <tr><td class="paramname">smoothingLength</td><td>- smoothing length of our hash. How big each cell of our hash is. </td></tr>
+    <tr><td class="paramname">hashTableSize</td><td>- size of our hash table You can think of this as how many different hash keys availible. </td></tr>
     <tr><td class="paramname">maxNumThreads</td><td>- the maximum number off threads we have in a block on our device. Can be found out with device query </td></tr>
   </table>
   </dd>
@@ -613,7 +610,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>test</b> (float _cons
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Apr 16 2015 16:43:19 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Apr 16 2015 17:58:35 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

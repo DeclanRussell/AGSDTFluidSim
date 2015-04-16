@@ -40,12 +40,13 @@ struct planeProp{
 void createCellIdx(unsigned int* d_cellOccArray, unsigned int _size, unsigned int *d_cellIdxArray);
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Creates a spatial hash key based on our particle postion
-/// @brief This is taken from Optimized Spatial Hashing for Collision Detection of Deformable Objects.
+/// @brief This is taken from Teschner, M., Heidelberger, B., Mueller, M., Pomeranets, D. and Gross, M.
+/// @brief (2003). Optimized spatial hashing for collision detection of deformable objects
 /// @param d_hashArray - a pointer to the cuda buffer that we wish to store our hash keys
 /// @param d_posArray - pointer to the cuda buffer that holds the particle postions we wish to hash
-/// @param numParticles - the number of particles
-/// @param smoothingLength - smoothing length of our hash. You can think of this as how many different hash keys availible.
-/// @param hashTableSize - size of our hash table
+/// @param numParticles - the number of particles. Used to calculate how many kernals to launch
+/// @param smoothingLength - smoothing length of our hash. How big each cell of our hash is.
+/// @param hashTableSize - size of our hash table You can think of this as how many different hash keys availible.
 /// @param maxNumThreads - the maximum number off threads we have in a block on our device. Can be found out with device query
 //----------------------------------------------------------------------------------------------------------------------
 void createHashTable(unsigned int* d_hashArray, float3* d_posArray, unsigned int numParticles, float smoothingLegnth,unsigned int hashTableSize, int maxNumThreads);
@@ -107,6 +108,5 @@ void fluidSolver(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, uns
 //----------------------------------------------------------------------------------------------------------------------
 void collisionDetectionSolver(planeProp* d_planeArray, unsigned int _numPlanes, float3 *d_posArray, float3 *d_velArray, float _timeStep, unsigned int _numParticles, unsigned int _maxNumThreads);
 //----------------------------------------------------------------------------------------------------------------------
-void test(float _const);
 
 #endif // HELLOCUDA_H
