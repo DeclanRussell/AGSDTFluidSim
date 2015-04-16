@@ -6,6 +6,7 @@ Instalation and running:
 
 For this simulation to run your GPU will need the to have compatibility with cuda and dynamic
 Parallelism. This will require an NVidia chip of compute caperbility 3.5 or higher!
+It should work on both mac and linux but I have not tested for mac so don't hold me to this!
 
 Step 1: You will need to tweak your gencode caperbility in the .pro file to your
 	hardware configuration.
