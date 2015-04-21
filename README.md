@@ -25,9 +25,9 @@ step 4: You should now have a working executable. Please contact me if you cant 
 
 Documentation and Report:
 
-	The documation and report of this project are in the form of a doxygen file. 
-	To access this you can either run the program and open it with the "Open Documenation"
-	button or open index.html which you will find in doc/html/ 
+The documation and report of this project are in the form of a doxygen file. 
+To access this you can either run the program and open it with the "Open Documenation"
+button or open index.html which you will find in doc/html/ 
  
 
 Enjoy! 
