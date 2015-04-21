@@ -3,6 +3,8 @@
 /// @author Declan Russell
 /// @date 14/03/15
 /// @version 1.0
+/// @namepsace GLSL
+/// @class fluidShaderFrag
 /// @brief Fragment shader to apply the final shading of our fluid. This calculates the fragment normals
 /// @brief based on a depth pass texture. It also adds reflection and refraction based on a cube map.
 //----------------------------------------------------------------------------------------------------------------------
@@ -109,11 +111,13 @@ out vec4 FragColor;
 /// @return eye space coordinate
 //----------------------------------------------------------------------------------------------------------------------
 vec3 uvToEye(vec2 _uv, float _depth){
-    vec2 normUV = (_uv*2) - 1.0;
+    vec3 screenCoord = (vec3(_uv,_depth) * vec3(2.0)) - vec3(1.0);
 
     //float d = -1 / (-0 + _depth * ((1000.0-1)/1000.0));
     //return vec3(normUV,_depth) * d;
-    return vec3(PInv * vec4(normUV,_depth,1.0));
+    vec4 eyeSpace = PInv * vec4(screenCoord,1.0);
+    eyeSpace.xyz / eyeSpace.w;
+    return vec3(eyeSpace);
 
 }
 
@@ -168,15 +172,17 @@ void main(void)
     vec3 reflectColor = vec3(texture(cubeMapTex, Reflect));
 
 
-    vec3 phong = ads(posEye,n)*color;
-
-    refractColor = mix(refractColor,phong,thickness);
-
-
-
     //our final colour
+    //Phong shading to find out color due to our light source
+    vec3 phong = ads(posEye,n)*color;
+    //mix our refraction color with our phong due to our thick
+    //our fluid is.
+    refractColor = mix(refractColor,phong,thickness);
     FragColor  = vec4(mix(refractColor, reflectColor, fresnalRatio),1.0);
 
+
+    //position shading
+    //FragColor = vec4(posEye,1.0);
 
     //normals shading
     //FragColor = vec4(n,1.0);

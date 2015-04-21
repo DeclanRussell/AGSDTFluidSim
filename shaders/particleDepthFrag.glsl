@@ -3,6 +3,8 @@
 /// @author Declan Russell
 /// @date 8/03/15
 /// @version 1.0
+/// @namepsace GLSL
+/// @class particleDepthFrag
 /// @brief Fragment shader for drawing point sprites as spheres. The output fragment will be the depth.
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -37,13 +39,15 @@ void  main(){
     normal.y*=-1.0;
     float r2 = dot(normal.xy, normal.xy);
     if (r2 > 1.0) discard; // kill pixels outside circle
-    normal.z = sqrt(1.0 - r2*0.2);
+    normal.z = -sqrt(r2);
+
 
 
     // calculate depth
     // point radius calculated from inverse projection * 0.5*pointSize
     vec4 pixelPos = vec4(position + (normal * pointRadius), 1.0);
-    vec4 clipSpacePos = P *pixelPos;
+    pixelPos.z -= 1.5;
+    vec4 clipSpacePos = P * pixelPos;
     vec3 depth = vec3(clipSpacePos.z / clipSpacePos.w);
 
     fragout = vec4(depth,1.0);

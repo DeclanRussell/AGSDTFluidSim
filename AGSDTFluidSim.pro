@@ -38,7 +38,8 @@ OTHER_FILES += shaders/*glsl \
     shaders/thicknessFrag.glsl \
     shaders/thicknessVert.glsl \
     shaders/skyBoxFrag.glsl \
-    shaders/skyBoxVert.glsl
+    shaders/skyBoxVert.glsl \
+    mainpage.dox
 
 
 INCLUDEPATH +=./include /opt/local/include $$(HOME)/NGL/include/

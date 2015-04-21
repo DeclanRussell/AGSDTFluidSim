@@ -3,6 +3,8 @@
 /// @author Declan Russell
 /// @date 15/03/15
 /// @version 1.0
+/// @namepsace GLSL
+/// @class skyBoxVert
 /// @brief Vertex shader for our sky box shader. Just passes through positions and tex coords and positions
 //----------------------------------------------------------------------------------------------------------------------
 

@@ -66,7 +66,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     QLabel *falloffLbl = new QLabel("Blur Falloff:",shaderProperties);
     shadPropLayout->addWidget(falloffLbl,3,0,1,1);
     QDoubleSpinBox *falloffSpnBx = new QDoubleSpinBox(shaderProperties);
-    falloffSpnBx->setValue(0.5);
+    falloffSpnBx->setValue(10);
+    falloffSpnBx->setMaximum(INFINITY);
     falloffSpnBx->setDecimals(3);
     falloffSpnBx->setSingleStep(0.1);
     connect(falloffSpnBx,SIGNAL(valueChanged(double)), m_openGLWidget, SLOT(setBlurFalloff(double)));

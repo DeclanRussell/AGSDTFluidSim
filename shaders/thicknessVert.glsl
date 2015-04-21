@@ -3,6 +3,8 @@
 /// @author Declan Russell
 /// @date 15/03/15
 /// @version 1.0
+/// @namepsace GLSL
+/// @class thicknessVert
 /// @brief Vertex shader for our thickness shader. Takes in points of particles and scales the point sprite with
 /// @brief the current scene projection matrix.
 //----------------------------------------------------------------------------------------------------------------------

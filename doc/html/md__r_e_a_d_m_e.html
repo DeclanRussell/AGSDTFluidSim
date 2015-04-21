@@ -81,11 +81,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">AGSDTFluidSim </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>A fluid simulation for my advanced graphics software development techniques unit. This is an SPH Fluid simulation that uses dynamic parallelism and fancy shading techniques. </p>
+<div class="textblock"><p>A fluid simulation for my advanced graphics software development techniques unit. This is an SPH Fluid simulation that uses dynamic parallelism and fancy shading techniques.</p>
+<p>Instalation and running:</p>
+<p>For this simulation to run your GPU will need the to have compatibility with cuda and dynamic Parallelism. This will require an NVidia chip of compute caperbility 3.5 or higher! It should work on both mac and linux but I have not tested for mac so don't hold me to this!</p>
+<p>Step 1: You will need to tweak your gencode caperbility in the .pro file to your hardware configuration. Step 2: (optional) Depending on what version on cuda you are running you may have to change the path to your cuda library in the .pro aswell. Im running 6.5 so if you are the same you should be fine. Step 3: In the AGSDTFluidSim directory run, </p>
+<pre class="fragment">qmake
+make clean
+make
+</pre><p>step 4: You should now have a working executable. Please contact me if you cant get it working.</p>
+<p>Documentation and Report: </p>
+<pre class="fragment">The documation and report of this project are in the form of a doxygen file. 
+To access this you can either run the program and open it with the "Open Documenation"
+button or open index.html which you will find in doc/html/ 
+</pre><p>Enjoy!</p>
+<p>Dec </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Apr 16 2015 17:58:35 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Apr 21 2015 01:51:28 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

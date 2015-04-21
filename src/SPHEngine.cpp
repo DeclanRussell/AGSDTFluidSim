@@ -11,10 +11,10 @@
 SPHEngine::SPHEngine(unsigned int _numParticles, unsigned int _volume, float _density) : m_numParticles(_numParticles),
                                                                                          m_volume(_volume),
                                                                                          m_density(_density),
-                                                                                         m_smoothingLength(1.2),
+                                                                                         m_smoothingLength(1.4),
                                                                                          m_numPlanes(0),
                                                                                          m_gasConstant(10.0f),
-                                                                                         m_viscCoef(0.003f)
+                                                                                         m_viscCoef(1.0f)
 
 {
     calcMass();
@@ -48,7 +48,7 @@ void SPHEngine::init(){
     ty = 1.0;
     for(unsigned int i=0; i<m_numParticles; i++){
         if(tx>9){ tx=1; tz+=0.1f;}
-        if(tz>9){ tz=1; ty+=0.1f;}
+        if(tz>2){ tz=1; ty+=0.1f;}
 
         tempF3.x = tx;
         tempF3.y = ty;
@@ -84,7 +84,7 @@ void SPHEngine::init(){
 
 
     //set the size of our hash table based on how many particles we have
-    m_hashTableSize = nextPrimeNum(m_numParticles);
+    m_hashTableSize = nextPrimeNum(m_numParticles/2);
     std::cout<<"hash table size: "<<m_hashTableSize<<std::endl;
     //allocate space for our hash table,cell occupancy array and velocity array.
     cudaMalloc(&m_dhashKeys, m_numParticles*sizeof(unsigned int));
@@ -139,7 +139,7 @@ void SPHEngine::update(float _timeStep){
     cudaGraphicsResourceGetMappedPointer((void**)&d_posPtr,&d_posSize,m_cudaBufferPtr);
 
     //calculate our hash keys
-    createHashTable(m_dhashKeys,d_posPtr,m_numParticles,0.5f/m_smoothingLength, m_hashTableSize, m_numThreadsPerBlock);
+    createHashTable(m_dhashKeys,d_posPtr,m_numParticles,m_smoothingLength, m_hashTableSize, m_numThreadsPerBlock);
 
     //sort our particle postions based on there key to make
     //points of the same key occupy contiguous memory
@@ -165,6 +165,8 @@ void SPHEngine::update(float _timeStep){
 
     //make sure all our threads are done
     cudaThreadSynchronize();
+
+    std::cout<<"\n\n"<<std::endl;
 
     //Test our particles for collision with our walls
     collisionDetectionSolver(m_dPlaneBuffer,m_numPlanes,d_posPtr,m_dVelBuffer,_timeStep,m_numParticles,m_numThreadsPerBlock);

@@ -3,7 +3,7 @@
 }
 
 
-This class uses cuda and parralel algorithms to manage particles in a fluid simulation.  
+our cuda libraries  
 
 
 
@@ -29,18 +29,33 @@ void \hyperlink{class_s_p_h_engine_a1a17b5c04756850b68cf95b917019241}{update} (f
 \hypertarget{class_s_p_h_engine_add241056dc1719b3a11486da48c3724c}{void \hyperlink{class_s_p_h_engine_add241056dc1719b3a11486da48c3724c}{set\-Volume} (float \-\_\-volume)}\label{class_s_p_h_engine_add241056dc1719b3a11486da48c3724c}
 
 \begin{DoxyCompactList}\small\item\em Mutator for the volume of our fluid. This in turn effects the mass of our particles. \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a588d8e6f1276d07adb5363c8c3766fda}{float \hyperlink{class_s_p_h_engine_a588d8e6f1276d07adb5363c8c3766fda}{get\-Volume} ()}\label{class_s_p_h_engine_a588d8e6f1276d07adb5363c8c3766fda}
+
+\begin{DoxyCompactList}\small\item\em accessor to query the volume of our fluid \end{DoxyCompactList}\item 
 \hypertarget{class_s_p_h_engine_acbc638f7ab8fa2ab356dadf677df10c6}{void \hyperlink{class_s_p_h_engine_acbc638f7ab8fa2ab356dadf677df10c6}{set\-Desity} (float \-\_\-density)}\label{class_s_p_h_engine_acbc638f7ab8fa2ab356dadf677df10c6}
 
 \begin{DoxyCompactList}\small\item\em Mutator for the desity of our fluid. This in turn effects the mass of our particles. \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a8ee29d26f9451d81a07abde5b1aa53c6}{float \hyperlink{class_s_p_h_engine_a8ee29d26f9451d81a07abde5b1aa53c6}{get\-Density} ()}\label{class_s_p_h_engine_a8ee29d26f9451d81a07abde5b1aa53c6}
+
+\begin{DoxyCompactList}\small\item\em accessor to query the density of our fluid \end{DoxyCompactList}\item 
 \hypertarget{class_s_p_h_engine_a196e04ba23d9d9c73924f3af8a8240ed}{void \hyperlink{class_s_p_h_engine_a196e04ba23d9d9c73924f3af8a8240ed}{set\-Smoothing\-Length} (float \-\_\-length)}\label{class_s_p_h_engine_a196e04ba23d9d9c73924f3af8a8240ed}
 
 \begin{DoxyCompactList}\small\item\em Mutator for the smoothing length of our simulation. Can also be thought of as hash cell size. \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a5eebbb4eaf3c773e263396d49a76fc3e}{float \hyperlink{class_s_p_h_engine_a5eebbb4eaf3c773e263396d49a76fc3e}{get\-Smoothing\-Length} ()}\label{class_s_p_h_engine_a5eebbb4eaf3c773e263396d49a76fc3e}
+
+\begin{DoxyCompactList}\small\item\em accessor to query the smoothing length of our fluid \end{DoxyCompactList}\item 
 \hypertarget{class_s_p_h_engine_a293fc06859e21473b03626a55c5c3a69}{void \hyperlink{class_s_p_h_engine_a293fc06859e21473b03626a55c5c3a69}{set\-Gas\-Constant} (float \-\_\-gas\-Const)}\label{class_s_p_h_engine_a293fc06859e21473b03626a55c5c3a69}
 
 \begin{DoxyCompactList}\small\item\em Mutator for the gas constant of our fluid. \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a683d29b540672f364c306b304bd50ea7}{float \hyperlink{class_s_p_h_engine_a683d29b540672f364c306b304bd50ea7}{get\-Gas\-Const} ()}\label{class_s_p_h_engine_a683d29b540672f364c306b304bd50ea7}
+
+\begin{DoxyCompactList}\small\item\em accessor to query the gas constant of our fluid \end{DoxyCompactList}\item 
 \hypertarget{class_s_p_h_engine_a296c06a01cb0a93dfa150c3acea64493}{void \hyperlink{class_s_p_h_engine_a296c06a01cb0a93dfa150c3acea64493}{set\-Visc\-Coef} (float \-\_\-visc\-Coef)}\label{class_s_p_h_engine_a296c06a01cb0a93dfa150c3acea64493}
 
 \begin{DoxyCompactList}\small\item\em Mutator for our viscosity coeficient of our fluid. \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a6d3709693af1379db5b60b02171d8c8b}{float \hyperlink{class_s_p_h_engine_a6d3709693af1379db5b60b02171d8c8b}{get\-Visc\-Coef} ()}\label{class_s_p_h_engine_a6d3709693af1379db5b60b02171d8c8b}
+
+\begin{DoxyCompactList}\small\item\em accessor to query the viscosity coeficient of our fluid \end{DoxyCompactList}\item 
 void \hyperlink{class_s_p_h_engine_aa53becc41023eb45601eb3060860193a}{add\-Wall} (float3 \-\_\-pos, float3 \-\_\-norm, float \-\_\-rest\-Coef=1.\-0)
 \begin{DoxyCompactList}\small\item\em adds a colllision plane to our simulation \end{DoxyCompactList}\item 
 \hypertarget{class_s_p_h_engine_a387ab48532ca20b2eb31319e862e243b}{int \hyperlink{class_s_p_h_engine_a387ab48532ca20b2eb31319e862e243b}{get\-Num\-Particles} ()}\label{class_s_p_h_engine_a387ab48532ca20b2eb31319e862e243b}
@@ -49,7 +64,11 @@ void \hyperlink{class_s_p_h_engine_aa53becc41023eb45601eb3060860193a}{add\-Wall}
 
 
 \subsection{Detailed Description}
-This class uses cuda and parralel algorithms to manage particles in a fluid simulation. 
+our cuda libraries 
+
+This class uses cuda and parralel algorithms to manage particles in a fluid simulation.
+
+our S\-P\-H kernals
 
 \begin{DoxyAuthor}{Author}
 Declan Russell 

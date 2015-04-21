@@ -1,3 +1,9 @@
+//----------------------------------------------------------------------------------------------------------------------
+/// @file CudaSPHKernals.cu
+/// @author Declan Russell
+/// @date 08/03/2015
+/// @version 1.0
+//----------------------------------------------------------------------------------------------------------------------
 #include <math.h>
 #include <thrust/sort.h>
 #include <thrust/fill.h>
@@ -170,28 +176,22 @@ __global__ void fluidSolverPerParticleKernal(float3 *d_posArray, float3 *d_velAr
 
             //calculate the pressure force
             currPressTemp = (_gasConstant * (density - _restDensity));
-            p1 = 1.0f;
-            if((currPressTemp!=0.0f)||(currPressTemp!=-0.0f)){
-                p1 = (currPressTemp/(currPressTemp*currPressTemp));
-            }
+            p1 = (currPressTemp/(currPressTemp*currPressTemp));
             nPressTemp = (_gasConstant * (nPartDenTemp - _restDensity));
-            p2=1.0f;
-            if((nPressTemp!=0.0f)||(nPressTemp!=-0.0f)){
-                p2 = (nPressTemp/(nPressTemp*nPressTemp));
-            }
+            p2 = (nPressTemp/(nPressTemp*nPressTemp));
             pressWeightTemp = pressureWeighting(curPartPos,nPartPosTemp,_smoothingLength,pressKernConst);
             pressureForce += ( p1 + p2 ) * _particleMass * pressWeightTemp;
 
             //calculate our viscosity force
             //if the density is zero then we will get NAN's in our devide
             //when density is very small viscosity becomes very unstable so best to have a limiter
-            if(nPartDenTemp>0.1){
+            if(nPartDenTemp>1){
                 viscWeightTemp = viscosityWeighting(curPartPos,nPartPosTemp,_smoothingLength,viscKernConst);
                 viscosityForce += (curPartVel - nParticleData[i].vel) * (_particleMass/nPartDenTemp) * viscWeightTemp;
                 //this is needed for surface tension
-//                massDivDen = _particleMass/nPartDenTemp;
-//                tensionSum += massDivDen * pressWeightTemp;
-//                tensionSumTwo += massDivDen * viscWeightTemp;
+                massDivDen = _particleMass/nPartDenTemp;
+                tensionSum += massDivDen * pressWeightTemp;
+                tensionSumTwo += massDivDen * viscWeightTemp;
             }
 
 
@@ -204,22 +204,20 @@ __global__ void fluidSolverPerParticleKernal(float3 *d_posArray, float3 *d_velAr
         viscosityForce *= _visCoef;
 
 
-
-
         //calculate our surface tension
-//        float nLength = length(tensionSumTwo);
-//        float3 tensionForce = make_float3(0);
-//        //1.0 is currently our threshold as tension becomes very unstable as n approaches 0
-//        if(nLength>1){
-//            //this also needs to be multipied by our tension contant
-//            tensionForce = (tensionSumTwo/nLength) * tensionSum * 1.0;
-//        }
+        float nLength = length(tensionSumTwo);
+        float3 tensionForce = make_float3(0);
+        //1.0 is currently our threshold as tension becomes very unstable as n approaches 0
+        if(nLength>0.5){
+            //this also needs to be multipied by our tension contant
+            tensionForce = (tensionSumTwo/nLength) * tensionSum;
+        }
 
 
 
         //calculate our acceleration
         float3 gravity = make_float3(0.0f,-9.8f,0.0f);
-        float3 acc = gravity + pressureForce + viscosityForce /*- tensionForce*/;// + make_float3(0.0f,0.0f,0.0f);
+        float3 acc = gravity + pressureForce + viscosityForce - tensionForce;
         //calculate our new velocity
 
         //euler intergration (Rubbish over large time steps)
@@ -280,44 +278,28 @@ __global__ void collisionDetKernal(planeProp *d_planeArray, unsigned int _numPla
 
         // start and end points of our line segement
         float3 vel = d_velArray[idx];
-        float3 B = d_posArray[idx];
-        float3 A = B - (vel * _timeStep);
-        planeProp intersectPlane;
-
+        float3 newVel = vel;
+        float3 pos = d_posArray[idx];
+        float t = 0;
         bool intersect = false;
-        float minDst = 1.1f;
-        float maxDst = 0.0f;
-        float r = 0.0f;
         //iterate through planes
         for(int i=0; i<_numPlanes; i++){
-            //if its on the wrong side of the plane
-            if(dot(B-planes[i].pos,planes[i].normal)<0.0f){
-                //test for intersection with plane
-                r = dot(planes[i].normal,(planes[i].pos - A)) / dot(planes[i].normal,(B-A));
-                if(r>=0.0f && r<minDst){
+            //if its on the wrong side of the plane move it back and reflect the velocity
+            //this is not 100% accurate collision, but at least it works
+            if(dot(pos-planes[i].pos,planes[i].normal)<=0.0f){
+                t = dot(planes[i].pos,planes[i].normal) - dot(planes[i].normal,pos);
+                t/= dot(planes[i].normal,vel);
+                pos = pos + vel * t;
+                newVel = newVel - (2.0f * dot(newVel,planes[i].normal) * planes[i].normal);
+                newVel -= (1.0 - planes[i].restCoef) * newVel * planes[i].normal;
                 intersect = true;
-                //if(r>maxDst && r<=1.0f){
-                    //get our first closest intersection point
-                    minDst = r;
-                    //maxDst = r;
-                    intersectPlane = planes[i];
-
-                }
             }
         }
 
         //if intersect has occured move our particle back and change our velocity
         if(intersect==true){
-            float3 newPos = A + ((B-A) * /*maxDst*/ (minDst));
-            d_posArray[idx] = newPos;
-            //vel.y = 0;
-            float d = dot(vel,intersectPlane.normal);
-            float3 newVel = vel - (2.0f * d * intersectPlane.normal);
-            if(d>0) newVel *= intersectPlane.restCoef;
+            d_posArray[idx] = pos;
             d_velArray[idx] = newVel;
-
-            //printf("og pos: %f,%f,%f  new pos: %f,%f,%f\n",B.x,B.y,B.z,newPos.x,newPos.y,newPos.z);
-            //printf("og vel: %f,%f,%f  new vel: %f,%f,%f\n",vel.x,vel.y,vel.z,newVel.x,newVel.y,newVel.z);
         }
     }
 }
@@ -375,7 +357,7 @@ void sortByKey(unsigned int *d_hashArray, float3 *d_posArray, float3 *d_velArray
 void countCellOccupancy(unsigned int *d_hashArray, unsigned int *d_cellOccArray,unsigned int _hashTableSize, unsigned int _numPoints, unsigned int _maxNumThreads){
     //std::cout<<"countCellOccupancy"<<std::endl;
     //calculate how many blocks we want
-    int blocks = ceil(_hashTableSize/_maxNumThreads)+1;
+    int blocks = ceil(_numPoints/_maxNumThreads)+1;
     countCellOccKernal<<<blocks,_maxNumThreads>>>(d_hashArray,d_cellOccArray,_hashTableSize,_numPoints);
 
 
@@ -438,7 +420,6 @@ void fluidSolver(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, uns
     //std::cout<<"fluidSolver"<<std::endl;
     //printf("memory allocated: %d",_maxNumThreads*(sizeof(particleProp)));
     //fluidSolverKernal<<<_hashTableSize, 30>>>(d_posArray,d_velArray,d_cellOccArray,d_cellIndxArray,_smoothingLength,_timestep, _particleMass, _restDensity,_gasConstant,_visCoef, _densKernConst, _pressKernConst, _viscKernConst);
-
 
 
     fluidSolverKernalDP<<<_hashTableSize, 1>>>(d_posArray,d_velArray,d_accArray,d_cellOccArray,d_cellIndxArray,_maxNumThreads,_smoothingLength,_timestep, _particleMass, _restDensity,_gasConstant,_visCoef, _densKernConst, _pressKernConst, _viscKernConst);

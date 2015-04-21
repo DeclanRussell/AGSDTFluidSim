@@ -3,6 +3,8 @@
 /// @author Declan Russell
 /// @date 15/03/15
 /// @version 1.0
+/// @namepsace GLSL
+/// @class skyBoxFrag
 /// @brief Fragment shader for our shy box shader.
 //----------------------------------------------------------------------------------------------------------------------
 

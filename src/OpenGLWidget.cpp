@@ -38,7 +38,7 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     m_fresnalPower = 10;
     m_pointThickness = 0.02f;
     m_update = true;
-    m_blurFalloff = 0.5f;
+    m_blurFalloff = 10.f;
     m_blurRadius = 10.f;
     m_cubeMapCreated = false;
     //set our fluid color to something nice
@@ -400,7 +400,6 @@ void OpenGLWidget::initializeGL(){
 
     (*shader)["BilateralFilter"]->use();
     shader->setUniform("depthTex",0);
-    shader->setUniform("blurDir",1.0f,0.0f);
     shader->setUniform("blurDepthFalloff",m_blurFalloff);
     shader->setUniform("filterRadius",100.0f/*/width()*/);
     shader->setUniform("texelSize",2.0f/((float)width()+height()));
@@ -435,11 +434,11 @@ void OpenGLWidget::initializeGL(){
     m_SPHEngine->setGasConstant(100);
 
     //add some walls to our simulation
-    m_SPHEngine->addWall(make_float3(0.0f,0.0f,0.0f),make_float3(0.0f,1.0f,0.0f),0.2f);      //floor
-    m_SPHEngine->addWall(make_float3(0.0f,0.0f,0.0f),make_float3(1.0f,0.0f,0.0f),0.2f);    //left
-    m_SPHEngine->addWall(make_float3(10.0f,0.0f,0.0f),make_float3(-1.0f,0.0f,0.0f),0.2f);    //right
-    m_SPHEngine->addWall(make_float3(0.0f,0.0f,10.0f),make_float3(0.0f,0.0f,-1.0f),0.2f);    //front
-    m_SPHEngine->addWall(make_float3(0.0f,0.0f,0.0f),make_float3(0.0f,0.0f,1.0f),0.2f);    //back
+    m_SPHEngine->addWall(make_float3(0.0f,0.0f,0.0f),make_float3(0.0f,1.0f,0.5f),0.8f);      //floor
+    m_SPHEngine->addWall(make_float3(0.0f,0.0f,0.0f),make_float3(1.0f,0.0f,0.0f),0.0f);    //left
+    m_SPHEngine->addWall(make_float3(10.0f,0.0f,0.0f),make_float3(-1.0f,0.0f,0.0f),0.0f);    //right
+    m_SPHEngine->addWall(make_float3(0.0f,0.0f,10.0f),make_float3(0.0f,0.0f,-1.0f),0.0f);    //front
+    m_SPHEngine->addWall(make_float3(0.0f,0.0f,0.0f),make_float3(0.0f,0.0f,1.0f),0.0f);    //back
 
     m_currentTime = m_currentTime.currentTime();
     startTimer(0);
@@ -473,8 +472,8 @@ void OpenGLWidget::resizeGL(const int _w, const int _h){
     ngl::Mat4 P = m_cam->getProjectionMatrix();
     ngl::Mat4 PInv = P.inverse();
     shader->setUniform("PInv",PInv);
-    shader->setUniform("texelSizeX",1.0f/_w);
-    shader->setUniform("texelSizeY",1.0f/_h);
+    shader->setUniform("texelSizeX",5.0f/(float)_w);
+    shader->setUniform("texelSizeY",5.0f/(float)_h);
 
     (*shader)["BilateralFilter"]->use();
     shader->setUniform("filterRadius",100.0f/*/width()*/);
@@ -522,7 +521,7 @@ void OpenGLWidget::paintGL(){
     (*shader)["ParticleDepth"]->use();
 
     //calculate the eyespace radius of our points
-    ngl::Vec4 esr(m_pointSize*0.5,0,0,1.0);
+    ngl::Vec4 esr(m_pointSize,0,0,1.0);
     esr = Pinv * esr;
     //std::cout<<"real world size: "<<esr.m_x<<" "<<esr.m_y<<" "<<esr.m_y<<" "<<esr.m_w<<std::endl;
 

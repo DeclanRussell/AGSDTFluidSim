@@ -3,6 +3,8 @@
 /// @author Declan Russell
 /// @date 14/03/15
 /// @version 2.0
+/// @namepsace GLSL
+/// @class bilateralFilterFrag
 /// @brief Fragment shader to apply bilateral filter blur on an input
 //----------------------------------------------------------------------------------------------------------------------
 

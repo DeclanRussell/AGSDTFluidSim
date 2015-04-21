@@ -93,7 +93,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p>This class uses cuda and parralel algorithms to manage particles in a fluid simulation.  
+<p>our cuda libraries  
  <a href="class_s_p_h_engine.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_s_p_h_engine_8h_source.html">SPHEngine.h</a>&gt;</code></p>
@@ -122,22 +122,42 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#add241056dc1719b3a11486da48c3724c">setVolume</a> (float _volume)</td></tr>
 <tr class="memdesc:add241056dc1719b3a11486da48c3724c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutator for the volume of our fluid. This in turn effects the mass of our particles. <br/></td></tr>
 <tr class="separator:add241056dc1719b3a11486da48c3724c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a588d8e6f1276d07adb5363c8c3766fda"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a588d8e6f1276d07adb5363c8c3766fda"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a588d8e6f1276d07adb5363c8c3766fda">getVolume</a> ()</td></tr>
+<tr class="memdesc:a588d8e6f1276d07adb5363c8c3766fda"><td class="mdescLeft">&#160;</td><td class="mdescRight">accessor to query the volume of our fluid <br/></td></tr>
+<tr class="separator:a588d8e6f1276d07adb5363c8c3766fda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acbc638f7ab8fa2ab356dadf677df10c6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acbc638f7ab8fa2ab356dadf677df10c6"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#acbc638f7ab8fa2ab356dadf677df10c6">setDesity</a> (float _density)</td></tr>
 <tr class="memdesc:acbc638f7ab8fa2ab356dadf677df10c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutator for the desity of our fluid. This in turn effects the mass of our particles. <br/></td></tr>
 <tr class="separator:acbc638f7ab8fa2ab356dadf677df10c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ee29d26f9451d81a07abde5b1aa53c6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8ee29d26f9451d81a07abde5b1aa53c6"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a8ee29d26f9451d81a07abde5b1aa53c6">getDensity</a> ()</td></tr>
+<tr class="memdesc:a8ee29d26f9451d81a07abde5b1aa53c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">accessor to query the density of our fluid <br/></td></tr>
+<tr class="separator:a8ee29d26f9451d81a07abde5b1aa53c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a196e04ba23d9d9c73924f3af8a8240ed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a196e04ba23d9d9c73924f3af8a8240ed"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a196e04ba23d9d9c73924f3af8a8240ed">setSmoothingLength</a> (float _length)</td></tr>
 <tr class="memdesc:a196e04ba23d9d9c73924f3af8a8240ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutator for the smoothing length of our simulation. Can also be thought of as hash cell size. <br/></td></tr>
 <tr class="separator:a196e04ba23d9d9c73924f3af8a8240ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5eebbb4eaf3c773e263396d49a76fc3e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5eebbb4eaf3c773e263396d49a76fc3e"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a5eebbb4eaf3c773e263396d49a76fc3e">getSmoothingLength</a> ()</td></tr>
+<tr class="memdesc:a5eebbb4eaf3c773e263396d49a76fc3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">accessor to query the smoothing length of our fluid <br/></td></tr>
+<tr class="separator:a5eebbb4eaf3c773e263396d49a76fc3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a293fc06859e21473b03626a55c5c3a69"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a293fc06859e21473b03626a55c5c3a69"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a293fc06859e21473b03626a55c5c3a69">setGasConstant</a> (float _gasConst)</td></tr>
 <tr class="memdesc:a293fc06859e21473b03626a55c5c3a69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutator for the gas constant of our fluid. <br/></td></tr>
 <tr class="separator:a293fc06859e21473b03626a55c5c3a69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a683d29b540672f364c306b304bd50ea7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a683d29b540672f364c306b304bd50ea7"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a683d29b540672f364c306b304bd50ea7">getGasConst</a> ()</td></tr>
+<tr class="memdesc:a683d29b540672f364c306b304bd50ea7"><td class="mdescLeft">&#160;</td><td class="mdescRight">accessor to query the gas constant of our fluid <br/></td></tr>
+<tr class="separator:a683d29b540672f364c306b304bd50ea7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a296c06a01cb0a93dfa150c3acea64493"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a296c06a01cb0a93dfa150c3acea64493"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a296c06a01cb0a93dfa150c3acea64493">setViscCoef</a> (float _viscCoef)</td></tr>
 <tr class="memdesc:a296c06a01cb0a93dfa150c3acea64493"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutator for our viscosity coeficient of our fluid. <br/></td></tr>
 <tr class="separator:a296c06a01cb0a93dfa150c3acea64493"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d3709693af1379db5b60b02171d8c8b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6d3709693af1379db5b60b02171d8c8b"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a6d3709693af1379db5b60b02171d8c8b">getViscCoef</a> ()</td></tr>
+<tr class="memdesc:a6d3709693af1379db5b60b02171d8c8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">accessor to query the viscosity coeficient of our fluid <br/></td></tr>
+<tr class="separator:a6d3709693af1379db5b60b02171d8c8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa53becc41023eb45601eb3060860193a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#aa53becc41023eb45601eb3060860193a">addWall</a> (float3 _pos, float3 _norm, float _restCoef=1.0)</td></tr>
 <tr class="memdesc:aa53becc41023eb45601eb3060860193a"><td class="mdescLeft">&#160;</td><td class="mdescRight">adds a colllision plane to our simulation  <a href="#aa53becc41023eb45601eb3060860193a">More...</a><br/></td></tr>
 <tr class="separator:aa53becc41023eb45601eb3060860193a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,7 +167,9 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 <tr class="separator:a387ab48532ca20b2eb31319e862e243b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>This class uses cuda and parralel algorithms to manage particles in a fluid simulation. </p>
+<div class="textblock"><p>our cuda libraries </p>
+<p>This class uses cuda and parralel algorithms to manage particles in a fluid simulation.</p>
+<p>our SPH kernals</p>
 <dl class="section author"><dt>Author</dt><dd>Declan Russell </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>09/03/2015 </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>1.0 Our fluid simulation uses smoothed particle hydrodynamics and true navier stokes equations to compute our particle positions in our simulation. This class also manages its own openGL buffer storing postions of particles in vertex attrip pointer 0. In case you wish to draw these particles. </dd></dl>
@@ -266,7 +288,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Apr 16 2015 17:58:35 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Apr 21 2015 01:51:28 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

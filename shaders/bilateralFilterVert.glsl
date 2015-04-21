@@ -3,6 +3,8 @@
 /// @author Declan Russell
 /// @date 14/03/15
 /// @version 1.0
+/// @namepsace GLSL
+/// @class bilateralFilterVert
 /// @brief Vertex shader for our bilateral filter shader. Just passes through positions and tex coords
 //----------------------------------------------------------------------------------------------------------------------
 

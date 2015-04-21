@@ -3,6 +3,8 @@
 /// @author Declan Russell
 /// @date 15/03/15
 /// @version 1.0
+/// @namepsace GLSL
+/// @class thicknessFrag
 /// @brief Fragment shader to output the thickness of our fluid. It is important for you to run this with
 /// @brief additive blending and no depth test for it to work. The more items that are drawn on top of each
 /// @brief other then the thicker the fluid.

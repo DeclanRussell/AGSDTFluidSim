@@ -3,6 +3,8 @@
 /// @author Declan Russell
 /// @date 8/03/15
 /// @version 1.0
+/// @namepsace GLSL
+/// @class particleDepthVert
 /// @brief Vertex shader for our particle depth shader. Takes in points of particles and scales the point sprite with
 /// @brief the current scene projection matrix.
 //----------------------------------------------------------------------------------------------------------------------
