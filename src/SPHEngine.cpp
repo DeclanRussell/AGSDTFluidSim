@@ -11,10 +11,10 @@
 SPHEngine::SPHEngine(unsigned int _numParticles, unsigned int _volume, float _density) : m_numParticles(_numParticles),
                                                                                          m_volume(_volume),
                                                                                          m_density(_density),
-                                                                                         m_smoothingLength(1.4),
+                                                                                         m_smoothingLength(0.4),
                                                                                          m_numPlanes(0),
-                                                                                         m_gasConstant(10.0f),
-                                                                                         m_viscCoef(1.0f)
+                                                                                         m_gasConstant(3000.0f),
+                                                                                         m_viscCoef(100.0f)
 
 {
     calcMass();
@@ -139,7 +139,7 @@ void SPHEngine::update(float _timeStep){
     cudaGraphicsResourceGetMappedPointer((void**)&d_posPtr,&d_posSize,m_cudaBufferPtr);
 
     //calculate our hash keys
-    createHashTable(m_dhashKeys,d_posPtr,m_numParticles,m_smoothingLength, m_hashTableSize, m_numThreadsPerBlock);
+    createHashTable(m_dhashKeys,d_posPtr,m_numParticles,1.0/m_smoothingLength, m_hashTableSize, m_numThreadsPerBlock);
 
     //sort our particle postions based on there key to make
     //points of the same key occupy contiguous memory
@@ -166,13 +166,13 @@ void SPHEngine::update(float _timeStep){
     //make sure all our threads are done
     cudaThreadSynchronize();
 
-    std::cout<<"\n\n"<<std::endl;
-
     //Test our particles for collision with our walls
     collisionDetectionSolver(m_dPlaneBuffer,m_numPlanes,d_posPtr,m_dVelBuffer,_timeStep,m_numParticles,m_numThreadsPerBlock);
 
     //make sure all our threads are done
     cudaThreadSynchronize();
+
+    //std::cout<<"\n\n"<<std::endl;
 
     //fill our occupancy buffer back up with zeros
     fillUint(m_dCellOccBuffer,m_hashTableSize,0);

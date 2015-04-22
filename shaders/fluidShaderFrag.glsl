@@ -159,6 +159,8 @@ void main(void)
     vec3 n1 = cross(ddx, ddy);
     vec3 n = normalize(n1);
 
+
+
     float thickness = texture(thicknessTex,VTexCoord).x;
 
     vec3 i = normalize(posEye);

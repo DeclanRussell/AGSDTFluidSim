@@ -158,6 +158,21 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a6d3709693af1379db5b60b02171d8c8b">getViscCoef</a> ()</td></tr>
 <tr class="memdesc:a6d3709693af1379db5b60b02171d8c8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">accessor to query the viscosity coeficient of our fluid <br/></td></tr>
 <tr class="separator:a6d3709693af1379db5b60b02171d8c8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1e6f83f2da1ec79a6e6a633b810daba"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac1e6f83f2da1ec79a6e6a633b810daba"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#ac1e6f83f2da1ec79a6e6a633b810daba">setTensionCoef</a> (float _tensCoef)</td></tr>
+<tr class="memdesc:ac1e6f83f2da1ec79a6e6a633b810daba"><td class="mdescLeft">&#160;</td><td class="mdescRight">mutation for our tension coeficient of our fluid <br/></td></tr>
+<tr class="separator:ac1e6f83f2da1ec79a6e6a633b810daba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa874402b050ea1f618bf2caf7f988b4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afa874402b050ea1f618bf2caf7f988b4"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#afa874402b050ea1f618bf2caf7f988b4">getTensionCoef</a> ()</td></tr>
+<tr class="memdesc:afa874402b050ea1f618bf2caf7f988b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">accessor to query our tension coeficient of our fluid <br/></td></tr>
+<tr class="separator:afa874402b050ea1f618bf2caf7f988b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b418198ceab591b1abfa5f645dbc9d7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6b418198ceab591b1abfa5f645dbc9d7"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a6b418198ceab591b1abfa5f645dbc9d7">setVelCorCoef</a> (float _velCorCoef)</td></tr>
+<tr class="memdesc:a6b418198ceab591b1abfa5f645dbc9d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">mutator to our velocity correction <br/></td></tr>
+<tr class="separator:a6b418198ceab591b1abfa5f645dbc9d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad9d9bc9a1a7e5f64a5e045c339f8b3e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#aad9d9bc9a1a7e5f64a5e045c339f8b3e">setMaxNumSamples</a> (int _numSamples)</td></tr>
+<tr class="memdesc:aad9d9bc9a1a7e5f64a5e045c339f8b3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">mutator for our maximum number of samples per particle in our fluid solver  <a href="#aad9d9bc9a1a7e5f64a5e045c339f8b3e">More...</a><br/></td></tr>
+<tr class="separator:aad9d9bc9a1a7e5f64a5e045c339f8b3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa53becc41023eb45601eb3060860193a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#aa53becc41023eb45601eb3060860193a">addWall</a> (float3 _pos, float3 _norm, float _restCoef=1.0)</td></tr>
 <tr class="memdesc:aa53becc41023eb45601eb3060860193a"><td class="mdescLeft">&#160;</td><td class="mdescRight">adds a colllision plane to our simulation  <a href="#aa53becc41023eb45601eb3060860193a">More...</a><br/></td></tr>
 <tr class="separator:aa53becc41023eb45601eb3060860193a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -257,6 +272,38 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 
 </div>
 </div>
+<a class="anchor" id="aad9d9bc9a1a7e5f64a5e045c339f8b3e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SPHEngine::setMaxNumSamples </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>_numSamples</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>mutator for our maximum number of samples per particle in our fluid solver </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_numSamples</td><td>- desired maximum number of samples per particle in fluid solver </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a1a17b5c04756850b68cf95b917019241"></a>
 <div class="memitem">
 <div class="memproto">
@@ -288,7 +335,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Apr 21 2015 01:51:28 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 22 2015 22:55:12 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

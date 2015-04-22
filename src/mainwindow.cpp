@@ -8,6 +8,7 @@
 #include <QFileDialog>
 #include <QColorDialog>
 #include <QDesktopServices>
+#include <QSplitter>
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
@@ -23,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     //add our openGL context to our scene
     m_openGLWidget = new OpenGLWidget(format,this);
     ui->gridLayout->addWidget(m_openGLWidget,0,0,4,1);
+
 
     //QObjects manage there children and will delete them when they are deleted
     //therefore no need to keep them all as members
@@ -148,6 +150,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     QDoubleSpinBox *denSpnBx = new QDoubleSpinBox(fluidSimProp);
     denSpnBx->setValue(998.2);
     denSpnBx->setMinimum(0);
+    denSpnBx->setMaximum(INFINITY);
     denSpnBx->setSingleStep(0.01);
     denSpnBx->setDecimals(3);
     connect(denSpnBx,SIGNAL(valueChanged(double)),m_openGLWidget,SLOT(setDensity(double)));
@@ -197,6 +200,25 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     QPushButton *playPauseBtn = new QPushButton("Play/Pause",playbackGrb);
     connect(playPauseBtn,SIGNAL(pressed()),m_openGLWidget,SLOT(playToggle()));
     playBckLayout->addWidget(playPauseBtn,0,0,1,1);
+
+
+    //slider for play back speed
+    QLabel *playSpeedLbl = new QLabel("Play back speed:",playbackGrb);
+    playBckLayout->addWidget(playSpeedLbl,1,0,1,1);
+    QSlider *playSpeedSld = new QSlider(Qt::Horizontal,playbackGrb);
+    playSpeedSld->setMinimum(0);
+    playSpeedSld->setMaximum(200);
+    playSpeedSld->setValue(100);
+    connect(playSpeedSld,SIGNAL(valueChanged(int)),m_openGLWidget,SLOT(setPlaybackSpeed(int)));
+    playBckLayout->addWidget(playSpeedSld,1,1,1,1);
+    QSpinBox *playSpeedSpn = new QSpinBox(playbackGrb);
+    playSpeedSpn->setMaximum(200);
+    playSpeedSpn->setMinimum(0);
+    playSpeedSpn->setValue(100);
+    playSpeedSpn->setEnabled(false);
+    connect(playSpeedSld,SIGNAL(sliderMoved(int)),playSpeedSpn,SLOT(setValue(int)));
+    playBckLayout->addWidget(playSpeedSpn,1,2,1,1);
+
 
     //Group box for our documentation
     QGroupBox *docGrb = new QGroupBox("Documentation:",this);

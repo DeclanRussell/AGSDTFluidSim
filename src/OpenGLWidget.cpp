@@ -37,12 +37,13 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     setRefractionRatio(0.2f);
     m_fresnalPower = 10;
     m_pointThickness = 0.02f;
-    m_update = true;
+    m_update = false;
     m_blurFalloff = 10.f;
     m_blurRadius = 10.f;
     m_cubeMapCreated = false;
     //set our fluid color to something nice
     m_fluidColor = QColor(0,255,255);
+    m_playBackSpeed = 1.f;
     // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
     this->resize(_parent->size());
 }
@@ -103,7 +104,7 @@ void OpenGLWidget::initializeGL(){
     m_cam= new ngl::Camera(from,to,up);
     // set the shape using FOV 45 Aspect Ratio based on Width and Height
     // The final two are near and far clipping planes of 0.1 and 100
-    m_cam->setShape(45,(float)width()/height(),0.001,100);
+    m_cam->setShape(45,(float)width()/height(),1,1000);
 
     //create our local frame buffer for our depth pass
     glGenFramebuffers(1,&m_depthFrameBuffer);
@@ -118,7 +119,9 @@ void OpenGLWidget::initializeGL(){
     //Create our depth texture to render to on the GPU
     glGenTextures(1, &m_depthRender);
     glBindTexture(GL_TEXTURE_2D, m_depthRender);
-    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, width(), height(), 0,GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    //note: For our shading technique it is important to have a high range in our colour values
+    //      GL_RGBA WONT CUT IT!
+    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA32F, width(), height(), 0,GL_RGBA, GL_UNSIGNED_BYTE, NULL);
     //note poor filtering is needed to be accurate with pixels and have no smoothing
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -142,7 +145,7 @@ void OpenGLWidget::initializeGL(){
     //create our bilateral texture on to render to on the GPU
     glGenTextures(1, &m_bilateralRender);
     glBindTexture(GL_TEXTURE_2D, m_bilateralRender);
-    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, width(), height(), 0,GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA32F, width(), height(), 0,GL_RGBA, GL_UNSIGNED_BYTE, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
@@ -418,27 +421,25 @@ void OpenGLWidget::initializeGL(){
     shader->setUniform("texelSizeX",1.0f/width());
     shader->setUniform("texelSizeY",1.0f/height());
 
-    //to be used later with phone shading
+    //to be used later with phong shading
     shader->setShaderParam3f("light.position",-1,-1,-1);
     shader->setShaderParam3f("light.intensity",0.8,0.8,0.8);
     shader->setShaderParam3f("Kd",0.5, 0.5, 0.5);
     shader->setShaderParam3f("Ka",0.5, 0.5, 0.5);
     shader->setShaderParam3f("Ks",1.0,1.0,1.0);
-    shader->setShaderParam1f("shininess",100.0);
+    shader->setShaderParam1f("shininess",1000.0);
 
 
     //allocate some space for our SPHEngine
-    m_SPHEngine = new SPHEngine(30000);
-    m_SPHEngine->setVolume(2);
-    m_SPHEngine->setDesity(998.2);
-    m_SPHEngine->setGasConstant(100);
+    m_SPHEngine = new SPHEngine(50000,1000,998.2);
+    m_SPHEngine->setGasConstant(5);
 
     //add some walls to our simulation
-    m_SPHEngine->addWall(make_float3(0.0f,0.0f,0.0f),make_float3(0.0f,1.0f,0.5f),0.8f);      //floor
-    m_SPHEngine->addWall(make_float3(0.0f,0.0f,0.0f),make_float3(1.0f,0.0f,0.0f),0.0f);    //left
-    m_SPHEngine->addWall(make_float3(10.0f,0.0f,0.0f),make_float3(-1.0f,0.0f,0.0f),0.0f);    //right
-    m_SPHEngine->addWall(make_float3(0.0f,0.0f,10.0f),make_float3(0.0f,0.0f,-1.0f),0.0f);    //front
-    m_SPHEngine->addWall(make_float3(0.0f,0.0f,0.0f),make_float3(0.0f,0.0f,1.0f),0.0f);    //back
+    m_SPHEngine->addWall(make_float3(0.0f,0.0f,0.0f),make_float3(0.0f,1.0f,0.0f),1.0f);      //floor
+    m_SPHEngine->addWall(make_float3(0.0f,0.0f,0.0f),make_float3(1.0f,0.0f,0.0f),0.4f);    //left
+    m_SPHEngine->addWall(make_float3(10.0f,0.0f,0.0f),make_float3(-1.0f,0.0f,0.0f),0.4f);    //right
+    m_SPHEngine->addWall(make_float3(0.0f,0.0f,10.0f),make_float3(0.0f,0.0f,-1.0f),0.4f);    //front
+    m_SPHEngine->addWall(make_float3(0.0f,0.0f,0.0f),make_float3(0.0f,0.0f,1.0f),0.4f);    //back
 
     m_currentTime = m_currentTime.currentTime();
     startTimer(0);
@@ -447,15 +448,15 @@ void OpenGLWidget::initializeGL(){
 void OpenGLWidget::resizeGL(const int _w, const int _h){
     // set the viewport for openGL
     glViewport(0,0,_w,_h);
-    m_cam->setShape(45,(float)_w/_h, 1,1000);
+    m_cam->setShape(45,(float)_w/_h, m_cam->getNear(),m_cam->getFar());
     m_text->setScreenSize(_w,_h);
     //resize our render targets and depth buffer
     glBindTexture(GL_TEXTURE_2D, m_depthRender);
-    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, _w, _h, 0,GL_RGBA, GL_UNSIGNED_BYTE, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA32F, _w, _h, 0,GL_RGBA, GL_UNSIGNED_BYTE, 0);
     glBindTexture(GL_TEXTURE_2D, m_bilateralRender);
-    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, _w, _h, 0,GL_RGBA, GL_UNSIGNED_BYTE, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA32F, _w, _h, 0,GL_RGBA, GL_UNSIGNED_BYTE, 0);
     glBindTexture(GL_TEXTURE_2D, m_thicknessRender);
-    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, _w, _h, 0,GL_RGBA, GL_UNSIGNED_BYTE, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA32F, _w, _h, 0,GL_RGBA, GL_UNSIGNED_BYTE, 0);
     glBindRenderbuffer(GL_RENDERBUFFER, m_staticDepthBuffer);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width(), height());
     //update our texel sizes
@@ -472,8 +473,8 @@ void OpenGLWidget::resizeGL(const int _w, const int _h){
     ngl::Mat4 P = m_cam->getProjectionMatrix();
     ngl::Mat4 PInv = P.inverse();
     shader->setUniform("PInv",PInv);
-    shader->setUniform("texelSizeX",5.0f/(float)_w);
-    shader->setUniform("texelSizeY",5.0f/(float)_h);
+    shader->setUniform("texelSizeX",1.0f/(float)_w);
+    shader->setUniform("texelSizeY",1.0f/(float)_h);
 
     (*shader)["BilateralFilter"]->use();
     shader->setUniform("filterRadius",100.0f/*/width()*/);
@@ -493,7 +494,7 @@ void OpenGLWidget::paintGL(){
 
     if(m_update){
         //update our fluid simulation with our time step
-        m_SPHEngine->update((float)msecsPassed/1000.0);
+        m_SPHEngine->update(((float)msecsPassed/1000.0) * m_playBackSpeed);
     }
 
     // create the rotation matrices

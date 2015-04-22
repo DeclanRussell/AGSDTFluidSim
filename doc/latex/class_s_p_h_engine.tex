@@ -56,6 +56,17 @@ void \hyperlink{class_s_p_h_engine_a1a17b5c04756850b68cf95b917019241}{update} (f
 \hypertarget{class_s_p_h_engine_a6d3709693af1379db5b60b02171d8c8b}{float \hyperlink{class_s_p_h_engine_a6d3709693af1379db5b60b02171d8c8b}{get\-Visc\-Coef} ()}\label{class_s_p_h_engine_a6d3709693af1379db5b60b02171d8c8b}
 
 \begin{DoxyCompactList}\small\item\em accessor to query the viscosity coeficient of our fluid \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_ac1e6f83f2da1ec79a6e6a633b810daba}{void \hyperlink{class_s_p_h_engine_ac1e6f83f2da1ec79a6e6a633b810daba}{set\-Tension\-Coef} (float \-\_\-tens\-Coef)}\label{class_s_p_h_engine_ac1e6f83f2da1ec79a6e6a633b810daba}
+
+\begin{DoxyCompactList}\small\item\em mutation for our tension coeficient of our fluid \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_afa874402b050ea1f618bf2caf7f988b4}{float \hyperlink{class_s_p_h_engine_afa874402b050ea1f618bf2caf7f988b4}{get\-Tension\-Coef} ()}\label{class_s_p_h_engine_afa874402b050ea1f618bf2caf7f988b4}
+
+\begin{DoxyCompactList}\small\item\em accessor to query our tension coeficient of our fluid \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a6b418198ceab591b1abfa5f645dbc9d7}{void \hyperlink{class_s_p_h_engine_a6b418198ceab591b1abfa5f645dbc9d7}{set\-Vel\-Cor\-Coef} (float \-\_\-vel\-Cor\-Coef)}\label{class_s_p_h_engine_a6b418198ceab591b1abfa5f645dbc9d7}
+
+\begin{DoxyCompactList}\small\item\em mutator to our velocity correction \end{DoxyCompactList}\item 
+void \hyperlink{class_s_p_h_engine_aad9d9bc9a1a7e5f64a5e045c339f8b3e}{set\-Max\-Num\-Samples} (int \-\_\-num\-Samples)
+\begin{DoxyCompactList}\small\item\em mutator for our maximum number of samples per particle in our fluid solver \end{DoxyCompactList}\item 
 void \hyperlink{class_s_p_h_engine_aa53becc41023eb45601eb3060860193a}{add\-Wall} (float3 \-\_\-pos, float3 \-\_\-norm, float \-\_\-rest\-Coef=1.\-0)
 \begin{DoxyCompactList}\small\item\em adds a colllision plane to our simulation \end{DoxyCompactList}\item 
 \hypertarget{class_s_p_h_engine_a387ab48532ca20b2eb31319e862e243b}{int \hyperlink{class_s_p_h_engine_a387ab48532ca20b2eb31319e862e243b}{get\-Num\-Particles} ()}\label{class_s_p_h_engine_a387ab48532ca20b2eb31319e862e243b}
@@ -123,6 +134,22 @@ adds a colllision plane to our simulation
 {\em \-\_\-norm} & -\/ the normal of our plane \\
 \hline
 {\em \-\_\-resr\-Coef} & -\/ coeficient of restitution of our plane \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_s_p_h_engine_aad9d9bc9a1a7e5f64a5e045c339f8b3e}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!set\-Max\-Num\-Samples@{set\-Max\-Num\-Samples}}
+\index{set\-Max\-Num\-Samples@{set\-Max\-Num\-Samples}!SPHEngine@{S\-P\-H\-Engine}}
+\subsubsection[{set\-Max\-Num\-Samples}]{\setlength{\rightskip}{0pt plus 5cm}void S\-P\-H\-Engine\-::set\-Max\-Num\-Samples (
+\begin{DoxyParamCaption}
+\item[{int}]{\-\_\-num\-Samples}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_s_p_h_engine_aad9d9bc9a1a7e5f64a5e045c339f8b3e}
+
+
+mutator for our maximum number of samples per particle in our fluid solver 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-num\-Samples} & -\/ desired maximum number of samples per particle in fluid solver \\
 \hline
 \end{DoxyParams}
 \hypertarget{class_s_p_h_engine_a1a17b5c04756850b68cf95b917019241}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!update@{update}}

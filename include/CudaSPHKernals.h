@@ -13,8 +13,6 @@
 #include <stdio.h>
 
 
-//just a function that moves our particles with some wave functions
-void calcPositions(float3* d_pos, int timeStep, int numParticles, int maxNumThreads);
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief a structure to hold the properties of our particle
 //----------------------------------------------------------------------------------------------------------------------

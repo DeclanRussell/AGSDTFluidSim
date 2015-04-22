@@ -39,7 +39,7 @@ void  main(){
     normal.y*=-1.0;
     float r2 = dot(normal.xy, normal.xy);
     if (r2 > 1.0) discard; // kill pixels outside circle
-    normal.z = -sqrt(r2);
+    normal.z = -sqrt(r2) * 2;
 
 
 
