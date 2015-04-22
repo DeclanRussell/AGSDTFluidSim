@@ -7,6 +7,7 @@ Used for prototyping our our functions used for our S\-P\-H simulation calculati
 
 
 {\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$cuda\-\_\-runtime.\-h$>$}\\*
 \subsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
@@ -25,8 +26,8 @@ void \hyperlink{_cuda_s_p_h_kernals_8h_adabb9ae527f09f6a5a5bd794a3d6228c}{sort\-
 \begin{DoxyCompactList}\small\item\em Sorts our hash key buffer and postion buffer such that points of the same key occupy contiguous memory. \end{DoxyCompactList}\item 
 void \hyperlink{_cuda_s_p_h_kernals_8h_a07f9ac02673aedd19b3dec84e24180d5}{count\-Cell\-Occupancy} (unsigned int $\ast$d\-\_\-hash\-Array, unsigned int $\ast$d\-\_\-cell\-Occ\-Array, unsigned int \-\_\-hash\-Table\-Size, unsigned int \-\_\-num\-Points, unsigned int \-\_\-max\-Num\-Threads)
 \begin{DoxyCompactList}\small\item\em Computes the particle occupancy of our hash cell. \end{DoxyCompactList}\item 
-void \hyperlink{_cuda_s_p_h_kernals_8h_a32490018a3312806721e0576ff6f8c7b}{fill\-Uint} (unsigned int $\ast$\-\_\-pointer, unsigned int \-\_\-array\-Size, unsigned int \-\_\-fill)
-\begin{DoxyCompactList}\small\item\em simple function so that we can fill a buffer with unsigned ints. \end{DoxyCompactList}\item 
+void \hyperlink{_cuda_s_p_h_kernals_8h_ab684f435c5cd455ffa3eb7bed7d9f500}{reset\-Cell\-Idx\-And\-Den} (unsigned int $\ast$\-\_\-cell\-Idx\-Ptr, unsigned int \-\_\-hash\-Table\-Size, float $\ast$\-\_\-den\-Ptr, unsigned int \-\_\-den\-Size, int \-\_\-max\-Num\-Threads, cuda\-Stream\-\_\-t \-\_\-stream1, cuda\-Stream\-\_\-t \-\_\-stream2)
+\begin{DoxyCompactList}\small\item\em simple function that resets our cell index buffer and our density buffer to 0 \end{DoxyCompactList}\item 
 void \hyperlink{_cuda_s_p_h_kernals_8h_a949e34b262f673f2d7d5817e3cae1585}{fluid\-Solver} (float3 $\ast$d\-\_\-pos\-Array, float3 $\ast$d\-\_\-vel\-Array, float3 $\ast$d\-\_\-acc\-Array, unsigned int $\ast$d\-\_\-cell\-Occ\-Array, unsigned int $\ast$d\-\_\-cell\-Indx\-Array, unsigned int \-\_\-hash\-Table\-Size, unsigned int \-\_\-max\-Num\-Threads, float \-\_\-smoothing\-Length, float \-\_\-timestep, float \-\_\-particle\-Mass=1, float \-\_\-rest\-Density=1, float \-\_\-gas\-Constant=1, float \-\_\-vis\-Coef=1, float \-\_\-dens\-Kern\-Const=1, float \-\_\-press\-Kern\-Const=1, float \-\_\-visc\-Kern\-Const=1)
 \begin{DoxyCompactList}\small\item\em Solver function that will call our solver kernal to calculate the new positions of the particles in. \end{DoxyCompactList}\item 
 void \hyperlink{_cuda_s_p_h_kernals_8h_a21ea2a200d5d727e0fd1d459fe27118a}{collision\-Detection\-Solver} (\hyperlink{structplane_prop}{plane\-Prop} $\ast$d\-\_\-plane\-Array, unsigned int \-\_\-num\-Planes, float3 $\ast$d\-\_\-pos\-Array, float3 $\ast$d\-\_\-vel\-Array, float \-\_\-time\-Step, unsigned int \-\_\-num\-Particles, unsigned int \-\_\-max\-Num\-Threads)
@@ -161,28 +162,6 @@ This is taken from Teschner, M., Heidelberger, B., Mueller, M., Pomeranets, D. a
 {\em max\-Num\-Threads} & -\/ the maximum number off threads we have in a block on our device. Can be found out with device query \\
 \hline
 \end{DoxyParams}
-\hypertarget{_cuda_s_p_h_kernals_8h_a32490018a3312806721e0576ff6f8c7b}{\index{Cuda\-S\-P\-H\-Kernals.\-h@{Cuda\-S\-P\-H\-Kernals.\-h}!fill\-Uint@{fill\-Uint}}
-\index{fill\-Uint@{fill\-Uint}!CudaSPHKernals.h@{Cuda\-S\-P\-H\-Kernals.\-h}}
-\subsubsection[{fill\-Uint}]{\setlength{\rightskip}{0pt plus 5cm}void fill\-Uint (
-\begin{DoxyParamCaption}
-\item[{unsigned int $\ast$}]{\-\_\-pointer, }
-\item[{unsigned int}]{\-\_\-array\-Size, }
-\item[{unsigned int}]{\-\_\-fill}
-\end{DoxyParamCaption}
-)}}\label{_cuda_s_p_h_kernals_8h_a32490018a3312806721e0576ff6f8c7b}
-
-
-simple function so that we can fill a buffer with unsigned ints. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em \-\_\-pointer} & -\/ pointer to the buffer you wish to fill \\
-\hline
-{\em \-\_\-array\-Size} & -\/ size of the buffer you wish to fill \\
-\hline
-{\em \-\_\-fill} & -\/ what you wish to fill it with \\
-\hline
-\end{DoxyParams}
 \hypertarget{_cuda_s_p_h_kernals_8h_a949e34b262f673f2d7d5817e3cae1585}{\index{Cuda\-S\-P\-H\-Kernals.\-h@{Cuda\-S\-P\-H\-Kernals.\-h}!fluid\-Solver@{fluid\-Solver}}
 \index{fluid\-Solver@{fluid\-Solver}!CudaSPHKernals.h@{Cuda\-S\-P\-H\-Kernals.\-h}}
 \subsubsection[{fluid\-Solver}]{\setlength{\rightskip}{0pt plus 5cm}void fluid\-Solver (
@@ -242,6 +221,40 @@ our fluid simulation.
 {\em \-\_\-press\-Kern\-Const} & -\/ constant part of the pressure kernal. Faster to compute once on C\-P\-U and load in. \\
 \hline
 {\em \-\_\-visc\-Kern\-Const} & -\/ constant part of the viscosity kernal. Faster to compute once on C\-P\-U and load in. \\
+\hline
+\end{DoxyParams}
+\hypertarget{_cuda_s_p_h_kernals_8h_ab684f435c5cd455ffa3eb7bed7d9f500}{\index{Cuda\-S\-P\-H\-Kernals.\-h@{Cuda\-S\-P\-H\-Kernals.\-h}!reset\-Cell\-Idx\-And\-Den@{reset\-Cell\-Idx\-And\-Den}}
+\index{reset\-Cell\-Idx\-And\-Den@{reset\-Cell\-Idx\-And\-Den}!CudaSPHKernals.h@{Cuda\-S\-P\-H\-Kernals.\-h}}
+\subsubsection[{reset\-Cell\-Idx\-And\-Den}]{\setlength{\rightskip}{0pt plus 5cm}void reset\-Cell\-Idx\-And\-Den (
+\begin{DoxyParamCaption}
+\item[{unsigned int $\ast$}]{\-\_\-cell\-Idx\-Ptr, }
+\item[{unsigned int}]{\-\_\-hash\-Table\-Size, }
+\item[{float $\ast$}]{\-\_\-den\-Ptr, }
+\item[{unsigned int}]{\-\_\-den\-Size, }
+\item[{int}]{\-\_\-max\-Num\-Threads, }
+\item[{cuda\-Stream\-\_\-t}]{\-\_\-stream1, }
+\item[{cuda\-Stream\-\_\-t}]{\-\_\-stream2}
+\end{DoxyParamCaption}
+)}}\label{_cuda_s_p_h_kernals_8h_ab684f435c5cd455ffa3eb7bed7d9f500}
+
+
+simple function that resets our cell index buffer and our density buffer to 0 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-cell\-Idx\-Ptr} & -\/ pointer to the cell index buffer to reset \\
+\hline
+{\em \-\_\-hash\-Table\-Size} & -\/ size of the cell idx buffer \\
+\hline
+{\em \-\_\-den\-Ptr} & -\/ pointer to our density buffer \\
+\hline
+{\em \-\_\-den\-Size} & -\/ size of our density buffer \\
+\hline
+{\em \-\_\-max\-Num\-Threads} & -\/ maxium number of threads we have per block \\
+\hline
+{\em \-\_\-stream1} & -\/ optional stream can be set to improove concurrency having both kernals run at the same time \\
+\hline
+{\em \-\_\-stream2} & -\/ optional stream can be set to improove concurrency having both kernals run at the same time \\
 \hline
 \end{DoxyParams}
 \hypertarget{_cuda_s_p_h_kernals_8h_adabb9ae527f09f6a5a5bd794a3d6228c}{\index{Cuda\-S\-P\-H\-Kernals.\-h@{Cuda\-S\-P\-H\-Kernals.\-h}!sort\-By\-Key@{sort\-By\-Key}}

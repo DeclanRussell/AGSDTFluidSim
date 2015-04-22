@@ -39,6 +39,30 @@ SPHEngine::~SPHEngine(){
 
 void SPHEngine::init(){
 
+    //Lets test some information about our GPU
+    int count;
+    if (cudaGetDeviceCount(&count))
+        return;
+    std::cout << "Found" << count << "CUDA device(s)" << std::endl;
+    if(count == 0){
+        std::cerr<<"Install an Nvidia chip scrub!"<<std::endl;
+        return;
+    }
+    for (int i=0; i < count; i++) {
+
+        cudaDeviceProp prop;
+        cudaGetDeviceProperties(&prop, i);
+        QString deviceString = QString("* %1, Compute capability: %2.%3").arg(prop.name).arg(prop.major).arg(prop.minor);
+        QString propString1 = QString("  Global mem: %1M, Shared mem per block: %2k, Registers per block: %3").arg(prop.totalGlobalMem / 1024 / 1024)
+                .arg(prop.sharedMemPerBlock / 1024).arg(prop.regsPerBlock);
+        QString propString2 = QString("  Warp size: %1 threads, Max threads per block: %2, Multiprocessor count: %3 MaxBlocks: %4")
+                .arg(prop.warpSize).arg(prop.maxThreadsPerBlock).arg(prop.multiProcessorCount).arg(prop.maxGridSize[0]);
+        std::cout << deviceString.toStdString() << std::endl;
+        std::cout << propString1.toStdString() << std::endl;
+        std::cout << propString2.toStdString() << std::endl;
+        m_numThreadsPerBlock = prop.maxThreadsPerBlock;
+        m_maxNumBlocks = prop.maxGridSize[0];
+    }
 
     //create some points just for testing our instancing
     std::vector<float3> particles;
@@ -92,46 +116,26 @@ void SPHEngine::init(){
     cudaMalloc(&m_dVelBuffer, m_numParticles*sizeof(float3));
     cudaMalloc(&m_dAccBuffer, m_numParticles*sizeof(float3));
     //initialize them with zeros
-    fillUint(m_dCellOccBuffer,m_hashTableSize,0);
+    cudaMemset(m_dCellOccBuffer,0,m_hashTableSize*sizeof(unsigned int));
     float3 x[m_numParticles];
     for(unsigned int i=0;i<m_numParticles;i++)x[i]=make_float3(0,0,0);
     cudaMemcpy(m_dVelBuffer, x, m_numParticles * sizeof(float3), cudaMemcpyHostToDevice);
     cudaMemcpy(m_dAccBuffer, x, m_numParticles * sizeof(float3), cudaMemcpyHostToDevice);
     //allocate space for our cell index buffer
     cudaMalloc(&m_dCellIndexBuffer, m_hashTableSize*sizeof(unsigned int));
+    //create our 2 cuda streams to add some better concurrency to our kernals
+    cudaStreamCreate(&m_cudaStreams[0]);
+    cudaStreamCreate(&m_cudaStreams[1]);
     //initialize it with zeros
     //not really that necesary but might reduce errors, nice to be safe
-    fillUint(m_dCellIndexBuffer,m_hashTableSize,0);
-
-    //Lets test some cuda stuff
-    int count;
-    if (cudaGetDeviceCount(&count))
-        return;
-    std::cout << "Found" << count << "CUDA device(s)" << std::endl;
-    if(count == 0){
-        std::cerr<<"Install an Nvidia chip scrub!"<<std::endl;
-        return;
-    }
-    for (int i=0; i < count; i++) {
-
-        cudaDeviceProp prop;
-        cudaGetDeviceProperties(&prop, i);
-        QString deviceString = QString("* %1, Compute capability: %2.%3").arg(prop.name).arg(prop.major).arg(prop.minor);
-        QString propString1 = QString("  Global mem: %1M, Shared mem per block: %2k, Registers per block: %3").arg(prop.totalGlobalMem / 1024 / 1024)
-                .arg(prop.sharedMemPerBlock / 1024).arg(prop.regsPerBlock);
-        QString propString2 = QString("  Warp size: %1 threads, Max threads per block: %2, Multiprocessor count: %3 MaxBlocks: %4")
-                .arg(prop.warpSize).arg(prop.maxThreadsPerBlock).arg(prop.multiProcessorCount).arg(prop.maxGridSize[0]);
-        std::cout << deviceString.toStdString() << std::endl;
-        std::cout << propString1.toStdString() << std::endl;
-        std::cout << propString2.toStdString() << std::endl;
-        m_numThreadsPerBlock = prop.maxThreadsPerBlock;
-        m_maxNumBlocks = prop.maxGridSize[0];
-    }
+    //cudaMemset(m_dCellIndexBuffer,0,m_hashTableSize*sizeof(unsigned int));
+    //cudaMemset(m_dDenBuffer,0,m_numParticles*sizeof(float));
+    //resetCellIdxAndDen(m_dCellIndexBuffer,m_hashTableSize,m_dDenBuffer,m_numParticles,m_numThreadsPerBlock,m_cudaStreams[0],m_cudaStreams[1]);
 
 }
 //----------------------------------------------------------------------------------------------------------------------
 void SPHEngine::update(float _timeStep){
-    //std::cout<<"update"<<std::endl;
+    std::cout<<"update"<<std::endl;
     //map our buffer pointer
     float3* d_posPtr;
     size_t d_posSize;
@@ -175,7 +179,7 @@ void SPHEngine::update(float _timeStep){
     //std::cout<<"\n\n"<<std::endl;
 
     //fill our occupancy buffer back up with zeros
-    fillUint(m_dCellOccBuffer,m_hashTableSize,0);
+    resetCellIdxAndDen(m_dCellOccBuffer,m_hashTableSize,m_dDenBuffer,m_numParticles,m_numThreadsPerBlock,m_cudaStreams[0],m_cudaStreams[1]);
 
 
     //unmap our buffer pointer and set it free into the wild

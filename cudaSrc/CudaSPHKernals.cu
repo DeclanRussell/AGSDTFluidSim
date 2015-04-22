@@ -6,14 +6,34 @@
 //----------------------------------------------------------------------------------------------------------------------
 #include <math.h>
 #include <thrust/sort.h>
-#include <thrust/fill.h>
 #include <thrust/device_ptr.h>
 #include <thrust/scan.h>
 #include "CudaSPHKernals.h"
 #include "cutil_math.h"  //< some math operations with cuda types
 
 #define pi 3.14159265359f
-
+//----------------------------------------------------------------------------------------------------------------------
+/// @brief Simple kernal that fills buffer of unsigned int's with zero's
+/// @param d_bufferPtr - pointer to buffer to fill with zeros
+/// @param _size size of the buffer
+__global__ void fillUIntZero(unsigned int* d_bufferPtr, unsigned int _size){
+    //Create our idx
+    int idx = threadIdx.x + blockIdx.x * blockDim.x;
+    if(idx<_size){
+        d_bufferPtr[idx] = 0;
+    }
+}
+//----------------------------------------------------------------------------------------------------------------------
+/// @brief Simple kernal that fills buffer of floats with zero's
+/// @param d_bufferPtr - pointer to buffer to fill with zeros
+/// @param _size size of the buffer
+__global__ void fillFloatZero(float* d_bufferPtr, unsigned int _size){
+    //Create our idx
+    int idx = threadIdx.x + blockIdx.x * blockDim.x;
+    if(idx<_size){
+        d_bufferPtr[idx] = 0.0f;
+    }
+}
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Kernal designed to produce a has key based on the location of a particle
 /// @brief Hash function taken from Teschner, M., Heidelberger, B., Mueller, M., Pomeranets, D. and Gross, M.
@@ -393,13 +413,16 @@ void countCellOccupancy(unsigned int *d_hashArray, unsigned int *d_cellOccArray,
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
-void fillUint(unsigned int *_pointer, unsigned int _arraySize, unsigned int _fill){
+void resetCellIdxAndDen(unsigned int *_cellIdxPtr, unsigned int _hashTableSize, float *_denPtr, unsigned int _denSize, int _maxNumThreads, cudaStream_t _stream1, cudaStream_t _stream2){
     //std::cout<<"fillUint"<<std::endl;
-    //Turn our raw pointers into thrust pointers so we can use
-    //them in thrust fill
-    thrust::device_ptr<unsigned int> t_Ptr = thrust::device_pointer_cast(_pointer);
-    //fill our buffer
-    thrust::fill(t_Ptr, t_Ptr+_arraySize, _fill);
+    //calculate how many blocks we want
+    int cellBlocks = ceil((float)_hashTableSize/(float)_maxNumThreads)+1;
+    int denBlocks = ceil((float)_denSize/(float)_maxNumThreads)+1;
+
+    std::cout<<"cellblocks "<<cellBlocks<<" denBlocks "<<denBlocks<<" hashsize "<<_hashTableSize<<" densize "<<_denSize<<" threads "<<_maxNumThreads<<std::endl;
+
+    fillUIntZero<<<cellBlocks,_maxNumThreads,0*sizeof(int),_stream1>>>(_cellIdxPtr,_hashTableSize);
+    fillFloatZero<<<denBlocks,_maxNumThreads,0*sizeof(int),_stream2>>>(_denPtr,_denSize);
 
     // check for error
     cudaError_t error = cudaGetLastError();

@@ -98,6 +98,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Used for prototyping our our functions used for our SPH simulation calculations.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdio.h&gt;</code><br/>
+<code>#include &lt;cuda_runtime.h&gt;</code><br/>
 </div>
 <p><a href="_cuda_s_p_h_kernals_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -124,9 +125,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a07f9ac02673aedd19b3dec84e24180d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_cuda_s_p_h_kernals_8h.html#a07f9ac02673aedd19b3dec84e24180d5">countCellOccupancy</a> (unsigned int *d_hashArray, unsigned int *d_cellOccArray, unsigned int _hashTableSize, unsigned int _numPoints, unsigned int _maxNumThreads)</td></tr>
 <tr class="memdesc:a07f9ac02673aedd19b3dec84e24180d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the particle occupancy of our hash cell.  <a href="#a07f9ac02673aedd19b3dec84e24180d5">More...</a><br/></td></tr>
 <tr class="separator:a07f9ac02673aedd19b3dec84e24180d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a32490018a3312806721e0576ff6f8c7b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_cuda_s_p_h_kernals_8h.html#a32490018a3312806721e0576ff6f8c7b">fillUint</a> (unsigned int *_pointer, unsigned int _arraySize, unsigned int _fill)</td></tr>
-<tr class="memdesc:a32490018a3312806721e0576ff6f8c7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">simple function so that we can fill a buffer with unsigned ints.  <a href="#a32490018a3312806721e0576ff6f8c7b">More...</a><br/></td></tr>
-<tr class="separator:a32490018a3312806721e0576ff6f8c7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab684f435c5cd455ffa3eb7bed7d9f500"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_cuda_s_p_h_kernals_8h.html#ab684f435c5cd455ffa3eb7bed7d9f500">resetCellIdxAndDen</a> (unsigned int *_cellIdxPtr, unsigned int _hashTableSize, float *_denPtr, unsigned int _denSize, int _maxNumThreads, cudaStream_t _stream1, cudaStream_t _stream2)</td></tr>
+<tr class="memdesc:ab684f435c5cd455ffa3eb7bed7d9f500"><td class="mdescLeft">&#160;</td><td class="mdescRight">simple function that resets our cell index buffer and our density buffer to 0  <a href="#ab684f435c5cd455ffa3eb7bed7d9f500">More...</a><br/></td></tr>
+<tr class="separator:ab684f435c5cd455ffa3eb7bed7d9f500"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a949e34b262f673f2d7d5817e3cae1585"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_cuda_s_p_h_kernals_8h.html#a949e34b262f673f2d7d5817e3cae1585">fluidSolver</a> (float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass=1, float _restDensity=1, float _gasConstant=1, float _visCoef=1, float _densKernConst=1, float _pressKernConst=1, float _viscKernConst=1)</td></tr>
 <tr class="memdesc:a949e34b262f673f2d7d5817e3cae1585"><td class="mdescLeft">&#160;</td><td class="mdescRight">Solver function that will call our solver kernal to calculate the new positions of the particles in.  <a href="#a949e34b262f673f2d7d5817e3cae1585">More...</a><br/></td></tr>
 <tr class="separator:a949e34b262f673f2d7d5817e3cae1585"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -372,48 +373,6 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a32490018a3312806721e0576ff6f8c7b"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fillUint </td>
-          <td>(</td>
-          <td class="paramtype">unsigned int *&#160;</td>
-          <td class="paramname"><em>_pointer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>_arraySize</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>_fill</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>simple function so that we can fill a buffer with unsigned ints. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">_pointer</td><td>- pointer to the buffer you wish to fill </td></tr>
-    <tr><td class="paramname">_arraySize</td><td>- size of the buffer you wish to fill </td></tr>
-    <tr><td class="paramname">_fill</td><td>- what you wish to fill it with </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a class="anchor" id="a949e34b262f673f2d7d5817e3cae1585"></a>
 <div class="memitem">
 <div class="memproto">
@@ -548,6 +507,76 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ab684f435c5cd455ffa3eb7bed7d9f500"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void resetCellIdxAndDen </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int *&#160;</td>
+          <td class="paramname"><em>_cellIdxPtr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>_hashTableSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>_denPtr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>_denSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>_maxNumThreads</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cudaStream_t&#160;</td>
+          <td class="paramname"><em>_stream1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cudaStream_t&#160;</td>
+          <td class="paramname"><em>_stream2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>simple function that resets our cell index buffer and our density buffer to 0 </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_cellIdxPtr</td><td>- pointer to the cell index buffer to reset </td></tr>
+    <tr><td class="paramname">_hashTableSize</td><td>- size of the cell idx buffer </td></tr>
+    <tr><td class="paramname">_denPtr</td><td>- pointer to our density buffer </td></tr>
+    <tr><td class="paramname">_denSize</td><td>- size of our density buffer </td></tr>
+    <tr><td class="paramname">_maxNumThreads</td><td>- maxium number of threads we have per block </td></tr>
+    <tr><td class="paramname">_stream1</td><td>- optional stream can be set to improove concurrency having both kernals run at the same time </td></tr>
+    <tr><td class="paramname">_stream2</td><td>- optional stream can be set to improove concurrency having both kernals run at the same time </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="adabb9ae527f09f6a5a5bd794a3d6228c"></a>
 <div class="memitem">
 <div class="memproto">
@@ -607,7 +636,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 22 2015 22:55:12 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Apr 23 2015 00:03:21 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

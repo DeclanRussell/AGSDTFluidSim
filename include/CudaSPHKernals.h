@@ -11,7 +11,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include <stdio.h>
-
+#include <cuda_runtime.h>
 
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief a structure to hold the properties of our particle
@@ -67,12 +67,16 @@ void sortByKey(unsigned int* d_hashArray, float3* d_posArray, float3 *d_velArray
 //----------------------------------------------------------------------------------------------------------------------
 void countCellOccupancy(unsigned int *d_hashArray, unsigned int *d_cellOccArray,unsigned int _hashTableSize, unsigned int _numPoints, unsigned int _maxNumThreads);
 //----------------------------------------------------------------------------------------------------------------------
-/// @brief simple function so that we can fill a buffer with unsigned ints.
-/// @param _pointer - pointer to the buffer you wish to fill
-/// @param _arraySize - size of the buffer you wish to fill
-/// @param _fill - what you wish to fill it with
+/// @brief simple function that resets our cell index buffer and our density buffer to 0
+/// @param _cellIdxPtr - pointer to the cell index buffer to reset
+/// @param _hashTableSize - size of the  cell idx buffer
+/// @param _denPtr - pointer to our density buffer
+/// @param _denSize - size of our density buffer
+/// @param _maxNumThreads - maxium number of threads we have per block
+/// @param _stream1 - optional stream can be set to improove concurrency having both kernals run at the same time
+/// @param _stream2 - optional stream can be set to improove concurrency having both kernals run at the same time
 //----------------------------------------------------------------------------------------------------------------------
-void fillUint(unsigned int *_pointer, unsigned int _arraySize, unsigned int _fill);
+void resetCellIdxAndDen(unsigned int *_cellIdxPtr, unsigned int _hashTableSize, float *_denPtr,unsigned int _denSize, int _maxNumThreads, cudaStream_t _stream1,cudaStream_t _stream2);
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Solver function that will call our solver kernal to calculate the new positions of the particles in
 /// @brief our fluid simulation.

@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['filluint',['fillUint',['../_cuda_s_p_h_kernals_8cu.html#a32490018a3312806721e0576ff6f8c7b',1,'fillUint(unsigned int *_pointer, unsigned int _arraySize, unsigned int _fill):&#160;CudaSPHKernals.cu'],['../_cuda_s_p_h_kernals_8h.html#a32490018a3312806721e0576ff6f8c7b',1,'fillUint(unsigned int *_pointer, unsigned int _arraySize, unsigned int _fill):&#160;CudaSPHKernals.cu']]],
+  ['fillfloatzero',['fillFloatZero',['../_cuda_s_p_h_kernals_8cu.html#a1e2b916dd4fcef35ebdb01962e1afa94',1,'CudaSPHKernals.cu']]],
+  ['filluintzero',['fillUIntZero',['../_cuda_s_p_h_kernals_8cu.html#aebe0337b7f7d3382c196242f576d1299',1,'CudaSPHKernals.cu']]],
   ['filter',['filter',['../bilateral_filter_frag_8glsl.html#a7fc9433dc7caa1f33078fafa0bf43dda',1,'bilateralFilterFrag.glsl']]],
   ['filterradius',['filterRadius',['../bilateral_filter_frag_8glsl.html#a2d45ac1478cca0b31f3b65fff9cb3530',1,'bilateralFilterFrag.glsl']]],
   ['fluidshaderfrag',['fluidShaderFrag',['../classfluid_shader_frag.html',1,'']]],
