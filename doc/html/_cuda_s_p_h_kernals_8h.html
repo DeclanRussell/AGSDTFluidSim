@@ -128,9 +128,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ab684f435c5cd455ffa3eb7bed7d9f500"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_cuda_s_p_h_kernals_8h.html#ab684f435c5cd455ffa3eb7bed7d9f500">resetCellIdxAndDen</a> (unsigned int *_cellIdxPtr, unsigned int _hashTableSize, float *_denPtr, unsigned int _denSize, int _maxNumThreads, cudaStream_t _stream1, cudaStream_t _stream2)</td></tr>
 <tr class="memdesc:ab684f435c5cd455ffa3eb7bed7d9f500"><td class="mdescLeft">&#160;</td><td class="mdescRight">simple function that resets our cell index buffer and our density buffer to 0  <a href="#ab684f435c5cd455ffa3eb7bed7d9f500">More...</a><br/></td></tr>
 <tr class="separator:ab684f435c5cd455ffa3eb7bed7d9f500"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a949e34b262f673f2d7d5817e3cae1585"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_cuda_s_p_h_kernals_8h.html#a949e34b262f673f2d7d5817e3cae1585">fluidSolver</a> (float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass=1, float _restDensity=1, float _gasConstant=1, float _visCoef=1, float _densKernConst=1, float _pressKernConst=1, float _viscKernConst=1)</td></tr>
-<tr class="memdesc:a949e34b262f673f2d7d5817e3cae1585"><td class="mdescLeft">&#160;</td><td class="mdescRight">Solver function that will call our solver kernal to calculate the new positions of the particles in.  <a href="#a949e34b262f673f2d7d5817e3cae1585">More...</a><br/></td></tr>
-<tr class="separator:a949e34b262f673f2d7d5817e3cae1585"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f87fc3a29fdd5a734ee8c5c5d2a4b83"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_cuda_s_p_h_kernals_8h.html#a7f87fc3a29fdd5a734ee8c5c5d2a4b83">fluidSolver</a> (float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, float *d_denArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass=1, float _restDensity=1, float _gasConstant=1, float _visCoef=1, float _densKernConst=1, float _pressKernConst=1, float _viscKernConst=1)</td></tr>
+<tr class="memdesc:a7f87fc3a29fdd5a734ee8c5c5d2a4b83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Solver function that will call our solver kernal to calculate the new positions of the particles in.  <a href="#a7f87fc3a29fdd5a734ee8c5c5d2a4b83">More...</a><br/></td></tr>
+<tr class="separator:a7f87fc3a29fdd5a734ee8c5c5d2a4b83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21ea2a200d5d727e0fd1d459fe27118a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_cuda_s_p_h_kernals_8h.html#a21ea2a200d5d727e0fd1d459fe27118a">collisionDetectionSolver</a> (<a class="el" href="structplane_prop.html">planeProp</a> *d_planeArray, unsigned int _numPlanes, float3 *d_posArray, float3 *d_velArray, float _timeStep, unsigned int _numParticles, unsigned int _maxNumThreads)</td></tr>
 <tr class="memdesc:a21ea2a200d5d727e0fd1d459fe27118a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collision detection between particles and planes.  <a href="#a21ea2a200d5d727e0fd1d459fe27118a">More...</a><br/></td></tr>
 <tr class="separator:a21ea2a200d5d727e0fd1d459fe27118a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -373,7 +373,7 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a949e34b262f673f2d7d5817e3cae1585"></a>
+<a class="anchor" id="a7f87fc3a29fdd5a734ee8c5c5d2a4b83"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -394,6 +394,12 @@ Functions</h2></td></tr>
           <td></td>
           <td class="paramtype">float3 *&#160;</td>
           <td class="paramname"><em>d_accArray</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>d_denArray</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -636,7 +642,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Apr 23 2015 00:03:21 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Apr 23 2015 00:53:49 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

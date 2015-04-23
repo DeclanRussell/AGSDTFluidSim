@@ -97,7 +97,7 @@ void resetCellIdxAndDen(unsigned int *_cellIdxPtr, unsigned int _hashTableSize, 
 /// @param _pressKernConst - constant part of the pressure kernal. Faster to compute once on CPU and load in.
 /// @param _viscKernConst - constant part of the viscosity kernal. Faster to compute once on CPU and load in.
 //----------------------------------------------------------------------------------------------------------------------
-void fluidSolver(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass = 1, float _restDensity = 1, float _gasConstant = 1, float _visCoef = 1, float _densKernConst = 1, float _pressKernConst = 1, float _viscKernConst = 1);
+void fluidSolver(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray,float* d_denArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass = 1, float _restDensity = 1, float _gasConstant = 1, float _visCoef = 1, float _densKernConst = 1, float _pressKernConst = 1, float _viscKernConst = 1);
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Collision detection between particles and planes
 /// @param d_PlaneArray - pointer to device buffer of our planes information

@@ -28,7 +28,7 @@ void \hyperlink{_cuda_s_p_h_kernals_8h_a07f9ac02673aedd19b3dec84e24180d5}{count\
 \begin{DoxyCompactList}\small\item\em Computes the particle occupancy of our hash cell. \end{DoxyCompactList}\item 
 void \hyperlink{_cuda_s_p_h_kernals_8h_ab684f435c5cd455ffa3eb7bed7d9f500}{reset\-Cell\-Idx\-And\-Den} (unsigned int $\ast$\-\_\-cell\-Idx\-Ptr, unsigned int \-\_\-hash\-Table\-Size, float $\ast$\-\_\-den\-Ptr, unsigned int \-\_\-den\-Size, int \-\_\-max\-Num\-Threads, cuda\-Stream\-\_\-t \-\_\-stream1, cuda\-Stream\-\_\-t \-\_\-stream2)
 \begin{DoxyCompactList}\small\item\em simple function that resets our cell index buffer and our density buffer to 0 \end{DoxyCompactList}\item 
-void \hyperlink{_cuda_s_p_h_kernals_8h_a949e34b262f673f2d7d5817e3cae1585}{fluid\-Solver} (float3 $\ast$d\-\_\-pos\-Array, float3 $\ast$d\-\_\-vel\-Array, float3 $\ast$d\-\_\-acc\-Array, unsigned int $\ast$d\-\_\-cell\-Occ\-Array, unsigned int $\ast$d\-\_\-cell\-Indx\-Array, unsigned int \-\_\-hash\-Table\-Size, unsigned int \-\_\-max\-Num\-Threads, float \-\_\-smoothing\-Length, float \-\_\-timestep, float \-\_\-particle\-Mass=1, float \-\_\-rest\-Density=1, float \-\_\-gas\-Constant=1, float \-\_\-vis\-Coef=1, float \-\_\-dens\-Kern\-Const=1, float \-\_\-press\-Kern\-Const=1, float \-\_\-visc\-Kern\-Const=1)
+void \hyperlink{_cuda_s_p_h_kernals_8h_a7f87fc3a29fdd5a734ee8c5c5d2a4b83}{fluid\-Solver} (float3 $\ast$d\-\_\-pos\-Array, float3 $\ast$d\-\_\-vel\-Array, float3 $\ast$d\-\_\-acc\-Array, float $\ast$d\-\_\-den\-Array, unsigned int $\ast$d\-\_\-cell\-Occ\-Array, unsigned int $\ast$d\-\_\-cell\-Indx\-Array, unsigned int \-\_\-hash\-Table\-Size, unsigned int \-\_\-max\-Num\-Threads, float \-\_\-smoothing\-Length, float \-\_\-timestep, float \-\_\-particle\-Mass=1, float \-\_\-rest\-Density=1, float \-\_\-gas\-Constant=1, float \-\_\-vis\-Coef=1, float \-\_\-dens\-Kern\-Const=1, float \-\_\-press\-Kern\-Const=1, float \-\_\-visc\-Kern\-Const=1)
 \begin{DoxyCompactList}\small\item\em Solver function that will call our solver kernal to calculate the new positions of the particles in. \end{DoxyCompactList}\item 
 void \hyperlink{_cuda_s_p_h_kernals_8h_a21ea2a200d5d727e0fd1d459fe27118a}{collision\-Detection\-Solver} (\hyperlink{structplane_prop}{plane\-Prop} $\ast$d\-\_\-plane\-Array, unsigned int \-\_\-num\-Planes, float3 $\ast$d\-\_\-pos\-Array, float3 $\ast$d\-\_\-vel\-Array, float \-\_\-time\-Step, unsigned int \-\_\-num\-Particles, unsigned int \-\_\-max\-Num\-Threads)
 \begin{DoxyCompactList}\small\item\em Collision detection between particles and planes. \end{DoxyCompactList}\end{DoxyCompactItemize}
@@ -162,13 +162,14 @@ This is taken from Teschner, M., Heidelberger, B., Mueller, M., Pomeranets, D. a
 {\em max\-Num\-Threads} & -\/ the maximum number off threads we have in a block on our device. Can be found out with device query \\
 \hline
 \end{DoxyParams}
-\hypertarget{_cuda_s_p_h_kernals_8h_a949e34b262f673f2d7d5817e3cae1585}{\index{Cuda\-S\-P\-H\-Kernals.\-h@{Cuda\-S\-P\-H\-Kernals.\-h}!fluid\-Solver@{fluid\-Solver}}
+\hypertarget{_cuda_s_p_h_kernals_8h_a7f87fc3a29fdd5a734ee8c5c5d2a4b83}{\index{Cuda\-S\-P\-H\-Kernals.\-h@{Cuda\-S\-P\-H\-Kernals.\-h}!fluid\-Solver@{fluid\-Solver}}
 \index{fluid\-Solver@{fluid\-Solver}!CudaSPHKernals.h@{Cuda\-S\-P\-H\-Kernals.\-h}}
 \subsubsection[{fluid\-Solver}]{\setlength{\rightskip}{0pt plus 5cm}void fluid\-Solver (
 \begin{DoxyParamCaption}
 \item[{float3 $\ast$}]{d\-\_\-pos\-Array, }
 \item[{float3 $\ast$}]{d\-\_\-vel\-Array, }
 \item[{float3 $\ast$}]{d\-\_\-acc\-Array, }
+\item[{float $\ast$}]{d\-\_\-den\-Array, }
 \item[{unsigned int $\ast$}]{d\-\_\-cell\-Occ\-Array, }
 \item[{unsigned int $\ast$}]{d\-\_\-cell\-Indx\-Array, }
 \item[{unsigned int}]{\-\_\-hash\-Table\-Size, }
@@ -183,7 +184,7 @@ This is taken from Teschner, M., Heidelberger, B., Mueller, M., Pomeranets, D. a
 \item[{float}]{\-\_\-press\-Kern\-Const = {\ttfamily 1}, }
 \item[{float}]{\-\_\-visc\-Kern\-Const = {\ttfamily 1}}
 \end{DoxyParamCaption}
-)}}\label{_cuda_s_p_h_kernals_8h_a949e34b262f673f2d7d5817e3cae1585}
+)}}\label{_cuda_s_p_h_kernals_8h_a7f87fc3a29fdd5a734ee8c5c5d2a4b83}
 
 
 Solver function that will call our solver kernal to calculate the new positions of the particles in. 

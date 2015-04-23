@@ -33,6 +33,9 @@ SPHEngine::~SPHEngine(){
     cudaFree(m_dCellOccBuffer);
     cudaFree(m_dVelBuffer);
     cudaFree(m_dPlaneBuffer);
+    cudaFree(m_dDenBuffer);
+    cudaStreamDestroy(m_cudaStreams[0]);
+    cudaStreamDestroy(m_cudaStreams[1]);
     glDeleteBuffers(1,&m_VBO);
     glDeleteVertexArrays(1,&m_VAO);
 }
@@ -123,19 +126,18 @@ void SPHEngine::init(){
     cudaMemcpy(m_dAccBuffer, x, m_numParticles * sizeof(float3), cudaMemcpyHostToDevice);
     //allocate space for our cell index buffer
     cudaMalloc(&m_dCellIndexBuffer, m_hashTableSize*sizeof(unsigned int));
+    cudaMalloc(&m_dDenBuffer,m_numParticles*sizeof(float));
     //create our 2 cuda streams to add some better concurrency to our kernals
     cudaStreamCreate(&m_cudaStreams[0]);
     cudaStreamCreate(&m_cudaStreams[1]);
     //initialize it with zeros
     //not really that necesary but might reduce errors, nice to be safe
-    //cudaMemset(m_dCellIndexBuffer,0,m_hashTableSize*sizeof(unsigned int));
-    //cudaMemset(m_dDenBuffer,0,m_numParticles*sizeof(float));
-    //resetCellIdxAndDen(m_dCellIndexBuffer,m_hashTableSize,m_dDenBuffer,m_numParticles,m_numThreadsPerBlock,m_cudaStreams[0],m_cudaStreams[1]);
+    resetCellIdxAndDen(m_dCellIndexBuffer,m_hashTableSize,m_dDenBuffer,m_numParticles,m_numThreadsPerBlock,m_cudaStreams[0],m_cudaStreams[1]);
 
 }
 //----------------------------------------------------------------------------------------------------------------------
 void SPHEngine::update(float _timeStep){
-    std::cout<<"update"<<std::endl;
+    //std::cout<<"update"<<std::endl;
     //map our buffer pointer
     float3* d_posPtr;
     size_t d_posSize;
@@ -165,7 +167,7 @@ void SPHEngine::update(float _timeStep){
     cudaThreadSynchronize();
 
     //update our particle positions with navier stokes equations
-    fluidSolver(d_posPtr,m_dVelBuffer,m_dAccBuffer,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_numThreadsPerBlock,m_smoothingLength*5,_timeStep,m_mass,m_density,m_gasConstant,m_viscCoef,m_densWeightConst,m_pressWeightConst,m_viscWeightConst);
+    fluidSolver(d_posPtr,m_dVelBuffer,m_dAccBuffer,m_dDenBuffer,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_numThreadsPerBlock,m_smoothingLength*5,_timeStep,m_mass,m_density,m_gasConstant,m_viscCoef,m_densWeightConst,m_pressWeightConst,m_viscWeightConst);
 
     //make sure all our threads are done
     cudaThreadSynchronize();
@@ -176,15 +178,11 @@ void SPHEngine::update(float _timeStep){
     //make sure all our threads are done
     cudaThreadSynchronize();
 
-    //std::cout<<"\n\n"<<std::endl;
-
     //fill our occupancy buffer back up with zeros
     resetCellIdxAndDen(m_dCellOccBuffer,m_hashTableSize,m_dDenBuffer,m_numParticles,m_numThreadsPerBlock,m_cudaStreams[0],m_cudaStreams[1]);
 
-
     //unmap our buffer pointer and set it free into the wild
     cudaGraphicsUnmapResources(1,&m_cudaBufferPtr);
-    //std::cout<<"update finished numParticles"<<m_numParticles<<" hash table size "<<m_hashTableSize<<std::endl;
 
 }
 //----------------------------------------------------------------------------------------------------------------------

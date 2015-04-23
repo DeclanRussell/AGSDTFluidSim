@@ -128,9 +128,15 @@ __device__ float3 viscosityWeighting(float3 _currentPos, float3 _neighPos,float 
     //false also being 0 and true being 1 solves removes the need for branching
     return r * (float)(rLength<_smoothingLength);
 }
+//----------------------------------------------------------------------------------------------------------------------
+__global__ void perParticleDensitySolver(float3 * d_posArray, float * d_denArray, int _samples, float _particleMass, int _particleIdx, float _densKernConst, float _smoothingLength){
+    if(threadIdx.x<_samples){
+        atomicAdd(&(d_denArray[_particleIdx]), _particleMass * densityWeighting(d_posArray[_particleIdx],d_posArray[_particleIdx+threadIdx.x],_smoothingLength,_densKernConst));
+    }
+}
 
 //----------------------------------------------------------------------------------------------------------------------
-__global__ void fluidSolverPerParticleKernal(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray,unsigned int _particleIdx, unsigned int _cellOcc, float _smoothingLength, float _timestep, float _particleMass, float _restDensity, float _gasConstant, float _visCoef, float densKernConst, float pressKernConst, float viscKernConst){
+__global__ void fluidSolverPerParticleKernal(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray,float *d_denArray,unsigned int _particleIdx, unsigned int _cellOcc, float _smoothingLength, float _timestep, float _particleMass, float _restDensity, float _gasConstant, float _visCoef, float densKernConst, float pressKernConst, float viscKernConst){
 
     //Create our idx
     int idx = threadIdx.x + blockIdx.x * blockDim.x;
@@ -166,9 +172,13 @@ __global__ void fluidSolverPerParticleKernal(float3 *d_posArray, float3 *d_velAr
         // However for such a small loop this may not actually make
         // much difference. We also will have to take into count
         // kernal launch times & memory access.
+
         float density = 0.0;
         float3 nPartPosTemp;
         int i;
+
+        clock_t time = clock();
+
         for(i=0;i<samples; i++){
             nPartPosTemp = nParticleData[i].pos;
             density += _particleMass * densityWeighting(curPartPos,nPartPosTemp,_smoothingLength,densKernConst);
@@ -176,6 +186,17 @@ __global__ void fluidSolverPerParticleKernal(float3 *d_posArray, float3 *d_velAr
         if(threadIdx.x<samples){
             nParticleData[threadIdx.x].density = density;
         }
+
+        printf("Elapsed time original : %d ms\n" ,clock()-time);
+
+
+        time = clock();
+        float densityTemp = 0;
+        perParticleDensitySolver<<<1,samples>>>(d_posArray,d_denArray,samples,_particleMass,particleIdx,densKernConst,_smoothingLength);
+
+        printf("Elapsed time dp : %d ms\n" ,clock()-time);
+
+
 
         //Once this is done we can finally do some navier-stokes!!
         float3 pressureForce = make_float3(0,0,0);
@@ -276,7 +297,7 @@ __global__ void fluidSolverPerParticleKernal(float3 *d_posArray, float3 *d_velAr
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
-__global__ void fluidSolverKernalDP(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _maxNumThreads,float _smoothingLength, float _timestep, float _particleMass, float _restDensity, float _gasConstant, float _visCoef, float densKernConst, float pressKernConst, float viscKernConst){
+__global__ void fluidSolverKernalDP(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, float *d_denArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _maxNumThreads,float _smoothingLength, float _timestep, float _particleMass, float _restDensity, float _gasConstant, float _visCoef, float densKernConst, float pressKernConst, float viscKernConst){
     // Read in our how many particles our cell holds
     unsigned int cellOcc = d_cellOccArray[blockIdx.x];
     // Calculate our index for these particles in our buffer
@@ -298,7 +319,7 @@ __global__ void fluidSolverKernalDP(float3 *d_posArray, float3 *d_velArray, floa
     // sameples in our SPH calculations. More particles than samples means
     // less accuracy. More samples means more computation
     if(cellOcc>0){
-        fluidSolverPerParticleKernal<<<blocks,threads>>>(d_posArray,d_velArray,d_accArray,particleIdx,cellOcc,_smoothingLength, _timestep,_particleMass,_restDensity,_gasConstant,_visCoef,densKernConst,pressKernConst,viscKernConst);
+        fluidSolverPerParticleKernal<<<blocks,threads>>>(d_posArray,d_velArray,d_accArray,d_denArray,particleIdx,cellOcc,_smoothingLength, _timestep,_particleMass,_restDensity,_gasConstant,_visCoef,densKernConst,pressKernConst,viscKernConst);
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
@@ -419,8 +440,6 @@ void resetCellIdxAndDen(unsigned int *_cellIdxPtr, unsigned int _hashTableSize, 
     int cellBlocks = ceil((float)_hashTableSize/(float)_maxNumThreads)+1;
     int denBlocks = ceil((float)_denSize/(float)_maxNumThreads)+1;
 
-    std::cout<<"cellblocks "<<cellBlocks<<" denBlocks "<<denBlocks<<" hashsize "<<_hashTableSize<<" densize "<<_denSize<<" threads "<<_maxNumThreads<<std::endl;
-
     fillUIntZero<<<cellBlocks,_maxNumThreads,0*sizeof(int),_stream1>>>(_cellIdxPtr,_hashTableSize);
     fillFloatZero<<<denBlocks,_maxNumThreads,0*sizeof(int),_stream2>>>(_denPtr,_denSize);
 
@@ -457,13 +476,13 @@ void createCellIdx(unsigned int* d_cellOccArray, unsigned int _size,unsigned int
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
-void fluidSolver(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass, float _restDensity, float _gasConstant, float _visCoef, float _densKernConst, float _pressKernConst, float _viscKernConst){
+void fluidSolver(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, float *d_denArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass, float _restDensity, float _gasConstant, float _visCoef, float _densKernConst, float _pressKernConst, float _viscKernConst){
     //std::cout<<"fluidSolver"<<std::endl;
     //printf("memory allocated: %d",_maxNumThreads*(sizeof(particleProp)));
     //fluidSolverKernal<<<_hashTableSize, 30>>>(d_posArray,d_velArray,d_cellOccArray,d_cellIndxArray,_smoothingLength,_timestep, _particleMass, _restDensity,_gasConstant,_visCoef, _densKernConst, _pressKernConst, _viscKernConst);
 
 
-    fluidSolverKernalDP<<<_hashTableSize, 1>>>(d_posArray,d_velArray,d_accArray,d_cellOccArray,d_cellIndxArray,_maxNumThreads,_smoothingLength,_timestep, _particleMass, _restDensity,_gasConstant,_visCoef, _densKernConst, _pressKernConst, _viscKernConst);
+    fluidSolverKernalDP<<<_hashTableSize, 1>>>(d_posArray,d_velArray,d_accArray,d_denArray,d_cellOccArray,d_cellIndxArray,_maxNumThreads,_smoothingLength,_timestep, _particleMass, _restDensity,_gasConstant,_visCoef, _densKernConst, _pressKernConst, _viscKernConst);
     //std::cout<<std::endl;
 
     // check for error
