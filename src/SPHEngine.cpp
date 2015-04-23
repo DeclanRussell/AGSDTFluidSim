@@ -84,7 +84,7 @@ void SPHEngine::init(){
 
 
     //set the size of our hash table based on how many particles we have
-    m_hashTableSize = nextPrimeNum(m_numParticles/2);
+    m_hashTableSize = nextPrimeNum(m_numParticles);
     std::cout<<"hash table size: "<<m_hashTableSize<<std::endl;
     //allocate space for our hash table,cell occupancy array and velocity array.
     cudaMalloc(&m_dhashKeys, m_numParticles*sizeof(unsigned int));
