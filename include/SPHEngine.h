@@ -28,8 +28,11 @@ public:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief defualt constructor
     /// @param _numParticles how many particles we want to have on simulation initialisation.
+    /// @param _volume  - the volume of our fluid.
+    /// @param _density - the density of our fluid
+    /// @param _contanerSize - the contaner size of for our fluid. e.g. 1 is a cube of 1*1*1.
     //----------------------------------------------------------------------------------------------------------------------
-    SPHEngine(unsigned int _numParticles = 0, unsigned int _volume = 1, float _density = 1000);
+    SPHEngine(unsigned int _numParticles = 0, unsigned int _volume = 1, float _density = 1000, float _contanerSize = 1);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief default destructor
     //----------------------------------------------------------------------------------------------------------------------
@@ -117,6 +120,10 @@ public:
     inline int getNumParticles(){return m_numParticles;}
     //----------------------------------------------------------------------------------------------------------------------
 private:
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief the max dimention of our hash grid. E.g. 1 is a cube of dimention 1*1*1.
+    //----------------------------------------------------------------------------------------------------------------------
+    float m_maxGridDim;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief the max number of samples of neighbouring particles in our fluid solving
     //----------------------------------------------------------------------------------------------------------------------

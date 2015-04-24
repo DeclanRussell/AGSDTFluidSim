@@ -42,12 +42,12 @@ void createCellIdx(unsigned int* d_cellOccArray, unsigned int _size, unsigned in
 /// @brief (2003). Optimized spatial hashing for collision detection of deformable objects
 /// @param d_hashArray - a pointer to the cuda buffer that we wish to store our hash keys
 /// @param d_posArray - pointer to the cuda buffer that holds the particle postions we wish to hash
-/// @param numParticles - the number of particles. Used to calculate how many kernals to launch
-/// @param smoothingLength - smoothing length of our hash. How big each cell of our hash is.
-/// @param hashTableSize - size of our hash table You can think of this as how many different hash keys availible.
-/// @param maxNumThreads - the maximum number off threads we have in a block on our device. Can be found out with device query
+/// @param _numParticles - the number of particles. Used to calculate how many kernals to launch
+/// @param _smoothingLength - Smoothing length of our hash. How big each cell of our hash is.
+/// @param _gridSize - the size of our grid. .g. 1 is a grid of size 1*1*1.
+/// @param _maxNumThreads - the maximum number off threads we have in a block on our device. Can be found out with device query
 //----------------------------------------------------------------------------------------------------------------------
-void createHashTable(unsigned int* d_hashArray, float3* d_posArray, unsigned int numParticles, float smoothingLegnth,unsigned int hashTableSize, int maxNumThreads);
+void createHashTable(unsigned int* d_hashArray, float3* d_posArray, unsigned int _numParticles, float _smoothingLength, float _gridSize, int _maxNumThreads);
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Sorts our hash key buffer and postion buffer such that points of the same key occupy contiguous memory
 /// @param d_hashArray - pointer to our hash key buffer

@@ -8,13 +8,14 @@
 
 #define pi 3.14159265359f
 //----------------------------------------------------------------------------------------------------------------------
-SPHEngine::SPHEngine(unsigned int _numParticles, unsigned int _volume, float _density) : m_numParticles(_numParticles),
+SPHEngine::SPHEngine(unsigned int _numParticles, unsigned int _volume, float _density, float _contanerSize) : m_numParticles(_numParticles),
                                                                                          m_volume(_volume),
                                                                                          m_density(_density),
-                                                                                         m_smoothingLength(0.4),
+                                                                                         m_maxGridDim(_contanerSize),
+                                                                                         m_smoothingLength(0.5),
                                                                                          m_numPlanes(0),
                                                                                          m_gasConstant(3000.0f),
-                                                                                         m_viscCoef(100.0f)
+                                                                                         m_viscCoef(1.0f)
 
 {
     calcMass();
@@ -39,24 +40,31 @@ SPHEngine::~SPHEngine(){
 
 void SPHEngine::init(){
 
+    //add some walls to keep our particles in our grid
+    addWall(make_float3(0.0f),make_float3(0.0f,1.0f,0.0f),0.2);                      //floor
+    addWall(make_float3(0.0f),make_float3(1.0f,0.0f,0.0f),0.5);                      //left wall
+    addWall(make_float3(0.0f),make_float3(0.0f,0.0f,1.0f),0.5);                      //back wall
+    addWall(make_float3(m_maxGridDim,0.0f,0.0f),make_float3(-1.0f,0.0f,0.0f),0.2); //right wall
+    addWall(make_float3(0.0f,m_maxGridDim,0.0f),make_float3(0.0f,-1.0f,0.0f),0.2); //ceiling
+    addWall(make_float3(0.0f,0.0f,m_maxGridDim),make_float3(0.0f,0.0f,-1.0f),0.2); //front wall
 
-    //create some points just for testing our instancing
+    //create our initial particles
     std::vector<float3> particles;
     float3 tempF3;
     float tx,ty,tz;
-    tx=tz=1;
-    ty = 1.0;
+    float increment = m_smoothingLength / pow(m_numParticles,(1.f/3.f)) * m_maxGridDim;
+    increment/=2.0;
+    tx=tz=ty=m_maxGridDim/4.f;
     for(unsigned int i=0; i<m_numParticles; i++){
-        if(tx>9){ tx=1; tz+=0.1f;}
-        if(tz>2){ tz=1; ty+=0.1f;}
+        if(tx>=(3.f*m_maxGridDim/4.f) - increment){ tx=m_maxGridDim/4.f; tz+=increment;}
+        if(tz>=(3.f*m_maxGridDim/4.f) - increment){ tz=m_maxGridDim/4.f; ty+=increment;}
 
         tempF3.x = tx;
         tempF3.y = ty;
         tempF3.z = tz;
         particles.push_back(tempF3);
-        tx+=0.1f;
+        tx+=increment;
     }
-
 
     glGenBuffers(1, &m_VBO);
     glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
@@ -84,7 +92,7 @@ void SPHEngine::init(){
 
 
     //set the size of our hash table based on how many particles we have
-    m_hashTableSize = nextPrimeNum(m_numParticles);
+    m_hashTableSize = pow(m_maxGridDim/m_smoothingLength,3);
     std::cout<<"hash table size: "<<m_hashTableSize<<std::endl;
     //allocate space for our hash table,cell occupancy array and velocity array.
     cudaMalloc(&m_dhashKeys, m_numParticles*sizeof(unsigned int));
@@ -139,7 +147,7 @@ void SPHEngine::update(float _timeStep){
     cudaGraphicsResourceGetMappedPointer((void**)&d_posPtr,&d_posSize,m_cudaBufferPtr);
 
     //calculate our hash keys
-    createHashTable(m_dhashKeys,d_posPtr,m_numParticles,1.0/m_smoothingLength, m_hashTableSize, m_numThreadsPerBlock);
+    createHashTable(m_dhashKeys,d_posPtr,m_numParticles,m_smoothingLength, m_maxGridDim, m_numThreadsPerBlock);
 
     //sort our particle postions based on there key to make
     //points of the same key occupy contiguous memory
@@ -161,7 +169,7 @@ void SPHEngine::update(float _timeStep){
     cudaThreadSynchronize();
 
     //update our particle positions with navier stokes equations
-    fluidSolver(d_posPtr,m_dVelBuffer,m_dAccBuffer,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_numThreadsPerBlock,m_smoothingLength*5,_timeStep,m_mass,m_density,m_gasConstant,m_viscCoef,m_densWeightConst,m_pressWeightConst,m_viscWeightConst);
+    fluidSolver(d_posPtr,m_dVelBuffer,m_dAccBuffer,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_numThreadsPerBlock,m_smoothingLength,_timeStep,m_mass,m_density,m_gasConstant,m_viscCoef,m_densWeightConst,m_pressWeightConst,m_viscWeightConst);
 
     //make sure all our threads are done
     cudaThreadSynchronize();
@@ -192,9 +200,9 @@ void SPHEngine::drawArrays(){
 //----------------------------------------------------------------------------------------------------------------------
 void SPHEngine::calcKernalConsts()
 {
-    m_densWeightConst = (15.0f/(pi*pow(m_smoothingLength,6)));
+    m_densWeightConst = (315.0f/(64*pi*pow(m_smoothingLength,9)));
     m_pressWeightConst = (-45.0f/(pi*pow(m_smoothingLength,6)));
-    m_viscWeightConst = (-90/(pi*pow(m_smoothingLength,6)));
+    m_viscWeightConst = (45/(pi*pow(m_smoothingLength,6)));
 
     std::cout<<"Density Const: "<<m_densWeightConst<<std::endl;
     std::cout<<"Pressure Const: "<<m_pressWeightConst<<std::endl;

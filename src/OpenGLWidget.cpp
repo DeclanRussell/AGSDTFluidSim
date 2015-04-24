@@ -404,7 +404,6 @@ void OpenGLWidget::initializeGL(){
     (*shader)["BilateralFilter"]->use();
     shader->setUniform("depthTex",0);
     shader->setUniform("blurDepthFalloff",m_blurFalloff);
-    shader->setUniform("filterRadius",100.0f/*/width()*/);
     shader->setUniform("texelSize",2.0f/((float)width()+height()));
 
     (*shader)["FluidShader"]->use();
@@ -431,15 +430,8 @@ void OpenGLWidget::initializeGL(){
 
 
     //allocate some space for our SPHEngine
-    m_SPHEngine = new SPHEngine(50000,1000,998.2);
-    m_SPHEngine->setGasConstant(5);
-
-    //add some walls to our simulation
-    m_SPHEngine->addWall(make_float3(0.0f,0.0f,0.0f),make_float3(0.0f,1.0f,0.0f),1.0f);      //floor
-    m_SPHEngine->addWall(make_float3(0.0f,0.0f,0.0f),make_float3(1.0f,0.0f,0.0f),0.4f);    //left
-    m_SPHEngine->addWall(make_float3(10.0f,0.0f,0.0f),make_float3(-1.0f,0.0f,0.0f),0.4f);    //right
-    m_SPHEngine->addWall(make_float3(0.0f,0.0f,10.0f),make_float3(0.0f,0.0f,-1.0f),0.4f);    //front
-    m_SPHEngine->addWall(make_float3(0.0f,0.0f,0.0f),make_float3(0.0f,0.0f,1.0f),0.4f);    //back
+    m_SPHEngine = new SPHEngine(50000,100,998.2,10);
+    m_SPHEngine->setGasConstant(10);
 
     m_currentTime = m_currentTime.currentTime();
     startTimer(0);

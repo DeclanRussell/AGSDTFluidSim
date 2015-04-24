@@ -19,7 +19,7 @@ struct \hyperlink{structplane_prop}{plane\-Prop}
 \item 
 void \hyperlink{_cuda_s_p_h_kernals_8h_a5ef63636297ac3ddbc0866064a75e12d}{create\-Cell\-Idx} (unsigned int $\ast$d\-\_\-cell\-Occ\-Array, unsigned int \-\_\-size, unsigned int $\ast$d\-\_\-cell\-Idx\-Array)
 \begin{DoxyCompactList}\small\item\em Creates an index array for our cells using thrusts exclusive scan. \end{DoxyCompactList}\item 
-void \hyperlink{_cuda_s_p_h_kernals_8h_a74b195a988479a037d731bbf2da30a5f}{create\-Hash\-Table} (unsigned int $\ast$d\-\_\-hash\-Array, float3 $\ast$d\-\_\-pos\-Array, unsigned int num\-Particles, float smoothing\-Legnth, unsigned int hash\-Table\-Size, int max\-Num\-Threads)
+void \hyperlink{_cuda_s_p_h_kernals_8h_a9fe88a9ff27a1ed8c403baba318ebe96}{create\-Hash\-Table} (unsigned int $\ast$d\-\_\-hash\-Array, float3 $\ast$d\-\_\-pos\-Array, unsigned int \-\_\-num\-Particles, float \-\_\-smoothing\-Length, float \-\_\-grid\-Size, int \-\_\-max\-Num\-Threads)
 \begin{DoxyCompactList}\small\item\em Creates a spatial hash key based on our particle postion. \end{DoxyCompactList}\item 
 void \hyperlink{_cuda_s_p_h_kernals_8h_adabb9ae527f09f6a5a5bd794a3d6228c}{sort\-By\-Key} (unsigned int $\ast$d\-\_\-hash\-Array, float3 $\ast$d\-\_\-pos\-Array, float3 $\ast$d\-\_\-vel\-Array, float3 $\ast$d\-\_\-acc\-Array, unsigned int \-\_\-num\-Particles)
 \begin{DoxyCompactList}\small\item\em Sorts our hash key buffer and postion buffer such that points of the same key occupy contiguous memory. \end{DoxyCompactList}\item 
@@ -130,18 +130,18 @@ Creates an index array for our cells using thrusts exclusive scan.
 {\em d\-\_\-cell\-Idx\-Array} & -\/ our output buffer on our device to store our index's \\
 \hline
 \end{DoxyParams}
-\hypertarget{_cuda_s_p_h_kernals_8h_a74b195a988479a037d731bbf2da30a5f}{\index{Cuda\-S\-P\-H\-Kernals.\-h@{Cuda\-S\-P\-H\-Kernals.\-h}!create\-Hash\-Table@{create\-Hash\-Table}}
+\hypertarget{_cuda_s_p_h_kernals_8h_a9fe88a9ff27a1ed8c403baba318ebe96}{\index{Cuda\-S\-P\-H\-Kernals.\-h@{Cuda\-S\-P\-H\-Kernals.\-h}!create\-Hash\-Table@{create\-Hash\-Table}}
 \index{create\-Hash\-Table@{create\-Hash\-Table}!CudaSPHKernals.h@{Cuda\-S\-P\-H\-Kernals.\-h}}
 \subsubsection[{create\-Hash\-Table}]{\setlength{\rightskip}{0pt plus 5cm}void create\-Hash\-Table (
 \begin{DoxyParamCaption}
 \item[{unsigned int $\ast$}]{d\-\_\-hash\-Array, }
 \item[{float3 $\ast$}]{d\-\_\-pos\-Array, }
-\item[{unsigned int}]{num\-Particles, }
-\item[{float}]{smoothing\-Legnth, }
-\item[{unsigned int}]{hash\-Table\-Size, }
-\item[{int}]{max\-Num\-Threads}
+\item[{unsigned int}]{\-\_\-num\-Particles, }
+\item[{float}]{\-\_\-smoothing\-Length, }
+\item[{float}]{\-\_\-grid\-Size, }
+\item[{int}]{\-\_\-max\-Num\-Threads}
 \end{DoxyParamCaption}
-)}}\label{_cuda_s_p_h_kernals_8h_a74b195a988479a037d731bbf2da30a5f}
+)}}\label{_cuda_s_p_h_kernals_8h_a9fe88a9ff27a1ed8c403baba318ebe96}
 
 
 Creates a spatial hash key based on our particle postion. 
@@ -152,13 +152,13 @@ This is taken from Teschner, M., Heidelberger, B., Mueller, M., Pomeranets, D. a
 \hline
 {\em d\-\_\-pos\-Array} & -\/ pointer to the cuda buffer that holds the particle postions we wish to hash \\
 \hline
-{\em num\-Particles} & -\/ the number of particles. Used to calculate how many kernals to launch \\
+{\em \-\_\-num\-Particles} & -\/ the number of particles. Used to calculate how many kernals to launch \\
 \hline
-{\em smoothing\-Length} & -\/ smoothing length of our hash. How big each cell of our hash is. \\
+{\em \-\_\-smoothing\-Length} & -\/ Smoothing length of our hash. How big each cell of our hash is. \\
 \hline
-{\em hash\-Table\-Size} & -\/ size of our hash table You can think of this as how many different hash keys availible. \\
+{\em \-\_\-grid\-Size} & -\/ the size of our grid. .g. 1 is a grid of size 1$\ast$1$\ast$1. \\
 \hline
-{\em max\-Num\-Threads} & -\/ the maximum number off threads we have in a block on our device. Can be found out with device query \\
+{\em \-\_\-max\-Num\-Threads} & -\/ the maximum number off threads we have in a block on our device. Can be found out with device query \\
 \hline
 \end{DoxyParams}
 \hypertarget{_cuda_s_p_h_kernals_8h_a32490018a3312806721e0576ff6f8c7b}{\index{Cuda\-S\-P\-H\-Kernals.\-h@{Cuda\-S\-P\-H\-Kernals.\-h}!fill\-Uint@{fill\-Uint}}
