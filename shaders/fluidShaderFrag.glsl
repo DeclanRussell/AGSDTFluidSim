@@ -36,6 +36,10 @@ uniform float texelSizeY;
 //----------------------------------------------------------------------------------------------------------------------
 uniform mat4 PInv;
 //----------------------------------------------------------------------------------------------------------------------
+/// @brief normal matrix
+//----------------------------------------------------------------------------------------------------------------------
+uniform mat4 normalMatrix;
+//----------------------------------------------------------------------------------------------------------------------
 /// @brief our fresnal power
 //----------------------------------------------------------------------------------------------------------------------
 uniform float fresnalPower;
@@ -166,9 +170,10 @@ void main(void)
     vec3 i = normalize(posEye);
     float fresnalRatio = fresnalConst + (1.0 - fresnalConst) * pow((1.0 - dot(-i, n)), fresnalPower);
 
-    vec3 Refract = refract(i, n, refractRatio);
+    vec3 normN = vec3(normalMatrix * vec4(n,1.0));
+    vec3 Refract = refract(i, normN,refractRatio);
 
-    vec3 Reflect = reflect(i, n);
+    vec3 Reflect = reflect(i, normN);
 
     vec3 refractColor = vec3(texture(cubeMapTex, Refract));
     vec3 reflectColor = vec3(texture(cubeMapTex, Reflect));
@@ -181,7 +186,6 @@ void main(void)
     //our fluid is.
     refractColor = mix(refractColor,phong,thickness);
     FragColor  = vec4(mix(refractColor, reflectColor, fresnalRatio),1.0);
-
 
     //position shading
     //FragColor = vec4(posEye,1.0);

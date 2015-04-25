@@ -430,8 +430,8 @@ void OpenGLWidget::initializeGL(){
 
 
     //allocate some space for our SPHEngine
-    m_SPHEngine = new SPHEngine(50000,100,998.2,10);
-    m_SPHEngine->setGasConstant(10);
+    m_SPHEngine = new SPHEngine(100000,1000,998.2,10);
+    m_SPHEngine->setGasConstant(50);
 
     m_currentTime = m_currentTime.currentTime();
     startTimer(0);
@@ -508,6 +508,8 @@ void OpenGLWidget::paintGL(){
     ngl::Mat4 MV = m_mouseGlobalTX * m_cam->getViewMatrix();
     ngl::Mat4 MVP = MV * P;
     ngl::Mat4 Pinv = P.inverse();
+    ngl::Mat4 normalMatrix = m_mouseGlobalTX.inverse();
+    normalMatrix.transpose();
 
     //Here is where we will ultimately load our matricies to shader once written
     ngl::ShaderLib *shader=ngl::ShaderLib::instance();
@@ -611,6 +613,7 @@ void OpenGLWidget::paintGL(){
 
     //bind our fluid shader
     (*shader)["FluidShader"]->use();
+    shader->setUniform("normalMatrix",normalMatrix);
     shader->setUniform("fresnalPower",m_fresnalPower);
     shader->setUniform("refractRatio",m_refractionRatio);
     shader->setUniform("fresnalConst",m_fresnalConst);

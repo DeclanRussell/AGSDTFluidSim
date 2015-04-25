@@ -16,8 +16,10 @@ SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
     src/OpenGLWidget.cpp \
-    src/SPHEngine.cpp
+    src/SPHEngine.cpp \
+    cudaSrc/*.cu
 
+SOURCES -= cudaSrc/*.cu
 
 HEADERS += \
     include/mainwindow.h \

@@ -10,8 +10,8 @@ Used for prototyping our our functions used for our S\-P\-H simulation calculati
 \subsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
-struct \hyperlink{structparticle_prop}{particle\-Prop}
-\begin{DoxyCompactList}\small\item\em a structure to hold the properties of our particle \end{DoxyCompactList}\item 
+struct \hyperlink{structparticle_cell_prop}{particle\-Cell\-Prop}
+\begin{DoxyCompactList}\small\item\em a structure to hold the properties of our particle cell \end{DoxyCompactList}\item 
 struct \hyperlink{structplane_prop}{plane\-Prop}
 \begin{DoxyCompactList}\small\item\em a structure to hold the properties of our planes \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Functions}
@@ -27,7 +27,7 @@ void \hyperlink{_cuda_s_p_h_kernals_8h_a07f9ac02673aedd19b3dec84e24180d5}{count\
 \begin{DoxyCompactList}\small\item\em Computes the particle occupancy of our hash cell. \end{DoxyCompactList}\item 
 void \hyperlink{_cuda_s_p_h_kernals_8h_a32490018a3312806721e0576ff6f8c7b}{fill\-Uint} (unsigned int $\ast$\-\_\-pointer, unsigned int \-\_\-array\-Size, unsigned int \-\_\-fill)
 \begin{DoxyCompactList}\small\item\em simple function so that we can fill a buffer with unsigned ints. \end{DoxyCompactList}\item 
-void \hyperlink{_cuda_s_p_h_kernals_8h_a949e34b262f673f2d7d5817e3cae1585}{fluid\-Solver} (float3 $\ast$d\-\_\-pos\-Array, float3 $\ast$d\-\_\-vel\-Array, float3 $\ast$d\-\_\-acc\-Array, unsigned int $\ast$d\-\_\-cell\-Occ\-Array, unsigned int $\ast$d\-\_\-cell\-Indx\-Array, unsigned int \-\_\-hash\-Table\-Size, unsigned int \-\_\-max\-Num\-Threads, float \-\_\-smoothing\-Length, float \-\_\-timestep, float \-\_\-particle\-Mass=1, float \-\_\-rest\-Density=1, float \-\_\-gas\-Constant=1, float \-\_\-vis\-Coef=1, float \-\_\-dens\-Kern\-Const=1, float \-\_\-press\-Kern\-Const=1, float \-\_\-visc\-Kern\-Const=1)
+void \hyperlink{_cuda_s_p_h_kernals_8h_a090789b1c38ce9340f0e6498fb9398dc}{fluid\-Solver} (float3 $\ast$d\-\_\-pos\-Array, float3 $\ast$d\-\_\-vel\-Array, float3 $\ast$d\-\_\-acc\-Array, unsigned int $\ast$d\-\_\-cell\-Occ\-Array, unsigned int $\ast$d\-\_\-cell\-Indx\-Array, unsigned int \-\_\-hash\-Table\-Size, int \-\_\-hash\-Resolution, unsigned int \-\_\-max\-Num\-Threads, float \-\_\-smoothing\-Length, float \-\_\-timestep, float \-\_\-particle\-Mass=1, float \-\_\-rest\-Density=1, float \-\_\-gas\-Constant=1, float \-\_\-vis\-Coef=1, float \-\_\-dens\-Kern\-Const=1, float \-\_\-press\-Kern\-Const=1, float \-\_\-visc\-Kern\-Const=1)
 \begin{DoxyCompactList}\small\item\em Solver function that will call our solver kernal to calculate the new positions of the particles in. \end{DoxyCompactList}\item 
 void \hyperlink{_cuda_s_p_h_kernals_8h_a21ea2a200d5d727e0fd1d459fe27118a}{collision\-Detection\-Solver} (\hyperlink{structplane_prop}{plane\-Prop} $\ast$d\-\_\-plane\-Array, unsigned int \-\_\-num\-Planes, float3 $\ast$d\-\_\-pos\-Array, float3 $\ast$d\-\_\-vel\-Array, float \-\_\-time\-Step, unsigned int \-\_\-num\-Particles, unsigned int \-\_\-max\-Num\-Threads)
 \begin{DoxyCompactList}\small\item\em Collision detection between particles and planes. \end{DoxyCompactList}\end{DoxyCompactItemize}
@@ -183,7 +183,7 @@ simple function so that we can fill a buffer with unsigned ints.
 {\em \-\_\-fill} & -\/ what you wish to fill it with \\
 \hline
 \end{DoxyParams}
-\hypertarget{_cuda_s_p_h_kernals_8h_a949e34b262f673f2d7d5817e3cae1585}{\index{Cuda\-S\-P\-H\-Kernals.\-h@{Cuda\-S\-P\-H\-Kernals.\-h}!fluid\-Solver@{fluid\-Solver}}
+\hypertarget{_cuda_s_p_h_kernals_8h_a090789b1c38ce9340f0e6498fb9398dc}{\index{Cuda\-S\-P\-H\-Kernals.\-h@{Cuda\-S\-P\-H\-Kernals.\-h}!fluid\-Solver@{fluid\-Solver}}
 \index{fluid\-Solver@{fluid\-Solver}!CudaSPHKernals.h@{Cuda\-S\-P\-H\-Kernals.\-h}}
 \subsubsection[{fluid\-Solver}]{\setlength{\rightskip}{0pt plus 5cm}void fluid\-Solver (
 \begin{DoxyParamCaption}
@@ -193,6 +193,7 @@ simple function so that we can fill a buffer with unsigned ints.
 \item[{unsigned int $\ast$}]{d\-\_\-cell\-Occ\-Array, }
 \item[{unsigned int $\ast$}]{d\-\_\-cell\-Indx\-Array, }
 \item[{unsigned int}]{\-\_\-hash\-Table\-Size, }
+\item[{int}]{\-\_\-hash\-Resolution, }
 \item[{unsigned int}]{\-\_\-max\-Num\-Threads, }
 \item[{float}]{\-\_\-smoothing\-Length, }
 \item[{float}]{\-\_\-timestep, }
@@ -204,7 +205,7 @@ simple function so that we can fill a buffer with unsigned ints.
 \item[{float}]{\-\_\-press\-Kern\-Const = {\ttfamily 1}, }
 \item[{float}]{\-\_\-visc\-Kern\-Const = {\ttfamily 1}}
 \end{DoxyParamCaption}
-)}}\label{_cuda_s_p_h_kernals_8h_a949e34b262f673f2d7d5817e3cae1585}
+)}}\label{_cuda_s_p_h_kernals_8h_a090789b1c38ce9340f0e6498fb9398dc}
 
 
 Solver function that will call our solver kernal to calculate the new positions of the particles in. 

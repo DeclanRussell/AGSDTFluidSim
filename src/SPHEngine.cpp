@@ -12,7 +12,7 @@ SPHEngine::SPHEngine(unsigned int _numParticles, unsigned int _volume, float _de
                                                                                          m_volume(_volume),
                                                                                          m_density(_density),
                                                                                          m_maxGridDim(_contanerSize),
-                                                                                         m_smoothingLength(0.5),
+                                                                                         m_smoothingLength(0.3),
                                                                                          m_numPlanes(0),
                                                                                          m_gasConstant(3000.0f),
                                                                                          m_viscCoef(1.0f)
@@ -41,10 +41,10 @@ SPHEngine::~SPHEngine(){
 void SPHEngine::init(){
 
     //add some walls to keep our particles in our grid
-    addWall(make_float3(0.0f),make_float3(0.0f,1.0f,0.0f),0.2);                      //floor
-    addWall(make_float3(0.0f),make_float3(1.0f,0.0f,0.0f),0.5);                      //left wall
-    addWall(make_float3(0.0f),make_float3(0.0f,0.0f,1.0f),0.5);                      //back wall
-    addWall(make_float3(m_maxGridDim,0.0f,0.0f),make_float3(-1.0f,0.0f,0.0f),0.2); //right wall
+    addWall(make_float3(0.0f + m_smoothingLength),make_float3(0.0f,1.0f,0.0f),1);                      //floor
+    addWall(make_float3(0.0f),make_float3(1.0f,0.0f,0.0f),0.2);                      //left wall
+    addWall(make_float3(0.0f),make_float3(0.0f,0.0f,1.0f),0.2);                      //back wall
+    addWall(make_float3(m_maxGridDim-m_smoothingLength,0.0f,0.0f),make_float3(-1.0f,0.0f,0.0f),0.2); //right wall
     addWall(make_float3(0.0f,m_maxGridDim,0.0f),make_float3(0.0f,-1.0f,0.0f),0.2); //ceiling
     addWall(make_float3(0.0f,0.0f,m_maxGridDim),make_float3(0.0f,0.0f,-1.0f),0.2); //front wall
 
@@ -52,18 +52,17 @@ void SPHEngine::init(){
     std::vector<float3> particles;
     float3 tempF3;
     float tx,ty,tz;
-    float increment = m_smoothingLength / pow(m_numParticles,(1.f/3.f)) * m_maxGridDim;
-    increment/=2.0;
-    tx=tz=ty=m_maxGridDim/4.f;
+    float increment =  m_smoothingLength;
+    tx=tz=ty=increment;
     for(unsigned int i=0; i<m_numParticles; i++){
-        if(tx>=(3.f*m_maxGridDim/4.f) - increment){ tx=m_maxGridDim/4.f; tz+=increment;}
-        if(tz>=(3.f*m_maxGridDim/4.f) - increment){ tz=m_maxGridDim/4.f; ty+=increment;}
+        if(tx>=(m_maxGridDim - increment)){ tx=increment; tz+=increment*.5f;}
+        if(tz>=(m_maxGridDim/2 - increment)){ tz=increment; ty+=increment*.5f;}
 
         tempF3.x = tx;
         tempF3.y = ty;
         tempF3.z = tz;
         particles.push_back(tempF3);
-        tx+=increment;
+        tx+=increment*.5f;
     }
 
     glGenBuffers(1, &m_VBO);
@@ -154,25 +153,25 @@ void SPHEngine::update(float _timeStep){
     sortByKey(m_dhashKeys,d_posPtr,m_dVelBuffer,m_dAccBuffer,m_numParticles);
 
     //make sure all our threads are done
-    cudaThreadSynchronize();
+    //cudaThreadSynchronize();
 
     //total up our cell occupancy
     countCellOccupancy(m_dhashKeys,m_dCellOccBuffer,m_hashTableSize,m_numParticles,m_numThreadsPerBlock);
 
     //make sure all our threads are done
-    cudaThreadSynchronize();
+    //cudaThreadSynchronize();
 
     //Uses exclusive scan to count our cell occupancy and create our cell index buffer.
     createCellIdx(m_dCellOccBuffer,m_hashTableSize,m_dCellIndexBuffer);
 
     //make sure all our threads are done
-    cudaThreadSynchronize();
+    //cudaThreadSynchronize();
 
     //update our particle positions with navier stokes equations
-    fluidSolver(d_posPtr,m_dVelBuffer,m_dAccBuffer,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_numThreadsPerBlock,m_smoothingLength,_timeStep,m_mass,m_density,m_gasConstant,m_viscCoef,m_densWeightConst,m_pressWeightConst,m_viscWeightConst);
+    fluidSolver(d_posPtr,m_dVelBuffer,m_dAccBuffer,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_maxGridDim/m_smoothingLength,m_numThreadsPerBlock,m_smoothingLength,_timeStep,m_mass,m_density,m_gasConstant,m_viscCoef,m_densWeightConst,m_pressWeightConst,m_viscWeightConst);
 
     //make sure all our threads are done
-    cudaThreadSynchronize();
+    //cudaThreadSynchronize();
 
     //Test our particles for collision with our walls
     collisionDetectionSolver(m_dPlaneBuffer,m_numPlanes,d_posPtr,m_dVelBuffer,_timeStep,m_numParticles,m_numThreadsPerBlock);

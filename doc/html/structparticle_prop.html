@@ -101,14 +101,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a05f3d0c824b9eeae21c00f72ea414099"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a05f3d0c824b9eeae21c00f72ea414099"></a>
-float3&#160;</td><td class="memItemRight" valign="bottom"><b>pos</b></td></tr>
+float3&#160;</td><td class="memItemRight" valign="bottom"><b>pos</b> = make_float3(0.0f,0.0f,0.0f)</td></tr>
 <tr class="separator:a05f3d0c824b9eeae21c00f72ea414099"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa762b3243befb09ff17ccc4962af8dea"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa762b3243befb09ff17ccc4962af8dea"></a>
-float3&#160;</td><td class="memItemRight" valign="bottom"><b>vel</b></td></tr>
+float3&#160;</td><td class="memItemRight" valign="bottom"><b>vel</b> = make_float3(0.0f,0.0f,0.0f)</td></tr>
 <tr class="separator:aa762b3243befb09ff17ccc4962af8dea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac94355e032cf4dfc6fc432719ece340b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac94355e032cf4dfc6fc432719ece340b"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>density</b></td></tr>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>density</b> = 0</td></tr>
 <tr class="separator:ac94355e032cf4dfc6fc432719ece340b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d6be4f01b34250e2ba0fffb4c118216"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2d6be4f01b34250e2ba0fffb4c118216"></a>
+unsigned short int&#160;</td><td class="memItemRight" valign="bottom"><b>cellOcc</b></td></tr>
+<tr class="separator:a2d6be4f01b34250e2ba0fffb4c118216"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88168adfb6356607bf4f6336bc6404f7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a88168adfb6356607bf4f6336bc6404f7"></a>
+unsigned short int&#160;</td><td class="memItemRight" valign="bottom"><b>cellStartIdx</b></td></tr>
+<tr class="separator:a88168adfb6356607bf4f6336bc6404f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf226fa15e2e4a9327f30ac6ce755273"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abf226fa15e2e4a9327f30ac6ce755273"></a>
+unsigned short int&#160;</td><td class="memItemRight" valign="bottom"><b>sampleSum</b> = 0</td></tr>
+<tr class="separator:abf226fa15e2e4a9327f30ac6ce755273"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>a structure to hold the properties of our particle </p>
@@ -118,7 +127,7 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>density</b></td></tr
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 24 2015 01:47:19 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 24 2015 17:02:13 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

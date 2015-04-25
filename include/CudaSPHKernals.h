@@ -14,12 +14,14 @@
 
 
 //----------------------------------------------------------------------------------------------------------------------
-/// @brief a structure to hold the properties of our particle
+/// @brief a structure to hold the properties of our particle cell
 //----------------------------------------------------------------------------------------------------------------------
-struct particleProp {
+struct particleCellProp {
     float3 pos;
     float3 vel;
-    float density;
+    float density = 0;
+    float dst;
+    float3 cToNVec;
 };
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief a structure to hold the properties of our planes
@@ -93,7 +95,7 @@ void fillUint(unsigned int *_pointer, unsigned int _arraySize, unsigned int _fil
 /// @param _pressKernConst - constant part of the pressure kernal. Faster to compute once on CPU and load in.
 /// @param _viscKernConst - constant part of the viscosity kernal. Faster to compute once on CPU and load in.
 //----------------------------------------------------------------------------------------------------------------------
-void fluidSolver(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass = 1, float _restDensity = 1, float _gasConstant = 1, float _visCoef = 1, float _densKernConst = 1, float _pressKernConst = 1, float _viscKernConst = 1);
+void fluidSolver(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, int _hashResolution, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass = 1, float _restDensity = 1, float _gasConstant = 1, float _visCoef = 1, float _densKernConst = 1, float _pressKernConst = 1, float _viscKernConst = 1);
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Collision detection between particles and planes
 /// @param d_PlaneArray - pointer to device buffer of our planes information
