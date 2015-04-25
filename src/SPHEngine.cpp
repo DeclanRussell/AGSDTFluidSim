@@ -15,7 +15,7 @@ SPHEngine::SPHEngine(unsigned int _numParticles, unsigned int _volume, float _de
                                                                                          m_smoothingLength(0.3),
                                                                                          m_numPlanes(0),
                                                                                          m_gasConstant(3000.0f),
-                                                                                         m_viscCoef(1.0f)
+                                                                                         m_viscCoef(1000.f)
 
 {
     calcMass();
@@ -41,7 +41,7 @@ SPHEngine::~SPHEngine(){
 void SPHEngine::init(){
 
     //add some walls to keep our particles in our grid
-    addWall(make_float3(0.0f + m_smoothingLength),make_float3(0.0f,1.0f,0.0f),1);                      //floor
+    addWall(make_float3(0.0f + m_smoothingLength),make_float3(0.0f,1.0f,0.0f),0);                      //floor
     addWall(make_float3(0.0f),make_float3(1.0f,0.0f,0.0f),0.2);                      //left wall
     addWall(make_float3(0.0f),make_float3(0.0f,0.0f,1.0f),0.2);                      //back wall
     addWall(make_float3(m_maxGridDim-m_smoothingLength,0.0f,0.0f),make_float3(-1.0f,0.0f,0.0f),0.2); //right wall

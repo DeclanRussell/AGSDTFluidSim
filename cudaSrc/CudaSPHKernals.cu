@@ -4,13 +4,12 @@
 /// @date 08/03/2015
 /// @version 1.0
 //----------------------------------------------------------------------------------------------------------------------
-#include <math.h>
 #include <thrust/sort.h>
 #include <thrust/fill.h>
 #include <thrust/device_ptr.h>
 #include <thrust/scan.h>
 #include "CudaSPHKernals.h"
-#include "cutil_math.h"  //< some math operations with cuda types
+#include "helper_math.h"  //< some math operations with cuda types
 
 #define pi 3.14159265359f
 
@@ -50,7 +49,7 @@ __global__ void pointHash(unsigned int* d_hashArray, float3* d_posArray, unsigne
             normalizeCoords.z = 1;
         }
 
-        float3 gridPos = floor(normalizeCoords*resolution);
+        float3 gridPos = floorf(normalizeCoords*resolution);
 
         //give our particles a hash value
         d_hashArray[idx] = gridPos.x * resolution * resolution + gridPos.y * resolution + gridPos.z;
@@ -197,7 +196,6 @@ __global__ void fluidSolverPerCellKernal(float3 *d_posArray, float3 *d_velArray,
         float3 tensionSum = make_float3(0);
         float3 tensionSumTwo = make_float3(0);
         float3 acc = make_float3(0.0f,-9.8f,0.0f);
-
         {
             float massDivDen;
             float3 pressWeightTemp, viscWeightTemp;
@@ -509,15 +507,13 @@ __global__ void collisionDetKernal(planeProp *d_planeArray, unsigned int _numPla
                 pos = pos + vel * t;
                 newVel = newVel - (2.0f * dot(newVel,planes[i].normal) * planes[i].normal);
 
-                //newVel.x -= (1.0f - planes[i].restCoef) * newVel.x * abs(planes[i].normal.x);
-                //newVel.y -= (1.0f - planes[i].restCoef) * newVel.y * abs(planes[i].normal.y);
-                //newVel.z -= (1.0f - planes[i].restCoef) * newVel.z * abs(planes[i].normal.z);
+                newVel -= (1.0f - planes[i].restCoef) * newVel * fabs(planes[i].normal);
                 intersect = true;
             }
         }
 
         //if((pos.x!=pos.x)||(pos.y!=pos.y)||(pos.z!=pos.z)){
-            //printf("shit currentpos %f,%f,%f newPos %f,%f,%f vel %f,%f,%f\n",d_posArray[idx].x,d_posArray[idx].y,d_posArray[idx].z,pos.x,pos.y,pos.z,vel.x,vel.y,vel.z);
+            printf("newVel %f,%f,%f vel %f,%f,%f\n",newVel.x,newVel.y,newVel.z,vel.x,vel.y,vel.z);
         //}
 
         //if intersect has occured move our particle back and change our velocity

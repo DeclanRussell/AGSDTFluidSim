@@ -26,8 +26,7 @@ HEADERS += \
     include/OpenGLWidget.h \
     include/ui_mainwindow.h \
     include/CudaSPHKernals.h \
-    include/SPHEngine.h \
-    include/cutil_math.h
+    include/SPHEngine.h
 
 FORMS += \
     ui/mainwindow.ui
