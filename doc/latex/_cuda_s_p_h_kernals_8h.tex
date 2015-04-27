@@ -21,13 +21,13 @@ void \hyperlink{_cuda_s_p_h_kernals_8h_a5ef63636297ac3ddbc0866064a75e12d}{create
 \begin{DoxyCompactList}\small\item\em Creates an index array for our cells using thrusts exclusive scan. \end{DoxyCompactList}\item 
 void \hyperlink{_cuda_s_p_h_kernals_8h_a9fe88a9ff27a1ed8c403baba318ebe96}{create\-Hash\-Table} (unsigned int $\ast$d\-\_\-hash\-Array, float3 $\ast$d\-\_\-pos\-Array, unsigned int \-\_\-num\-Particles, float \-\_\-smoothing\-Length, float \-\_\-grid\-Size, int \-\_\-max\-Num\-Threads)
 \begin{DoxyCompactList}\small\item\em Creates a spatial hash key based on our particle postion. \end{DoxyCompactList}\item 
-void \hyperlink{_cuda_s_p_h_kernals_8h_adabb9ae527f09f6a5a5bd794a3d6228c}{sort\-By\-Key} (unsigned int $\ast$d\-\_\-hash\-Array, float3 $\ast$d\-\_\-pos\-Array, float3 $\ast$d\-\_\-vel\-Array, float3 $\ast$d\-\_\-acc\-Array, unsigned int \-\_\-num\-Particles)
+void \hyperlink{_cuda_s_p_h_kernals_8h_a1541f8b1ee73799a0cecc7030773a6a9}{sort\-By\-Key} (unsigned int $\ast$d\-\_\-hash\-Array, float3 $\ast$d\-\_\-pos\-Array, float3 $\ast$d\-\_\-vel\-Array, unsigned int \-\_\-num\-Particles)
 \begin{DoxyCompactList}\small\item\em Sorts our hash key buffer and postion buffer such that points of the same key occupy contiguous memory. \end{DoxyCompactList}\item 
 void \hyperlink{_cuda_s_p_h_kernals_8h_a07f9ac02673aedd19b3dec84e24180d5}{count\-Cell\-Occupancy} (unsigned int $\ast$d\-\_\-hash\-Array, unsigned int $\ast$d\-\_\-cell\-Occ\-Array, unsigned int \-\_\-hash\-Table\-Size, unsigned int \-\_\-num\-Points, unsigned int \-\_\-max\-Num\-Threads)
 \begin{DoxyCompactList}\small\item\em Computes the particle occupancy of our hash cell. \end{DoxyCompactList}\item 
 void \hyperlink{_cuda_s_p_h_kernals_8h_a32490018a3312806721e0576ff6f8c7b}{fill\-Uint} (unsigned int $\ast$\-\_\-pointer, unsigned int \-\_\-array\-Size, unsigned int \-\_\-fill)
 \begin{DoxyCompactList}\small\item\em simple function so that we can fill a buffer with unsigned ints. \end{DoxyCompactList}\item 
-void \hyperlink{_cuda_s_p_h_kernals_8h_a090789b1c38ce9340f0e6498fb9398dc}{fluid\-Solver} (float3 $\ast$d\-\_\-pos\-Array, float3 $\ast$d\-\_\-vel\-Array, float3 $\ast$d\-\_\-acc\-Array, unsigned int $\ast$d\-\_\-cell\-Occ\-Array, unsigned int $\ast$d\-\_\-cell\-Indx\-Array, unsigned int \-\_\-hash\-Table\-Size, int \-\_\-hash\-Resolution, unsigned int \-\_\-max\-Num\-Threads, float \-\_\-smoothing\-Length, float \-\_\-timestep, float \-\_\-particle\-Mass=1, float \-\_\-rest\-Density=1, float \-\_\-gas\-Constant=1, float \-\_\-vis\-Coef=1, float \-\_\-dens\-Kern\-Const=1, float \-\_\-press\-Kern\-Const=1, float \-\_\-visc\-Kern\-Const=1)
+void \hyperlink{_cuda_s_p_h_kernals_8h_a7afbd8f9fa04a6599d456b4336657677}{fluid\-Solver} (float3 $\ast$d\-\_\-pos\-Array, float3 $\ast$d\-\_\-vel\-Array, unsigned int $\ast$d\-\_\-cell\-Occ\-Array, unsigned int $\ast$d\-\_\-cell\-Indx\-Array, unsigned int \-\_\-hash\-Table\-Size, int \-\_\-hash\-Resolution, unsigned int \-\_\-max\-Num\-Threads, float \-\_\-smoothing\-Length, float \-\_\-timestep, float \-\_\-particle\-Mass=1, float \-\_\-rest\-Density=1, float \-\_\-gas\-Constant=1, float \-\_\-vis\-Coef=1, float \-\_\-dens\-Kern\-Const=1, float \-\_\-press\-Kern\-Const=1, float \-\_\-visc\-Kern\-Const=1)
 \begin{DoxyCompactList}\small\item\em Solver function that will call our solver kernal to calculate the new positions of the particles in. \end{DoxyCompactList}\item 
 void \hyperlink{_cuda_s_p_h_kernals_8h_a21ea2a200d5d727e0fd1d459fe27118a}{collision\-Detection\-Solver} (\hyperlink{structplane_prop}{plane\-Prop} $\ast$d\-\_\-plane\-Array, unsigned int \-\_\-num\-Planes, float3 $\ast$d\-\_\-pos\-Array, float3 $\ast$d\-\_\-vel\-Array, float \-\_\-time\-Step, unsigned int \-\_\-num\-Particles, unsigned int \-\_\-max\-Num\-Threads)
 \begin{DoxyCompactList}\small\item\em Collision detection between particles and planes. \end{DoxyCompactList}\end{DoxyCompactItemize}
@@ -183,13 +183,12 @@ simple function so that we can fill a buffer with unsigned ints.
 {\em \-\_\-fill} & -\/ what you wish to fill it with \\
 \hline
 \end{DoxyParams}
-\hypertarget{_cuda_s_p_h_kernals_8h_a090789b1c38ce9340f0e6498fb9398dc}{\index{Cuda\-S\-P\-H\-Kernals.\-h@{Cuda\-S\-P\-H\-Kernals.\-h}!fluid\-Solver@{fluid\-Solver}}
+\hypertarget{_cuda_s_p_h_kernals_8h_a7afbd8f9fa04a6599d456b4336657677}{\index{Cuda\-S\-P\-H\-Kernals.\-h@{Cuda\-S\-P\-H\-Kernals.\-h}!fluid\-Solver@{fluid\-Solver}}
 \index{fluid\-Solver@{fluid\-Solver}!CudaSPHKernals.h@{Cuda\-S\-P\-H\-Kernals.\-h}}
 \subsubsection[{fluid\-Solver}]{\setlength{\rightskip}{0pt plus 5cm}void fluid\-Solver (
 \begin{DoxyParamCaption}
 \item[{float3 $\ast$}]{d\-\_\-pos\-Array, }
 \item[{float3 $\ast$}]{d\-\_\-vel\-Array, }
-\item[{float3 $\ast$}]{d\-\_\-acc\-Array, }
 \item[{unsigned int $\ast$}]{d\-\_\-cell\-Occ\-Array, }
 \item[{unsigned int $\ast$}]{d\-\_\-cell\-Indx\-Array, }
 \item[{unsigned int}]{\-\_\-hash\-Table\-Size, }
@@ -205,7 +204,7 @@ simple function so that we can fill a buffer with unsigned ints.
 \item[{float}]{\-\_\-press\-Kern\-Const = {\ttfamily 1}, }
 \item[{float}]{\-\_\-visc\-Kern\-Const = {\ttfamily 1}}
 \end{DoxyParamCaption}
-)}}\label{_cuda_s_p_h_kernals_8h_a090789b1c38ce9340f0e6498fb9398dc}
+)}}\label{_cuda_s_p_h_kernals_8h_a7afbd8f9fa04a6599d456b4336657677}
 
 
 Solver function that will call our solver kernal to calculate the new positions of the particles in. 
@@ -245,17 +244,16 @@ our fluid simulation.
 {\em \-\_\-visc\-Kern\-Const} & -\/ constant part of the viscosity kernal. Faster to compute once on C\-P\-U and load in. \\
 \hline
 \end{DoxyParams}
-\hypertarget{_cuda_s_p_h_kernals_8h_adabb9ae527f09f6a5a5bd794a3d6228c}{\index{Cuda\-S\-P\-H\-Kernals.\-h@{Cuda\-S\-P\-H\-Kernals.\-h}!sort\-By\-Key@{sort\-By\-Key}}
+\hypertarget{_cuda_s_p_h_kernals_8h_a1541f8b1ee73799a0cecc7030773a6a9}{\index{Cuda\-S\-P\-H\-Kernals.\-h@{Cuda\-S\-P\-H\-Kernals.\-h}!sort\-By\-Key@{sort\-By\-Key}}
 \index{sort\-By\-Key@{sort\-By\-Key}!CudaSPHKernals.h@{Cuda\-S\-P\-H\-Kernals.\-h}}
 \subsubsection[{sort\-By\-Key}]{\setlength{\rightskip}{0pt plus 5cm}void sort\-By\-Key (
 \begin{DoxyParamCaption}
 \item[{unsigned int $\ast$}]{d\-\_\-hash\-Array, }
 \item[{float3 $\ast$}]{d\-\_\-pos\-Array, }
 \item[{float3 $\ast$}]{d\-\_\-vel\-Array, }
-\item[{float3 $\ast$}]{d\-\_\-acc\-Array, }
 \item[{unsigned int}]{\-\_\-num\-Particles}
 \end{DoxyParamCaption}
-)}}\label{_cuda_s_p_h_kernals_8h_adabb9ae527f09f6a5a5bd794a3d6228c}
+)}}\label{_cuda_s_p_h_kernals_8h_a1541f8b1ee73799a0cecc7030773a6a9}
 
 
 Sorts our hash key buffer and postion buffer such that points of the same key occupy contiguous memory. 

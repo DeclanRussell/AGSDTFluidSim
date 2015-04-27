@@ -430,8 +430,8 @@ void OpenGLWidget::initializeGL(){
 
 
     //allocate some space for our SPHEngine
-    m_SPHEngine = new SPHEngine(10000,30.0f,998.2f,10.f);
-    m_SPHEngine->setGasConstant(50);
+    m_SPHEngine = new SPHEngine(5000,15.0f,998.2f,10.f);
+    m_SPHEngine->setGasConstant(1);
 
     m_currentTime = m_currentTime.currentTime();
     startTimer(0);

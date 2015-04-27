@@ -57,7 +57,7 @@ void createHashTable(unsigned int* d_hashArray, float3* d_posArray, unsigned int
 /// @param d_accArray - pointer to our particle acceleration buffer
 /// @param _numParticles - the number of particels in our buffer
 //----------------------------------------------------------------------------------------------------------------------
-void sortByKey(unsigned int* d_hashArray, float3* d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int _numParticles);
+void sortByKey(unsigned int* d_hashArray, float3* d_posArray, float3 *d_velArray, unsigned int _numParticles);
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Computes the particle occupancy of our hash cell
 /// @param d_hashArray - pointer to our hash key buffer
@@ -94,7 +94,7 @@ void fillUint(unsigned int *_pointer, unsigned int _arraySize, unsigned int _fil
 /// @param _pressKernConst - constant part of the pressure kernal. Faster to compute once on CPU and load in.
 /// @param _viscKernConst - constant part of the viscosity kernal. Faster to compute once on CPU and load in.
 //----------------------------------------------------------------------------------------------------------------------
-void fluidSolver(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, int _hashResolution, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass = 1, float _restDensity = 1, float _gasConstant = 1, float _visCoef = 1, float _densKernConst = 1, float _pressKernConst = 1, float _viscKernConst = 1);
+void fluidSolver(float3 *d_posArray, float3 *d_velArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, int _hashResolution, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass = 1, float _restDensity = 1, float _gasConstant = 1, float _visCoef = 1, float _densKernConst = 1, float _pressKernConst = 1, float _viscKernConst = 1);
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Collision detection between particles and planes
 /// @param d_PlaneArray - pointer to device buffer of our planes information

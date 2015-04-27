@@ -15,7 +15,7 @@ SPHEngine::SPHEngine(unsigned int _numParticles, unsigned int _volume, float _de
                                                                                          m_smoothingLength(0.3f),
                                                                                          m_numPlanes(0),
                                                                                          m_gasConstant(3000.0f),
-                                                                                         m_viscCoef(1000.f)
+                                                                                         m_viscCoef(1.f)
 
 {
     calcMass();
@@ -46,7 +46,7 @@ void SPHEngine::init(){
     addWall(make_float3(0.0f,0.0f,m_smoothingLength),make_float3(0.0f,0.0f,1.0f),0.2f);               //back wall
     addWall(make_float3(m_maxGridDim-m_smoothingLength,0.0f,0.0f),make_float3(-1.0f,0.0f,0.0f),0.2f); //right wall
     addWall(make_float3(0.0f,m_maxGridDim-m_smoothingLength,0.0f),make_float3(0.0f,-1.0f,0.0f),0.2f); //ceiling
-    addWall(make_float3(0.0f,0.0f,m_maxGridDim-m_smoothingLength),make_float3(0.0f,0.0f,-1.0f),0.2f); //front wall
+    addWall(make_float3(0.0f,0.0f,m_maxGridDim/2-m_smoothingLength),make_float3(0.0f,0.0f,-1.0f),0.2f); //front wall
 
     //create our initial particles
     std::vector<float3> particles;
@@ -56,12 +56,12 @@ void SPHEngine::init(){
     tx=tz=ty=m_smoothingLength;
     for(unsigned int i=0; i<m_numParticles; i++){
         if(tx>=(m_maxGridDim - m_smoothingLength)){ tx=m_smoothingLength; ty+=increment;}
-        if(tz>=(m_maxGridDim - m_smoothingLength)){ tz=m_smoothingLength; ty+=increment;}
+        if(tz>=(m_maxGridDim/4 - m_smoothingLength)){ tz=m_smoothingLength; ty+=increment;}
         tempF3.x = tx;
         tempF3.y = ty;
         tempF3.z = tz;
         particles.push_back(tempF3);
-        tx+=increment*.5f;
+        tx+=increment;
     }
 
     glGenBuffers(1, &m_VBO);
@@ -96,13 +96,11 @@ void SPHEngine::init(){
     cudaMalloc(&m_dhashKeys, m_numParticles*sizeof(unsigned int));
     cudaMalloc(&m_dCellOccBuffer, m_hashTableSize*sizeof(unsigned int));
     cudaMalloc(&m_dVelBuffer, m_numParticles*sizeof(float3));
-    cudaMalloc(&m_dAccBuffer, m_numParticles*sizeof(float3));
     //initialize them with zeros
     fillUint(m_dCellOccBuffer,m_hashTableSize,0);
     float3 x[m_numParticles];
     for(unsigned int i=0;i<m_numParticles;i++)x[i]=make_float3(0,0,0);
     cudaMemcpy(m_dVelBuffer, x, m_numParticles * sizeof(float3), cudaMemcpyHostToDevice);
-    cudaMemcpy(m_dAccBuffer, x, m_numParticles * sizeof(float3), cudaMemcpyHostToDevice);
     //allocate space for our cell index buffer
     cudaMalloc(&m_dCellIndexBuffer, m_hashTableSize*sizeof(unsigned int));
     //initialize it with zeros
@@ -149,7 +147,7 @@ void SPHEngine::update(float _timeStep){
 
     //sort our particle postions based on there key to make
     //points of the same key occupy contiguous memory
-    sortByKey(m_dhashKeys,d_posPtr,m_dVelBuffer,m_dAccBuffer,m_numParticles);
+    sortByKey(m_dhashKeys,d_posPtr,m_dVelBuffer,m_numParticles);
 
     //make sure all our threads are done
     cudaThreadSynchronize();
@@ -167,7 +165,7 @@ void SPHEngine::update(float _timeStep){
     cudaThreadSynchronize();
 
     //update our particle positions with navier stokes equations
-    fluidSolver(d_posPtr,m_dVelBuffer,m_dAccBuffer,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_maxGridDim/m_smoothingLength,m_numThreadsPerBlock,m_smoothingLength,_timeStep,m_mass,m_density,m_gasConstant,m_viscCoef,m_densWeightConst,m_pressWeightConst,m_viscWeightConst);
+    fluidSolver(d_posPtr,m_dVelBuffer,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_maxGridDim/m_smoothingLength,m_numThreadsPerBlock,m_smoothingLength,_timeStep,100,m_density,m_gasConstant,m_viscCoef,m_densWeightConst,m_pressWeightConst,m_viscWeightConst);
 
     //make sure all our threads are done
     cudaThreadSynchronize();
