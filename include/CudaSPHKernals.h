@@ -20,8 +20,7 @@ struct particleCellProp {
     float3 pos;
     float3 vel;
     float density = 0;
-    float dst;
-    float3 cToNVec;
+    int idx;
 };
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief a structure to hold the properties of our planes

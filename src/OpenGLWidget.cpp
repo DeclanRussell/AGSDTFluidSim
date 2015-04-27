@@ -430,7 +430,7 @@ void OpenGLWidget::initializeGL(){
 
 
     //allocate some space for our SPHEngine
-    m_SPHEngine = new SPHEngine(50000,1000,998.2,10);
+    m_SPHEngine = new SPHEngine(10000,30.0f,998.2f,10.f);
     m_SPHEngine->setGasConstant(50);
 
     m_currentTime = m_currentTime.currentTime();
@@ -486,7 +486,8 @@ void OpenGLWidget::paintGL(){
 
     if(m_update){
         //update our fluid simulation with our time step
-        m_SPHEngine->update(((float)msecsPassed/1000.0) * m_playBackSpeed);
+        m_SPHEngine->update((0.004f) * m_playBackSpeed);
+        //m_SPHEngine->update(((float)msecsPassed/1000.f) * m_playBackSpeed);
     }
 
     // create the rotation matrices

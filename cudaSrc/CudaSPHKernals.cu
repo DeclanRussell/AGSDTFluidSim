@@ -77,8 +77,11 @@ __global__ void countCellOccKernal(unsigned int *d_hashArray, unsigned int *d_ce
 /// @param _densKernCosnt - constant part of our kernal. Easier to calculate once on CPU and have loaded into device kernal.
 /// @return return the weighting that our neighbouring particle has on our current particle
 __device__ float densityWeighting(float _dst,float _smoothingLength, float _densKernConst){
-    float temp = (_smoothingLength * _smoothingLength) - (_dst*_dst);
-    float weighting = _densKernConst * temp * temp * temp;
+    float weighting = 0;
+    if(_dst>0 && _dst<=_smoothingLength){
+        float temp = (_smoothingLength * _smoothingLength) - (_dst*_dst);
+        weighting = _densKernConst * temp * temp * temp;
+    }
     return weighting;
 }
 //----------------------------------------------------------------------------------------------------------------------
@@ -89,10 +92,10 @@ __device__ float densityWeighting(float _dst,float _smoothingLength, float _dens
 /// @param _pressKernCosnt - constant part of our kernal. Easier to calculate once on CPU and have loaded into device kernal.
 /// @return return the weighting that our neighbouring particle has on our current particle
 __device__ float3 pressureWeighting(float3 _r, float _dst,float _smoothingLength, float _pressKernConst){
-    float weighting = 0;
+    float weighting = 0.f;
     if(_dst>0 && _dst<=_smoothingLength){
         weighting = _pressKernConst * (_smoothingLength-_dst) * (_smoothingLength-_dst);
-        _r /= _dst;
+        _r/=_dst;
     }
     _r *= weighting;
     return _r;
@@ -113,7 +116,7 @@ __device__ float3 viscosityWeighting(float3 _r, float _dst,float _smoothingLengt
     return _r;
 }
 //----------------------------------------------------------------------------------------------------------------------
-__global__ void fluidSolverPerCellKernal(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, int _hashResolution, int _hashTableSize, float _smoothingLength, float _timestep, float _particleMass, float _restDensity, float _gasConstant, float _visCoef, float densKernConst, float pressKernConst, float viscKernConst){
+__global__ void fluidSolverPerCellKernal(int _maxSamples, float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, int _hashResolution, int _hashTableSize, float _smoothingLength, float _timestep, float _particleMass, float _restDensity, float _gasConstant, float _visCoef, float densKernConst, float pressKernConst, float viscKernConst){
 
 
     // In this solver we will be exploiting the shared memory of the this block
@@ -133,270 +136,108 @@ __global__ void fluidSolverPerCellKernal(float3 *d_posArray, float3 *d_velArray,
         cellStartIdx = d_cellIndxArray[blockIdx.x];
     }
     __syncthreads();
-    if(!cellOcc) return;
     //If there is nothing in the cell its faster if we dont declare this shared
     //memory as just allocating it takes time!
-    __shared__ particleCellProp nParticleData[100];
+    if(!cellOcc) return;
+    extern __shared__ particleCellProp nParticleData[];
+    sampleSum = min(_maxSamples,cellOcc);
 
+    int i;
     if(threadIdx.x==0){
         //load in our neighbouring cells
         int resX = _hashResolution * _hashResolution;
-        for(int i=0;i<27;i++){
-            unsigned int x = floor((float)i/(float)9);
-            unsigned int y = floor((float)(i -9*x)/(float)3);
-            unsigned int nCellIdx = blockIdx.x +  (x-1u) * resX + (y-1u) * _hashResolution + (i%3-1);
+        unsigned int x;
+        unsigned int y;
+        unsigned int nCellIdx;
+        int j;
+        for(i=0;i<27;i++){
+            if(sampleSum>=_maxSamples) break;
+            x = floor((float)i/(float)9);
+            y = floor((float)(i -9*x)/(float)3);
+            nCellIdx = blockIdx.x +  (x-1u) * resX + (y-1u) * _hashResolution + (i%3-1);
             if(nCellIdx>0&&nCellIdx<_hashTableSize){
+                if(nCellIdx==blockIdx.x) continue;
                 int nCellStart = d_cellIndxArray[nCellIdx];
                 //see how much space we have left in our shared memory
                 int nStart = sampleSum;
-                int dif = min(100-nStart,d_cellOccArray[nCellIdx]);
+                int dif = min(_maxSamples-nStart,d_cellOccArray[nCellIdx]);
                 sampleSum+=dif;
                 //load in our neightbour data
-                for(int i=0; i<dif;i++){
-                    nParticleData[nStart+i].pos = d_posArray[nCellStart+i];
-                }
-                for(int i=0; i<dif;i++){
-                    nParticleData[nStart+i].vel = d_velArray[nCellStart+i];
+                for(j=0; j<dif;j++){
+                    nParticleData[nStart+j].idx = nCellStart+j;
                 }
             }
-            if(sampleSum>=100) break;
+        }
+    }
+    __syncthreads();
+    float3 curPartPos;
+    float3 curPartVel;
+    int curPartIdx;
+    if(threadIdx.x<sampleSum){
+        if(threadIdx.x<cellOcc){
+            curPartIdx = cellStartIdx+threadIdx.x;
+            curPartPos = nParticleData[threadIdx.x].pos = d_posArray[curPartIdx];
+            curPartVel = nParticleData[threadIdx.x].vel = d_velArray[curPartIdx];
+        }
+        else{
+            curPartPos = nParticleData[threadIdx.x].pos = d_posArray[nParticleData[threadIdx.x].idx];
+            curPartVel = nParticleData[threadIdx.x].vel = d_velArray[nParticleData[threadIdx.x].idx];
         }
     }
 
-    __syncthreads();
-
+    // Calculate the density of our particle
+    float density = 0.0;
+    for(i=0;i<sampleSum; i++){
+        density += _particleMass * densityWeighting(length(curPartPos-nParticleData[i].pos),_smoothingLength,densKernConst);
+    }
+    //load result into our shared memory
+    if(threadIdx.x<sampleSum){
+        nParticleData[threadIdx.x].density = density;
+    }
 
     //make sure that what were going to access is in our range
     if(threadIdx.x<cellOcc){
-
-        int curPartIdx = cellStartIdx + threadIdx.x;
-        //load our current particle information
-        float3 curPartPos = d_posArray[curPartIdx];
-        float3 curPartVel = d_velArray[curPartIdx];
-
-
-        // Calculate the density of our particle
-        // Possibly could optimise this with more dynamic parralism.
-        // However for such a small loop this may not actually make
-        // much difference. We also will have to take into count
-        // kernal launch times & memory access.
-        float density = 0.0;
-        int i;
-        for(i=0;i<sampleSum; i++){
-            nParticleData[i].cToNVec = curPartPos - nParticleData[i].pos;
-            nParticleData[i].dst = length(nParticleData[i].cToNVec);
-            density += _particleMass * densityWeighting(nParticleData[i].dst,_smoothingLength,densKernConst);
-        }
-        if(threadIdx.x<sampleSum){
-            nParticleData[threadIdx.x].density = density;
-        }
-
+        //multiplication faster than divide so lets just do it once
+        float invDensity = 1.0f/density;
+        __syncthreads();
         //Once this is done we can finally do some navier-stokes!!
         float3 viscosityForce = make_float3(0.0f,0.0f,0.0f);
         float3 tensionSum = make_float3(0);
         float3 tensionSumTwo = make_float3(0);
-        float3 acc = make_float3(0.0f,-9.8f,0.0f);
+        float3 acc = make_float3(0.0f,0.0f,0.0f);
         {
             float massDivDen;
-            float3 pressWeightTemp, viscWeightTemp;
-            float currPressTemp,nPressTemp,p1,p2,p1a;
+            float3 pressWeightTemp, viscWeightTemp, r;
+            float currPressTemp,nPressTemp,p1,p2,dst;
+            //calculate the pressure force of our current particle
+            currPressTemp = (_gasConstant * (density - _restDensity));
+            p1 = (currPressTemp*invDensity*invDensity);
             for(i=0;i<sampleSum;i++){
-
-                //calculate the pressure force
-                currPressTemp = (_gasConstant * (density - _restDensity));
-                p1 = (1.0f/currPressTemp);
-                //printf("p1 %f den %f rest %f gs %f\n",p1,density,_restDensity,_gasConstant);
-    //            printf("den %f rest %f gs %f",density,_restDensity,_gasConstant);
-    //            p1a = (1.0f/currPressTemp);
-                nPressTemp = (_gasConstant * (nParticleData[i].density - _restDensity));
-                p2 = (1.0f/nPressTemp);
-                //printf("p2 %f den %f rest %f gs %f\n",p2,nParticleData[i].density,_restDensity,_gasConstant);
-                pressWeightTemp = pressureWeighting(nParticleData[i].cToNVec,nParticleData[i].dst,_smoothingLength,pressKernConst);
-                acc -= ( p1 + p2 ) * _particleMass * pressWeightTemp;
-
-
-                //calculate our viscosity force
-                //if the density is zero then we will get NAN's in our devide
-                //when density is very small viscosity becomes very unstable so best to have a limiter
-                if(nParticleData[i].density>0){
-                    viscWeightTemp = viscosityWeighting(nParticleData[i].cToNVec,nParticleData[i].dst,_smoothingLength,viscKernConst);
-                    viscosityForce += (curPartVel - nParticleData[i].vel) * (_particleMass/nParticleData[i].density) * viscWeightTemp;
-                    //this is needed for surface tension
+                //cuda seems to struggle when testing for >0 No idea why
+                if(nParticleData[i].density>1 && density>1){
+                //if(nParticleData[i].density>0 && density>0){
+                    //calculate the pressure force of our neighbour particle
+                    nPressTemp = (_gasConstant * (nParticleData[i].density - _restDensity));
+                    p2 = (nPressTemp/(nParticleData[i].density*nParticleData[i].density));
+                    r = curPartPos - nParticleData[i].pos;
+                    dst = length(r);
+                    pressWeightTemp = pressureWeighting(r,dst,_smoothingLength,pressKernConst);
+                    acc -= ( p1 + p2 ) * pressWeightTemp;
+                    //if(acc.x!=acc.x){
+                    //    printf("balls acc %f,%f,%f cp %f cd %f cid %f np %f \nnd %f m %f pw %f,%f,%f cTn %f,%f,%f\n",acc.x,acc.y,acc.z,currPressTemp,density,invDensity,nPressTemp,nParticleData[i].density,_restDensity,_particleMass,pressWeightTemp.x,pressWeightTemp.y,pressWeightTemp.z,r.x,r.y,r.z);
+                    //    if(density>0) printf("cd %f\n",density);
+                    //}
+                    //if(length(acc)>12)printf("acc %f,%f,%f  den %f nDen %f _dst %f w%f,%f,%f   cellOcc %d  nIdex %d\n",acc.x,acc.y,acc.z,density,nParticleData[i].density,dst,pressWeightTemp.x,pressWeightTemp.y,pressWeightTemp.z,cellOcc,i);
+                    //calculate our viscosity force
+                    viscWeightTemp = viscosityWeighting(r,dst,_smoothingLength,viscKernConst);
                     massDivDen = _particleMass/nParticleData[i].density;
+                    viscosityForce += (curPartVel - nParticleData[i].vel) * massDivDen * viscWeightTemp;
+                    //this is needed for surface tension
                     tensionSum += massDivDen * pressWeightTemp;
                     tensionSumTwo += massDivDen * viscWeightTemp;
                 }
             }
         }
-
-
-
-        //calculate our surface tension
-        float3 tensionForce = make_float3(0);
-        {
-            float nLength = length(tensionSumTwo);
-            //1.0 is currently our threshold as tension becomes very unstable as n approaches 0
-            if(nLength>0.5){
-                //this also needs to be multipied by our tension contant
-                tensionForce = (tensionSumTwo/nLength) * tensionSum;
-            }
-        }
-
-
-
-//        if(samples>1){
-        viscosityForce *= _visCoef;
-        if(density>0) acc+= (viscosityForce /*+ tensionForce*/)/density;
-//        }
-
-
-
-        //calculate our new velocity
-        //euler intergration (Rubbish over large time steps)
-//        float3 newVel = curPartVel + (acc * _timestep);
-//        float3 newPos = curPartPos + (newVel * _timestep);
-
-        //leap frog integration
-        //more stable if we move by half steps than full
-        float3 velHalfBack = curPartVel - 0.5f * _timestep * d_accArray[curPartIdx];
-        float3 velHalfFor = velHalfBack + _timestep * acc;
-
-
-        //XSPH velocity correction
-        //can be found in Paiva, A., Petronetto, F., Lewiner, T. and Tavares, G. (2009).
-        //Particle-based viscoplastic fluid/solid simulation,
-        //To achieve this lets take advantage of our shared memory again
-        if(threadIdx.x<sampleSum){
-            nParticleData[threadIdx.x].vel = velHalfFor;
-        }
-        __syncthreads();
-        float3 newVel = make_float3(.0f);
-        for(i=0;i<sampleSum;i++){
-            if((density>0)&&(nParticleData[i].density>0))
-            newVel += (2.0f*_particleMass/(density+nParticleData[i].density)) * (nParticleData[i].vel - velHalfBack) * densityWeighting(nParticleData[i].dst,_smoothingLength,densKernConst);
-        }
-
-        newVel = velHalfFor + 0.1f * newVel;
-        float3 newPos = curPartPos + (newVel * _timestep);
-
-//        if(newPos.x!=newPos.x){
-//            printf("shit currentpos %f,%f,%f newPos %f,%f,%f\n pressure force %f,%f,%f samples %d\n",curPartPos.x,curPartPos.y,curPartPos.z,newPos.x,newPos.y,newPos.z,pressureForce.x,pressureForce.y,pressureForce.z,samples);
-//            printf("vel: %f,%f,%f\n",newVel.x,newVel.y,newVel.z);
-//            printf("timeStep %f acc %f,%f,%f\n\n",_timestep,acc.x,acc.y,acc.z);
-//        }
-        //update our particle positin and velocity
-        d_velArray[curPartIdx] = newVel;
-        d_posArray[curPartIdx] = newPos;
-        d_accArray[curPartIdx] = acc;
-
-
-    }
-}
-////----------------------------------------------------------------------------------------------------------------------
-//__global__ void fluidSolverPerCellKernalDP(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _cellOcc, unsigned int _cellIndx, int _hashResolution, int _hashTableSize, float _smoothingLength, float _timestep, float _particleMass, float _restDensity, float _gasConstant, float _visCoef, float densKernConst, float pressKernConst, float viscKernConst){
-
-
-//    // In this solver we will be exploiting the shared memory of the this block
-//    // to store our neighbouring particles properties rather than loading it
-//    // from a buffer.
-//    // This gives us great speed advantages! So hold on to your seats!
-//    // Firstly lets declare our shared piece of memory
-//    __shared__ unsigned short int sampleSum;
-//    __shared__ particleCellProp nParticleData[100];
-
-//    if(threadIdx.x==0){
-//        sampleSum = 0;
-//        //load in our neighbouring cells
-//        int resX = _hashResolution * _hashResolution;
-//        for(int i=0;i<27;i++){
-//            unsigned int x = floor((float)i/(float)9);
-//            unsigned int y = floor((float)(i -9*x)/(float)3);
-//            unsigned int nCellIdx = _cellIndx +  (x-1u) * resX + (y-1u) * _hashResolution + (i%3-1);
-//            if(nCellIdx>0&&nCellIdx<_hashTableSize){
-//                int nCellStart = d_cellIndxArray[nCellIdx];
-//                //see how much space we have left in our shared memory
-//                int nStart = sampleSum;
-//                int dif = min(100-nStart,d_cellOccArray[nCellIdx]);
-//                sampleSum+=dif;
-//                //load in our neightbour data
-//                for(int i=0; i<dif;i++){
-//                    nParticleData[nStart+i].pos = d_posArray[nCellStart+i];
-//                }
-//                for(int i=0; i<dif;i++){
-//                    nParticleData[nStart+i].vel = d_velArray[nCellStart+i];
-//                }
-//            }
-//            if(sampleSum>=100) break;
-//        }
-//    }
-
-//    __syncthreads();
-
-
-//    //make sure that what were going to access is in our range
-//    if(threadIdx.x<_cellOcc){
-
-//        int curPartIdx = _cellIndx + threadIdx.x;
-//        //load our current particle information
-//        float3 curPartPos = d_posArray[curPartIdx];
-//        float3 curPartVel = d_velArray[curPartIdx];
-
-
-//        // Calculate the density of our particle
-//        // Possibly could optimise this with more dynamic parralism.
-//        // However for such a small loop this may not actually make
-//        // much difference. We also will have to take into count
-//        // kernal launch times & memory access.
-//        float density = 0.0;
-//        int i;
-//        for(i=0;i<sampleSum; i++){
-//            density += _particleMass * densityWeighting(curPartPos,nParticleData[i].pos,_smoothingLength,densKernConst);
-//        }
-//        if(threadIdx.x<sampleSum){
-//            nParticleData[threadIdx.x].density = density;
-//        }
-
-//        //Once this is done we can finally do some navier-stokes!!
-//        float3 viscosityForce = make_float3(0.0f,0.0f,0.0f);
-//        float3 tensionSum = make_float3(0);
-//        float3 tensionSumTwo = make_float3(0);
-//        float3 acc = make_float3(0.0f,-9.8f,0.0f);
-
-//        {
-//            float massDivDen;
-//            float3 pressWeightTemp, viscWeightTemp;
-//            float currPressTemp,nPressTemp,p1,p2,p1a;
-//            for(i=0;i<sampleSum;i++){
-//                if(threadIdx.x == i) continue;
-
-
-//                //calculate the pressure force
-//                currPressTemp = (_gasConstant * (density - _restDensity));
-//                p1 = (1.0f/currPressTemp);
-//                //printf("p1 %f den %f rest %f gs %f\n",p1,density,_restDensity,_gasConstant);
-//    //            printf("den %f rest %f gs %f",density,_restDensity,_gasConstant);
-//    //            p1a = (1.0f/currPressTemp);
-//                nPressTemp = (_gasConstant * (nParticleData[i].density - _restDensity));
-//                p2 = (1.0f/nPressTemp);
-//                //printf("p2 %f den %f rest %f gs %f\n",p2,nParticleData[i].density,_restDensity,_gasConstant);
-//                pressWeightTemp = pressureWeighting(curPartPos,nParticleData[i].pos,_smoothingLength,pressKernConst);
-//                acc -= ( p1 + p2 ) * _particleMass * pressWeightTemp;
-
-
-//                //calculate our viscosity force
-//                //if the density is zero then we will get NAN's in our devide
-//                //when density is very small viscosity becomes very unstable so best to have a limiter
-//                if(nParticleData[i].density>0){
-//                    viscWeightTemp = viscosityWeighting(curPartPos,nParticleData[i].pos,_smoothingLength,viscKernConst);
-//                    viscosityForce += (curPartVel - nParticleData[i].vel) * (_particleMass/nParticleData[i].density) * viscWeightTemp;
-//                    //this is needed for surface tension
-//                    massDivDen = _particleMass/nParticleData[i].density;
-//                    tensionSum += massDivDen * pressWeightTemp;
-//                    tensionSumTwo += massDivDen * viscWeightTemp;
-//                }
-//            }
-//        }
-
 
 
 //        //calculate our surface tension
@@ -410,70 +251,51 @@ __global__ void fluidSolverPerCellKernal(float3 *d_posArray, float3 *d_velArray,
 //            }
 //        }
 
+        acc*=_particleMass;
+        acc+=make_float3(0.0f,-9.8f,0.0f);
+        //if(density>0) acc+= (viscosityForce*_visCoef /*+ tensionForce*/)*invDensity;
 
 
-////        if(samples>1){
-//        viscosityForce *= _visCoef;
-//        if(density>0) acc+= (viscosityForce /*+ tensionForce*/)/density;
-////        }
-
-
-
-//        //calculate our new velocity
-//        //euler intergration (Rubbish over large time steps)
-////        float3 newVel = curPartVel + (acc * _timestep);
-////        float3 newPos = curPartPos + (newVel * _timestep);
-
-//        //leap frog integration
-//        //more stable if we move by half steps than full
-//        float3 velHalfBack = curPartVel - 0.5f * _timestep * d_accArray[curPartIdx];
-//        float3 velHalfFor = velHalfBack + _timestep * acc;
-
-
-//        //XSPH velocity correction
-//        //can be found in Paiva, A., Petronetto, F., Lewiner, T. and Tavares, G. (2009).
-//        //Particle-based viscoplastic fluid/solid simulation,
-//        //To achieve this lets take advantage of our shared memory again
-//        if(threadIdx.x<sampleSum){
-//            nParticleData[threadIdx.x].vel = velHalfFor;
-//        }
-//        __syncthreads();
-//        float3 newVel = make_float3(.0f);
-//        for(i=0;i<sampleSum;i++){
-//            if((density>0)&&(nParticleData[i].density>0))
-//            newVel += (2.0f*_particleMass/(density+nParticleData[i].density)) * (nParticleData[i].vel - velHalfBack) * densityWeighting(curPartPos,nParticleData[i].pos,_smoothingLength,densKernConst);
-//        }
-
-//        newVel = velHalfFor + 0.1f * newVel;
+        //calculate our new velocity
+        //euler intergration (Rubbish over large time steps)
+//        float3 newVel = curPartVel + (acc * _timestep);
 //        float3 newPos = curPartPos + (newVel * _timestep);
 
-////        if(newPos.x!=newPos.x){
-////            printf("shit currentpos %f,%f,%f newPos %f,%f,%f\n pressure force %f,%f,%f samples %d\n",curPartPos.x,curPartPos.y,curPartPos.z,newPos.x,newPos.y,newPos.z,pressureForce.x,pressureForce.y,pressureForce.z,samples);
-////            printf("vel: %f,%f,%f\n",newVel.x,newVel.y,newVel.z);
-////            printf("timeStep %f acc %f,%f,%f\n\n",_timestep,acc.x,acc.y,acc.z);
-////        }
-//        //update our particle positin and velocity
-//        d_velArray[curPartIdx] = newVel;
-//        d_posArray[curPartIdx] = newPos;
-//        d_accArray[curPartIdx] = acc;
+        //leap frog integration
+        //more stable if we move by half steps than full
+        float3 velHalfBack = curPartVel - 0.5f * _timestep * d_accArray[curPartIdx];
+        float3 velHalfFor = velHalfBack + _timestep * acc;
+        //printf("pf %f,%f,%f vel %f,%f,%f\n",acc.x,acc.y,acc.z,velHalfFor.x,velHalfFor.y,velHalfFor.z);
 
 
-//    }
-//}
-////----------------------------------------------------------------------------------------------------------------------
-//__global__ void fluidSolverKernalDP(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, int _hashResolution, int _hashTableSize, float _smoothingLength, float _timestep, float _particleMass, float _restDensity, float _gasConstant, float _visCoef, float _densKernConst, float _pressKernConst, float _viscKernConst){
-//    int idx = threadIdx.x + blockIdx.x * blockDim.x;
-//    if(idx<_hashTableSize){
-//        // Read in our how many particles our cell holds
-//        int cellOcc = d_cellOccArray[blockIdx.x];
-//        if(cellOcc>0){
-//            // Calculate our index for these particles in our buffer
-//            int cellStartIdx = d_cellIndxArray[blockIdx.x];
-//            fluidSolverPerCellKernalDP<<<1,cellOcc>>>(d_posArray,d_velArray,d_accArray,d_cellOccArray,d_cellIndxArray,cellOcc,cellStartIdx,_hashResolution,_hashTableSize,_smoothingLength,_timestep,_particleMass,_restDensity,_gasConstant,_visCoef,_densKernConst,_pressKernConst,_viscKernConst);
+        //XSPH velocity correction
+        //can be found in Paiva, A., Petronetto, F., Lewiner, T. and Tavares, G. (2009).
+        //Particle-based viscoplastic fluid/solid simulation,
+        //To achieve this lets take advantage of our shared memory again
+        nParticleData[threadIdx.x].vel = velHalfFor;
+        __syncthreads();
+        float3 newVel = make_float3(.0f);
+        for(i=0;i<cellOcc;i++){
+            if((density>0)&&(nParticleData[i].density>0))
+            newVel += (2.0f*_particleMass/(density+nParticleData[i].density)) * (nParticleData[i].vel - velHalfBack) * densityWeighting(length(curPartPos-nParticleData[i].pos),_smoothingLength,densKernConst);
+        }
+
+        newVel = velHalfFor + 0.3f * newVel;
+        float3 newPos = curPartPos + (newVel * _timestep);
+        //printf("p %f,%f,%f\n",newPos.x,newPos.y,newPos.z);
+//        if(newPos.x!=newPos.x){
+//            printf("shit currentpos %f,%f,%f newPos %f,%f,%f samples %d\n",curPartPos.x,curPartPos.y,curPartPos.z,newPos.x,newPos.y,newPos.z,sampleSum);
+//            printf("vel: %f,%f,%f\n",newVel.x,newVel.y,newVel.z);
+//            printf("timeStep %f acc %f,%f,%f\n\n",_timestep,acc.x,acc.y,acc.z);
 //        }
-//    }
+        //update our particle positin and velocity
+        d_velArray[curPartIdx] = newVel;
+        d_posArray[curPartIdx] = newPos;
+        d_accArray[curPartIdx] = acc;
 
-//}
+
+    }
+}
 //----------------------------------------------------------------------------------------------------------------------
 __global__ void collisionDetKernal(planeProp *d_planeArray, unsigned int _numPlanes, float3 *d_posArray, float3 *d_velArray, unsigned int _numParticles, float _timeStep){
     //Create our idx
@@ -491,35 +313,30 @@ __global__ void collisionDetKernal(planeProp *d_planeArray, unsigned int _numPla
         float3 vel = d_velArray[idx];
         float3 newVel = vel;
         float3 pos = d_posArray[idx];
-        float3 oldVel;
-        float t = 0;
+        float dst = 0;
         bool intersect = false;
+        float3 pToO;
+        int itersectPlane;
         //iterate through planes
         for(int i=0; i<_numPlanes; i++){
             //if its on the wrong side of the plane move it back and reflect the velocity
-            //this is not 100% accurate collision, but at least it works
-            if(dot(pos-planes[i].pos,planes[i].normal)<0.0f){
-                t = dot(planes[i].pos,planes[i].normal) - dot(planes[i].normal,pos);
-                if(length(vel)!=0){
-                    t/= dot(planes[i].normal,vel);
-                }
-
-                pos = pos + vel * t;
-                newVel = newVel - (2.0f * dot(newVel,planes[i].normal) * planes[i].normal);
-
-                newVel -= (1.0f - planes[i].restCoef) * newVel * fabs(planes[i].normal);
-                intersect = true;
+            //this is not 100% accurate collision, but at least it works!!
+            if(dot(pos-planes[i].pos,planes[i].normal)<0.f){
+                //move particle to closest point on plane
+                pToO = pos-planes[i].pos;
+                dst = dot(pToO,planes[i].normal);
+                pos = pos-(dst*planes[i].normal);
+                //reflect velocity arount normal
+                newVel =  newVel - (2.0f * dot(newVel,planes[i].normal) * planes[i].normal);
+                itersectPlane = i;
+                intersect=true;
             }
         }
-
-        //if((pos.x!=pos.x)||(pos.y!=pos.y)||(pos.z!=pos.z)){
-            printf("newVel %f,%f,%f vel %f,%f,%f\n",newVel.x,newVel.y,newVel.z,vel.x,vel.y,vel.z);
-        //}
 
         //if intersect has occured move our particle back and change our velocity
         if(intersect==true){
             d_posArray[idx] = pos;
-            d_velArray[idx] = newVel;
+            d_velArray[idx] = newVel - (1.0 - planes[itersectPlane].restCoef) * newVel * fabs(planes[itersectPlane].normal);
         }
     }
 }
@@ -640,8 +457,8 @@ void fluidSolver(float3 *d_posArray, float3 *d_velArray, float3 *d_accArray, uns
     //printf("memory allocated: %d",_maxNumThreads*(sizeof(particleCellProp)));
     //fluidSolverKernal<<<_hashTableSize, 30>>>(d_posArray,d_velArray,d_cellOccArray,d_cellIndxArray,_smoothingLength,_timestep, _particleMass, _restDensity,_gasConstant,_visCoef, _densKernConst, _pressKernConst, _viscKernConst);
 
-
-    fluidSolverPerCellKernal<<<_hashTableSize,100>>>(d_posArray,d_velArray,d_accArray,d_cellOccArray,d_cellIndxArray,_hashResolution,_hashTableSize,_smoothingLength,_timestep,_particleMass,_restDensity,_gasConstant,_visCoef,_densKernConst,_pressKernConst,_viscKernConst);
+    int totalSamples = 300;
+    fluidSolverPerCellKernal<<<_hashTableSize,totalSamples,totalSamples*sizeof(particleCellProp)>>>(totalSamples,d_posArray,d_velArray,d_accArray,d_cellOccArray,d_cellIndxArray,_hashResolution,_hashTableSize,_smoothingLength,_timestep,_particleMass,_restDensity,_gasConstant,_visCoef,_densKernConst,_pressKernConst,_viscKernConst);
 
 
     //dynamic parrallelism version. Slow!
