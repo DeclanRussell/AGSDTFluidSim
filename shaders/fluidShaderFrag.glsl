@@ -196,4 +196,5 @@ void main(void)
 
     //raw input generally depth
     //FragColor = texture(depthTex, VTexCoord);
+
 }

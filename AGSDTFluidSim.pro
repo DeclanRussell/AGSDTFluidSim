@@ -17,7 +17,13 @@ SOURCES += \
     src/mainwindow.cpp \
     src/OpenGLWidget.cpp \
     src/SPHEngine.cpp \
-    cudaSrc/*.cu
+    cudaSrc/*.cu \
+    src/GLTexture.cpp \
+    src/GLTextureLib.cpp \
+    src/FrameBuffer.cpp \
+    src/RenderBuffer.cpp \
+    src/RenderTargetLib.cpp \
+    src/FluidShader.cpp
 
 SOURCES -= cudaSrc/*.cu
 
@@ -26,7 +32,14 @@ HEADERS += \
     include/OpenGLWidget.h \
     include/ui_mainwindow.h \
     include/CudaSPHKernals.h \
-    include/SPHEngine.h
+    include/SPHEngine.h \
+    include/GLTexture.h \
+    include/GLTextureLib.h \
+    include/FrameBuffer.h \
+    include/RenderBuffer.h \
+    include/RenderTargetLib.h \
+    include/AbstractOpenGLObject.h \
+    include/FluidShader.h
 
 FORMS += \
     ui/mainwindow.ui
