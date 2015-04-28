@@ -46,17 +46,20 @@ void SPHEngine::init(){
     addWall(make_float3(0.0f,0.0f,m_smoothingLength),make_float3(0.0f,0.0f,1.0f),0.2f);               //back wall
     addWall(make_float3(m_maxGridDim-m_smoothingLength,0.0f,0.0f),make_float3(-1.0f,0.0f,0.0f),0.2f); //right wall
     addWall(make_float3(0.0f,m_maxGridDim-m_smoothingLength,0.0f),make_float3(0.0f,-1.0f,0.0f),0.2f); //ceiling
-    addWall(make_float3(0.0f,0.0f,m_maxGridDim/2-m_smoothingLength),make_float3(0.0f,0.0f,-1.0f),0.2f); //front wall
+    addWall(make_float3(0.0f,0.0f,m_maxGridDim-m_smoothingLength),make_float3(0.0f,0.0f,-1.0f),0.2f); //front wall
 
     //create our initial particles
     std::vector<float3> particles;
     float3 tempF3;
+    float3 min = make_float3(m_maxGridDim/10);
+    float3 max = make_float3(9.f*m_maxGridDim/10);
     float tx,ty,tz;
-    float increment =  m_smoothingLength/3;
-    tx=tz=ty=m_smoothingLength;
+    float increment =  m_smoothingLength/2;
+    tx=tz=m_maxGridDim/3;
+    ty=m_smoothingLength;
     for(unsigned int i=0; i<m_numParticles; i++){
-        if(tx>=(m_maxGridDim - m_smoothingLength)){ tx=m_smoothingLength; ty+=increment;}
-        if(tz>=(m_maxGridDim/4 - m_smoothingLength)){ tz=m_smoothingLength; ty+=increment;}
+        if(tx>=(max.x - m_smoothingLength)){ tx=min.x; tz+=increment;}
+        if(tz>=(max.x - m_smoothingLength)){ tz=min.x; ty+=increment;}
         tempF3.x = tx;
         tempF3.y = ty;
         tempF3.z = tz;
@@ -165,7 +168,7 @@ void SPHEngine::update(float _timeStep){
     cudaThreadSynchronize();
 
     //update our particle positions with navier stokes equations
-    fluidSolver(d_posPtr,m_dVelBuffer,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_maxGridDim/m_smoothingLength,m_numThreadsPerBlock,m_smoothingLength,_timeStep,100,m_density,m_gasConstant,m_viscCoef,m_densWeightConst,m_pressWeightConst,m_viscWeightConst);
+    fluidSolver(d_posPtr,m_dVelBuffer,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_maxGridDim/m_smoothingLength,m_numThreadsPerBlock,m_smoothingLength,_timeStep,200,m_density,m_gasConstant,m_viscCoef,m_densWeightConst,m_pressWeightConst,m_viscWeightConst);
 
     //make sure all our threads are done
     cudaThreadSynchronize();

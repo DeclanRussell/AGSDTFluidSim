@@ -36,7 +36,7 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     //init refraction and fresnal powers
     setRefractionRatio(0.2f);
     m_fresnalPower = 10;
-    m_pointThickness = 0.02f;
+    m_pointThickness = 0.1f;
     m_update = false;
     m_blurFalloff = 10.f;
     m_blurRadius = 10.f;
@@ -430,7 +430,7 @@ void OpenGLWidget::initializeGL(){
 
 
     //allocate some space for our SPHEngine
-    m_SPHEngine = new SPHEngine(5000,15.0f,998.2f,10.f);
+    m_SPHEngine = new SPHEngine(10000,15.0f,998.2f,10.f);
     m_SPHEngine->setGasConstant(1);
 
     m_currentTime = m_currentTime.currentTime();

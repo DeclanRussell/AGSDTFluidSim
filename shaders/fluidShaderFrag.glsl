@@ -184,7 +184,8 @@ void main(void)
     vec3 phong = ads(posEye,n)*color;
     //mix our refraction color with our phong due to our thick
     //our fluid is.
-    refractColor = mix(refractColor,phong,thickness);
+    //texture can be more than value of 1 so if it is lets clamp it to 1
+    refractColor = mix(refractColor,phong,(thickness>1)?1:thickness);
     FragColor  = vec4(mix(refractColor, reflectColor, fresnalRatio),1.0);
 
     //position shading

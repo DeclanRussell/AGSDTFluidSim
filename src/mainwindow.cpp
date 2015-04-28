@@ -55,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     QDoubleSpinBox *partThicknessSpnBx = new QDoubleSpinBox(shaderProperties);
     partThicknessSpnBx->setMinimum(0.0);
     partThicknessSpnBx->setDecimals(4);
-    partThicknessSpnBx->setValue(0.02);
+    partThicknessSpnBx->setValue(0.1);
     partThicknessSpnBx->setSingleStep(0.01);
     connect(partThicknessSpnBx,SIGNAL(valueChanged(double)), m_openGLWidget, SLOT(setParticleThickness(double)));
     shadPropLayout->addWidget(partThicknessSpnBx,1,1,1,1);

@@ -19,7 +19,8 @@
 struct particleCellProp {
     float3 pos;
     float3 vel;
-    float density = 0;
+    float density;
+    float densityWeight;
     int idx;
 };
 //----------------------------------------------------------------------------------------------------------------------
