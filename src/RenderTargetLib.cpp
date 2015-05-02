@@ -16,10 +16,12 @@ RenderTargetLib::~RenderTargetLib(){
     //remove our render targets
     std::map <std::string, RenderBuffer * >::const_iterator renderBuffer;
     for(renderBuffer=m_renderBuffers.begin();renderBuffer!=m_renderBuffers.end();renderBuffer++){
+        std::cerr<<"Removing render buffer "<<renderBuffer->first<<std::endl;
         delete renderBuffer->second;
     }
     std::map <std::string, FrameBuffer * >::const_iterator frameBuffer;
     for(frameBuffer=m_frameBuffers.begin();frameBuffer!=m_frameBuffers.end();frameBuffer++){
+        std::cerr<<"Removing frame buffer "<<frameBuffer->first<<std::endl;
         delete frameBuffer->second;
     }
 }

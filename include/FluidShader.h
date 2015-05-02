@@ -39,9 +39,10 @@ public:
     /// @param _M - model matrix of our scene
     /// @param _V - view matrix of our scene
     /// @param _P - projection matrix of our scene
+    /// @param _rotM - the rotation matrix of our scene to rotate our cube map
     /// @param _eyePos - position of the camera in the scene
     //----------------------------------------------------------------------------------------------------------------------
-    void draw(GLuint _positionVAO, int _numPoints, ngl::Mat4 _M, ngl::Mat4 _V, ngl::Mat4 _P, ngl::Vec4 _eyePos);
+    void draw(GLuint _positionVAO, int _numPoints, ngl::Mat4 _M, ngl::Mat4 _V, ngl::Mat4 _P, ngl::Mat4 _rotM, ngl::Vec4 _eyePos);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief resizes our shader output
     /// @brief if the screen resizes we need to notify this shader as it uses render targets
@@ -64,11 +65,38 @@ public:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief sets our refraction ratio
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setRefractionRatio(float _eta){m_refractionRatio = (float)_eta; m_fresnalConst = (float)((1.0 - _eta) * (1.0 - _eta)) / ((1.0 + _eta) * (1.0 + _eta));}
+    inline void setRefractionRatio(float _eta){m_refractionRatio = _eta; m_fresnalConst = (float)((1.0 - _eta) * (1.0 - _eta)) / ((1.0 + _eta) * (1.0 + _eta));}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief mutator for the fresnal power. this effects the reflection of our fluid
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setFresnalPower(double _power){m_fresnalPower = (float)_power;}
+    inline void setFresnalPower(float _power){m_fresnalPower = _power;}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief set how big we want to draw our fluid particles
+    /// @param _size - desired size
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setPointSize(float _size){m_pointSize = _size;}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief set how thick we want to render each particle
+    /// @param _thickness - desired thickness
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setThickness(float _thickness){m_pointThickness = _thickness;}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief set the blur fall off of our bilateral filter shader
+    /// @param _falloff - desired fall off value
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setBlurFalloff(float _falloff){m_blurFalloff = _falloff;}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief set the blur ratius of our bilateral filter shader
+    /// @param __radius - desired blue radius value
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setBlurRadius(float _radius){m_blurRadius = _radius;}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief set the desired color of our fluid. Color values from 0-1.
+    /// @param _colR - red value
+    /// @param _colG - green value
+    /// @param _colB - blue value
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setColor(float _colR, float _colG, float _colB){m_fluidColor = ngl::Vec3(_colR,_colG,_colB);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief creates our shader
     //----------------------------------------------------------------------------------------------------------------------
@@ -122,7 +150,7 @@ private:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief billboard VAO for rendering textures to screen
     //----------------------------------------------------------------------------------------------------------------------
-    GLuint m_billboardVAO;
+    static GLuint m_billboardVAO;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief the size to draw our water particles
     //----------------------------------------------------------------------------------------------------------------------

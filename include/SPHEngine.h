@@ -28,11 +28,11 @@ public:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief defualt constructor
     /// @param _numParticles how many particles we want to have on simulation initialisation.
-    /// @param _volume  - the volume of our fluid.
+    /// @param _mass  - mass per partilce of our fluid
     /// @param _density - the density of our fluid
     /// @param _contanerSize - the contaner size of for our fluid. e.g. 1 is a cube of 1*1*1.
     //----------------------------------------------------------------------------------------------------------------------
-    SPHEngine(unsigned int _numParticles = 0, unsigned int _volume = 1, float _density = 1000, float _contanerSize = 1);
+    SPHEngine(unsigned int _numParticles = 0, float _mass = 10.f, float _density = 998.2f, float _contanerSize = 10);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief default destructor
     //----------------------------------------------------------------------------------------------------------------------
@@ -55,25 +55,21 @@ public:
     //----------------------------------------------------------------------------------------------------------------------
     inline GLuint getPositionBuffer(){return m_VAO;}
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief Mutator for the volume of our fluid. This in turn effects the mass of our particles.
+    /// @brief Mutator for the desity of our fluid.
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setVolume(float _volume){m_volume = _volume; calcMass();}
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief accessor to query the volume of our fluid
-    //----------------------------------------------------------------------------------------------------------------------
-    inline float getVolume(){return m_volume;}
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief Mutator for the desity of our fluid. This in turn effects the mass of our particles.
-    //----------------------------------------------------------------------------------------------------------------------
-    inline void setDesity(float _density){m_density = _density; calcMass();}
+    inline void setDesity(float _density){m_density = _density;}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief accessor to query the density of our fluid
     //----------------------------------------------------------------------------------------------------------------------
     inline float getDensity(){return m_density;}
     //----------------------------------------------------------------------------------------------------------------------
+    /// @brief mutator to set the mass of our fluid particles
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setParticleMass(float _mass){m_mass = _mass;}
+    //----------------------------------------------------------------------------------------------------------------------
     /// @brief Mutator for the smoothing length of our simulation. Can also be thought of as hash cell size.
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setSmoothingLength(float _length){m_smoothingLength = _length; calcKernalConsts();}
+    inline void setSmoothingLength(float _length){m_smoothingLength = _length; calcKernalConsts(); signalResizeHashTable();}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief accessor to query the smoothing length of our fluid
     //----------------------------------------------------------------------------------------------------------------------
@@ -112,18 +108,95 @@ public:
     //----------------------------------------------------------------------------------------------------------------------
     inline void setMaxNumSamples(int _numSamples){m_maxNumSamples = _numSamples;}
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief adds a colllision plane to our simulation
-    /// @param _pos - the position of our plane
-    /// @param _norm - the normal of our plane
-    /// @param _resrCoef - coeficient of restitution of our plane
+    /// @brief adds a colllision object for our fluid. So far supports containers and collision cuboids
+    /// @warning Very simple AABB collision. Probably rubish and unoptimized
+    /// @param _min - container minimum
+    /// @param _max - container maximum
+    /// @param _restCoef - coeficient of restitution of our container in our 3 axis
+    /// @param _isContainer - indicate whether or not we are adding a container of a box
     //----------------------------------------------------------------------------------------------------------------------
-    void addWall(float3 _pos, float3 _norm, float _restCoef = 1.0);
+    void addCollisionObject(float3 _min, float3 _max, float3 _restCoef, bool _isContainer);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief accessor to number of particles in simulation
     //----------------------------------------------------------------------------------------------------------------------
     inline int getNumParticles(){return m_numParticles;}
     //----------------------------------------------------------------------------------------------------------------------
+    /// @brief signals our engine to reset the simulation
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void signalReset(){if(m_updating)m_resetPending=true; else resetSimulation();}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief signals the engine to add particles to our simulation
+    /// @param _numParticles - the number of particles to add to our simulation
+    //----------------------------------------------------------------------------------------------------------------------
+    void signalAddParticles(int _numParticles);
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief sets the spawn box position
+    /// @param _x - x position of spawn box
+    /// @param _y - y position of spawn box
+    /// @param _z - z position of spawn box
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setSpawnBoxPos(float _x, float _y, float _z){m_spawnParticlesPos = make_float3(_x,_y,_z);}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief accessor to our spawn box position
+    /// @return float3 spawn box position
+    //----------------------------------------------------------------------------------------------------------------------
+    inline float3 getSpawnBoxPos(){return m_spawnParticlesPos;}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief set the size of our spawn box
+    /// @param _size - the size of our spawn box
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setSpawnBoxSize(float _size){m_spawnBoxSize = _size;}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief accessor to our spawn box size
+    /// @return float spawn box size
+    //----------------------------------------------------------------------------------------------------------------------
+    inline float getSpawnBoxSize(){return m_spawnBoxSize;}
+    //----------------------------------------------------------------------------------------------------------------------
 private:
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief signal to resize our hash table after the next update has finished
+    //----------------------------------------------------------------------------------------------------------------------
+    void signalResizeHashTable();
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief bool to indicate if we need to resize hash table after next update
+    //----------------------------------------------------------------------------------------------------------------------
+    bool m_resizeHashPending;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief resized our hash table and related buffers
+    //----------------------------------------------------------------------------------------------------------------------
+    void resizeHashTable();
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief function to add particles to our simulation
+    //----------------------------------------------------------------------------------------------------------------------
+    void addParticles();
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief a bool to indicate that we need to add particles to our simulation after the current update is done
+    //----------------------------------------------------------------------------------------------------------------------
+    bool m_addParticlesPending;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief the number of particles to add to our simulation
+    //----------------------------------------------------------------------------------------------------------------------
+    unsigned int m_numParticlesToAdd;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief the position of our spawn particles box
+    //----------------------------------------------------------------------------------------------------------------------
+    float3 m_spawnParticlesPos;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief the size of the box we wish to spawn particles in
+    //----------------------------------------------------------------------------------------------------------------------
+    float m_spawnBoxSize;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief resets our simulation and deletes all related buffers
+    //----------------------------------------------------------------------------------------------------------------------
+    void resetSimulation();
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief flag to tell our program that a reset is pendeing. Important that we dont delete buffers while they're being used
+    //----------------------------------------------------------------------------------------------------------------------
+    bool m_resetPending;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief bool to indicate if our engine is updating particles
+    //----------------------------------------------------------------------------------------------------------------------
+    bool m_updating;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief the max dimention of our hash grid. E.g. 1 is a cube of dimention 1*1*1.
     //----------------------------------------------------------------------------------------------------------------------
@@ -133,13 +206,17 @@ private:
     //----------------------------------------------------------------------------------------------------------------------
     int m_maxNumSamples;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief the number of planes we have in our buffer
+    /// @brief the number of collision objects we have in our buffer
     //----------------------------------------------------------------------------------------------------------------------
-    unsigned int m_numPlanes;
+    unsigned int m_numCollisionObjects;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief our cuda stream to run our kernals on
+    //----------------------------------------------------------------------------------------------------------------------
+    cudaStream_t m_stream;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief pointer to our plane buffer on our device
     //----------------------------------------------------------------------------------------------------------------------
-    planeProp* m_dPlaneBuffer;
+    SimpleCuboidCollisionObject* m_dCollisionObjectBuffer;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief velocity correction used for XSPH in our fluid sovler
     //----------------------------------------------------------------------------------------------------------------------
@@ -182,11 +259,6 @@ private:
     //----------------------------------------------------------------------------------------------------------------------
     unsigned int nextPrimeNum(int _x);
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief A function to calculate the mass of our particles based on density, volume and number of particles in our simulation.
-    /// @brief mass = density ( volume / number of particles )
-    //----------------------------------------------------------------------------------------------------------------------
-    inline void calcMass(){m_mass = m_density * (m_volume/(float)m_numParticles);}
-    //----------------------------------------------------------------------------------------------------------------------
     /// @brief The mass of our fluid.
     /// @value Defaults to 1. User can modify density and volume to change this.
     //----------------------------------------------------------------------------------------------------------------------
@@ -196,11 +268,6 @@ private:
     /// @value Defaults to 1. User may modify this.
     //----------------------------------------------------------------------------------------------------------------------
     float m_density;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief the volume of our fluid.
-    /// @value Defaults to the number of particles in simulation. User may modify this.
-    //----------------------------------------------------------------------------------------------------------------------
-    float m_volume;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief our gas constant for our fluid solving
     //----------------------------------------------------------------------------------------------------------------------

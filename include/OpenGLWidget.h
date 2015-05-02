@@ -19,6 +19,7 @@
 #include <QTime>
 #include <QColor>
 #include <ngl/Mat4.h>
+#include <ngl/Vec3.h>
 #include <ngl/Camera.h>
 #include <ngl/Text.h> //<-- for writting in GL
 
@@ -53,10 +54,6 @@ public:
     //----------------------------------------------------------------------------------------------------------------------
     void resizeGL(const int _w, const int _h );
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief mutator for our point size
-    //----------------------------------------------------------------------------------------------------------------------
-    inline void setPointSize(float _size){/*m_pointSize = _size;*/}
-    //----------------------------------------------------------------------------------------------------------------------
     /// @brief keyboard press event
     //----------------------------------------------------------------------------------------------------------------------
     void keyPressEvent(QKeyEvent *_event);
@@ -85,84 +82,178 @@ public:
     //----------------------------------------------------------------------------------------------------------------------
 public slots:
     //----------------------------------------------------------------------------------------------------------------------
+    /// @brief slot to set sim position
+    /// @param _x - x position of our simulation
+    /// @param _y - y position of our simulation
+    /// @param _z - z position of our simualtion
+    /// @param _simNo - simulation to set the position of
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setSimPosition(float _x, float _y, float _z,int _simNo = 0){m_fluidSimProps[_simNo].m_simPosition = ngl::Vec3(_x,_y,_z);}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief slot to add a fluid simulation to our scene
+    //----------------------------------------------------------------------------------------------------------------------
+    void addFluidSim();
+    //----------------------------------------------------------------------------------------------------------------------
     /// @brief slot to load cube maps to for our enironment map
     /// @brief this function pressumes that all our cube map textures are in one texture
     /// @param _loc - the location of our cube map texture
-    /// @return If the texture has been loaded correctly
     //----------------------------------------------------------------------------------------------------------------------
-    bool loadCubeMap(QString _loc);
+    void loadCubeMap(QString _loc);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a slot to change our particle size
     /// @param _size - particle size
+    /// @param _simNo - which simulation we want to change the particle size in
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setParticleSize(double _size){/*m_fluidShader->setPointSize(_size);*/}
+    inline void setParticleSize(float _size, int _simNo = 0){m_fluidShaders[_simNo]->setPointSize(_size);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a slot to change our particle thickess
     /// @param _thickness - particle thickness
+    /// @param _simNo - which simulation we want to change the thickness in
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setParticleThickness(double _thickness){/*m_fluidShader->setThickness(_thickness);*/}
+    inline void setParticleThickness(float _thickness, int _simNo = 0){m_fluidShaders[_simNo]->setThickness(_thickness);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a slot to change our bilateral filter blur falloff
     /// @param _falloff - bilateral blur falloff
+    /// @param _simNo - which simulation we want to change the blur fall off in
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setBlurFalloff(double _falloff){/*m_fluidShader->setBlurFalloff(_falloff);*/}
+    inline void setBlurFalloff(float _falloff, int _simNo = 0){m_fluidShaders[_simNo]->setBlurFalloff(_falloff);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a slot to change our bilateral filter blur radius
     /// @param _radius - bilateral blur radius
+    /// @param _simNo - which simulation we want to change the blur radius in
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setBlurRadius(double _radius){/*m_fluidShader->setBlurRadius( _radius);*/}
+    inline void setBlurRadius(float _radius, int _simNo = 0){m_fluidShaders[_simNo]->setBlurRadius( _radius);}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief a slot to set the refraction ratio of our fluid
+    /// @param _eta - desired refraction ratio
+    /// @param _simNo - which simulation we want to change the rafraction ratio in
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setRafractionRatio(float _eta, int _simNo = 0){m_fluidShaders[_simNo]->setRefractionRatio(_eta);}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief a slot to set the fresnal power of our fluid
+    /// @param _power - desired fresnal power of our fluid
+    /// @param _simNo - which simulation we want to change the fresnal power in
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setFresnalPower(float _power,int _simNo = 0){m_fluidShaders[_simNo]->setFresnalPower(_power);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief play/pause toggle slot
+    /// @param _simNo - which simulation we want to toggle play
     //----------------------------------------------------------------------------------------------------------------------
-    inline void playToggle(){m_update = !m_update;}
+    inline void playToggle(int _simNo = 0){m_fluidSimProps[_simNo].m_update = !m_fluidSimProps[_simNo].m_update;}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief set volume of our fluid slot
-    /// @param _vol - volume
+    /// @param _mass - desired mass of particles
+    /// @param _simNo - which simulation we want to change
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setVolume(double _vol){m_SPHEngine->setVolume((float) _vol);}
+    inline void setMass(float _mass, int _simNo = 0){m_SPHEngines[_simNo]->setParticleMass(_mass);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief set density of our fluid slot
-    /// @param _den - density
+    /// @param _den - desired rest density
+    /// @param _simNo - which simulation we want to change
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setDensity(double _den){m_SPHEngine->setDesity((float) _den);}
+    inline void setDensity(float _den, int _simNo = 0){m_SPHEngines[_simNo]->setDesity(_den);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief set viscoty coeficient of our fluid slot
     /// @param _visc - viscosity coeficient
+    /// @param _simNo - which simulation we want to change
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setViscCoef(double _visc){m_SPHEngine->setViscCoef((float)_visc);}
+    inline void setViscCoef(float _visc, int _simNo = 0){m_SPHEngines[_simNo]->setViscCoef(_visc);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief set gas constant of our fluid slot
     /// @param _gasConst - gas constant
+    /// @param _simNo - which simulation we want to change
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setGasConst(double _gasConst){m_SPHEngine->setGasConstant((float)_gasConst);}
+    inline void setGasConst(double _gasConst, int _simNo = 0){m_SPHEngines[_simNo]->setGasConstant(_gasConst);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief set smoothing length of our fluid slot
     /// @param _len - smoothing length
+    /// @param _simNo - which simulation we want to change our smoothing length in
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setSmoothingLength(double _len){m_SPHEngine->setSmoothingLength((float)_len);}
+    inline void setSmoothingLength(float _len, int _simNo = 0){m_SPHEngines[_simNo]->setSmoothingLength(_len);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief set the color of our fluid slot
+    /// @param _col - desired color to set the fluid to
+    /// @param _simNo - which simulation we want to change the color in
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setFluidColor(QColor _col){/*m_fluidShader->setColor(_col.redF(),_col.greenF(),_col.blueF());*/}
+    inline void setFluidColor(QColor _col, int _simNo = 0){m_fluidShaders[_simNo]->setColor(_col.redF(),_col.greenF(),_col.blueF());}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a slot to set the playback speed of our simulation
     /// @param _speed - the speed of play back as a percentage 100.f is real time
+    /// @param _simNo - which simulation we want to change the play back speed in
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setPlaybackSpeed(int _speed){m_playBackSpeed = (float)_speed/100.f;}
+    inline void setPlaybackSpeed(float _speed, int _simNo = 0){m_fluidSimProps[_simNo].m_playSpeed = _speed;}
     //----------------------------------------------------------------------------------------------------------------------
+    /// @brief a slot to set the time step of our simulation
+    /// @param _timeStep - the timeStep of our simulation
+    /// @param _simNo - which simulation we want to change the play back speed in
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setSimTimeStep(float _timeStep, int _simNo = 0){m_fluidSimProps[_simNo].m_timeStep = _timeStep;}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief a slot to reset our simulation and remove all particles
+    /// @brief _simNo - simulation number to reset
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void resetSim(int _simNo){m_SPHEngines[_simNo]->signalReset();}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief a slot to set the spawn box position in our simulation
+    /// @param _x - x position of spawn box location
+    /// @param _y - y position of spawn box location
+    /// @param _z - z position of spawn box location
+    /// @param _simNo - simulation number to set the spawn box location
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setSpawnBoxPosition(float _x, float _y, float _z,int _simNo = 0){m_SPHEngines[_simNo]->setSpawnBoxPos(_x,_y,_z);}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief a slot to set the spawn box size in our simulation
+    /// @param _size - desired spawn box size
+    /// @param _simNo - simulation number to set the spawn box size
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setSpawnBoxSize(float _size,int _simNo = 0){m_SPHEngines[_simNo]->setSpawnBoxSize(_size);}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief slot to add particles to our simulation
+    /// @param _numParticles - number of particles to add to simulation
+    /// @param _simNo - simulation to add particles to
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void addParticlesToSim(int _numParticles,int _simNo = 0){m_SPHEngines[_simNo]->signalAddParticles(_numParticles);}
+    //----------------------------------------------------------------------------------------------------------------------
+
 private:
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief the playback speed of our simulation
+    /// @brief structure to hold some update information about our fluid simulations
     //----------------------------------------------------------------------------------------------------------------------
-    float m_playBackSpeed;
+    struct fluidSimProps{
+        //----------------------------------------------------------------------------------------------------------------------
+        /// @brief vector of our simulation positions
+        //----------------------------------------------------------------------------------------------------------------------
+        ngl::Vec3 m_simPosition;
+        //----------------------------------------------------------------------------------------------------------------------
+        /// @brief the timestep to increment ouf simulation
+        //----------------------------------------------------------------------------------------------------------------------
+        float m_timeStep;
+        //----------------------------------------------------------------------------------------------------------------------
+        /// @brief a bool to tell us if we need to update our simulation
+        //----------------------------------------------------------------------------------------------------------------------
+        bool m_update;
+        //----------------------------------------------------------------------------------------------------------------------
+        /// @brief play speed
+        //----------------------------------------------------------------------------------------------------------------------
+        float m_playSpeed;
+        //----------------------------------------------------------------------------------------------------------------------
+        /// @brief bool to indicate if we want to update with a set time step or with actual time
+        //----------------------------------------------------------------------------------------------------------------------
+        bool m_updateWithFixedTimeStep;
+        //----------------------------------------------------------------------------------------------------------------------
+    };
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief update information abour our simulations
+    //----------------------------------------------------------------------------------------------------------------------
+    std::vector<fluidSimProps> m_fluidSimProps;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief Our SPHEngine that manages our particles.
     //----------------------------------------------------------------------------------------------------------------------
-    SPHEngine *m_SPHEngine;
+    std::vector<SPHEngine *> m_SPHEngines;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief Our fluid shader
     //----------------------------------------------------------------------------------------------------------------------
-    FluidShader *m_fluidShader;
+    std::vector<FluidShader *> m_fluidShaders;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief used for calculating framerate
     //----------------------------------------------------------------------------------------------------------------------
@@ -191,10 +282,6 @@ private:
     /// @brief model pos
     //----------------------------------------------------------------------------------------------------------------------
     ngl::Vec3 m_modelPos;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief a bool to tell us if we need to update
-    //----------------------------------------------------------------------------------------------------------------------
-    bool m_update;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief Spin face x
     //----------------------------------------------------------------------------------------------------------------------

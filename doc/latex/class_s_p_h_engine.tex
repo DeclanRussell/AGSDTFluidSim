@@ -13,7 +13,7 @@ our cuda libraries
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hyperlink{class_s_p_h_engine_ac997f2a996e7c7778263e160a5dd005f}{S\-P\-H\-Engine} (unsigned int \-\_\-num\-Particles=0, unsigned int \-\_\-volume=1, float \-\_\-density=1000, float \-\_\-contaner\-Size=1)
+\hyperlink{class_s_p_h_engine_a8be3b3f99242c3548ade6ff9314fc46c}{S\-P\-H\-Engine} (unsigned int \-\_\-num\-Particles=0, float \-\_\-mass=10.f, float \-\_\-density=998.\-2f, float \-\_\-contaner\-Size=10)
 \begin{DoxyCompactList}\small\item\em defualt constructor \end{DoxyCompactList}\item 
 \hypertarget{class_s_p_h_engine_a0969407c141667c1147d409a0397257d}{\hyperlink{class_s_p_h_engine_a0969407c141667c1147d409a0397257d}{$\sim$\-S\-P\-H\-Engine} ()}\label{class_s_p_h_engine_a0969407c141667c1147d409a0397257d}
 
@@ -29,18 +29,15 @@ void \hyperlink{class_s_p_h_engine_a1a17b5c04756850b68cf95b917019241}{update} (f
 \hypertarget{class_s_p_h_engine_aee51f7802e02c838732d9acab37da89a}{G\-Luint \hyperlink{class_s_p_h_engine_aee51f7802e02c838732d9acab37da89a}{get\-Position\-Buffer} ()}\label{class_s_p_h_engine_aee51f7802e02c838732d9acab37da89a}
 
 \begin{DoxyCompactList}\small\item\em returns the output postion open\-G\-L buffer of our particles \end{DoxyCompactList}\item 
-\hypertarget{class_s_p_h_engine_add241056dc1719b3a11486da48c3724c}{void \hyperlink{class_s_p_h_engine_add241056dc1719b3a11486da48c3724c}{set\-Volume} (float \-\_\-volume)}\label{class_s_p_h_engine_add241056dc1719b3a11486da48c3724c}
-
-\begin{DoxyCompactList}\small\item\em Mutator for the volume of our fluid. This in turn effects the mass of our particles. \end{DoxyCompactList}\item 
-\hypertarget{class_s_p_h_engine_a588d8e6f1276d07adb5363c8c3766fda}{float \hyperlink{class_s_p_h_engine_a588d8e6f1276d07adb5363c8c3766fda}{get\-Volume} ()}\label{class_s_p_h_engine_a588d8e6f1276d07adb5363c8c3766fda}
-
-\begin{DoxyCompactList}\small\item\em accessor to query the volume of our fluid \end{DoxyCompactList}\item 
 \hypertarget{class_s_p_h_engine_acbc638f7ab8fa2ab356dadf677df10c6}{void \hyperlink{class_s_p_h_engine_acbc638f7ab8fa2ab356dadf677df10c6}{set\-Desity} (float \-\_\-density)}\label{class_s_p_h_engine_acbc638f7ab8fa2ab356dadf677df10c6}
 
-\begin{DoxyCompactList}\small\item\em Mutator for the desity of our fluid. This in turn effects the mass of our particles. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Mutator for the desity of our fluid. \end{DoxyCompactList}\item 
 \hypertarget{class_s_p_h_engine_a8ee29d26f9451d81a07abde5b1aa53c6}{float \hyperlink{class_s_p_h_engine_a8ee29d26f9451d81a07abde5b1aa53c6}{get\-Density} ()}\label{class_s_p_h_engine_a8ee29d26f9451d81a07abde5b1aa53c6}
 
 \begin{DoxyCompactList}\small\item\em accessor to query the density of our fluid \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a0f937d1c09511f302455f102fae167c3}{void \hyperlink{class_s_p_h_engine_a0f937d1c09511f302455f102fae167c3}{set\-Particle\-Mass} (float \-\_\-mass)}\label{class_s_p_h_engine_a0f937d1c09511f302455f102fae167c3}
+
+\begin{DoxyCompactList}\small\item\em mutator to set the mass of our fluid particles \end{DoxyCompactList}\item 
 \hypertarget{class_s_p_h_engine_a196e04ba23d9d9c73924f3af8a8240ed}{void \hyperlink{class_s_p_h_engine_a196e04ba23d9d9c73924f3af8a8240ed}{set\-Smoothing\-Length} (float \-\_\-length)}\label{class_s_p_h_engine_a196e04ba23d9d9c73924f3af8a8240ed}
 
 \begin{DoxyCompactList}\small\item\em Mutator for the smoothing length of our simulation. Can also be thought of as hash cell size. \end{DoxyCompactList}\item 
@@ -70,11 +67,24 @@ void \hyperlink{class_s_p_h_engine_a1a17b5c04756850b68cf95b917019241}{update} (f
 \begin{DoxyCompactList}\small\item\em mutator to our velocity correction \end{DoxyCompactList}\item 
 void \hyperlink{class_s_p_h_engine_aad9d9bc9a1a7e5f64a5e045c339f8b3e}{set\-Max\-Num\-Samples} (int \-\_\-num\-Samples)
 \begin{DoxyCompactList}\small\item\em mutator for our maximum number of samples per particle in our fluid solver \end{DoxyCompactList}\item 
-void \hyperlink{class_s_p_h_engine_aa53becc41023eb45601eb3060860193a}{add\-Wall} (float3 \-\_\-pos, float3 \-\_\-norm, float \-\_\-rest\-Coef=1.\-0)
-\begin{DoxyCompactList}\small\item\em adds a colllision plane to our simulation \end{DoxyCompactList}\item 
+void \hyperlink{class_s_p_h_engine_afe2b02e535cf064f91f2de4312c8ae39}{add\-Collision\-Object} (float3 \-\_\-min, float3 \-\_\-max, float3 \-\_\-rest\-Coef, bool \-\_\-is\-Container)
+\begin{DoxyCompactList}\small\item\em adds a colllision object for our fluid. So far supports containers and collision cuboids \end{DoxyCompactList}\item 
 \hypertarget{class_s_p_h_engine_a387ab48532ca20b2eb31319e862e243b}{int \hyperlink{class_s_p_h_engine_a387ab48532ca20b2eb31319e862e243b}{get\-Num\-Particles} ()}\label{class_s_p_h_engine_a387ab48532ca20b2eb31319e862e243b}
 
-\begin{DoxyCompactList}\small\item\em accessor to number of particles in simulation \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em accessor to number of particles in simulation \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a692ed8ae0cdb67f4a774fa2a94ad635f}{void \hyperlink{class_s_p_h_engine_a692ed8ae0cdb67f4a774fa2a94ad635f}{signal\-Reset} ()}\label{class_s_p_h_engine_a692ed8ae0cdb67f4a774fa2a94ad635f}
+
+\begin{DoxyCompactList}\small\item\em signals our engine to reset the simulation \end{DoxyCompactList}\item 
+void \hyperlink{class_s_p_h_engine_a4e61b1f56e20ab4eee7edd111c59912f}{signal\-Add\-Particles} (int \-\_\-num\-Particles)
+\begin{DoxyCompactList}\small\item\em signals the engine to add particles to our simulation \end{DoxyCompactList}\item 
+void \hyperlink{class_s_p_h_engine_a130606677b2c3edbc9b95006672c1578}{set\-Spawn\-Box\-Pos} (float \-\_\-x, float \-\_\-y, float \-\_\-z)
+\begin{DoxyCompactList}\small\item\em sets the spawn box position \end{DoxyCompactList}\item 
+float3 \hyperlink{class_s_p_h_engine_a452295b33bfa893db3c9484da9ce9fb5}{get\-Spawn\-Box\-Pos} ()
+\begin{DoxyCompactList}\small\item\em accessor to our spawn box position \end{DoxyCompactList}\item 
+void \hyperlink{class_s_p_h_engine_a2bf5d2bc9fc8bcc39d42108150123663}{set\-Spawn\-Box\-Size} (float \-\_\-size)
+\begin{DoxyCompactList}\small\item\em set the size of our spawn box \end{DoxyCompactList}\item 
+float \hyperlink{class_s_p_h_engine_a234554f5b25de8cc34541e1fd0a4b52b}{get\-Spawn\-Box\-Size} ()
+\begin{DoxyCompactList}\small\item\em accessor to our spawn box size \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
@@ -96,16 +106,16 @@ Declan Russell
 
 
 \subsection{Constructor \& Destructor Documentation}
-\hypertarget{class_s_p_h_engine_ac997f2a996e7c7778263e160a5dd005f}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!S\-P\-H\-Engine@{S\-P\-H\-Engine}}
+\hypertarget{class_s_p_h_engine_a8be3b3f99242c3548ade6ff9314fc46c}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!S\-P\-H\-Engine@{S\-P\-H\-Engine}}
 \index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!SPHEngine@{S\-P\-H\-Engine}}
 \subsubsection[{S\-P\-H\-Engine}]{\setlength{\rightskip}{0pt plus 5cm}S\-P\-H\-Engine\-::\-S\-P\-H\-Engine (
 \begin{DoxyParamCaption}
 \item[{unsigned int}]{\-\_\-num\-Particles = {\ttfamily 0}, }
-\item[{unsigned int}]{\-\_\-volume = {\ttfamily 1}, }
-\item[{float}]{\-\_\-density = {\ttfamily 1000}, }
-\item[{float}]{\-\_\-contaner\-Size = {\ttfamily 1}}
+\item[{float}]{\-\_\-mass = {\ttfamily 10.f}, }
+\item[{float}]{\-\_\-density = {\ttfamily 998.2f}, }
+\item[{float}]{\-\_\-contaner\-Size = {\ttfamily 10}}
 \end{DoxyParamCaption}
-)}}\label{class_s_p_h_engine_ac997f2a996e7c7778263e160a5dd005f}
+)}}\label{class_s_p_h_engine_a8be3b3f99242c3548ade6ff9314fc46c}
 
 
 defualt constructor 
@@ -114,7 +124,7 @@ defualt constructor
 \begin{DoxyParams}{Parameters}
 {\em \-\_\-num\-Particles} & how many particles we want to have on simulation initialisation. \\
 \hline
-{\em \-\_\-volume} & -\/ the volume of our fluid. \\
+{\em \-\_\-mass} & -\/ mass per partilce of our fluid \\
 \hline
 {\em \-\_\-density} & -\/ the density of our fluid \\
 \hline
@@ -124,28 +134,62 @@ defualt constructor
 
 
 \subsection{Member Function Documentation}
-\hypertarget{class_s_p_h_engine_aa53becc41023eb45601eb3060860193a}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!add\-Wall@{add\-Wall}}
-\index{add\-Wall@{add\-Wall}!SPHEngine@{S\-P\-H\-Engine}}
-\subsubsection[{add\-Wall}]{\setlength{\rightskip}{0pt plus 5cm}void S\-P\-H\-Engine\-::add\-Wall (
+\hypertarget{class_s_p_h_engine_afe2b02e535cf064f91f2de4312c8ae39}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!add\-Collision\-Object@{add\-Collision\-Object}}
+\index{add\-Collision\-Object@{add\-Collision\-Object}!SPHEngine@{S\-P\-H\-Engine}}
+\subsubsection[{add\-Collision\-Object}]{\setlength{\rightskip}{0pt plus 5cm}void S\-P\-H\-Engine\-::add\-Collision\-Object (
 \begin{DoxyParamCaption}
-\item[{float3}]{\-\_\-pos, }
-\item[{float3}]{\-\_\-norm, }
-\item[{float}]{\-\_\-rest\-Coef = {\ttfamily 1.0}}
+\item[{float3}]{\-\_\-min, }
+\item[{float3}]{\-\_\-max, }
+\item[{float3}]{\-\_\-rest\-Coef, }
+\item[{bool}]{\-\_\-is\-Container}
 \end{DoxyParamCaption}
-)}}\label{class_s_p_h_engine_aa53becc41023eb45601eb3060860193a}
+)}}\label{class_s_p_h_engine_afe2b02e535cf064f91f2de4312c8ae39}
 
 
-adds a colllision plane to our simulation 
+adds a colllision object for our fluid. So far supports containers and collision cuboids 
 
+\begin{DoxyWarning}{Warning}
+Very simple A\-A\-B\-B collision. Probably rubish and unoptimized 
+\end{DoxyWarning}
 
 \begin{DoxyParams}{Parameters}
-{\em \-\_\-pos} & -\/ the position of our plane \\
+{\em \-\_\-min} & -\/ container minimum \\
 \hline
-{\em \-\_\-norm} & -\/ the normal of our plane \\
+{\em \-\_\-max} & -\/ container maximum \\
 \hline
-{\em \-\_\-resr\-Coef} & -\/ coeficient of restitution of our plane \\
+{\em \-\_\-rest\-Coef} & -\/ coeficient of restitution of our container in our 3 axis \\
+\hline
+{\em \-\_\-is\-Container} & -\/ indicate whether or not we are adding a container of a box \\
 \hline
 \end{DoxyParams}
+\hypertarget{class_s_p_h_engine_a452295b33bfa893db3c9484da9ce9fb5}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!get\-Spawn\-Box\-Pos@{get\-Spawn\-Box\-Pos}}
+\index{get\-Spawn\-Box\-Pos@{get\-Spawn\-Box\-Pos}!SPHEngine@{S\-P\-H\-Engine}}
+\subsubsection[{get\-Spawn\-Box\-Pos}]{\setlength{\rightskip}{0pt plus 5cm}float3 S\-P\-H\-Engine\-::get\-Spawn\-Box\-Pos (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_s_p_h_engine_a452295b33bfa893db3c9484da9ce9fb5}
+
+
+accessor to our spawn box position 
+
+\begin{DoxyReturn}{Returns}
+float3 spawn box position 
+\end{DoxyReturn}
+\hypertarget{class_s_p_h_engine_a234554f5b25de8cc34541e1fd0a4b52b}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!get\-Spawn\-Box\-Size@{get\-Spawn\-Box\-Size}}
+\index{get\-Spawn\-Box\-Size@{get\-Spawn\-Box\-Size}!SPHEngine@{S\-P\-H\-Engine}}
+\subsubsection[{get\-Spawn\-Box\-Size}]{\setlength{\rightskip}{0pt plus 5cm}float S\-P\-H\-Engine\-::get\-Spawn\-Box\-Size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_s_p_h_engine_a234554f5b25de8cc34541e1fd0a4b52b}
+
+
+accessor to our spawn box size 
+
+\begin{DoxyReturn}{Returns}
+float spawn box size 
+\end{DoxyReturn}
 \hypertarget{class_s_p_h_engine_aad9d9bc9a1a7e5f64a5e045c339f8b3e}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!set\-Max\-Num\-Samples@{set\-Max\-Num\-Samples}}
 \index{set\-Max\-Num\-Samples@{set\-Max\-Num\-Samples}!SPHEngine@{S\-P\-H\-Engine}}
 \subsubsection[{set\-Max\-Num\-Samples}]{\setlength{\rightskip}{0pt plus 5cm}void S\-P\-H\-Engine\-::set\-Max\-Num\-Samples (
@@ -160,6 +204,60 @@ mutator for our maximum number of samples per particle in our fluid solver
 
 \begin{DoxyParams}{Parameters}
 {\em \-\_\-num\-Samples} & -\/ desired maximum number of samples per particle in fluid solver \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_s_p_h_engine_a130606677b2c3edbc9b95006672c1578}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!set\-Spawn\-Box\-Pos@{set\-Spawn\-Box\-Pos}}
+\index{set\-Spawn\-Box\-Pos@{set\-Spawn\-Box\-Pos}!SPHEngine@{S\-P\-H\-Engine}}
+\subsubsection[{set\-Spawn\-Box\-Pos}]{\setlength{\rightskip}{0pt plus 5cm}void S\-P\-H\-Engine\-::set\-Spawn\-Box\-Pos (
+\begin{DoxyParamCaption}
+\item[{float}]{\-\_\-x, }
+\item[{float}]{\-\_\-y, }
+\item[{float}]{\-\_\-z}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_s_p_h_engine_a130606677b2c3edbc9b95006672c1578}
+
+
+sets the spawn box position 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-x} & -\/ x position of spawn box \\
+\hline
+{\em \-\_\-y} & -\/ y position of spawn box \\
+\hline
+{\em \-\_\-z} & -\/ z position of spawn box \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_s_p_h_engine_a2bf5d2bc9fc8bcc39d42108150123663}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!set\-Spawn\-Box\-Size@{set\-Spawn\-Box\-Size}}
+\index{set\-Spawn\-Box\-Size@{set\-Spawn\-Box\-Size}!SPHEngine@{S\-P\-H\-Engine}}
+\subsubsection[{set\-Spawn\-Box\-Size}]{\setlength{\rightskip}{0pt plus 5cm}void S\-P\-H\-Engine\-::set\-Spawn\-Box\-Size (
+\begin{DoxyParamCaption}
+\item[{float}]{\-\_\-size}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_s_p_h_engine_a2bf5d2bc9fc8bcc39d42108150123663}
+
+
+set the size of our spawn box 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-size} & -\/ the size of our spawn box \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_s_p_h_engine_a4e61b1f56e20ab4eee7edd111c59912f}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!signal\-Add\-Particles@{signal\-Add\-Particles}}
+\index{signal\-Add\-Particles@{signal\-Add\-Particles}!SPHEngine@{S\-P\-H\-Engine}}
+\subsubsection[{signal\-Add\-Particles}]{\setlength{\rightskip}{0pt plus 5cm}void S\-P\-H\-Engine\-::signal\-Add\-Particles (
+\begin{DoxyParamCaption}
+\item[{int}]{\-\_\-num\-Particles}
+\end{DoxyParamCaption}
+)}}\label{class_s_p_h_engine_a4e61b1f56e20ab4eee7edd111c59912f}
+
+
+signals the engine to add particles to our simulation 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-num\-Particles} & -\/ the number of particles to add to our simulation \\
 \hline
 \end{DoxyParams}
 \hypertarget{class_s_p_h_engine_a1a17b5c04756850b68cf95b917019241}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!update@{update}}

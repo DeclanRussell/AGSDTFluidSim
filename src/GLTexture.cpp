@@ -82,8 +82,8 @@ void GLTexture::resize(GLsizei _width, GLsizei _height){
 void GLTexture::setData(const GLvoid *_data, GLsizei _width, GLsizei _height){
    bind();
     if(m_height){
-       if(_width!=-1) m_width - _width;
-       if(_height!=-1) m_height - _height;
+       if(_width!=-1) m_width = _width;
+       if(_height!=-1) m_height = _height;
        glTexImage2D(m_target,m_level,m_internalFormat,m_width,m_height,m_border,m_format,m_type,_data);
     }
     else{
@@ -95,8 +95,8 @@ void GLTexture::setData(const GLvoid *_data, GLsizei _width, GLsizei _height){
 //----------------------------------------------------------------------------------------------------------------------
 void GLTexture::setData(const GLvoid *_front, const GLvoid *_back, const GLvoid *_top, const GLvoid *_bottom, const GLvoid *_left, const GLvoid *_right, GLsizei _width, GLsizei _height){
     bind();
-    if(_width!=-1) m_width - _width;
-    if(_height!=-1) m_height - _height;
+    if(_width!=-1) m_width = _width;
+    if(_height!=-1) m_height = _height;
     // copy image data into 'target' side of cube map
     glTexImage2D ( GL_TEXTURE_CUBE_MAP_POSITIVE_Z, m_level, m_internalFormat, m_width, m_height, m_border, m_format, m_type, _front);
     glTexImage2D ( GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, m_level, m_internalFormat, m_width, m_height, m_border, m_format, m_type, _back);

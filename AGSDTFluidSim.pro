@@ -23,7 +23,8 @@ SOURCES += \
     src/FrameBuffer.cpp \
     src/RenderBuffer.cpp \
     src/RenderTargetLib.cpp \
-    src/FluidShader.cpp
+    src/FluidShader.cpp \
+    src/FluidPropDockWidget.cpp
 
 SOURCES -= cudaSrc/*.cu
 
@@ -39,7 +40,8 @@ HEADERS += \
     include/RenderBuffer.h \
     include/RenderTargetLib.h \
     include/AbstractOpenGLObject.h \
-    include/FluidShader.h
+    include/FluidShader.h \
+    include/FluidPropDockWidget.h
 
 FORMS += \
     ui/mainwindow.ui
@@ -115,7 +117,7 @@ LIBS += -lcudart -lcudadevrt
 CUDA_INC = $$join(INCLUDEPATH,' -I','-I',' ')
 
 # nvcc flags (ptxas option verbose is always useful)
-NVCCFLAGS = --compiler-options  -fno-strict-aliasing -use_fast_math --ptxas-options=-v
+NVCCFLAGS = --compiler-options  -fno-strict-aliasing --ptxas-options=-v
 
 
 #prepare intermediat cuda compiler

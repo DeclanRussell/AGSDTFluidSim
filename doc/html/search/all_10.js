@@ -10,5 +10,6 @@ var searchData=
   ['thicknesstex',['thicknessTex',['../fluid_shader_frag_8glsl.html#ae98cad87e3271b9fe544fdeb6cb0ec5a',1,'fluidShaderFrag.glsl']]],
   ['thicknessvert',['thicknessVert',['../classthickness_vert.html',1,'']]],
   ['thicknessvert_2eglsl',['thicknessVert.glsl',['../thickness_vert_8glsl.html',1,'']]],
-  ['timerevent',['timerEvent',['../class_open_g_l_widget.html#a11473cec64e843211458fd83f9d6ad72',1,'OpenGLWidget']]]
+  ['timerevent',['timerEvent',['../class_open_g_l_widget.html#a11473cec64e843211458fd83f9d6ad72',1,'OpenGLWidget']]],
+  ['toggleplay',['togglePlay',['../class_fluid_prop_dock_widget.html#a16076f5d56b8d79f74726915d0f51b0b',1,'FluidPropDockWidget']]]
 ];

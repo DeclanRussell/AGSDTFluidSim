@@ -16,6 +16,7 @@ GLTextureLib::~GLTextureLib(){
     //remove our textures
     std::map <std::string, GLTexture * >::const_iterator texures;
     for(texures=m_textures.begin();texures!=m_textures.end();texures++){
+        std::cerr<<"Removing texture "<<texures->first<<std::endl;
         delete texures->second;
     }
 }

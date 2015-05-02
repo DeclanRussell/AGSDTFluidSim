@@ -20,16 +20,18 @@ struct particleCellProp {
     float3 pos;
     float3 vel;
     float density;
-    float densityWeight;
     int idx;
 };
 //----------------------------------------------------------------------------------------------------------------------
-/// @brief a structure to hold the properties of our planes
+/// @brief a cuboid collion object properties
 //----------------------------------------------------------------------------------------------------------------------
-struct planeProp{
-    float3 pos;
-    float3 normal;
-    float restCoef;
+struct SimpleCuboidCollisionObject{
+    float4 p1;
+    float4 p2;
+    float3 restitution;
+    bool isContainer;
+    __device__ void collide(float3 &_pos, float3 &_vel);
+
 };
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Creates an index array for our cells using thrusts exclusive scan
@@ -42,6 +44,7 @@ void createCellIdx(unsigned int* d_cellOccArray, unsigned int _size, unsigned in
 /// @brief Creates a spatial hash key based on our particle postion
 /// @brief This is taken from Teschner, M., Heidelberger, B., Mueller, M., Pomeranets, D. and Gross, M.
 /// @brief (2003). Optimized spatial hashing for collision detection of deformable objects
+/// @param _stream - the cuda stream we wish this kernal to run on
 /// @param d_hashArray - a pointer to the cuda buffer that we wish to store our hash keys
 /// @param d_posArray - pointer to the cuda buffer that holds the particle postions we wish to hash
 /// @param _numParticles - the number of particles. Used to calculate how many kernals to launch
@@ -49,7 +52,7 @@ void createCellIdx(unsigned int* d_cellOccArray, unsigned int _size, unsigned in
 /// @param _gridSize - the size of our grid. .g. 1 is a grid of size 1*1*1.
 /// @param _maxNumThreads - the maximum number off threads we have in a block on our device. Can be found out with device query
 //----------------------------------------------------------------------------------------------------------------------
-void createHashTable(unsigned int* d_hashArray, float3* d_posArray, unsigned int _numParticles, float _smoothingLength, float _gridSize, int _maxNumThreads);
+void createHashTable(cudaStream_t _stream,unsigned int* d_hashArray, float3* d_posArray, unsigned int _numParticles, float _smoothingLength, float _gridSize, int _maxNumThreads);
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Sorts our hash key buffer and postion buffer such that points of the same key occupy contiguous memory
 /// @param d_hashArray - pointer to our hash key buffer
@@ -61,13 +64,14 @@ void createHashTable(unsigned int* d_hashArray, float3* d_posArray, unsigned int
 void sortByKey(unsigned int* d_hashArray, float3* d_posArray, float3 *d_velArray, unsigned int _numParticles);
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Computes the particle occupancy of our hash cell
+/// @param _stream - the cuda stream we wish this kernal to run on
 /// @param d_hashArray - pointer to our hash key buffer
 /// @param d_cellOccArray - pointer to our cell occupancy array
 /// @param _hashTableSize - size of our hash table
 /// @param _numPoints - number of points in our hash table
 /// @param _maxNumThreads - the maximum number of threads that we have per block on our device
 //----------------------------------------------------------------------------------------------------------------------
-void countCellOccupancy(unsigned int *d_hashArray, unsigned int *d_cellOccArray,unsigned int _hashTableSize, unsigned int _numPoints, unsigned int _maxNumThreads);
+void countCellOccupancy(cudaStream_t _stream, unsigned int *d_hashArray, unsigned int *d_cellOccArray, unsigned int _hashTableSize, unsigned int _numPoints, unsigned int _maxNumThreads);
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief simple function so that we can fill a buffer with unsigned ints.
 /// @param _pointer - pointer to the buffer you wish to fill
@@ -78,6 +82,7 @@ void fillUint(unsigned int *_pointer, unsigned int _arraySize, unsigned int _fil
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Solver function that will call our solver kernal to calculate the new positions of the particles in
 /// @brief our fluid simulation.
+/// @param _stream - the cuda stream we wish this kernal to run on
 /// @param d_posArray - pointer to our gpu buffer that holds the postions of our particles
 /// @param d_velArray - pointer to our gpu buffer that holds the velocities of our particles
 /// @param d_accArray - pointer to our gpu buffer that holds the accelleration of our particles
@@ -95,9 +100,10 @@ void fillUint(unsigned int *_pointer, unsigned int _arraySize, unsigned int _fil
 /// @param _pressKernConst - constant part of the pressure kernal. Faster to compute once on CPU and load in.
 /// @param _viscKernConst - constant part of the viscosity kernal. Faster to compute once on CPU and load in.
 //----------------------------------------------------------------------------------------------------------------------
-void fluidSolver(float3 *d_posArray, float3 *d_velArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, int _hashResolution, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass = 1, float _restDensity = 1, float _gasConstant = 1, float _visCoef = 1, float _densKernConst = 1, float _pressKernConst = 1, float _viscKernConst = 1);
+void fluidSolver(cudaStream_t _stream,float3 *d_posArray, float3 *d_velArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, int _hashResolution, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass = 1, float _restDensity = 1, float _gasConstant = 1, float _visCoef = 1, float _densKernConst = 1, float _pressKernConst = 1, float _viscKernConst = 1);
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Collision detection between particles and planes
+/// @param _stream - the cuda stream we wish this kernal to run on
 /// @param d_PlaneArray - pointer to device buffer of our planes information
 /// @param _numPlanes - number of planes in our array
 /// @param d_posArray - pointer to device buffer of our particle positions
@@ -106,7 +112,7 @@ void fluidSolver(float3 *d_posArray, float3 *d_velArray, unsigned int *d_cellOcc
 /// @param _numParticles - the number of particles in our scene
 /// @param _maxNumThreads - the maximum nuber of threads we need to launch per block
 //----------------------------------------------------------------------------------------------------------------------
-void collisionDetectionSolver(planeProp* d_planeArray, unsigned int _numPlanes, float3 *d_posArray, float3 *d_velArray, float _timeStep, unsigned int _numParticles, unsigned int _maxNumThreads);
+void collisionDetectionSolver(cudaStream_t _stream, SimpleCuboidCollisionObject* d_planeArray, unsigned int _numObjects, float3 *d_posArray, float3 *d_velArray, float _timeStep, unsigned int _numParticles, unsigned int _maxNumThreads);
 //----------------------------------------------------------------------------------------------------------------------
 
 #endif // HELLOCUDA_H

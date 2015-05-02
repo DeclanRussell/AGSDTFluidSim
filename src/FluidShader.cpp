@@ -11,6 +11,7 @@
 //declare our static variable
 int FluidShader::m_instanceCount;
 bool FluidShader::m_cubeMapCreated;
+GLuint FluidShader::m_billboardVAO;
 int FluidShader::m_width;
 int FluidShader::m_height;
 
@@ -21,8 +22,8 @@ FluidShader::FluidShader(int _width, int _height)
     m_pointSize = 0.2f;
     //init refraction and fresnal powers
     setRefractionRatio(0.2f);
-    m_fresnalPower = 10;
-    m_pointThickness = 0.1f;
+    m_fresnalPower = 3;
+    m_pointThickness = 0.01f;
     //our blur shading init params
     m_blurFalloff = 10.f;
     m_blurRadius = 10.f;
@@ -403,7 +404,7 @@ void FluidShader::resize(int _w, int _h){
     shader->setUniform("texelSize",2.0f/(_w+_h));
 }
 //----------------------------------------------------------------------------------------------------------------------
-void FluidShader::draw(GLuint _positionVAO, int _numPoints, ngl::Mat4 _M, ngl::Mat4 _V, ngl::Mat4 _P, ngl::Vec4 _eyePos){
+void FluidShader::draw(GLuint _positionVAO, int _numPoints, ngl::Mat4 _M, ngl::Mat4 _V, ngl::Mat4 _P,ngl::Mat4 _rotM, ngl::Vec4 _eyePos){
     ngl::Mat4 MV = _M * _V;
     ngl::Mat4 MVP = MV * _P;
     ngl::Mat4 Pinv = _P.inverse();
@@ -491,7 +492,11 @@ void FluidShader::draw(GLuint _positionVAO, int _numPoints, ngl::Mat4 _M, ngl::M
     //unbind our local static frame buffer so we now render to the screen
     renderTarget->getFrameBuffer("bilateralFrameBuffer")->unbind();
     renderTarget->getRenderBuffer("depthRenderBuffer")->unbind();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+    if(m_instanceNo==0){
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
 
     //if this is our first instance of the shader
     //Draw our sky box
@@ -499,7 +504,7 @@ void FluidShader::draw(GLuint _positionVAO, int _numPoints, ngl::Mat4 _M, ngl::M
     if(m_instanceNo==0){
         (*shader)["SkyBoxShader"]->use();
         //load our matricies to shader
-        ngl::Mat4 MCube = _M;
+        ngl::Mat4 MCube = _rotM;
         //move to where our camera is located
         MCube.m_m[3][0] = _eyePos.m_x;
         MCube.m_m[3][1] = _eyePos.m_y;

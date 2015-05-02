@@ -19,34 +19,51 @@ Inheritance diagram for Open\-G\-L\-Widget\-:\begin{figure}[H]
 \subsection*{Public Slots}
 \begin{DoxyCompactItemize}
 \item 
-bool \hyperlink{class_open_g_l_widget_ae26021ef3dd9a8f6a9fd68d4ce44a6ee}{load\-Cube\-Map} (Q\-String \-\_\-loc)
+void \hyperlink{class_open_g_l_widget_a6bc6106c82580697f386fdfd2fdb3a12}{set\-Sim\-Position} (float \-\_\-x, float \-\_\-y, float \-\_\-z, int \-\_\-sim\-No=0)
+\begin{DoxyCompactList}\small\item\em slot to set sim position \end{DoxyCompactList}\item 
+\hypertarget{class_open_g_l_widget_a9ccb72da15f23a16fb74b270a9e19489}{void \hyperlink{class_open_g_l_widget_a9ccb72da15f23a16fb74b270a9e19489}{add\-Fluid\-Sim} ()}\label{class_open_g_l_widget_a9ccb72da15f23a16fb74b270a9e19489}
+
+\begin{DoxyCompactList}\small\item\em slot to add a fluid simulation to our scene \end{DoxyCompactList}\item 
+void \hyperlink{class_open_g_l_widget_a39018f8fc74ce591bfac884c277621e6}{load\-Cube\-Map} (Q\-String \-\_\-loc)
 \begin{DoxyCompactList}\small\item\em slot to load cube maps to for our enironment map \end{DoxyCompactList}\item 
-void \hyperlink{class_open_g_l_widget_a83bd4b62dc32eac33e84d570e31ddc1c}{set\-Particle\-Size} (double \-\_\-size)
+void \hyperlink{class_open_g_l_widget_a3cdaf60ea4f98ee4782dec21b4810a41}{set\-Particle\-Size} (float \-\_\-size, int \-\_\-sim\-No=0)
 \begin{DoxyCompactList}\small\item\em a slot to change our particle size \end{DoxyCompactList}\item 
-void \hyperlink{class_open_g_l_widget_aef63bb4f820d5909837330d8cd220c20}{set\-Particle\-Thickness} (double \-\_\-thickness)
+void \hyperlink{class_open_g_l_widget_aec967838bdff11519892bc05a5d930b0}{set\-Particle\-Thickness} (float \-\_\-thickness, int \-\_\-sim\-No=0)
 \begin{DoxyCompactList}\small\item\em a slot to change our particle thickess \end{DoxyCompactList}\item 
-void \hyperlink{class_open_g_l_widget_a18386d03c765a2b49d947573d5e98561}{set\-Blur\-Falloff} (double \-\_\-falloff)
+void \hyperlink{class_open_g_l_widget_a8e96b44ed40ec8a5fe726f427f01e6fe}{set\-Blur\-Falloff} (float \-\_\-falloff, int \-\_\-sim\-No=0)
 \begin{DoxyCompactList}\small\item\em a slot to change our bilateral filter blur falloff \end{DoxyCompactList}\item 
-void \hyperlink{class_open_g_l_widget_a9115db4eeda180baaa8d14fae56d4ad2}{set\-Blur\-Radius} (double \-\_\-radius)
+void \hyperlink{class_open_g_l_widget_add467ba5217218564d08ffb638b2f190}{set\-Blur\-Radius} (float \-\_\-radius, int \-\_\-sim\-No=0)
 \begin{DoxyCompactList}\small\item\em a slot to change our bilateral filter blur radius \end{DoxyCompactList}\item 
-\hypertarget{class_open_g_l_widget_a1b2f1e0736d69c0970823f9d31d908f7}{void \hyperlink{class_open_g_l_widget_a1b2f1e0736d69c0970823f9d31d908f7}{play\-Toggle} ()}\label{class_open_g_l_widget_a1b2f1e0736d69c0970823f9d31d908f7}
-
+void \hyperlink{class_open_g_l_widget_a9ad49f35e3a76ec5ea58cedbe73afa34}{set\-Rafraction\-Ratio} (float \-\_\-eta, int \-\_\-sim\-No=0)
+\begin{DoxyCompactList}\small\item\em a slot to set the refraction ratio of our fluid \end{DoxyCompactList}\item 
+void \hyperlink{class_open_g_l_widget_adc34d0b2bed5d7a7f2d5b92fa1b82889}{set\-Fresnal\-Power} (float \-\_\-power, int \-\_\-sim\-No=0)
+\begin{DoxyCompactList}\small\item\em a slot to set the fresnal power of our fluid \end{DoxyCompactList}\item 
+void \hyperlink{class_open_g_l_widget_a2d1d9bb18d20f1479cb86e832ab17fd2}{play\-Toggle} (int \-\_\-sim\-No=0)
 \begin{DoxyCompactList}\small\item\em play/pause toggle slot \end{DoxyCompactList}\item 
-void \hyperlink{class_open_g_l_widget_a4f9cc5b8135515ea87870585dfdf194b}{set\-Volume} (double \-\_\-vol)
+void \hyperlink{class_open_g_l_widget_a84585fd40a1fad03bbd118436f5fc477}{set\-Mass} (float \-\_\-mass, int \-\_\-sim\-No=0)
 \begin{DoxyCompactList}\small\item\em set volume of our fluid slot \end{DoxyCompactList}\item 
-void \hyperlink{class_open_g_l_widget_a2b1f58185ccc07782cc8c1d6f8f73863}{set\-Density} (double \-\_\-den)
+void \hyperlink{class_open_g_l_widget_a785cd8493ea4c1a24a19a16835de4577}{set\-Density} (float \-\_\-den, int \-\_\-sim\-No=0)
 \begin{DoxyCompactList}\small\item\em set density of our fluid slot \end{DoxyCompactList}\item 
-void \hyperlink{class_open_g_l_widget_a2476342258d25fafecb7e784373141e4}{set\-Visc\-Coef} (double \-\_\-visc)
+void \hyperlink{class_open_g_l_widget_aad4c9ceaedc57507d3e9504d15dd8f4a}{set\-Visc\-Coef} (float \-\_\-visc, int \-\_\-sim\-No=0)
 \begin{DoxyCompactList}\small\item\em set viscoty coeficient of our fluid slot \end{DoxyCompactList}\item 
-void \hyperlink{class_open_g_l_widget_a5e4e0ff0bd8f6fad5fd1fb53265dc814}{set\-Gas\-Const} (double \-\_\-gas\-Const)
+void \hyperlink{class_open_g_l_widget_a806e81697e0c6bf0992696ab948bc1c5}{set\-Gas\-Const} (double \-\_\-gas\-Const, int \-\_\-sim\-No=0)
 \begin{DoxyCompactList}\small\item\em set gas constant of our fluid slot \end{DoxyCompactList}\item 
-void \hyperlink{class_open_g_l_widget_a0806c995ed218e055cab1f9c177a6818}{set\-Smoothing\-Length} (double \-\_\-len)
+void \hyperlink{class_open_g_l_widget_af0f0474b4ff16318e6cf2e7479b369c7}{set\-Smoothing\-Length} (float \-\_\-len, int \-\_\-sim\-No=0)
 \begin{DoxyCompactList}\small\item\em set smoothing length of our fluid slot \end{DoxyCompactList}\item 
-\hypertarget{class_open_g_l_widget_aba6ed78cded62034694d981d1e2e2219}{void \hyperlink{class_open_g_l_widget_aba6ed78cded62034694d981d1e2e2219}{set\-Fluid\-Color} (Q\-Color \-\_\-col)}\label{class_open_g_l_widget_aba6ed78cded62034694d981d1e2e2219}
-
+void \hyperlink{class_open_g_l_widget_a559ba717c412258c234ce5865c0b6976}{set\-Fluid\-Color} (Q\-Color \-\_\-col, int \-\_\-sim\-No=0)
 \begin{DoxyCompactList}\small\item\em set the color of our fluid slot \end{DoxyCompactList}\item 
-void \hyperlink{class_open_g_l_widget_a1ecbdc2f18d7b955d7827c7314aea5a9}{set\-Playback\-Speed} (int \-\_\-speed)
-\begin{DoxyCompactList}\small\item\em a slot to set the playback speed of our simulation \end{DoxyCompactList}\end{DoxyCompactItemize}
+void \hyperlink{class_open_g_l_widget_a3c415ea6ecc1ccf6df49b08df74bbd1a}{set\-Playback\-Speed} (float \-\_\-speed, int \-\_\-sim\-No=0)
+\begin{DoxyCompactList}\small\item\em a slot to set the playback speed of our simulation \end{DoxyCompactList}\item 
+void \hyperlink{class_open_g_l_widget_ac8a71d325740372032c0061d3bf1daa0}{set\-Sim\-Time\-Step} (float \-\_\-time\-Step, int \-\_\-sim\-No=0)
+\begin{DoxyCompactList}\small\item\em a slot to set the time step of our simulation \end{DoxyCompactList}\item 
+void \hyperlink{class_open_g_l_widget_acc54210918549bd628db0080d576b483}{reset\-Sim} (int \-\_\-sim\-No)
+\begin{DoxyCompactList}\small\item\em a slot to reset our simulation and remove all particles \end{DoxyCompactList}\item 
+void \hyperlink{class_open_g_l_widget_ac4d67ea702f268f7d072e94a569cb5f0}{set\-Spawn\-Box\-Position} (float \-\_\-x, float \-\_\-y, float \-\_\-z, int \-\_\-sim\-No=0)
+\begin{DoxyCompactList}\small\item\em a slot to set the spawn box position in our simulation \end{DoxyCompactList}\item 
+void \hyperlink{class_open_g_l_widget_a60e5e6f2845384c3faeaa11c0fb800b4}{set\-Spawn\-Box\-Size} (float \-\_\-size, int \-\_\-sim\-No=0)
+\begin{DoxyCompactList}\small\item\em a slot to set the spawn box size in our simulation \end{DoxyCompactList}\item 
+void \hyperlink{class_open_g_l_widget_adce23eb4fa8b5a1d1ac0403c911abb37}{add\-Particles\-To\-Sim} (int \-\_\-num\-Particles, int \-\_\-sim\-No=0)
+\begin{DoxyCompactList}\small\item\em slot to add particles to our simulation \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -64,9 +81,6 @@ void \hyperlink{class_open_g_l_widget_a1ecbdc2f18d7b955d7827c7314aea5a9}{set\-Pl
 \hypertarget{class_open_g_l_widget_a55cf4659a7f10207fb6ab3fcf9273abc}{void \hyperlink{class_open_g_l_widget_a55cf4659a7f10207fb6ab3fcf9273abc}{resize\-G\-L} (const int \-\_\-w, const int \-\_\-h)}\label{class_open_g_l_widget_a55cf4659a7f10207fb6ab3fcf9273abc}
 
 \begin{DoxyCompactList}\small\item\em called to resize the window \end{DoxyCompactList}\item 
-\hypertarget{class_open_g_l_widget_a4f3770bd262b22162296fd49e45fbafd}{void \hyperlink{class_open_g_l_widget_a4f3770bd262b22162296fd49e45fbafd}{set\-Point\-Size} (float \-\_\-size)}\label{class_open_g_l_widget_a4f3770bd262b22162296fd49e45fbafd}
-
-\begin{DoxyCompactList}\small\item\em mutator for our point size \end{DoxyCompactList}\item 
 \hypertarget{class_open_g_l_widget_a2e7ec0372fb6b2a0eb85a9524cfdd7fd}{void \hyperlink{class_open_g_l_widget_a2e7ec0372fb6b2a0eb85a9524cfdd7fd}{key\-Press\-Event} (Q\-Key\-Event $\ast$\-\_\-event)}\label{class_open_g_l_widget_a2e7ec0372fb6b2a0eb85a9524cfdd7fd}
 
 \begin{DoxyCompactList}\small\item\em keyboard press event \end{DoxyCompactList}\item 
@@ -121,13 +135,32 @@ ctor for our N\-G\-L drawing class
 
 
 \subsection{Member Function Documentation}
-\hypertarget{class_open_g_l_widget_ae26021ef3dd9a8f6a9fd68d4ce44a6ee}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!load\-Cube\-Map@{load\-Cube\-Map}}
+\hypertarget{class_open_g_l_widget_adce23eb4fa8b5a1d1ac0403c911abb37}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!add\-Particles\-To\-Sim@{add\-Particles\-To\-Sim}}
+\index{add\-Particles\-To\-Sim@{add\-Particles\-To\-Sim}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{add\-Particles\-To\-Sim}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::add\-Particles\-To\-Sim (
+\begin{DoxyParamCaption}
+\item[{int}]{\-\_\-num\-Particles, }
+\item[{int}]{\-\_\-sim\-No = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_adce23eb4fa8b5a1d1ac0403c911abb37}
+
+
+slot to add particles to our simulation 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-num\-Particles} & -\/ number of particles to add to simulation \\
+\hline
+{\em \-\_\-sim\-No} & -\/ simulation to add particles to \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_open_g_l_widget_a39018f8fc74ce591bfac884c277621e6}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!load\-Cube\-Map@{load\-Cube\-Map}}
 \index{load\-Cube\-Map@{load\-Cube\-Map}!OpenGLWidget@{Open\-G\-L\-Widget}}
-\subsubsection[{load\-Cube\-Map}]{\setlength{\rightskip}{0pt plus 5cm}bool Open\-G\-L\-Widget\-::load\-Cube\-Map (
+\subsubsection[{load\-Cube\-Map}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::load\-Cube\-Map (
 \begin{DoxyParamCaption}
 \item[{Q\-String}]{\-\_\-loc}
 \end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [slot]}}}\label{class_open_g_l_widget_ae26021ef3dd9a8f6a9fd68d4ce44a6ee}
+)\hspace{0.3cm}{\ttfamily [slot]}}}\label{class_open_g_l_widget_a39018f8fc74ce591bfac884c277621e6}
 
 
 slot to load cube maps to for our enironment map 
@@ -137,16 +170,41 @@ this function pressumes that all our cube map textures are in one texture
 {\em \-\_\-loc} & -\/ the location of our cube map texture \\
 \hline
 \end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-If the texture has been loaded correctly 
-\end{DoxyReturn}
-\hypertarget{class_open_g_l_widget_a18386d03c765a2b49d947573d5e98561}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Blur\-Falloff@{set\-Blur\-Falloff}}
+\hypertarget{class_open_g_l_widget_a2d1d9bb18d20f1479cb86e832ab17fd2}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!play\-Toggle@{play\-Toggle}}
+\index{play\-Toggle@{play\-Toggle}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{play\-Toggle}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::play\-Toggle (
+\begin{DoxyParamCaption}
+\item[{int}]{\-\_\-sim\-No = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a2d1d9bb18d20f1479cb86e832ab17fd2}
+
+
+play/pause toggle slot 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-sim\-No} & -\/ which simulation we want to toggle play \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_open_g_l_widget_acc54210918549bd628db0080d576b483}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!reset\-Sim@{reset\-Sim}}
+\index{reset\-Sim@{reset\-Sim}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{reset\-Sim}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::reset\-Sim (
+\begin{DoxyParamCaption}
+\item[{int}]{\-\_\-sim\-No}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_acc54210918549bd628db0080d576b483}
+
+
+a slot to reset our simulation and remove all particles 
+
+\-\_\-sim\-No -\/ simulation number to reset \hypertarget{class_open_g_l_widget_a8e96b44ed40ec8a5fe726f427f01e6fe}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Blur\-Falloff@{set\-Blur\-Falloff}}
 \index{set\-Blur\-Falloff@{set\-Blur\-Falloff}!OpenGLWidget@{Open\-G\-L\-Widget}}
 \subsubsection[{set\-Blur\-Falloff}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Blur\-Falloff (
 \begin{DoxyParamCaption}
-\item[{double}]{\-\_\-falloff}
+\item[{float}]{\-\_\-falloff, }
+\item[{int}]{\-\_\-sim\-No = {\ttfamily 0}}
 \end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a18386d03c765a2b49d947573d5e98561}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a8e96b44ed40ec8a5fe726f427f01e6fe}
 
 
 a slot to change our bilateral filter blur falloff 
@@ -155,14 +213,17 @@ a slot to change our bilateral filter blur falloff
 \begin{DoxyParams}{Parameters}
 {\em \-\_\-falloff} & -\/ bilateral blur falloff \\
 \hline
+{\em \-\_\-sim\-No} & -\/ which simulation we want to change the blur fall off in \\
+\hline
 \end{DoxyParams}
-\hypertarget{class_open_g_l_widget_a9115db4eeda180baaa8d14fae56d4ad2}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Blur\-Radius@{set\-Blur\-Radius}}
+\hypertarget{class_open_g_l_widget_add467ba5217218564d08ffb638b2f190}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Blur\-Radius@{set\-Blur\-Radius}}
 \index{set\-Blur\-Radius@{set\-Blur\-Radius}!OpenGLWidget@{Open\-G\-L\-Widget}}
 \subsubsection[{set\-Blur\-Radius}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Blur\-Radius (
 \begin{DoxyParamCaption}
-\item[{double}]{\-\_\-radius}
+\item[{float}]{\-\_\-radius, }
+\item[{int}]{\-\_\-sim\-No = {\ttfamily 0}}
 \end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a9115db4eeda180baaa8d14fae56d4ad2}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_add467ba5217218564d08ffb638b2f190}
 
 
 a slot to change our bilateral filter blur radius 
@@ -171,30 +232,74 @@ a slot to change our bilateral filter blur radius
 \begin{DoxyParams}{Parameters}
 {\em \-\_\-radius} & -\/ bilateral blur radius \\
 \hline
+{\em \-\_\-sim\-No} & -\/ which simulation we want to change the blur radius in \\
+\hline
 \end{DoxyParams}
-\hypertarget{class_open_g_l_widget_a2b1f58185ccc07782cc8c1d6f8f73863}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Density@{set\-Density}}
+\hypertarget{class_open_g_l_widget_a785cd8493ea4c1a24a19a16835de4577}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Density@{set\-Density}}
 \index{set\-Density@{set\-Density}!OpenGLWidget@{Open\-G\-L\-Widget}}
 \subsubsection[{set\-Density}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Density (
 \begin{DoxyParamCaption}
-\item[{double}]{\-\_\-den}
+\item[{float}]{\-\_\-den, }
+\item[{int}]{\-\_\-sim\-No = {\ttfamily 0}}
 \end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a2b1f58185ccc07782cc8c1d6f8f73863}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a785cd8493ea4c1a24a19a16835de4577}
 
 
 set density of our fluid slot 
 
 
 \begin{DoxyParams}{Parameters}
-{\em \-\_\-den} & -\/ density \\
+{\em \-\_\-den} & -\/ desired rest density \\
+\hline
+{\em \-\_\-sim\-No} & -\/ which simulation we want to change \\
 \hline
 \end{DoxyParams}
-\hypertarget{class_open_g_l_widget_a5e4e0ff0bd8f6fad5fd1fb53265dc814}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Gas\-Const@{set\-Gas\-Const}}
+\hypertarget{class_open_g_l_widget_a559ba717c412258c234ce5865c0b6976}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Fluid\-Color@{set\-Fluid\-Color}}
+\index{set\-Fluid\-Color@{set\-Fluid\-Color}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{set\-Fluid\-Color}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Fluid\-Color (
+\begin{DoxyParamCaption}
+\item[{Q\-Color}]{\-\_\-col, }
+\item[{int}]{\-\_\-sim\-No = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a559ba717c412258c234ce5865c0b6976}
+
+
+set the color of our fluid slot 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-col} & -\/ desired color to set the fluid to \\
+\hline
+{\em \-\_\-sim\-No} & -\/ which simulation we want to change the color in \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_open_g_l_widget_adc34d0b2bed5d7a7f2d5b92fa1b82889}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Fresnal\-Power@{set\-Fresnal\-Power}}
+\index{set\-Fresnal\-Power@{set\-Fresnal\-Power}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{set\-Fresnal\-Power}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Fresnal\-Power (
+\begin{DoxyParamCaption}
+\item[{float}]{\-\_\-power, }
+\item[{int}]{\-\_\-sim\-No = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_adc34d0b2bed5d7a7f2d5b92fa1b82889}
+
+
+a slot to set the fresnal power of our fluid 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-power} & -\/ desired fresnal power of our fluid \\
+\hline
+{\em \-\_\-sim\-No} & -\/ which simulation we want to change the fresnal power in \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_open_g_l_widget_a806e81697e0c6bf0992696ab948bc1c5}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Gas\-Const@{set\-Gas\-Const}}
 \index{set\-Gas\-Const@{set\-Gas\-Const}!OpenGLWidget@{Open\-G\-L\-Widget}}
 \subsubsection[{set\-Gas\-Const}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Gas\-Const (
 \begin{DoxyParamCaption}
-\item[{double}]{\-\_\-gas\-Const}
+\item[{double}]{\-\_\-gas\-Const, }
+\item[{int}]{\-\_\-sim\-No = {\ttfamily 0}}
 \end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a5e4e0ff0bd8f6fad5fd1fb53265dc814}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a806e81697e0c6bf0992696ab948bc1c5}
 
 
 set gas constant of our fluid slot 
@@ -203,14 +308,36 @@ set gas constant of our fluid slot
 \begin{DoxyParams}{Parameters}
 {\em \-\_\-gas\-Const} & -\/ gas constant \\
 \hline
+{\em \-\_\-sim\-No} & -\/ which simulation we want to change \\
+\hline
 \end{DoxyParams}
-\hypertarget{class_open_g_l_widget_a83bd4b62dc32eac33e84d570e31ddc1c}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Particle\-Size@{set\-Particle\-Size}}
+\hypertarget{class_open_g_l_widget_a84585fd40a1fad03bbd118436f5fc477}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Mass@{set\-Mass}}
+\index{set\-Mass@{set\-Mass}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{set\-Mass}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Mass (
+\begin{DoxyParamCaption}
+\item[{float}]{\-\_\-mass, }
+\item[{int}]{\-\_\-sim\-No = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a84585fd40a1fad03bbd118436f5fc477}
+
+
+set volume of our fluid slot 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-mass} & -\/ desired mass of particles \\
+\hline
+{\em \-\_\-sim\-No} & -\/ which simulation we want to change \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_open_g_l_widget_a3cdaf60ea4f98ee4782dec21b4810a41}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Particle\-Size@{set\-Particle\-Size}}
 \index{set\-Particle\-Size@{set\-Particle\-Size}!OpenGLWidget@{Open\-G\-L\-Widget}}
 \subsubsection[{set\-Particle\-Size}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Particle\-Size (
 \begin{DoxyParamCaption}
-\item[{double}]{\-\_\-size}
+\item[{float}]{\-\_\-size, }
+\item[{int}]{\-\_\-sim\-No = {\ttfamily 0}}
 \end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a83bd4b62dc32eac33e84d570e31ddc1c}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a3cdaf60ea4f98ee4782dec21b4810a41}
 
 
 a slot to change our particle size 
@@ -219,14 +346,17 @@ a slot to change our particle size
 \begin{DoxyParams}{Parameters}
 {\em \-\_\-size} & -\/ particle size \\
 \hline
+{\em \-\_\-sim\-No} & -\/ which simulation we want to change the particle size in \\
+\hline
 \end{DoxyParams}
-\hypertarget{class_open_g_l_widget_aef63bb4f820d5909837330d8cd220c20}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Particle\-Thickness@{set\-Particle\-Thickness}}
+\hypertarget{class_open_g_l_widget_aec967838bdff11519892bc05a5d930b0}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Particle\-Thickness@{set\-Particle\-Thickness}}
 \index{set\-Particle\-Thickness@{set\-Particle\-Thickness}!OpenGLWidget@{Open\-G\-L\-Widget}}
 \subsubsection[{set\-Particle\-Thickness}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Particle\-Thickness (
 \begin{DoxyParamCaption}
-\item[{double}]{\-\_\-thickness}
+\item[{float}]{\-\_\-thickness, }
+\item[{int}]{\-\_\-sim\-No = {\ttfamily 0}}
 \end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_aef63bb4f820d5909837330d8cd220c20}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_aec967838bdff11519892bc05a5d930b0}
 
 
 a slot to change our particle thickess 
@@ -235,14 +365,17 @@ a slot to change our particle thickess
 \begin{DoxyParams}{Parameters}
 {\em \-\_\-thickness} & -\/ particle thickness \\
 \hline
+{\em \-\_\-sim\-No} & -\/ which simulation we want to change the thickness in \\
+\hline
 \end{DoxyParams}
-\hypertarget{class_open_g_l_widget_a1ecbdc2f18d7b955d7827c7314aea5a9}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Playback\-Speed@{set\-Playback\-Speed}}
+\hypertarget{class_open_g_l_widget_a3c415ea6ecc1ccf6df49b08df74bbd1a}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Playback\-Speed@{set\-Playback\-Speed}}
 \index{set\-Playback\-Speed@{set\-Playback\-Speed}!OpenGLWidget@{Open\-G\-L\-Widget}}
 \subsubsection[{set\-Playback\-Speed}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Playback\-Speed (
 \begin{DoxyParamCaption}
-\item[{int}]{\-\_\-speed}
+\item[{float}]{\-\_\-speed, }
+\item[{int}]{\-\_\-sim\-No = {\ttfamily 0}}
 \end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a1ecbdc2f18d7b955d7827c7314aea5a9}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a3c415ea6ecc1ccf6df49b08df74bbd1a}
 
 
 a slot to set the playback speed of our simulation 
@@ -251,14 +384,80 @@ a slot to set the playback speed of our simulation
 \begin{DoxyParams}{Parameters}
 {\em \-\_\-speed} & -\/ the speed of play back as a percentage 100.\-f is real time \\
 \hline
+{\em \-\_\-sim\-No} & -\/ which simulation we want to change the play back speed in \\
+\hline
 \end{DoxyParams}
-\hypertarget{class_open_g_l_widget_a0806c995ed218e055cab1f9c177a6818}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Smoothing\-Length@{set\-Smoothing\-Length}}
+\hypertarget{class_open_g_l_widget_a9ad49f35e3a76ec5ea58cedbe73afa34}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Rafraction\-Ratio@{set\-Rafraction\-Ratio}}
+\index{set\-Rafraction\-Ratio@{set\-Rafraction\-Ratio}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{set\-Rafraction\-Ratio}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Rafraction\-Ratio (
+\begin{DoxyParamCaption}
+\item[{float}]{\-\_\-eta, }
+\item[{int}]{\-\_\-sim\-No = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a9ad49f35e3a76ec5ea58cedbe73afa34}
+
+
+a slot to set the refraction ratio of our fluid 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-eta} & -\/ desired refraction ratio \\
+\hline
+{\em \-\_\-sim\-No} & -\/ which simulation we want to change the rafraction ratio in \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_open_g_l_widget_a6bc6106c82580697f386fdfd2fdb3a12}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Sim\-Position@{set\-Sim\-Position}}
+\index{set\-Sim\-Position@{set\-Sim\-Position}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{set\-Sim\-Position}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Sim\-Position (
+\begin{DoxyParamCaption}
+\item[{float}]{\-\_\-x, }
+\item[{float}]{\-\_\-y, }
+\item[{float}]{\-\_\-z, }
+\item[{int}]{\-\_\-sim\-No = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a6bc6106c82580697f386fdfd2fdb3a12}
+
+
+slot to set sim position 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-x} & -\/ x position of our simulation \\
+\hline
+{\em \-\_\-y} & -\/ y position of our simulation \\
+\hline
+{\em \-\_\-z} & -\/ z position of our simualtion \\
+\hline
+{\em \-\_\-sim\-No} & -\/ simulation to set the position of \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_open_g_l_widget_ac8a71d325740372032c0061d3bf1daa0}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Sim\-Time\-Step@{set\-Sim\-Time\-Step}}
+\index{set\-Sim\-Time\-Step@{set\-Sim\-Time\-Step}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{set\-Sim\-Time\-Step}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Sim\-Time\-Step (
+\begin{DoxyParamCaption}
+\item[{float}]{\-\_\-time\-Step, }
+\item[{int}]{\-\_\-sim\-No = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_ac8a71d325740372032c0061d3bf1daa0}
+
+
+a slot to set the time step of our simulation 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-time\-Step} & -\/ the time\-Step of our simulation \\
+\hline
+{\em \-\_\-sim\-No} & -\/ which simulation we want to change the play back speed in \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_open_g_l_widget_af0f0474b4ff16318e6cf2e7479b369c7}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Smoothing\-Length@{set\-Smoothing\-Length}}
 \index{set\-Smoothing\-Length@{set\-Smoothing\-Length}!OpenGLWidget@{Open\-G\-L\-Widget}}
 \subsubsection[{set\-Smoothing\-Length}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Smoothing\-Length (
 \begin{DoxyParamCaption}
-\item[{double}]{\-\_\-len}
+\item[{float}]{\-\_\-len, }
+\item[{int}]{\-\_\-sim\-No = {\ttfamily 0}}
 \end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a0806c995ed218e055cab1f9c177a6818}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_af0f0474b4ff16318e6cf2e7479b369c7}
 
 
 set smoothing length of our fluid slot 
@@ -267,14 +466,61 @@ set smoothing length of our fluid slot
 \begin{DoxyParams}{Parameters}
 {\em \-\_\-len} & -\/ smoothing length \\
 \hline
+{\em \-\_\-sim\-No} & -\/ which simulation we want to change our smoothing length in \\
+\hline
 \end{DoxyParams}
-\hypertarget{class_open_g_l_widget_a2476342258d25fafecb7e784373141e4}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Visc\-Coef@{set\-Visc\-Coef}}
+\hypertarget{class_open_g_l_widget_ac4d67ea702f268f7d072e94a569cb5f0}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Spawn\-Box\-Position@{set\-Spawn\-Box\-Position}}
+\index{set\-Spawn\-Box\-Position@{set\-Spawn\-Box\-Position}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{set\-Spawn\-Box\-Position}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Spawn\-Box\-Position (
+\begin{DoxyParamCaption}
+\item[{float}]{\-\_\-x, }
+\item[{float}]{\-\_\-y, }
+\item[{float}]{\-\_\-z, }
+\item[{int}]{\-\_\-sim\-No = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_ac4d67ea702f268f7d072e94a569cb5f0}
+
+
+a slot to set the spawn box position in our simulation 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-x} & -\/ x position of spawn box location \\
+\hline
+{\em \-\_\-y} & -\/ y position of spawn box location \\
+\hline
+{\em \-\_\-z} & -\/ z position of spawn box location \\
+\hline
+{\em \-\_\-sim\-No} & -\/ simulation number to set the spawn box location \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_open_g_l_widget_a60e5e6f2845384c3faeaa11c0fb800b4}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Spawn\-Box\-Size@{set\-Spawn\-Box\-Size}}
+\index{set\-Spawn\-Box\-Size@{set\-Spawn\-Box\-Size}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{set\-Spawn\-Box\-Size}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Spawn\-Box\-Size (
+\begin{DoxyParamCaption}
+\item[{float}]{\-\_\-size, }
+\item[{int}]{\-\_\-sim\-No = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a60e5e6f2845384c3faeaa11c0fb800b4}
+
+
+a slot to set the spawn box size in our simulation 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-size} & -\/ desired spawn box size \\
+\hline
+{\em \-\_\-sim\-No} & -\/ simulation number to set the spawn box size \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_open_g_l_widget_aad4c9ceaedc57507d3e9504d15dd8f4a}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Visc\-Coef@{set\-Visc\-Coef}}
 \index{set\-Visc\-Coef@{set\-Visc\-Coef}!OpenGLWidget@{Open\-G\-L\-Widget}}
 \subsubsection[{set\-Visc\-Coef}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Visc\-Coef (
 \begin{DoxyParamCaption}
-\item[{double}]{\-\_\-visc}
+\item[{float}]{\-\_\-visc, }
+\item[{int}]{\-\_\-sim\-No = {\ttfamily 0}}
 \end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a2476342258d25fafecb7e784373141e4}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_aad4c9ceaedc57507d3e9504d15dd8f4a}
 
 
 set viscoty coeficient of our fluid slot 
@@ -283,21 +529,7 @@ set viscoty coeficient of our fluid slot
 \begin{DoxyParams}{Parameters}
 {\em \-\_\-visc} & -\/ viscosity coeficient \\
 \hline
-\end{DoxyParams}
-\hypertarget{class_open_g_l_widget_a4f9cc5b8135515ea87870585dfdf194b}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Volume@{set\-Volume}}
-\index{set\-Volume@{set\-Volume}!OpenGLWidget@{Open\-G\-L\-Widget}}
-\subsubsection[{set\-Volume}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Volume (
-\begin{DoxyParamCaption}
-\item[{double}]{\-\_\-vol}
-\end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_a4f9cc5b8135515ea87870585dfdf194b}
-
-
-set volume of our fluid slot 
-
-
-\begin{DoxyParams}{Parameters}
-{\em \-\_\-vol} & -\/ volume \\
+{\em \-\_\-sim\-No} & -\/ which simulation we want to change \\
 \hline
 \end{DoxyParams}
 \hypertarget{class_open_g_l_widget_a0682546d360b7ce9ae1dce31a090cfca}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!wheel\-Event@{wheel\-Event}}

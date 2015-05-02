@@ -100,9 +100,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac997f2a996e7c7778263e160a5dd005f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#ac997f2a996e7c7778263e160a5dd005f">SPHEngine</a> (unsigned int _numParticles=0, unsigned int _volume=1, float _density=1000, float _contanerSize=1)</td></tr>
-<tr class="memdesc:ac997f2a996e7c7778263e160a5dd005f"><td class="mdescLeft">&#160;</td><td class="mdescRight">defualt constructor  <a href="#ac997f2a996e7c7778263e160a5dd005f">More...</a><br/></td></tr>
-<tr class="separator:ac997f2a996e7c7778263e160a5dd005f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8be3b3f99242c3548ade6ff9314fc46c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a8be3b3f99242c3548ade6ff9314fc46c">SPHEngine</a> (unsigned int _numParticles=0, float _mass=10.f, float _density=998.2f, float _contanerSize=10)</td></tr>
+<tr class="memdesc:a8be3b3f99242c3548ade6ff9314fc46c"><td class="mdescLeft">&#160;</td><td class="mdescRight">defualt constructor  <a href="#a8be3b3f99242c3548ade6ff9314fc46c">More...</a><br/></td></tr>
+<tr class="separator:a8be3b3f99242c3548ade6ff9314fc46c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0969407c141667c1147d409a0397257d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0969407c141667c1147d409a0397257d"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a0969407c141667c1147d409a0397257d">~SPHEngine</a> ()</td></tr>
 <tr class="memdesc:a0969407c141667c1147d409a0397257d"><td class="mdescLeft">&#160;</td><td class="mdescRight">default destructor <br/></td></tr>
@@ -122,22 +122,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 GLuint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#aee51f7802e02c838732d9acab37da89a">getPositionBuffer</a> ()</td></tr>
 <tr class="memdesc:aee51f7802e02c838732d9acab37da89a"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns the output postion openGL buffer of our particles <br/></td></tr>
 <tr class="separator:aee51f7802e02c838732d9acab37da89a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add241056dc1719b3a11486da48c3724c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="add241056dc1719b3a11486da48c3724c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#add241056dc1719b3a11486da48c3724c">setVolume</a> (float _volume)</td></tr>
-<tr class="memdesc:add241056dc1719b3a11486da48c3724c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutator for the volume of our fluid. This in turn effects the mass of our particles. <br/></td></tr>
-<tr class="separator:add241056dc1719b3a11486da48c3724c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a588d8e6f1276d07adb5363c8c3766fda"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a588d8e6f1276d07adb5363c8c3766fda"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a588d8e6f1276d07adb5363c8c3766fda">getVolume</a> ()</td></tr>
-<tr class="memdesc:a588d8e6f1276d07adb5363c8c3766fda"><td class="mdescLeft">&#160;</td><td class="mdescRight">accessor to query the volume of our fluid <br/></td></tr>
-<tr class="separator:a588d8e6f1276d07adb5363c8c3766fda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acbc638f7ab8fa2ab356dadf677df10c6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acbc638f7ab8fa2ab356dadf677df10c6"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#acbc638f7ab8fa2ab356dadf677df10c6">setDesity</a> (float _density)</td></tr>
-<tr class="memdesc:acbc638f7ab8fa2ab356dadf677df10c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutator for the desity of our fluid. This in turn effects the mass of our particles. <br/></td></tr>
+<tr class="memdesc:acbc638f7ab8fa2ab356dadf677df10c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutator for the desity of our fluid. <br/></td></tr>
 <tr class="separator:acbc638f7ab8fa2ab356dadf677df10c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ee29d26f9451d81a07abde5b1aa53c6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8ee29d26f9451d81a07abde5b1aa53c6"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a8ee29d26f9451d81a07abde5b1aa53c6">getDensity</a> ()</td></tr>
 <tr class="memdesc:a8ee29d26f9451d81a07abde5b1aa53c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">accessor to query the density of our fluid <br/></td></tr>
 <tr class="separator:a8ee29d26f9451d81a07abde5b1aa53c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f937d1c09511f302455f102fae167c3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0f937d1c09511f302455f102fae167c3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a0f937d1c09511f302455f102fae167c3">setParticleMass</a> (float _mass)</td></tr>
+<tr class="memdesc:a0f937d1c09511f302455f102fae167c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">mutator to set the mass of our fluid particles <br/></td></tr>
+<tr class="separator:a0f937d1c09511f302455f102fae167c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a196e04ba23d9d9c73924f3af8a8240ed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a196e04ba23d9d9c73924f3af8a8240ed"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a196e04ba23d9d9c73924f3af8a8240ed">setSmoothingLength</a> (float _length)</td></tr>
 <tr class="memdesc:a196e04ba23d9d9c73924f3af8a8240ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutator for the smoothing length of our simulation. Can also be thought of as hash cell size. <br/></td></tr>
@@ -177,13 +173,32 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:aad9d9bc9a1a7e5f64a5e045c339f8b3e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#aad9d9bc9a1a7e5f64a5e045c339f8b3e">setMaxNumSamples</a> (int _numSamples)</td></tr>
 <tr class="memdesc:aad9d9bc9a1a7e5f64a5e045c339f8b3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">mutator for our maximum number of samples per particle in our fluid solver  <a href="#aad9d9bc9a1a7e5f64a5e045c339f8b3e">More...</a><br/></td></tr>
 <tr class="separator:aad9d9bc9a1a7e5f64a5e045c339f8b3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa53becc41023eb45601eb3060860193a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#aa53becc41023eb45601eb3060860193a">addWall</a> (float3 _pos, float3 _norm, float _restCoef=1.0)</td></tr>
-<tr class="memdesc:aa53becc41023eb45601eb3060860193a"><td class="mdescLeft">&#160;</td><td class="mdescRight">adds a colllision plane to our simulation  <a href="#aa53becc41023eb45601eb3060860193a">More...</a><br/></td></tr>
-<tr class="separator:aa53becc41023eb45601eb3060860193a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe2b02e535cf064f91f2de4312c8ae39"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#afe2b02e535cf064f91f2de4312c8ae39">addCollisionObject</a> (float3 _min, float3 _max, float3 _restCoef, bool _isContainer)</td></tr>
+<tr class="memdesc:afe2b02e535cf064f91f2de4312c8ae39"><td class="mdescLeft">&#160;</td><td class="mdescRight">adds a colllision object for our fluid. So far supports containers and collision cuboids  <a href="#afe2b02e535cf064f91f2de4312c8ae39">More...</a><br/></td></tr>
+<tr class="separator:afe2b02e535cf064f91f2de4312c8ae39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a387ab48532ca20b2eb31319e862e243b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a387ab48532ca20b2eb31319e862e243b"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a387ab48532ca20b2eb31319e862e243b">getNumParticles</a> ()</td></tr>
 <tr class="memdesc:a387ab48532ca20b2eb31319e862e243b"><td class="mdescLeft">&#160;</td><td class="mdescRight">accessor to number of particles in simulation <br/></td></tr>
 <tr class="separator:a387ab48532ca20b2eb31319e862e243b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a692ed8ae0cdb67f4a774fa2a94ad635f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a692ed8ae0cdb67f4a774fa2a94ad635f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a692ed8ae0cdb67f4a774fa2a94ad635f">signalReset</a> ()</td></tr>
+<tr class="memdesc:a692ed8ae0cdb67f4a774fa2a94ad635f"><td class="mdescLeft">&#160;</td><td class="mdescRight">signals our engine to reset the simulation <br/></td></tr>
+<tr class="separator:a692ed8ae0cdb67f4a774fa2a94ad635f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e61b1f56e20ab4eee7edd111c59912f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a4e61b1f56e20ab4eee7edd111c59912f">signalAddParticles</a> (int _numParticles)</td></tr>
+<tr class="memdesc:a4e61b1f56e20ab4eee7edd111c59912f"><td class="mdescLeft">&#160;</td><td class="mdescRight">signals the engine to add particles to our simulation  <a href="#a4e61b1f56e20ab4eee7edd111c59912f">More...</a><br/></td></tr>
+<tr class="separator:a4e61b1f56e20ab4eee7edd111c59912f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a130606677b2c3edbc9b95006672c1578"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a130606677b2c3edbc9b95006672c1578">setSpawnBoxPos</a> (float _x, float _y, float _z)</td></tr>
+<tr class="memdesc:a130606677b2c3edbc9b95006672c1578"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets the spawn box position  <a href="#a130606677b2c3edbc9b95006672c1578">More...</a><br/></td></tr>
+<tr class="separator:a130606677b2c3edbc9b95006672c1578"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a452295b33bfa893db3c9484da9ce9fb5"><td class="memItemLeft" align="right" valign="top">float3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a452295b33bfa893db3c9484da9ce9fb5">getSpawnBoxPos</a> ()</td></tr>
+<tr class="memdesc:a452295b33bfa893db3c9484da9ce9fb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">accessor to our spawn box position  <a href="#a452295b33bfa893db3c9484da9ce9fb5">More...</a><br/></td></tr>
+<tr class="separator:a452295b33bfa893db3c9484da9ce9fb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bf5d2bc9fc8bcc39d42108150123663"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a2bf5d2bc9fc8bcc39d42108150123663">setSpawnBoxSize</a> (float _size)</td></tr>
+<tr class="memdesc:a2bf5d2bc9fc8bcc39d42108150123663"><td class="mdescLeft">&#160;</td><td class="mdescRight">set the size of our spawn box  <a href="#a2bf5d2bc9fc8bcc39d42108150123663">More...</a><br/></td></tr>
+<tr class="separator:a2bf5d2bc9fc8bcc39d42108150123663"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a234554f5b25de8cc34541e1fd0a4b52b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a234554f5b25de8cc34541e1fd0a4b52b">getSpawnBoxSize</a> ()</td></tr>
+<tr class="memdesc:a234554f5b25de8cc34541e1fd0a4b52b"><td class="mdescLeft">&#160;</td><td class="mdescRight">accessor to our spawn box size  <a href="#a234554f5b25de8cc34541e1fd0a4b52b">More...</a><br/></td></tr>
+<tr class="separator:a234554f5b25de8cc34541e1fd0a4b52b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>our cuda libraries </p>
@@ -193,7 +208,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 <dl class="section date"><dt>Date</dt><dd>09/03/2015 </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>1.0 Our fluid simulation uses smoothed particle hydrodynamics and true navier stokes equations to compute our particle positions in our simulation. This class also manages its own openGL buffer storing postions of particles in vertex attrip pointer 0. In case you wish to draw these particles. </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="ac997f2a996e7c7778263e160a5dd005f"></a>
+<a class="anchor" id="a8be3b3f99242c3548ade6ff9314fc46c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -206,20 +221,20 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>_volume</em> = <code>1</code>, </td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>_mass</em> = <code>10.f</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>_density</em> = <code>1000</code>, </td>
+          <td class="paramname"><em>_density</em> = <code>998.2f</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>_contanerSize</em> = <code>1</code>&#160;</td>
+          <td class="paramname"><em>_contanerSize</em> = <code>10</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -233,7 +248,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">_numParticles</td><td>how many particles we want to have on simulation initialisation. </td></tr>
-    <tr><td class="paramname">_volume</td><td>- the volume of our fluid. </td></tr>
+    <tr><td class="paramname">_mass</td><td>- mass per partilce of our fluid </td></tr>
     <tr><td class="paramname">_density</td><td>- the density of our fluid </td></tr>
     <tr><td class="paramname">_contanerSize</td><td>- the contaner size of for our fluid. e.g. 1 is a cube of 1*1*1. </td></tr>
   </table>
@@ -243,27 +258,33 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="aa53becc41023eb45601eb3060860193a"></a>
+<a class="anchor" id="afe2b02e535cf064f91f2de4312c8ae39"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void SPHEngine::addWall </td>
+          <td class="memname">void SPHEngine::addCollisionObject </td>
           <td>(</td>
           <td class="paramtype">float3&#160;</td>
-          <td class="paramname"><em>_pos</em>, </td>
+          <td class="paramname"><em>_min</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">float3&#160;</td>
-          <td class="paramname"><em>_norm</em>, </td>
+          <td class="paramname"><em>_max</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>_restCoef</em> = <code>1.0</code>&#160;</td>
+          <td class="paramtype">float3&#160;</td>
+          <td class="paramname"><em>_restCoef</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>_isContainer</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -273,15 +294,69 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
       </table>
 </div><div class="memdoc">
 
-<p>adds a colllision plane to our simulation </p>
+<p>adds a colllision object for our fluid. So far supports containers and collision cuboids </p>
+<dl class="section warning"><dt>Warning</dt><dd>Very simple AABB collision. Probably rubish and unoptimized </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">_pos</td><td>- the position of our plane </td></tr>
-    <tr><td class="paramname">_norm</td><td>- the normal of our plane </td></tr>
-    <tr><td class="paramname">_resrCoef</td><td>- coeficient of restitution of our plane </td></tr>
+    <tr><td class="paramname">_min</td><td>- container minimum </td></tr>
+    <tr><td class="paramname">_max</td><td>- container maximum </td></tr>
+    <tr><td class="paramname">_restCoef</td><td>- coeficient of restitution of our container in our 3 axis </td></tr>
+    <tr><td class="paramname">_isContainer</td><td>- indicate whether or not we are adding a container of a box </td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="a452295b33bfa893db3c9484da9ce9fb5"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float3 SPHEngine::getSpawnBoxPos </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>accessor to our spawn box position </p>
+<dl class="section return"><dt>Returns</dt><dd>float3 spawn box position </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a234554f5b25de8cc34541e1fd0a4b52b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float SPHEngine::getSpawnBoxSize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>accessor to our spawn box size </p>
+<dl class="section return"><dt>Returns</dt><dd>float spawn box size </dd></dl>
 
 </div>
 </div>
@@ -311,6 +386,112 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">_numSamples</td><td>- desired maximum number of samples per particle in fluid solver </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a130606677b2c3edbc9b95006672c1578"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SPHEngine::setSpawnBoxPos </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>_x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>_y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>_z</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>sets the spawn box position </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_x</td><td>- x position of spawn box </td></tr>
+    <tr><td class="paramname">_y</td><td>- y position of spawn box </td></tr>
+    <tr><td class="paramname">_z</td><td>- z position of spawn box </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a2bf5d2bc9fc8bcc39d42108150123663"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SPHEngine::setSpawnBoxSize </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>_size</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>set the size of our spawn box </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_size</td><td>- the size of our spawn box </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a4e61b1f56e20ab4eee7edd111c59912f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SPHEngine::signalAddParticles </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>_numParticles</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>signals the engine to add particles to our simulation </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_numParticles</td><td>- the number of particles to add to our simulation </td></tr>
   </table>
   </dd>
 </dl>
@@ -348,7 +529,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Apr 28 2015 21:28:02 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat May 2 2015 02:57:37 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

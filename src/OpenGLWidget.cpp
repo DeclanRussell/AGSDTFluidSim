@@ -30,13 +30,13 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     m_spinXFace=0;
     m_spinYFace=0;
     m_modelPos=ngl::Vec3(0.0);
-    m_update = false;
-    m_playBackSpeed = 1.f;
     // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
     this->resize(_parent->size());
 }
 //----------------------------------------------------------------------------------------------------------------------
 OpenGLWidget::~OpenGLWidget(){
+    RenderTargetLib::getInstance()->destroy();
+    GLTextureLib::getInstance()->destroy();
     ngl::NGLInit *Init = ngl::NGLInit::instance();
     std::cout<<"Shutting down NGL, removing VAO's and Shaders\n";
     Init->NGLQuit();
@@ -72,23 +72,13 @@ void OpenGLWidget::initializeGL(){
     // Now we will create a basic Camera from the graphics library
     // This is a static camera so it only needs to be set once
     // First create Values for the camera position
-    ngl::Vec3 from(5,15,15);
+    ngl::Vec3 from(5,0,15);
     ngl::Vec3 to(5,0,0);
     ngl::Vec3 up(0,1,0);
     m_cam= new ngl::Camera(from,to,up);
     // set the shape using FOV 45 Aspect Ratio based on Width and Height
     // The final two are near and far clipping planes of 0.1 and 100
-    m_cam->setShape(45,(float)width()/height(),1,1000);
-
-    //create our fluid shader
-    m_fluidShader = new FluidShader(width(),height());
-    m_fluidShader->setScreenSize(width(),height());
-    loadCubeMap("textures/skyCubeMap.png");
-    m_fluidShader->init();
-
-    //allocate some space for our SPHEngine
-    m_SPHEngine = new SPHEngine(10000,15.0f,998.2f,10.f);
-    m_SPHEngine->setGasConstant(1);
+    m_cam->setShape(45,(float)width()/height(),1,100);
 
     m_currentTime = m_currentTime.currentTime();
     startTimer(0);
@@ -99,7 +89,9 @@ void OpenGLWidget::resizeGL(const int _w, const int _h){
     glViewport(0,0,_w,_h);
     m_cam->setShape(45,(float)_w/_h, m_cam->getNear(),m_cam->getFar());
     m_text->setScreenSize(_w,_h);
-    m_fluidShader->resize(_w,_h);
+    for(int i=0;i<m_fluidShaders.size();i++){
+        m_fluidShaders[i]->resize(_w,_h);
+    }
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::timerEvent(QTimerEvent *){
@@ -113,30 +105,42 @@ void OpenGLWidget::paintGL(){
     int msecsPassed = m_currentTime.msecsTo(newTime);
     m_currentTime = m_currentTime.currentTime();
 
-    if(m_update){
-        //update our fluid simulation with our time step
-        m_SPHEngine->update((0.004f) * m_playBackSpeed);
-        //m_SPHEngine->update(((float)msecsPassed/1000.f) * m_playBackSpeed);
+
+    //update our fluid simulations with our time step
+    for(unsigned int i=0;i<m_SPHEngines.size();i++){
+        if(m_fluidSimProps[i].m_update){
+            if(m_fluidSimProps[i].m_updateWithFixedTimeStep){
+                m_SPHEngines[i]->update((m_fluidSimProps[i].m_timeStep) * m_fluidSimProps[i].m_playSpeed);
+            }
+            else{
+                m_SPHEngines[i]->update(((float)msecsPassed/1000.f) * m_fluidSimProps[i].m_playSpeed);
+            }
+        }
     }
+
 
     // create the rotation matrices
     ngl::Mat4 rotX;
     ngl::Mat4 rotY;
-
+    ngl::Mat4 rotXY;
     rotX.rotateX(m_spinXFace);
     rotY.rotateY(m_spinYFace);
-    // multiply the rotations
-    m_mouseGlobalTX=rotY*rotX;
-    // add the translations
-    m_mouseGlobalTX.m_m[3][0] = m_modelPos.m_x;
-    m_mouseGlobalTX.m_m[3][1] = m_modelPos.m_y;
-    m_mouseGlobalTX.m_m[3][2] = m_modelPos.m_z;
+    rotXY = rotX*rotY;
 
     //draw our fluid
     ngl::Mat4 V = m_cam->getViewMatrix();
     ngl::Mat4 P = m_cam->getProjectionMatrix();
-    m_fluidShader->draw(m_SPHEngine->getPositionBuffer(),m_SPHEngine->getNumParticles(),m_mouseGlobalTX,V,P,m_cam->getEye());
-
+    for(int i=0;i<m_fluidShaders.size();i++){
+        ngl::Mat4 M = m_mouseGlobalTX;
+        M.m_m[3][0] = m_fluidSimProps[i].m_simPosition.m_x;
+        M.m_m[3][1] = m_fluidSimProps[i].m_simPosition.m_y;
+        M.m_m[3][2] = m_fluidSimProps[i].m_simPosition.m_z;
+        M = M * rotXY;
+        M.m_m[3][0] += m_modelPos.m_x;
+        M.m_m[3][1] += m_modelPos.m_y;
+        M.m_m[3][2] += m_modelPos.m_z;
+        m_fluidShaders[i]->draw(m_SPHEngines[i]->getPositionBuffer(),m_SPHEngines[i]->getNumParticles(),M,V,P,rotXY,m_cam->getEye());
+    }
 
     //write our framerate
     QString text;
@@ -147,18 +151,23 @@ void OpenGLWidget::paintGL(){
         text.sprintf("framerate is %f",(float)(1000.0/msecsPassed));
     }
     m_text->renderText(10,20,text);
-    text.sprintf("Number of particles: %d",m_SPHEngine->getNumParticles());
+    int totalParticles = 0;
+    for(int i=0;i<m_SPHEngines.size();i++){
+        totalParticles+=m_SPHEngines[i]->getNumParticles();
+    }
+    text.sprintf("Number of particles: %d",totalParticles);
     m_text->renderText(10,40,text);
 
 }
 //----------------------------------------------------------------------------------------------------------------------
-bool OpenGLWidget::loadCubeMap(QString _loc){
+void OpenGLWidget::loadCubeMap(QString _loc){
     //seperate our cube map texture our into its 6 side textures
     QImage img(_loc);
     img = img.mirrored(false,true);
     //some error checking
     if(img.isNull()){
-        return false;
+        std::cerr<<"Error: Environment map mage could not be loaded."<<std::endl;
+        return;
     }
 
     int wStep = img.width()/4;
@@ -171,9 +180,33 @@ bool OpenGLWidget::loadCubeMap(QString _loc){
     QImage right = QGLWidget::convertToGLFormat( img.copy(2*wStep,hStep,wStep,hStep));
     QImage back = QGLWidget::convertToGLFormat( img.copy(3*wStep,hStep,wStep,hStep));
 
-    m_fluidShader->setCubeMap(wStep,hStep,front.bits(),back.bits(),top.bits(),bottom.bits(),left.bits(),right.bits());
+    m_fluidShaders[0]->setCubeMap(wStep,hStep,front.bits(),back.bits(),top.bits(),bottom.bits(),left.bits(),right.bits());
 
 }
+//----------------------------------------------------------------------------------------------------------------------
+void OpenGLWidget::addFluidSim(){
+    //set up some inofrmation for when we update these simulations
+    fluidSimProps props;
+    props.m_simPosition = ngl::Vec3(0,0,0);
+    props.m_update = false;
+    props.m_timeStep = 0.004;
+    props.m_updateWithFixedTimeStep = true;
+    props.m_playSpeed = 1;
+
+    m_fluidSimProps.push_back(props);
+
+    //create our fluid shader
+    m_fluidShaders.push_back(new FluidShader(width(),height()));
+    m_fluidShaders[m_fluidShaders.size()-1]->setScreenSize(width(),height());
+    if(m_fluidShaders.size()==1){
+        loadCubeMap("textures/skyCubeMap.png");
+    }
+    m_fluidShaders[m_fluidShaders.size()-1]->init();
+
+    //allocate some space for our SPHEngine
+    m_SPHEngines.push_back(new SPHEngine());
+}
+
 
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::keyPressEvent(QKeyEvent *_event){
@@ -181,10 +214,9 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *_event){
         QGuiApplication::exit();
     }
     if(_event->key()==Qt::Key_E){
-        m_SPHEngine->update(0.001);
-    }
-    if(_event->key()==Qt::Key_Space){
-        m_update = !m_update;
+        for(unsigned int i=0;i<m_SPHEngines.size();i++){
+            m_SPHEngines[i]->update(0.001);
+        }
     }
 }
 //----------------------------------------------------------------------------------------------------------------------

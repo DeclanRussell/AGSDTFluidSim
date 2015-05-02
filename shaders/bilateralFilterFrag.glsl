@@ -46,7 +46,7 @@ float filter(vec2 blurDir, float depth){
     for(float x=-filterRadius; x<=filterRadius; x+=texelSize) {
         float depSample = texture(depthTex, VTexCoord + x*blurDir).x;
         // spatial domain
-        r = x * 2.0f;
+        r = x * 0.5;
         w = exp(-r*r);
         // range domain
         r2 = (depSample - depth) * blurDepthFalloff;
