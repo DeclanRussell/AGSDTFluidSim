@@ -1,0 +1,152 @@
+\hypertarget{class_g_l_texture}{\section{G\-L\-Texture Class Reference}
+\label{class_g_l_texture}\index{G\-L\-Texture@{G\-L\-Texture}}
+}
+Inheritance diagram for G\-L\-Texture\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_g_l_texture}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_g_l_texture_a1f0c33b32b1e37985976b6f10c2263c3}{G\-L\-Texture} (G\-Lenum \-\_\-target, G\-Lint \-\_\-level, G\-Lint \-\_\-internal\-Format, G\-Lsizei \-\_\-width, G\-Lsizei \-\_\-height, G\-Lint \-\_\-border, G\-Lenum \-\_\-format, G\-Lenum \-\_\-type, const G\-Lvoid $\ast$\-\_\-data)
+\begin{DoxyCompactList}\small\item\em Constructor that creates our texture on our G\-P\-U. \end{DoxyCompactList}\item 
+\hyperlink{class_g_l_texture_a0ec835c5a25261ce08b43b7a1601fc8f}{G\-L\-Texture} (G\-Lenum \-\_\-target, G\-Lint \-\_\-level, G\-Lint \-\_\-internal\-Format, G\-Lsizei \-\_\-width, G\-Lsizei \-\_\-height, G\-Lint \-\_\-border, G\-Lenum \-\_\-format, G\-Lenum \-\_\-type, const G\-Lvoid $\ast$\-\_\-front, const G\-Lvoid $\ast$\-\_\-back, const G\-Lvoid $\ast$\-\_\-top, const G\-Lvoid $\ast$\-\_\-bottom, const G\-Lvoid $\ast$\-\_\-left, const G\-Lvoid $\ast$\-\_\-right)
+\begin{DoxyCompactList}\small\item\em Constructor that creates a cube map texture on our G\-P\-U. \end{DoxyCompactList}\item 
+\hypertarget{class_g_l_texture_a7a0f04b3bd68c77588c0aea9b30b08c4}{\hyperlink{class_g_l_texture_a7a0f04b3bd68c77588c0aea9b30b08c4}{$\sim$\-G\-L\-Texture} ()}\label{class_g_l_texture_a7a0f04b3bd68c77588c0aea9b30b08c4}
+
+\begin{DoxyCompactList}\small\item\em our destrutor that removes our texture \end{DoxyCompactList}\item 
+\hypertarget{class_g_l_texture_add43b53521541bad76faec1cc5292048}{void \hyperlink{class_g_l_texture_add43b53521541bad76faec1cc5292048}{set\-Tex\-Paramiteri} (G\-Lenum \-\_\-pname, G\-Lint \-\_\-param)}\label{class_g_l_texture_add43b53521541bad76faec1cc5292048}
+
+\begin{DoxyCompactList}\small\item\em set our texture integer paramiters same as gl\-Tex\-Paramiteri see Open\-G\-L documentation for more info \end{DoxyCompactList}\item 
+\hypertarget{class_g_l_texture_a2a2d0c69601ba7843dd33def3f0d28a2}{void \hyperlink{class_g_l_texture_a2a2d0c69601ba7843dd33def3f0d28a2}{set\-Tex\-Paramiterf} (G\-Lenum \-\_\-pname, G\-Lfloat \-\_\-param)}\label{class_g_l_texture_a2a2d0c69601ba7843dd33def3f0d28a2}
+
+\begin{DoxyCompactList}\small\item\em set our texture float paramiters same as gl\-Tex\-Paramiterf see Open\-G\-L documentation for more info \end{DoxyCompactList}\item 
+void \hyperlink{class_g_l_texture_a5b70c5df1d184c9be005b0ed05f1e808}{resize} (G\-Lsizei \-\_\-width, G\-Lsizei \-\_\-height=0)
+\begin{DoxyCompactList}\small\item\em resizes our texture \end{DoxyCompactList}\item 
+void \hyperlink{class_g_l_texture_a9214dfefb40db4fbb7450bcc0ba70b61}{set\-Data} (const G\-Lvoid $\ast$\-\_\-data, G\-Lsizei \-\_\-width=-\/1, G\-Lsizei \-\_\-height=-\/1)
+\begin{DoxyCompactList}\small\item\em set the data of our textue \end{DoxyCompactList}\item 
+\hypertarget{class_g_l_texture_af20871f52b9705409078558a33a2c73d}{void \hyperlink{class_g_l_texture_af20871f52b9705409078558a33a2c73d}{set\-Data} (const G\-Lvoid $\ast$\-\_\-front, const G\-Lvoid $\ast$\-\_\-back, const G\-Lvoid $\ast$\-\_\-top, const G\-Lvoid $\ast$\-\_\-bottom, const G\-Lvoid $\ast$\-\_\-left, const G\-Lvoid $\ast$\-\_\-right, G\-Lsizei \-\_\-width=-\/1, G\-Lsizei \-\_\-height=-\/1)}\label{class_g_l_texture_af20871f52b9705409078558a33a2c73d}
+
+\begin{DoxyCompactList}\small\item\em set the data for a cube map texture \end{DoxyCompactList}\item 
+void \hyperlink{class_g_l_texture_a8fcf4e5253bccd04ffe6e65af228dabc}{bind} (unsigned int \-\_\-loc)
+\begin{DoxyCompactList}\small\item\em binds our texture and set active texture \end{DoxyCompactList}\item 
+\hypertarget{class_g_l_texture_a3d26fc3a017fd2079ab67e422f9bac10}{void \hyperlink{class_g_l_texture_a3d26fc3a017fd2079ab67e422f9bac10}{bind} ()}\label{class_g_l_texture_a3d26fc3a017fd2079ab67e422f9bac10}
+
+\begin{DoxyCompactList}\small\item\em binds our texture \end{DoxyCompactList}\item 
+\hypertarget{class_g_l_texture_a96090b31b8d550a50eb1d4bed1055774}{void \hyperlink{class_g_l_texture_a96090b31b8d550a50eb1d4bed1055774}{unbind} ()}\label{class_g_l_texture_a96090b31b8d550a50eb1d4bed1055774}
+
+\begin{DoxyCompactList}\small\item\em unbinds our texture \end{DoxyCompactList}\item 
+\hypertarget{class_g_l_texture_a0232aa38a299d2570a06367cd8ebd688}{G\-Luint \hyperlink{class_g_l_texture_a0232aa38a299d2570a06367cd8ebd688}{get\-Handle} ()}\label{class_g_l_texture_a0232aa38a299d2570a06367cd8ebd688}
+
+\begin{DoxyCompactList}\small\item\em accessor to the handle of our texture \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_g_l_texture_a1f0c33b32b1e37985976b6f10c2263c3}{\index{G\-L\-Texture@{G\-L\-Texture}!G\-L\-Texture@{G\-L\-Texture}}
+\index{G\-L\-Texture@{G\-L\-Texture}!GLTexture@{G\-L\-Texture}}
+\subsubsection[{G\-L\-Texture}]{\setlength{\rightskip}{0pt plus 5cm}G\-L\-Texture\-::\-G\-L\-Texture (
+\begin{DoxyParamCaption}
+\item[{G\-Lenum}]{\-\_\-target, }
+\item[{G\-Lint}]{\-\_\-level, }
+\item[{G\-Lint}]{\-\_\-internal\-Format, }
+\item[{G\-Lsizei}]{\-\_\-width, }
+\item[{G\-Lsizei}]{\-\_\-height, }
+\item[{G\-Lint}]{\-\_\-border, }
+\item[{G\-Lenum}]{\-\_\-format, }
+\item[{G\-Lenum}]{\-\_\-type, }
+\item[{const G\-Lvoid $\ast$}]{\-\_\-data}
+\end{DoxyParamCaption}
+)}}\label{class_g_l_texture_a1f0c33b32b1e37985976b6f10c2263c3}
+
+
+Constructor that creates our texture on our G\-P\-U. 
+
+See Open\-G\-L documentation for detail about texture paramiters \hypertarget{class_g_l_texture_a0ec835c5a25261ce08b43b7a1601fc8f}{\index{G\-L\-Texture@{G\-L\-Texture}!G\-L\-Texture@{G\-L\-Texture}}
+\index{G\-L\-Texture@{G\-L\-Texture}!GLTexture@{G\-L\-Texture}}
+\subsubsection[{G\-L\-Texture}]{\setlength{\rightskip}{0pt plus 5cm}G\-L\-Texture\-::\-G\-L\-Texture (
+\begin{DoxyParamCaption}
+\item[{G\-Lenum}]{\-\_\-target, }
+\item[{G\-Lint}]{\-\_\-level, }
+\item[{G\-Lint}]{\-\_\-internal\-Format, }
+\item[{G\-Lsizei}]{\-\_\-width, }
+\item[{G\-Lsizei}]{\-\_\-height, }
+\item[{G\-Lint}]{\-\_\-border, }
+\item[{G\-Lenum}]{\-\_\-format, }
+\item[{G\-Lenum}]{\-\_\-type, }
+\item[{const G\-Lvoid $\ast$}]{\-\_\-front, }
+\item[{const G\-Lvoid $\ast$}]{\-\_\-back, }
+\item[{const G\-Lvoid $\ast$}]{\-\_\-top, }
+\item[{const G\-Lvoid $\ast$}]{\-\_\-bottom, }
+\item[{const G\-Lvoid $\ast$}]{\-\_\-left, }
+\item[{const G\-Lvoid $\ast$}]{\-\_\-right}
+\end{DoxyParamCaption}
+)}}\label{class_g_l_texture_a0ec835c5a25261ce08b43b7a1601fc8f}
+
+
+Constructor that creates a cube map texture on our G\-P\-U. 
+
+See Open\-G\-L documentation for detail about texture paramiters 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_g_l_texture_a8fcf4e5253bccd04ffe6e65af228dabc}{\index{G\-L\-Texture@{G\-L\-Texture}!bind@{bind}}
+\index{bind@{bind}!GLTexture@{G\-L\-Texture}}
+\subsubsection[{bind}]{\setlength{\rightskip}{0pt plus 5cm}void G\-L\-Texture\-::bind (
+\begin{DoxyParamCaption}
+\item[{unsigned int}]{\-\_\-loc}
+\end{DoxyParamCaption}
+)}}\label{class_g_l_texture_a8fcf4e5253bccd04ffe6e65af228dabc}
+
+
+binds our texture and set active texture 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-loc} & -\/ active texture location to bind to \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_g_l_texture_a5b70c5df1d184c9be005b0ed05f1e808}{\index{G\-L\-Texture@{G\-L\-Texture}!resize@{resize}}
+\index{resize@{resize}!GLTexture@{G\-L\-Texture}}
+\subsubsection[{resize}]{\setlength{\rightskip}{0pt plus 5cm}void G\-L\-Texture\-::resize (
+\begin{DoxyParamCaption}
+\item[{G\-Lsizei}]{\-\_\-width, }
+\item[{G\-Lsizei}]{\-\_\-height = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}}\label{class_g_l_texture_a5b70c5df1d184c9be005b0ed05f1e808}
+
+
+resizes our texture 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-width} & -\/ width to resize texture \\
+\hline
+{\em \-\_\-height} & -\/ height to resize texture \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_g_l_texture_a9214dfefb40db4fbb7450bcc0ba70b61}{\index{G\-L\-Texture@{G\-L\-Texture}!set\-Data@{set\-Data}}
+\index{set\-Data@{set\-Data}!GLTexture@{G\-L\-Texture}}
+\subsubsection[{set\-Data}]{\setlength{\rightskip}{0pt plus 5cm}void G\-L\-Texture\-::set\-Data (
+\begin{DoxyParamCaption}
+\item[{const G\-Lvoid $\ast$}]{\-\_\-data, }
+\item[{G\-Lsizei}]{\-\_\-width = {\ttfamily -\/1}, }
+\item[{G\-Lsizei}]{\-\_\-height = {\ttfamily -\/1}}
+\end{DoxyParamCaption}
+)}}\label{class_g_l_texture_a9214dfefb40db4fbb7450bcc0ba70b61}
+
+
+set the data of our textue 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-data} & -\/ data to set to texture \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{_g_l_texture_8h}{G\-L\-Texture.\-h}\item 
+src/G\-L\-Texture.\-cpp\end{DoxyCompactItemize}

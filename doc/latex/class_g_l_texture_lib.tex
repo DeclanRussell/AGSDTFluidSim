@@ -1,0 +1,117 @@
+\hypertarget{class_g_l_texture_lib}{\section{G\-L\-Texture\-Lib Class Reference}
+\label{class_g_l_texture_lib}\index{G\-L\-Texture\-Lib@{G\-L\-Texture\-Lib}}
+}
+
+
+Simple class for loading in and managing Open\-G\-L textures.  
+
+
+
+
+{\ttfamily \#include $<$G\-L\-Texture.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_g_l_texture}{G\-L\-Texture} $\ast$ \hyperlink{class_g_l_texture_lib_a778cde3734906f46649defdda30d7d7e}{add\-Texture} (std\-::string \-\_\-name, G\-Lenum \-\_\-target, G\-Lint \-\_\-level, G\-Lint \-\_\-internal\-Format, G\-Lsizei \-\_\-width, G\-Lsizei \-\_\-height, G\-Lint \-\_\-border, G\-Lenum \-\_\-format, G\-Lenum \-\_\-type, const G\-Lvoid $\ast$\-\_\-data)
+\begin{DoxyCompactList}\small\item\em add a texture to our texture library \end{DoxyCompactList}\item 
+\hyperlink{class_g_l_texture}{G\-L\-Texture} $\ast$ \hyperlink{class_g_l_texture_lib_aece253fdd6aad02adca2d743c463a9f2}{add\-Cube\-Map} (std\-::string \-\_\-name, G\-Lenum \-\_\-target, G\-Lint \-\_\-level, G\-Lint \-\_\-internal\-Format, G\-Lsizei \-\_\-width, G\-Lsizei \-\_\-height, G\-Lint \-\_\-border, G\-Lenum \-\_\-format, G\-Lenum \-\_\-type, const G\-Lvoid $\ast$\-\_\-front, const G\-Lvoid $\ast$\-\_\-back, const G\-Lvoid $\ast$\-\_\-top, const G\-Lvoid $\ast$\-\_\-bottom, const G\-Lvoid $\ast$\-\_\-left, const G\-Lvoid $\ast$\-\_\-right)
+\begin{DoxyCompactList}\small\item\em add a cube map to our texture library \end{DoxyCompactList}\item 
+\hypertarget{class_g_l_texture_lib_aa18a039ee29d50ccd34a7e1f7d24ce5b}{\hyperlink{class_g_l_texture}{G\-L\-Texture} $\ast$ \hyperlink{class_g_l_texture_lib_aa18a039ee29d50ccd34a7e1f7d24ce5b}{operator\mbox{[}$\,$\mbox{]}} (const std\-::string \&\-\_\-name)}\label{class_g_l_texture_lib_aa18a039ee29d50ccd34a7e1f7d24ce5b}
+
+\begin{DoxyCompactList}\small\item\em overloaded operators to access a texture in our library \end{DoxyCompactList}\item 
+\hypertarget{class_g_l_texture_lib_ab4ab9d6def1eb2acecfbe062686ab98e}{\hyperlink{class_g_l_texture}{G\-L\-Texture} $\ast$ \hyperlink{class_g_l_texture_lib_ab4ab9d6def1eb2acecfbe062686ab98e}{operator\mbox{[}$\,$\mbox{]}} (const char $\ast$\-\_\-name)}\label{class_g_l_texture_lib_ab4ab9d6def1eb2acecfbe062686ab98e}
+
+\begin{DoxyCompactList}\small\item\em overloaded operators to access a texture in our library \end{DoxyCompactList}\item 
+\hypertarget{class_g_l_texture_lib_aca4b2bd67c1af5b5c1ea304fe2622eac}{\hyperlink{class_g_l_texture_lib_aca4b2bd67c1af5b5c1ea304fe2622eac}{$\sim$\-G\-L\-Texture\-Lib} ()}\label{class_g_l_texture_lib_aca4b2bd67c1af5b5c1ea304fe2622eac}
+
+\begin{DoxyCompactList}\small\item\em our destructor. Removes all textures from library \end{DoxyCompactList}\item 
+\hypertarget{class_g_l_texture_lib_a49ba9410297b15f1f2988369853c108f}{void \hyperlink{class_g_l_texture_lib_a49ba9410297b15f1f2988369853c108f}{destroy} ()}\label{class_g_l_texture_lib_a49ba9410297b15f1f2988369853c108f}
+
+\begin{DoxyCompactList}\small\item\em Deletes our library. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_g_l_texture_lib_aedb1360fe37f369eb290f773dbada309}{static \hyperlink{class_g_l_texture_lib}{G\-L\-Texture\-Lib} $\ast$ \hyperlink{class_g_l_texture_lib_aedb1360fe37f369eb290f773dbada309}{get\-Instance} ()}\label{class_g_l_texture_lib_aedb1360fe37f369eb290f773dbada309}
+
+\begin{DoxyCompactList}\small\item\em returns an instance of our texture library \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Simple class for loading in and managing Open\-G\-L textures. 
+
+Singleton class for creating and storing textures in a library.
+
+\begin{DoxyAuthor}{Author}
+Declan Russell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+28/04/2015 
+\end{DoxyDate}
+\begin{DoxyVersion}{Version}
+1.\-0 
+\end{DoxyVersion}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_g_l_texture_lib_aece253fdd6aad02adca2d743c463a9f2}{\index{G\-L\-Texture\-Lib@{G\-L\-Texture\-Lib}!add\-Cube\-Map@{add\-Cube\-Map}}
+\index{add\-Cube\-Map@{add\-Cube\-Map}!GLTextureLib@{G\-L\-Texture\-Lib}}
+\subsubsection[{add\-Cube\-Map}]{\setlength{\rightskip}{0pt plus 5cm}{\bf G\-L\-Texture} $\ast$ G\-L\-Texture\-Lib\-::add\-Cube\-Map (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{\-\_\-name, }
+\item[{G\-Lenum}]{\-\_\-target, }
+\item[{G\-Lint}]{\-\_\-level, }
+\item[{G\-Lint}]{\-\_\-internal\-Format, }
+\item[{G\-Lsizei}]{\-\_\-width, }
+\item[{G\-Lsizei}]{\-\_\-height, }
+\item[{G\-Lint}]{\-\_\-border, }
+\item[{G\-Lenum}]{\-\_\-format, }
+\item[{G\-Lenum}]{\-\_\-type, }
+\item[{const G\-Lvoid $\ast$}]{\-\_\-front, }
+\item[{const G\-Lvoid $\ast$}]{\-\_\-back, }
+\item[{const G\-Lvoid $\ast$}]{\-\_\-top, }
+\item[{const G\-Lvoid $\ast$}]{\-\_\-bottom, }
+\item[{const G\-Lvoid $\ast$}]{\-\_\-left, }
+\item[{const G\-Lvoid $\ast$}]{\-\_\-right}
+\end{DoxyParamCaption}
+)}}\label{class_g_l_texture_lib_aece253fdd6aad02adca2d743c463a9f2}
+
+
+add a cube map to our texture library 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-name} & -\/ the name of our texture \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_g_l_texture_lib_a778cde3734906f46649defdda30d7d7e}{\index{G\-L\-Texture\-Lib@{G\-L\-Texture\-Lib}!add\-Texture@{add\-Texture}}
+\index{add\-Texture@{add\-Texture}!GLTextureLib@{G\-L\-Texture\-Lib}}
+\subsubsection[{add\-Texture}]{\setlength{\rightskip}{0pt plus 5cm}{\bf G\-L\-Texture} $\ast$ G\-L\-Texture\-Lib\-::add\-Texture (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{\-\_\-name, }
+\item[{G\-Lenum}]{\-\_\-target, }
+\item[{G\-Lint}]{\-\_\-level, }
+\item[{G\-Lint}]{\-\_\-internal\-Format, }
+\item[{G\-Lsizei}]{\-\_\-width, }
+\item[{G\-Lsizei}]{\-\_\-height, }
+\item[{G\-Lint}]{\-\_\-border, }
+\item[{G\-Lenum}]{\-\_\-format, }
+\item[{G\-Lenum}]{\-\_\-type, }
+\item[{const G\-Lvoid $\ast$}]{\-\_\-data}
+\end{DoxyParamCaption}
+)}}\label{class_g_l_texture_lib_a778cde3734906f46649defdda30d7d7e}
+
+
+add a texture to our texture library 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-name} & -\/ the name of our texture \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{_g_l_texture_lib_8h}{G\-L\-Texture\-Lib.\-h}\item 
+src/G\-L\-Texture\-Lib.\-cpp\end{DoxyCompactItemize}

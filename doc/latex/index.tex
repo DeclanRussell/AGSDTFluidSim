@@ -1,0 +1,111 @@
+\section*{Cuda Smoothed Particle Hydrodynamics Report }
+
+ \section*{Introduction }
+
+The contents of this report follows the design and implimentation of a real time fluid simulation. This implimentation takes the form of a 3\-D Langrangian grid and takes advanteges of the speed of Nvidia's Cuda A\-P\-I to create a fast realistic fluid simulation. In the following sections you will find an explenation of maths used, optimisations made and the implimentation of this artifact.
+
+\section*{Smoothed Particle Hydrodynamics and Fluid Theory }
+
+When implimenting fluid simulations there is an array of techniques in which you can use. Each of which have there own advantages and disadvanteges. The most prominent of these techniques are Eularian and Langrangian.
+\begin{DoxyItemize}
+\item Eularian Method Looks at fluid motion through specific locations in space. Space is devided up into cells which store attributes about the fluid in that location such as pressure, velocity and desity etc...
+\begin{DoxyItemize}
+\item Advanteges
+\begin{DoxyItemize}
+\item Performance determined by grid size not number of particles
+\item Fast
+\end{DoxyItemize}
+\item Disadvanteges
+\begin{DoxyItemize}
+\item Detail contrained to grid size
+\item Simulation size limited to grid size
+\end{DoxyItemize}
+\end{DoxyItemize}
+\item Langrangian Method Focuses on individual particles of the fluid. Each particle stores attributes about its own pressure, velocity and density.
+\begin{DoxyItemize}
+\item Advanteges
+\begin{DoxyItemize}
+\item Simulation size not limited.
+\end{DoxyItemize}
+\item Disadvanteges
+\begin{DoxyItemize}
+\item Performance tied to number of particles
+\item For a realistic simulation we need to have a lot of particles
+\end{DoxyItemize}
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+For this implimentation I will be following the Langrangian method.
+
+\subsection*{Navier Stokes Equations }
+
+Navier stokes equations mathematically model the behaviour of fluid. The they look at calculating forces apparent in the fluid and give us an acceleration with from the sum all these forces. Bellow is the Langrangian fluid equation for weakly compressible flow.\par
+ \[ \rho\frac{du}{dt}=-\bigtriangledown\rho+\mu\bigtriangledown^2 u + f \]\par
+ On the left of this equation you will see the greek symbol $\rho$ which stands for the density of the of the fluid. This is multiplied by $\frac{du}{dt}$ which is the excelleration of our particle at the next timestep. Now lets break down the three componts on the right hand side of the equation.\par
+ \[ -\bigtriangledown\rho \]\par
+ This term represents the gradient of pressure of our particle. Giving the direction that the pressure is in and the magnitude of this pressure\par
+ \[ \mu\bigtriangledown^2 u \]\par
+This term represents the viscosity force acting upon our particle. $\mu$ Being a scaler coefficient that can be set by the user to increase of decrease the viscosity force acting upon our fluid.\par
+ \[ f \]\par
+Our third and final term in this formulae represents any external forces acting upon our fluid. This could be anything from gravity, suface tension or any other forces you may need to interact with our fluid.
+
+\subsection*{Smoothed Particle Hydrodynamics }
+
+Smoothed particle hydrodynamics is a technique that provides a collection of approximation formulae to solve our Navier Stokes equations. It focuses on scaling the forces in our Navier Stokes equation based on the distance between particles. Closer particles will have a much higher influence on our forces than particles further away. To do this we will specify a wighting kernal which I will specify later.
+
+\subsection*{Calculating our forces }
+
+\subsection*{Density }
+
+As you can see from our Navier Stokes equations every force must be devided by the particles density to calculate the acceleration therefore the first force we must calculate must be the density of our particles. To do this we use the formulae bellow.\par
+ \[ \rho(x_i)= \sum\limits_{j}m_j W_{default}(x_i-x_j,h) \]\par
+ This formulae represents the sum of $m$ which is the mass of our neightbouring particle. In our simluation our mass will be a constant with all particles having the same mass. This is then multiplied by function $W$ which is our weighting kernal. More on how we calculate that later.
+
+\subsection*{Pressure Gradient }
+
+Once we have our the densities of our particles calulated we can now move on to computing our pressure gradient. To do this firstly however we must calculate the pressure per particle in our simulation. This is computed with the following equation,\par
+ \[ p_i = k(\rho_i - \rho_0) \]\par
+ Here we have variable $k$ which is the gas constant of our fluid and will be set by the user depending on their desired fluid behaviour. $\rho_i$ is the density of the particle that we are calcuating the pressure for and $\rho_0$ is the rest density of our fluid. This is also a constant that the use will set by the user depending on their desired fluid behaviour. Now that we have our pressure per particle, we can use this to to compute our pressure gradient function,\par
+ \[ f_i^{pressure} = -\sum\limits_{i\neq j}p_j\frac{m_j}{\rho_j}\bigtriangledown W_{pressure}(x_i-x_j,h) \]\par
+The formulae above represents the summation of particle properties $j$ when $j$ is not equal to $i$. The variable $m_j$ is our particle mass, $\rho_j$ is the density of our particle which we calculated using the equation in the previous section and $W$ is our pressure weighting kernal which I will discuss later. However there is a problem when using this equation. The pressure force calculated is not symetrical as particle $i$ only uses the the pressure at particle $j$ to compute the pressure gradient. This problem can be solved however by using an different proposed equation \mbox{[}M\-J92\mbox{]}, \[ f_i^{pressure} = -\sum\limits_{i\neq j}(\frac{p_i}{\rho_i^2} + \frac{p_j}{\rho_j^2})m_j\bigtriangledown W_{pressure}(x_i-x_j,h) \]
+
+\subsection*{Viscosity Force }
+
+Next we can calculate our viscosity force, the larger this force is the more it gives the fluid a thicker or stickier appearence. An example of a very viscous fluid would be syrup. To calculate this force we use the following equation, \[ f_i^{viscosity} = \mu\sum\limits_{i\neq j}(u_j-u_i)\bigtriangledown^2 W_{viscosity}(x_i-x_j,h) \]\par
+In this equation we have one more unknown $\mu$, this represents the viscosity force. This is a scaler value set by the user to for the desired visocity influence on the fluid. Also you may notice that this formulae also contains a third weighting kernal which will be explained in the next section.
+
+\subsection*{Other forces }
+
+Finally our final unknown is $f$. For this implimentation $f$ will only represent gravity which we will assume is a constant 9.\-8m/s in the negative y direction. However for future work this can be extented to also include any other forces you may want to include such as surface tension or some kind of interaction forces.
+
+\subsection*{Weighting Kernals }
+
+As mentioned in the previous sections all our force equations use a weighting kernal which scales the force value calculated based on the distance particles are from each other. The first of these kernals we encountered was the function $W_{default}$ which can be denoted,\par
+ \[ \newcommand{\twopartdef}[4] { \left\{ \begin{array}{ll} #1 & \mbox{if } #2 \\ #3 & \mbox{if } #4 \end{array} \right. } W_{default}(r,h) = \frac{315}{64\pi h^9}\twopartdef{(h^2-||r||^2)^3}{0\leq ||r|| <h}{0}{||r||>h} \]
+
+In this equation $r$ is equivilent to vector from our neighbour particle to our current particle. The letter $h$ is the smoothing length of our equation. This variable is set before the simulation is run and will affect the behaviour of our fluid.\par
+The above weighting kernal will look like this when assuming that the soomthing length is 1,\par
+ This smoothing kernal is sutible for use on our density calculations but however will not be suitible for when we calculate our pressure. This is due to the gradient of the function tending to 0 as the distance of our particles tends to 0. To use this weighting kernal would create clustering of our particles. Ideally we would want our pressure kernal to continually get larger as our distance approaches 0 and is at the point of highest pressure. This is solved in \mbox{[}M\-M03\mbox{]} with their proposed \char`\"{}\-Spikey\char`\"{} kernal. \[ W_{pressure}(r,h) = W_{spikey}(r,h) = -\frac{45}{\pi h^6} \frac{r}{||r||}(h-||r||)^2 \]
+
+Again assuming that our smoothing length $h$ is 1 our smoothing kernal will look like,\par
+ Notice how our kernal now tends to infinity due to our devision of the length of $r$ solving our clustering problem.
+
+Our final weighting kernal is for our viscosity term. Also proposed \mbox{[}M\-M03\mbox{]} is the following kernal,\par
+ \[ W_{viscosity}(r,h) = -\frac{45}{\pi h^6}r(h-||r||) \] If is important to note that unlike the pressure weighting kernal, the values from our viscosity weighing are always positive. This is because the viscosity term acts as a damping force, if values were to become negative it would increase the energy of our particles.\par
+Again assuming that our smoothing length $h$ is 1 our smoothing kernal will look like,\par
+ \subsection*{Integration Methods }
+
+\subsection*{Eular }
+
+To update our particles position we must integrate our acceleration to calculate first our velocity and then our displacement. The most basic integration we can use is Eular integration which goes as follows,\par
+ \[ u = u + adt \] \[ x = x + udt \]
+
+We have four unknowns in these equations. $x$, $u$ and $a$ are our position, velocity and accelerationl. Our final unknown $dt$ is the timestep of our update. However the problem with this method is that as the simulation the chance of error when using these equations increases over time. These means the longer the simulation is running for the more unaccurate and unstable it will get. \subsection*{Leap Frog }
+
+A more stable method to use is the Leap Frog method. This method uses future half step velocity and a previous half step velocity to calculate the position at the next half time step. This method prooves much more stable than our Eular method. It is achieved with the equations below,\par
+ \[ u_{t+\frac{1}{2} \triangle t} = u_{t- \frac{1}{2} \triangle t} + \triangle t a_t \] \[ u_{t-\frac{1}{2} \triangle t} = u_0 - \frac{1}{2}\triangle t a_0 \] \[ x_{t+\frac{1}{2} \triangle t} = x_t - \triangle tu_{t+\frac{1}{2} \triangle t} \] Below is a graph comparing the percentage of error of Leap Frog compared to other popular integration techniques over time with a deliberately high timestep used.\par
+As you can see from the graph although the accuracy may drop the integration technique stays very stable over long periods of time.
+
+\section*{Optimisations }
+
+\subsection*{Spacial Hash }

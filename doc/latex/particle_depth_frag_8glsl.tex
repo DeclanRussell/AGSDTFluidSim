@@ -1,0 +1,36 @@
+\hypertarget{particle_depth_frag_8glsl}{\section{shaders/particle\-Depth\-Frag.glsl File Reference}
+\label{particle_depth_frag_8glsl}\index{shaders/particle\-Depth\-Frag.\-glsl@{shaders/particle\-Depth\-Frag.\-glsl}}
+}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{particle_depth_frag_8glsl_acdef7a1fd863a6d3770c1268cb06add3}{void \hyperlink{particle_depth_frag_8glsl_acdef7a1fd863a6d3770c1268cb06add3}{main} ()}\label{particle_depth_frag_8glsl_acdef7a1fd863a6d3770c1268cb06add3}
+
+\begin{DoxyCompactList}\small\item\em fragment main. Draws point sprites as spheres, calculates and outputs there depth. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{particle_depth_frag_8glsl_a3ed508f736330bc856fb21ef562c1963}{in vec3 \hyperlink{particle_depth_frag_8glsl_a3ed508f736330bc856fb21ef562c1963}{position}}\label{particle_depth_frag_8glsl_a3ed508f736330bc856fb21ef562c1963}
+
+\begin{DoxyCompactList}\small\item\em eye space postion from vertex shader \end{DoxyCompactList}\item 
+\hypertarget{particle_depth_frag_8glsl_a59376561fcb9ace7e6531ad800fb1283}{uniform float \hyperlink{particle_depth_frag_8glsl_a59376561fcb9ace7e6531ad800fb1283}{point\-Radius}}\label{particle_depth_frag_8glsl_a59376561fcb9ace7e6531ad800fb1283}
+
+\begin{DoxyCompactList}\small\item\em radius of our points \end{DoxyCompactList}\item 
+\hypertarget{particle_depth_frag_8glsl_a06f273d5c491bfbe3897fc9c73dcf0d5}{uniform mat4 \hyperlink{particle_depth_frag_8glsl_a06f273d5c491bfbe3897fc9c73dcf0d5}{P}}\label{particle_depth_frag_8glsl_a06f273d5c491bfbe3897fc9c73dcf0d5}
+
+\begin{DoxyCompactList}\small\item\em projection matrix \end{DoxyCompactList}\item 
+\hypertarget{particle_depth_frag_8glsl_a575f888600764d6ebd67a3fd89a7d034}{out vec4 \hyperlink{particle_depth_frag_8glsl_a575f888600764d6ebd67a3fd89a7d034}{fragout}}\label{particle_depth_frag_8glsl_a575f888600764d6ebd67a3fd89a7d034}
+
+\begin{DoxyCompactList}\small\item\em output fragment. This will be the depth of our particles \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+Declan Russell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+8/03/15 
+\end{DoxyDate}
+\begin{DoxyVersion}{Version}
+1.\-0  G\-L\-S\-L 
+\end{DoxyVersion}

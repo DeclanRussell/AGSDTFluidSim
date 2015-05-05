@@ -222,45 +222,57 @@ FluidPropDockWidget::FluidPropDockWidget(OpenGLWidget *_fluidWidget, QWidget *pa
     connect(m_spinPosZ,SIGNAL(valueChanged(double)),this,SLOT(setSimPosition()));
     fluidSimLayout->addWidget(m_spinPosZ,5,3,1,1);
 
+    //our veolicty correction field
+    QLabel *velCorLbl = new QLabel("XSPH Velocity Correction",fluidSimProp);
+    fluidSimLayout->addWidget(velCorLbl,6,0,1,1);
+    QDoubleSpinBox *velCorSpn = new QDoubleSpinBox(fluidSimProp);
+    velCorSpn->setDecimals(3);
+    velCorSpn->setSingleStep(0.05);
+    velCorSpn->setMaximum(1);
+    velCorSpn->setValue(0.3);
+    connect(velCorSpn,SIGNAL(valueChanged(double)),this,SLOT(setVelCorrection(double)));
+    fluidSimLayout->addWidget(velCorSpn,6,1,1,1);
+
+
     //Spinbox's to edit spawn box postion
     QLabel *spwnPosLbl = new QLabel("Spawn Box Position:",fluidSimProp);
-    fluidSimLayout->addWidget(spwnPosLbl,6,0,1,1);
+    fluidSimLayout->addWidget(spwnPosLbl,7,0,1,1);
     m_spawnPosX = new QDoubleSpinBox(fluidSimProp);
     m_spawnPosX->setMaximum(INFINITY);
     m_spawnPosX->setMinimum(-INFINITY);
     m_spawnPosX->setValue(2);
     connect(m_spawnPosX,SIGNAL(valueChanged(double)),this,SLOT(setSpawnBoxPos()));
-    fluidSimLayout->addWidget(m_spawnPosX,6,1,1,1);
+    fluidSimLayout->addWidget(m_spawnPosX,7,1,1,1);
     m_spawnPosY = new QDoubleSpinBox(fluidSimProp);
     m_spawnPosY->setMaximum(INFINITY);
     m_spawnPosY->setMinimum(-INFINITY);
     m_spawnPosY->setValue(0);
     connect(m_spawnPosY,SIGNAL(valueChanged(double)),this,SLOT(setSpawnBoxPos()));
-    fluidSimLayout->addWidget(m_spawnPosY,6,2,1,1);
+    fluidSimLayout->addWidget(m_spawnPosY,7,2,1,1);
     m_spawnPosZ = new QDoubleSpinBox(fluidSimProp);
     m_spawnPosZ->setMaximum(INFINITY);
     m_spawnPosZ->setMinimum(-INFINITY);
     m_spawnPosZ->setValue(2);
     connect(m_spawnPosZ,SIGNAL(valueChanged(double)),this,SLOT(setSpawnBoxPos()));
-    fluidSimLayout->addWidget(m_spawnPosZ,6,3,1,1);
+    fluidSimLayout->addWidget(m_spawnPosZ,7,3,1,1);
     QLabel *spwnSizeLbl = new QLabel("Spawn Box Size:",fluidSimProp);
-    fluidSimLayout->addWidget(spwnSizeLbl,6,4,1,1);
+    fluidSimLayout->addWidget(spwnSizeLbl,7,4,1,1);
     QDoubleSpinBox *spwnSizeSpn = new QDoubleSpinBox(fluidSimProp);
     spwnSizeSpn->setMaximum(INFINITY);
     spwnSizeSpn->setMinimum(-INFINITY);
     spwnSizeSpn->setValue(6);
     connect(spwnSizeSpn,SIGNAL(valueChanged(double)),this,SLOT(setSpawnBoxSize(double)));
-    fluidSimLayout->addWidget(spwnSizeSpn,6,5,1,1);
+    fluidSimLayout->addWidget(spwnSizeSpn,7,5,1,1);
 
     //add particles field
     QPushButton *addParticlesBtn = new QPushButton("Add Particles",fluidSimProp);
     connect(addParticlesBtn,SIGNAL(pressed()),this,SLOT(addPartToSim()));
-    fluidSimLayout->addWidget(addParticlesBtn,7,0,1,1);
+    fluidSimLayout->addWidget(addParticlesBtn,8,0,1,1);
 
     m_numPartToAddSpn = new QSpinBox(fluidSimProp);
     m_numPartToAddSpn->setMaximum(INFINITY);
     m_numPartToAddSpn->setValue(50000);
-    fluidSimLayout->addWidget(m_numPartToAddSpn,7,1,1,1);
+    fluidSimLayout->addWidget(m_numPartToAddSpn,8,1,1,1);
 
     //Group box for our playback settings
     QGroupBox *playbackGrb = new QGroupBox("Playback:",this);

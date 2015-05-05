@@ -1,0 +1,131 @@
+\hypertarget{fluid_shader_frag_8glsl}{\section{shaders/fluid\-Shader\-Frag.glsl File Reference}
+\label{fluid_shader_frag_8glsl}\index{shaders/fluid\-Shader\-Frag.\-glsl@{shaders/fluid\-Shader\-Frag.\-glsl}}
+}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structlight_info}{light\-Info}
+\begin{DoxyCompactList}\small\item\em a structure to hold our light information \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+vec3 \hyperlink{fluid_shader_frag_8glsl_aa92a70677efb9df36d42919ab01aaaf4}{ads} (vec3 \hyperlink{thickness_vert_8glsl_af78042b263da1185c97c3202ced45aab}{position}, vec3 normal)
+\begin{DoxyCompactList}\small\item\em calculates our phong shading \end{DoxyCompactList}\item 
+vec3 \hyperlink{fluid_shader_frag_8glsl_abd810f8b2d0a0892c1c9d96228c3017d}{uv\-To\-Eye} (vec2 \-\_\-uv, float \-\_\-depth)
+\begin{DoxyCompactList}\small\item\em converts uv coords and depth to eye space coodinates \end{DoxyCompactList}\item 
+\hypertarget{fluid_shader_frag_8glsl_a6288eba0f8e8ad3ab1544ad731eb7667}{void \hyperlink{fluid_shader_frag_8glsl_a6288eba0f8e8ad3ab1544ad731eb7667}{main} (void)}\label{fluid_shader_frag_8glsl_a6288eba0f8e8ad3ab1544ad731eb7667}
+
+\begin{DoxyCompactList}\small\item\em our fragment shader main \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{fluid_shader_frag_8glsl_ab59292ab7df136fb38e0290755f90dea}{uniform sampler2\-D \hyperlink{fluid_shader_frag_8glsl_ab59292ab7df136fb38e0290755f90dea}{depth\-Tex}}\label{fluid_shader_frag_8glsl_ab59292ab7df136fb38e0290755f90dea}
+
+\begin{DoxyCompactList}\small\item\em texture for holding the depth pass \end{DoxyCompactList}\item 
+\hypertarget{fluid_shader_frag_8glsl_ae98cad87e3271b9fe544fdeb6cb0ec5a}{uniform sampler2\-D \hyperlink{fluid_shader_frag_8glsl_ae98cad87e3271b9fe544fdeb6cb0ec5a}{thickness\-Tex}}\label{fluid_shader_frag_8glsl_ae98cad87e3271b9fe544fdeb6cb0ec5a}
+
+\begin{DoxyCompactList}\small\item\em texture for holding the thickness pass \end{DoxyCompactList}\item 
+\hypertarget{fluid_shader_frag_8glsl_a9dac566b8dcb58f380dec54a9a51b3fa}{uniform sampler\-Cube \hyperlink{fluid_shader_frag_8glsl_a9dac566b8dcb58f380dec54a9a51b3fa}{cube\-Map\-Tex}}\label{fluid_shader_frag_8glsl_a9dac566b8dcb58f380dec54a9a51b3fa}
+
+\begin{DoxyCompactList}\small\item\em texture for holding the cube map \end{DoxyCompactList}\item 
+\hypertarget{fluid_shader_frag_8glsl_a2e4c2975a979371b6b81bc6c96378ec4}{uniform float \hyperlink{fluid_shader_frag_8glsl_a2e4c2975a979371b6b81bc6c96378ec4}{texel\-Size\-X}}\label{fluid_shader_frag_8glsl_a2e4c2975a979371b6b81bc6c96378ec4}
+
+\begin{DoxyCompactList}\small\item\em the size of each texel in the x direction \end{DoxyCompactList}\item 
+\hypertarget{fluid_shader_frag_8glsl_abcc4dc2465be1f7c9cd6323c736e2f25}{uniform float \hyperlink{fluid_shader_frag_8glsl_abcc4dc2465be1f7c9cd6323c736e2f25}{texel\-Size\-Y}}\label{fluid_shader_frag_8glsl_abcc4dc2465be1f7c9cd6323c736e2f25}
+
+\begin{DoxyCompactList}\small\item\em the size of each texel in the y direction \end{DoxyCompactList}\item 
+\hypertarget{fluid_shader_frag_8glsl_adb721f94dc6d8e24d528c437244e5433}{uniform mat4 \hyperlink{fluid_shader_frag_8glsl_adb721f94dc6d8e24d528c437244e5433}{P\-Inv}}\label{fluid_shader_frag_8glsl_adb721f94dc6d8e24d528c437244e5433}
+
+\begin{DoxyCompactList}\small\item\em inverse projection matrix \end{DoxyCompactList}\item 
+\hypertarget{fluid_shader_frag_8glsl_a81f796db8a1c3681fb3eee2ca9d59d26}{uniform mat4 \hyperlink{fluid_shader_frag_8glsl_a81f796db8a1c3681fb3eee2ca9d59d26}{normal\-Matrix}}\label{fluid_shader_frag_8glsl_a81f796db8a1c3681fb3eee2ca9d59d26}
+
+\begin{DoxyCompactList}\small\item\em normal matrix \end{DoxyCompactList}\item 
+\hypertarget{fluid_shader_frag_8glsl_a8cdb209f9b5837fd63f115f80bbdb9f4}{uniform float \hyperlink{fluid_shader_frag_8glsl_a8cdb209f9b5837fd63f115f80bbdb9f4}{fresnal\-Power}}\label{fluid_shader_frag_8glsl_a8cdb209f9b5837fd63f115f80bbdb9f4}
+
+\begin{DoxyCompactList}\small\item\em our fresnal power \end{DoxyCompactList}\item 
+\hypertarget{fluid_shader_frag_8glsl_a06337330b43d1cd2a840c144eba787b4}{uniform float \hyperlink{fluid_shader_frag_8glsl_a06337330b43d1cd2a840c144eba787b4}{refract\-Ratio}}\label{fluid_shader_frag_8glsl_a06337330b43d1cd2a840c144eba787b4}
+
+\begin{DoxyCompactList}\small\item\em refraction ratio \end{DoxyCompactList}\item 
+\hypertarget{fluid_shader_frag_8glsl_a6f4af602438afe00ebcc9105bdaea4d9}{uniform float \hyperlink{fluid_shader_frag_8glsl_a6f4af602438afe00ebcc9105bdaea4d9}{fresnal\-Const}}\label{fluid_shader_frag_8glsl_a6f4af602438afe00ebcc9105bdaea4d9}
+
+\begin{DoxyCompactList}\small\item\em fresnal constant \end{DoxyCompactList}\item 
+\hypertarget{fluid_shader_frag_8glsl_a1b6b0074b43684c435f4275d6fb7bf1a}{uniform vec3 \hyperlink{fluid_shader_frag_8glsl_a1b6b0074b43684c435f4275d6fb7bf1a}{color}}\label{fluid_shader_frag_8glsl_a1b6b0074b43684c435f4275d6fb7bf1a}
+
+\begin{DoxyCompactList}\small\item\em color of our fluid \end{DoxyCompactList}\item 
+\hypertarget{fluid_shader_frag_8glsl_a3b19027caa70314998e90a0e13d915d3}{in vec2 \hyperlink{fluid_shader_frag_8glsl_a3b19027caa70314998e90a0e13d915d3}{V\-Tex\-Coord}}\label{fluid_shader_frag_8glsl_a3b19027caa70314998e90a0e13d915d3}
+
+\begin{DoxyCompactList}\small\item\em texture coordinates of billboard \end{DoxyCompactList}\item 
+\hypertarget{fluid_shader_frag_8glsl_a2d61698f25b9852932908e6c44421549}{uniform \hyperlink{structlight_info}{light\-Info} \hyperlink{fluid_shader_frag_8glsl_a2d61698f25b9852932908e6c44421549}{light}}\label{fluid_shader_frag_8glsl_a2d61698f25b9852932908e6c44421549}
+
+\begin{DoxyCompactList}\small\item\em our scene light \end{DoxyCompactList}\item 
+\hypertarget{fluid_shader_frag_8glsl_aa178290dec8fcda23ab79da823747989}{uniform vec3 \hyperlink{fluid_shader_frag_8glsl_aa178290dec8fcda23ab79da823747989}{Kd}}\label{fluid_shader_frag_8glsl_aa178290dec8fcda23ab79da823747989}
+
+\begin{DoxyCompactList}\small\item\em phong shading diffuse \end{DoxyCompactList}\item 
+\hypertarget{fluid_shader_frag_8glsl_af733c479cfa0205f76cd3c14b55c16eb}{uniform vec3 \hyperlink{fluid_shader_frag_8glsl_af733c479cfa0205f76cd3c14b55c16eb}{Ka}}\label{fluid_shader_frag_8glsl_af733c479cfa0205f76cd3c14b55c16eb}
+
+\begin{DoxyCompactList}\small\item\em phong shading ambient \end{DoxyCompactList}\item 
+\hypertarget{fluid_shader_frag_8glsl_af3912303d262aec3cd9c062ccd9b3ea6}{uniform vec3 \hyperlink{fluid_shader_frag_8glsl_af3912303d262aec3cd9c062ccd9b3ea6}{Ks}}\label{fluid_shader_frag_8glsl_af3912303d262aec3cd9c062ccd9b3ea6}
+
+\begin{DoxyCompactList}\small\item\em phong shading specular \end{DoxyCompactList}\item 
+\hypertarget{fluid_shader_frag_8glsl_a166447b6cc208e90b69ba94cba7eacfe}{uniform float \hyperlink{fluid_shader_frag_8glsl_a166447b6cc208e90b69ba94cba7eacfe}{shininess}}\label{fluid_shader_frag_8glsl_a166447b6cc208e90b69ba94cba7eacfe}
+
+\begin{DoxyCompactList}\small\item\em phong shading shininess \end{DoxyCompactList}\item 
+\hypertarget{fluid_shader_frag_8glsl_af5639df2ce0dea4170bb8b47a599911e}{out vec4 \hyperlink{fluid_shader_frag_8glsl_af5639df2ce0dea4170bb8b47a599911e}{Frag\-Color}}\label{fluid_shader_frag_8glsl_af5639df2ce0dea4170bb8b47a599911e}
+
+\begin{DoxyCompactList}\small\item\em output fragment \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+Declan Russell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+14/03/15 
+\end{DoxyDate}
+\begin{DoxyVersion}{Version}
+1.\-0  G\-L\-S\-L 
+\end{DoxyVersion}
+
+
+\subsection{Function Documentation}
+\hypertarget{fluid_shader_frag_8glsl_aa92a70677efb9df36d42919ab01aaaf4}{\index{fluid\-Shader\-Frag.\-glsl@{fluid\-Shader\-Frag.\-glsl}!ads@{ads}}
+\index{ads@{ads}!fluidShaderFrag.glsl@{fluid\-Shader\-Frag.\-glsl}}
+\subsubsection[{ads}]{\setlength{\rightskip}{0pt plus 5cm}vec3 ads (
+\begin{DoxyParamCaption}
+\item[{vec3}]{position, }
+\item[{vec3}]{normal}
+\end{DoxyParamCaption}
+)}}\label{fluid_shader_frag_8glsl_aa92a70677efb9df36d42919ab01aaaf4}
+
+
+calculates our phong shading 
+
+
+\begin{DoxyParams}{Parameters}
+{\em position} & of surface \\
+\hline
+{\em normal} & of surface \\
+\hline
+\end{DoxyParams}
+\hypertarget{fluid_shader_frag_8glsl_abd810f8b2d0a0892c1c9d96228c3017d}{\index{fluid\-Shader\-Frag.\-glsl@{fluid\-Shader\-Frag.\-glsl}!uv\-To\-Eye@{uv\-To\-Eye}}
+\index{uv\-To\-Eye@{uv\-To\-Eye}!fluidShaderFrag.glsl@{fluid\-Shader\-Frag.\-glsl}}
+\subsubsection[{uv\-To\-Eye}]{\setlength{\rightskip}{0pt plus 5cm}vec3 uv\-To\-Eye (
+\begin{DoxyParamCaption}
+\item[{vec2}]{\-\_\-uv, }
+\item[{float}]{\-\_\-depth}
+\end{DoxyParamCaption}
+)}}\label{fluid_shader_frag_8glsl_abd810f8b2d0a0892c1c9d96228c3017d}
+
+
+converts uv coords and depth to eye space coodinates 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-uv} & -\/ texture coordinate \\
+\hline
+{\em \-\_\-depth} & -\/ depth at location \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+eye space coordinate 
+\end{DoxyReturn}

@@ -8,6 +8,13 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+  $(window).load(resizeHeight);
+</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
 <script type="text/javascript">
@@ -26,7 +33,7 @@
    <div id="projectname">Cuda SPH Fluid Simulation - Declan Russell
    &#160;<span id="projectnumber">1.0</span>
    </div>
-   <div id="projectbrief">SPH fluid simulation that uses cuda and dynamic parellism and some neat shading techniques</div>
+   <div id="projectbrief">SPH fluid simulation that uses cuda optimizations and some neat shading techniques</div>
   </td>
  </tr>
  </tbody>
@@ -62,6 +69,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     </ul>
   </div>
 </div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('index.html','');});
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -81,16 +102,182 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">Cuda SPH Fluid Simulation - Declan Russell Documentation</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>This is my main page </p>
+<div class="textblock"><h1>Cuda Smoothed Particle Hydrodynamics Report </h1>
 <div class="image">
-<img src="DocImageTest.png" alt="DocImageTest.png"/>
+<img src="IntroFluidPic.png" alt="IntroFluidPic.png"/>
 </div>
- </div></div><!-- contents -->
+ <h1>Introduction </h1>
+<p>The contents of this report follows the design and implimentation of a real time fluid simulation. This implimentation takes the form of a 3D Langrangian grid and takes advanteges of the speed of Nvidia's Cuda API to create a fast realistic fluid simulation. In the following sections you will find an explenation of maths used, optimisations made and the implimentation of this artifact.</p>
+<h1>Smoothed Particle Hydrodynamics and Fluid Theory </h1>
+<p>When implimenting fluid simulations there is an array of techniques in which you can use. Each of which have there own advantages and disadvanteges. The most prominent of these techniques are Eularian and Langrangian.</p>
+<ul>
+<li>Eularian Method Looks at fluid motion through specific locations in space. Space is devided up into cells which store attributes about the fluid in that location such as pressure, velocity and desity etc...<ul>
+<li>Advanteges<ul>
+<li>Performance determined by grid size not number of particles</li>
+<li>Fast</li>
+</ul>
+</li>
+<li>Disadvanteges<ul>
+<li>Detail contrained to grid size</li>
+<li>Simulation size limited to grid size</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Langrangian Method Focuses on individual particles of the fluid. Each particle stores attributes about its own pressure, velocity and density.<ul>
+<li>Advanteges<ul>
+<li>Simulation size not limited.</li>
+</ul>
+</li>
+<li>Disadvanteges<ul>
+<li>Performance tied to number of particles</li>
+<li>For a realistic simulation we need to have a lot of particles</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>For this implimentation I will be following the Langrangian method.</p>
+<h2>Navier Stokes Equations </h2>
+<p>Navier stokes equations mathematically model the behaviour of fluid. The they look at calculating forces apparent in the fluid and give us an acceleration with from the sum all these forces. Bellow is the Langrangian fluid equation for weakly compressible flow.<br/>
+ </p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ \rho\frac{du}{dt}=-\bigtriangledown\rho+\mu\bigtriangledown^2 u + f \]" src="form_0.png"/>
+</p>
+<p><br/>
+ On the left of this equation you will see the greek symbol <img class="formulaInl" alt="$\rho$" src="form_1.png"/> which stands for the density of the of the fluid. This is multiplied by <img class="formulaInl" alt="$\frac{du}{dt}$" src="form_2.png"/> which is the excelleration of our particle at the next timestep. Now lets break down the three componts on the right hand side of the equation.<br/>
+ </p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ -\bigtriangledown\rho \]" src="form_3.png"/>
+</p>
+<p><br/>
+ This term represents the gradient of pressure of our particle. Giving the direction that the pressure is in and the magnitude of this pressure<br/>
+ </p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ \mu\bigtriangledown^2 u \]" src="form_4.png"/>
+</p>
+<p><br/>
+This term represents the viscosity force acting upon our particle. <img class="formulaInl" alt="$\mu$" src="form_5.png"/> Being a scaler coefficient that can be set by the user to increase of decrease the viscosity force acting upon our fluid.<br/>
+ </p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ f \]" src="form_6.png"/>
+</p>
+<p><br/>
+Our third and final term in this formulae represents any external forces acting upon our fluid. This could be anything from gravity, suface tension or any other forces you may need to interact with our fluid.</p>
+<h2>Smoothed Particle Hydrodynamics </h2>
+<p>Smoothed particle hydrodynamics is a technique that provides a collection of approximation formulae to solve our Navier Stokes equations. It focuses on scaling the forces in our Navier Stokes equation based on the distance between particles. Closer particles will have a much higher influence on our forces than particles further away. To do this we will specify a wighting kernal which I will specify later.</p>
+<h2>Calculating our forces </h2>
+<h2>Density </h2>
+<p>As you can see from our Navier Stokes equations every force must be devided by the particles density to calculate the acceleration therefore the first force we must calculate must be the density of our particles. To do this we use the formulae bellow.<br/>
+ </p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ \rho(x_i)= \sum\limits_{j}m_j W_{default}(x_i-x_j,h) \]" src="form_32.png"/>
+</p>
+<p><br/>
+ This formulae represents the sum of <img class="formulaInl" alt="$m$" src="form_8.png"/> which is the mass of our neightbouring particle. In our simluation our mass will be a constant with all particles having the same mass. This is then multiplied by function <img class="formulaInl" alt="$W$" src="form_18.png"/> which is our weighting kernal. More on how we calculate that later.</p>
+<h2>Pressure Gradient </h2>
+<p>Once we have our the densities of our particles calulated we can now move on to computing our pressure gradient. To do this firstly however we must calculate the pressure per particle in our simulation. This is computed with the following equation,<br/>
+ </p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ p_i = k(\rho_i - \rho_0) \]" src="form_17.png"/>
+</p>
+<p><br/>
+ Here we have variable <img class="formulaInl" alt="$k$" src="form_13.png"/> which is the gas constant of our fluid and will be set by the user depending on their desired fluid behaviour. <img class="formulaInl" alt="$\rho_i$" src="form_14.png"/> is the density of the particle that we are calcuating the pressure for and <img class="formulaInl" alt="$\rho_0$" src="form_15.png"/> is the rest density of our fluid. This is also a constant that the use will set by the user depending on their desired fluid behaviour. Now that we have our pressure per particle, we can use this to to compute our pressure gradient function,<br/>
+ </p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ f_i^{pressure} = -\sum\limits_{i\neq j}p_j\frac{m_j}{\rho_j}\bigtriangledown W_{pressure}(x_i-x_j,h) \]" src="form_33.png"/>
+</p>
+<p><br/>
+The formulae above represents the summation of particle properties <img class="formulaInl" alt="$j$" src="form_19.png"/> when <img class="formulaInl" alt="$j$" src="form_19.png"/> is not equal to <img class="formulaInl" alt="$i$" src="form_20.png"/>. The variable <img class="formulaInl" alt="$m_j$" src="form_9.png"/> is our particle mass, <img class="formulaInl" alt="$\rho_j$" src="form_10.png"/> is the density of our particle which we calculated using the equation in the previous section and <img class="formulaInl" alt="$W$" src="form_18.png"/> is our pressure weighting kernal which I will discuss later. However there is a problem when using this equation. The pressure force calculated is not symetrical as particle <img class="formulaInl" alt="$i$" src="form_20.png"/> only uses the the pressure at particle <img class="formulaInl" alt="$j$" src="form_19.png"/> to compute the pressure gradient. This problem can be solved however by using an different proposed equation [MJ92], </p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ f_i^{pressure} = -\sum\limits_{i\neq j}(\frac{p_i}{\rho_i^2} + \frac{p_j}{\rho_j^2})m_j\bigtriangledown W_{pressure}(x_i-x_j,h) \]" src="form_35.png"/>
+</p>
+<h2>Viscosity Force </h2>
+<p>Next we can calculate our viscosity force, the larger this force is the more it gives the fluid a thicker or stickier appearence. An example of a very viscous fluid would be syrup. To calculate this force we use the following equation, </p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ f_i^{viscosity} = \mu\sum\limits_{i\neq j}(u_j-u_i)\bigtriangledown^2 W_{viscosity}(x_i-x_j,h) \]" src="form_36.png"/>
+</p>
+<p><br/>
+In this equation we have one more unknown <img class="formulaInl" alt="$\mu$" src="form_5.png"/>, this represents the viscosity force. This is a scaler value set by the user to for the desired visocity influence on the fluid. Also you may notice that this formulae also contains a third weighting kernal which will be explained in the next section.</p>
+<h2>Other forces </h2>
+<p>Finally our final unknown is <img class="formulaInl" alt="$f$" src="form_37.png"/>. For this implimentation <img class="formulaInl" alt="$f$" src="form_37.png"/> will only represent gravity which we will assume is a constant 9.8m/s in the negative y direction. However for future work this can be extented to also include any other forces you may want to include such as surface tension or some kind of interaction forces.</p>
+<h2>Weighting Kernals </h2>
+<p>As mentioned in the previous sections all our force equations use a weighting kernal which scales the force value calculated based on the distance particles are from each other. The first of these kernals we encountered was the function <img class="formulaInl" alt="$W_{default}$" src="form_38.png"/> which can be denoted,<br/>
+ </p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ \newcommand{\twopartdef}[4] { \left\{ \begin{array}{ll} #1 &amp; \mbox{if } #2 \\ #3 &amp; \mbox{if } #4 \end{array} \right. } W_{default}(r,h) = \frac{315}{64\pi h^9}\twopartdef{(h^2-||r||^2)^3}{0\leq ||r|| <h}{0}{||r||>h} \]" src="form_40.png"/>
+</p>
+<p>In this equation <img class="formulaInl" alt="$r$" src="form_41.png"/> is equivilent to vector from our neighbour particle to our current particle. The letter <img class="formulaInl" alt="$h$" src="form_42.png"/> is the smoothing length of our equation. This variable is set before the simulation is run and will affect the behaviour of our fluid.<br/>
+The above weighting kernal will look like this when assuming that the soomthing length is 1,<br/>
+</p>
+<div class="image">
+<img src="DefaultWK.png" alt="DefaultWK.png"/>
+<div class="caption">
+Default weighting kernal with smoothing length 1</div></div>
+<p> This smoothing kernal is sutible for use on our density calculations but however will not be suitible for when we calculate our pressure. This is due to the gradient of the function tending to 0 as the distance of our particles tends to 0. To use this weighting kernal would create clustering of our particles. Ideally we would want our pressure kernal to continually get larger as our distance approaches 0 and is at the point of highest pressure. This is solved in [MM03] with their proposed "Spikey" kernal. </p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ W_{pressure}(r,h) = W_{spikey}(r,h) = -\frac{45}{\pi h^6} \frac{r}{||r||}(h-||r||)^2 \]" src="form_43.png"/>
+</p>
+<p>Again assuming that our smoothing length <img class="formulaInl" alt="$h$" src="form_42.png"/> is 1 our smoothing kernal will look like,<br/>
+</p>
+<div class="image">
+<img src="PressureWK.png" alt="PressureWK.png"/>
+<div class="caption">
+Pressure weighting kernal with smoothing length 1</div></div>
+<p> Notice how our kernal now tends to infinity due to our devision of the length of <img class="formulaInl" alt="$r$" src="form_41.png"/> solving our clustering problem.</p>
+<p>Our final weighting kernal is for our viscosity term. Also proposed [MM03] is the following kernal,<br/>
+ </p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ W_{viscosity}(r,h) = -\frac{45}{\pi h^6}r(h-||r||) \]" src="form_44.png"/>
+</p>
+<p> If is important to note that unlike the pressure weighting kernal, the values from our viscosity weighing are always positive. This is because the viscosity term acts as a damping force, if values were to become negative it would increase the energy of our particles.<br/>
+Again assuming that our smoothing length <img class="formulaInl" alt="$h$" src="form_42.png"/> is 1 our smoothing kernal will look like,<br/>
+</p>
+<div class="image">
+<img src="ViscosityWK.png" alt="ViscosityWK.png"/>
+<div class="caption">
+Viscosity weighting kernal with smoothing length 1</div></div>
+ <h2>Integration Methods </h2>
+<h2>Eular </h2>
+<p>To update our particles position we must integrate our acceleration to calculate first our velocity and then our displacement. The most basic integration we can use is Eular integration which goes as follows,<br/>
+ </p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ u = u + adt \]" src="form_45.png"/>
+</p>
+ <p class="formulaDsp">
+<img class="formulaDsp" alt="\[ x = x + udt \]" src="form_46.png"/>
+</p>
+<p>We have four unknowns in these equations. <img class="formulaInl" alt="$x$" src="form_47.png"/>, <img class="formulaInl" alt="$u$" src="form_48.png"/> and <img class="formulaInl" alt="$a$" src="form_49.png"/> are our position, velocity and accelerationl. Our final unknown <img class="formulaInl" alt="$dt$" src="form_50.png"/> is the timestep of our update. However the problem with this method is that as the simulation the chance of error when using these equations increases over time. These means the longer the simulation is running for the more unaccurate and unstable it will get. </p>
+<h2>Leap Frog </h2>
+<p>A more stable method to use is the Leap Frog method. This method uses future half step velocity and a previous half step velocity to calculate the position at the next half time step. This method prooves much more stable than our Eular method. It is achieved with the equations below,<br/>
+ </p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ u_{t+\frac{1}{2} \triangle t} = u_{t- \frac{1}{2} \triangle t} + \triangle t a_t \]" src="form_51.png"/>
+</p>
+ <p class="formulaDsp">
+<img class="formulaDsp" alt="\[ u_{t-\frac{1}{2} \triangle t} = u_0 - \frac{1}{2}\triangle t a_0 \]" src="form_52.png"/>
+</p>
+ <p class="formulaDsp">
+<img class="formulaDsp" alt="\[ x_{t+\frac{1}{2} \triangle t} = x_t - \triangle tu_{t+\frac{1}{2} \triangle t} \]" src="form_53.png"/>
+</p>
+<p> Below is a graph comparing the percentage of error of Leap Frog compared to other popular integration techniques over time with a deliberately high timestep used.<br/>
+</p>
+<div class="image">
+<img src="leapFrogGraph.png" alt="leapFrogGraph.png"/>
+<div class="caption">
+Comparison of Integration Techniques. Source: http://einstein.drexel.edu/courses/Comp_Phys/Integrators/leapfrog/</div></div>
+<p>As you can see from the graph although the accuracy may drop the integration technique stays very stable over long periods of time.</p>
+<h1>Optimisations </h1>
+<h2>Spacial Hash </h2>
+</div></div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated on Sat May 2 2015 02:57:37 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.6
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated on Tue May 5 2015 01:42:21 for Cuda SPH Fluid Simulation - Declan Russell by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
+  </ul>
+</div>
 </body>
 </html>

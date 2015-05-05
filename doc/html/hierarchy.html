@@ -8,6 +8,13 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+  $(window).load(resizeHeight);
+</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
 <script type="text/javascript">
@@ -26,7 +33,7 @@
    <div id="projectname">Cuda SPH Fluid Simulation - Declan Russell
    &#160;<span id="projectnumber">1.0</span>
    </div>
-   <div id="projectbrief">SPH fluid simulation that uses cuda and dynamic parellism and some neat shading techniques</div>
+   <div id="projectbrief">SPH fluid simulation that uses cuda optimizations and some neat shading techniques</div>
   </td>
  </tr>
  </tbody>
@@ -70,6 +77,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     </ul>
   </div>
 </div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('hierarchy.html','');});
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -98,41 +119,46 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr id="row_1_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="class_abstract_render_target.html" target="_self">AbstractRenderTarget</a></td><td class="desc">Abstract base class for OpenGL Objects </td></tr>
 <tr id="row_2_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="classbilateral_filter_frag.html" target="_self">bilateralFilterFrag</a></td><td class="desc">Fragment shader to apply bilateral filter blur on an input </td></tr>
 <tr id="row_3_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="classbilateral_filter_vert.html" target="_self">bilateralFilterVert</a></td><td class="desc">Vertex shader for our bilateral filter shader. Just passes through positions and tex coords </td></tr>
-<tr id="row_4_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="class_fluid_shader.html" target="_self">FluidShader</a></td><td class="desc">Fluid shader. Method can be found at <a href="http://developer.download.nvidia.com/presentations/2010/gdc/Direct3D_Effects.pdf">http://developer.download.nvidia.com/presentations/2010/gdc/Direct3D_Effects.pdf</a> </td></tr>
-<tr id="row_5_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="classfluid_shader_frag.html" target="_self">fluidShaderFrag</a></td><td class="desc">Fragment shader to apply the final shading of our fluid. This calculates the fragment normals </td></tr>
-<tr id="row_6_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="classfluid_shader_vert.html" target="_self">fluidShaderVert</a></td><td class="desc">Vertex shader for our fluid shader. Just passes through positions and tex coords </td></tr>
-<tr id="row_7_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="class_g_l_texture_lib.html" target="_self">GLTextureLib</a></td><td class="desc">Simple class for loading in and managing OpenGL textures </td></tr>
-<tr id="row_8_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="structlight_info.html" target="_self">lightInfo</a></td><td class="desc">Structure to hold our light information </td></tr>
-<tr id="row_9_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="structparticle_cell_prop.html" target="_self">particleCellProp</a></td><td class="desc">Structure to hold the properties of our particle cell </td></tr>
-<tr id="row_10_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="classparticle_depth_frag.html" target="_self">particleDepthFrag</a></td><td class="desc">Fragment shader for drawing point sprites as spheres. The output fragment will be the depth </td></tr>
-<tr id="row_11_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="classparticle_depth_vert.html" target="_self">particleDepthVert</a></td><td class="desc">Vertex shader for our particle depth shader. Takes in points of particles and scales the point sprite with </td></tr>
-<tr id="row_12_"><td class="entry"><img id="arr_12_" src="ftv2mnode.png" alt="o" width="16" height="22" onclick="toggleFolder('12_')"/><img src="ftv2cl.png" alt="C" width="24" height="22" /><b>QDockWidget</b></td><td class="desc"></td></tr>
-<tr id="row_12_0_" class="even"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2lastnode.png" alt="\" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="class_fluid_prop_dock_widget.html" target="_self">FluidPropDockWidget</a></td><td class="desc"></td></tr>
-<tr id="row_13_"><td class="entry"><img id="arr_13_" src="ftv2mnode.png" alt="o" width="16" height="22" onclick="toggleFolder('13_')"/><img src="ftv2cl.png" alt="C" width="24" height="22" /><b>QGLWidget</b></td><td class="desc"></td></tr>
-<tr id="row_13_0_" class="even"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2lastnode.png" alt="\" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="class_open_g_l_widget.html" target="_self">OpenGLWidget</a></td><td class="desc">Basic Qt widget that holds a OpenGL context </td></tr>
-<tr id="row_14_"><td class="entry"><img id="arr_14_" src="ftv2mnode.png" alt="o" width="16" height="22" onclick="toggleFolder('14_')"/><img src="ftv2cl.png" alt="C" width="24" height="22" /><b>QMainWindow</b></td><td class="desc"></td></tr>
-<tr id="row_14_0_" class="even"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2lastnode.png" alt="\" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="class_main_window.html" target="_self">MainWindow</a></td><td class="desc"></td></tr>
-<tr id="row_15_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="structqt__meta__stringdata___fluid_prop_dock_widget__t.html" target="_self">qt_meta_stringdata_FluidPropDockWidget_t</a></td><td class="desc"></td></tr>
-<tr id="row_16_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="structqt__meta__stringdata___main_window__t.html" target="_self">qt_meta_stringdata_MainWindow_t</a></td><td class="desc"></td></tr>
-<tr id="row_17_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="structqt__meta__stringdata___open_g_l_widget__t.html" target="_self">qt_meta_stringdata_OpenGLWidget_t</a></td><td class="desc"></td></tr>
-<tr id="row_18_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="class_render_target_lib.html" target="_self">RenderTargetLib</a></td><td class="desc">Singleton class for creating and storing render targets in a library </td></tr>
-<tr id="row_19_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="struct_simple_cuboid_collision_object.html" target="_self">SimpleCuboidCollisionObject</a></td><td class="desc">Cuboid collion object properties </td></tr>
-<tr id="row_20_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="classsky_box_frag.html" target="_self">skyBoxFrag</a></td><td class="desc">Fragment shader for our shy box shader </td></tr>
-<tr id="row_21_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="classsky_box_vert.html" target="_self">skyBoxVert</a></td><td class="desc">Vertex shader for our sky box shader. Just passes through positions and tex coords and positions </td></tr>
-<tr id="row_22_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="class_s_p_h_engine.html" target="_self">SPHEngine</a></td><td class="desc">Our cuda libraries </td></tr>
-<tr id="row_23_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="classthickness_frag.html" target="_self">thicknessFrag</a></td><td class="desc">Fragment shader to output the thickness of our fluid. It is important for you to run this with </td></tr>
-<tr id="row_24_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="classthickness_vert.html" target="_self">thicknessVert</a></td><td class="desc">Vertex shader for our thickness shader. Takes in points of particles and scales the point sprite with </td></tr>
-<tr id="row_25_"><td class="entry"><img id="arr_25_" src="ftv2mlastnode.png" alt="\" width="16" height="22" onclick="toggleFolder('25_')"/><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="class_ui___main_window.html" target="_self">Ui_MainWindow</a></td><td class="desc"></td></tr>
-<tr id="row_25_0_" class="even"><td class="entry"><img src="ftv2blank.png" alt="&#160;" width="16" height="22" /><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="class_ui_1_1_main_window.html" target="_self">Ui::MainWindow</a></td><td class="desc"></td></tr>
-<tr id="row_25_1_"><td class="entry"><img src="ftv2blank.png" alt="&#160;" width="16" height="22" /><img src="ftv2lastnode.png" alt="\" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="class_ui_1_1_main_window.html" target="_self">Ui::MainWindow</a></td><td class="desc"></td></tr>
+<tr id="row_4_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="classcuboid_geom.html" target="_self">cuboidGeom</a></td><td class="desc">Geometry shader for our cuboid shader. Turns one point into a cube drawn with GL_LINES </td></tr>
+<tr id="row_5_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="classcuboid_vert.html" target="_self">cuboidVert</a></td><td class="desc">Vertex shader for our cuboid shader </td></tr>
+<tr id="row_6_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="class_fluid_shader.html" target="_self">FluidShader</a></td><td class="desc">Fluid shader. Method can be found at <a href="http://developer.download.nvidia.com/presentations/2010/gdc/Direct3D_Effects.pdf">http://developer.download.nvidia.com/presentations/2010/gdc/Direct3D_Effects.pdf</a> </td></tr>
+<tr id="row_7_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="classfluid_shader_frag.html" target="_self">fluidShaderFrag</a></td><td class="desc">Fragment shader to apply the final shading of our fluid. This calculates the fragment normals </td></tr>
+<tr id="row_8_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="classfluid_shader_vert.html" target="_self">fluidShaderVert</a></td><td class="desc">Vertex shader for our fluid shader. Just passes through positions and tex coords </td></tr>
+<tr id="row_9_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="class_g_l_texture_lib.html" target="_self">GLTextureLib</a></td><td class="desc">Simple class for loading in and managing OpenGL textures </td></tr>
+<tr id="row_10_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="structlight_info.html" target="_self">lightInfo</a></td><td class="desc">Structure to hold our light information </td></tr>
+<tr id="row_11_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="structparticle_cell_prop.html" target="_self">particleCellProp</a></td><td class="desc">Structure to hold the properties of our particle cell </td></tr>
+<tr id="row_12_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="classparticle_depth_frag.html" target="_self">particleDepthFrag</a></td><td class="desc">Fragment shader for drawing point sprites as spheres. The output fragment will be the depth </td></tr>
+<tr id="row_13_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="classparticle_depth_vert.html" target="_self">particleDepthVert</a></td><td class="desc">Vertex shader for our particle depth shader. Takes in points of particles and scales the point sprite with </td></tr>
+<tr id="row_14_"><td class="entry"><img id="arr_14_" src="ftv2mnode.png" alt="o" width="16" height="22" onclick="toggleFolder('14_')"/><img src="ftv2cl.png" alt="C" width="24" height="22" /><b>QDockWidget</b></td><td class="desc"></td></tr>
+<tr id="row_14_0_" class="even"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2lastnode.png" alt="\" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="class_fluid_prop_dock_widget.html" target="_self">FluidPropDockWidget</a></td><td class="desc"></td></tr>
+<tr id="row_15_"><td class="entry"><img id="arr_15_" src="ftv2mnode.png" alt="o" width="16" height="22" onclick="toggleFolder('15_')"/><img src="ftv2cl.png" alt="C" width="24" height="22" /><b>QGLWidget</b></td><td class="desc"></td></tr>
+<tr id="row_15_0_" class="even"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2lastnode.png" alt="\" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="class_open_g_l_widget.html" target="_self">OpenGLWidget</a></td><td class="desc">Basic Qt widget that holds a OpenGL context </td></tr>
+<tr id="row_16_"><td class="entry"><img id="arr_16_" src="ftv2mnode.png" alt="o" width="16" height="22" onclick="toggleFolder('16_')"/><img src="ftv2cl.png" alt="C" width="24" height="22" /><b>QMainWindow</b></td><td class="desc"></td></tr>
+<tr id="row_16_0_" class="even"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2lastnode.png" alt="\" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="class_main_window.html" target="_self">MainWindow</a></td><td class="desc"></td></tr>
+<tr id="row_17_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="structqt__meta__stringdata___fluid_prop_dock_widget__t.html" target="_self">qt_meta_stringdata_FluidPropDockWidget_t</a></td><td class="desc"></td></tr>
+<tr id="row_18_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="structqt__meta__stringdata___main_window__t.html" target="_self">qt_meta_stringdata_MainWindow_t</a></td><td class="desc"></td></tr>
+<tr id="row_19_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="structqt__meta__stringdata___open_g_l_widget__t.html" target="_self">qt_meta_stringdata_OpenGLWidget_t</a></td><td class="desc"></td></tr>
+<tr id="row_20_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="class_render_target_lib.html" target="_self">RenderTargetLib</a></td><td class="desc">Singleton class for creating and storing render targets in a library </td></tr>
+<tr id="row_21_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="struct_simple_cuboid_collision_object.html" target="_self">SimpleCuboidCollisionObject</a></td><td class="desc">Cuboid collion object properties </td></tr>
+<tr id="row_22_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="classsky_box_frag.html" target="_self">skyBoxFrag</a></td><td class="desc">Fragment shader for our shy box shader </td></tr>
+<tr id="row_23_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="classsky_box_vert.html" target="_self">skyBoxVert</a></td><td class="desc">Vertex shader for our sky box shader. Just passes through positions and tex coords and positions </td></tr>
+<tr id="row_24_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="class_s_p_h_engine.html" target="_self">SPHEngine</a></td><td class="desc">Our cuda libraries </td></tr>
+<tr id="row_25_"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="classthickness_frag.html" target="_self">thicknessFrag</a></td><td class="desc">Fragment shader to output the thickness of our fluid. It is important for you to run this with </td></tr>
+<tr id="row_26_" class="even"><td class="entry"><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="classthickness_vert.html" target="_self">thicknessVert</a></td><td class="desc">Vertex shader for our thickness shader. Takes in points of particles and scales the point sprite with </td></tr>
+<tr id="row_27_"><td class="entry"><img id="arr_27_" src="ftv2mlastnode.png" alt="\" width="16" height="22" onclick="toggleFolder('27_')"/><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="class_ui___main_window.html" target="_self">Ui_MainWindow</a></td><td class="desc"></td></tr>
+<tr id="row_27_0_" class="even"><td class="entry"><img src="ftv2blank.png" alt="&#160;" width="16" height="22" /><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="class_ui_1_1_main_window.html" target="_self">Ui::MainWindow</a></td><td class="desc"></td></tr>
+<tr id="row_27_1_"><td class="entry"><img src="ftv2blank.png" alt="&#160;" width="16" height="22" /><img src="ftv2lastnode.png" alt="\" width="16" height="22" /><img src="ftv2cl.png" alt="C" width="24" height="22" /><a class="el" href="class_ui_1_1_main_window.html" target="_self">Ui::MainWindow</a></td><td class="desc"></td></tr>
 </table>
 </div><!-- directory -->
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated on Sat May 2 2015 02:57:37 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.6
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated on Tue May 5 2015 01:42:21 for Cuda SPH Fluid Simulation - Declan Russell by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
+  </ul>
+</div>
 </body>
 </html>

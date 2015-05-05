@@ -126,6 +126,11 @@ public slots:
     //----------------------------------------------------------------------------------------------------------------------
     inline void setTimeStep(double _step){m_fluidGLWidget->setSimTimeStep(_step,m_instanceNo);}
     //----------------------------------------------------------------------------------------------------------------------
+    /// @brief slot to set the velocity correction of our simulatin
+    /// @brief _val - value of velocity correciion
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setVelCorrection(double _val){m_fluidGLWidget->setVelCorrection(_val,m_instanceNo);}
+    //----------------------------------------------------------------------------------------------------------------------
 private:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a pointer to our fluid sim openGlWidget

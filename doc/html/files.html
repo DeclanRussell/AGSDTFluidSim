@@ -8,6 +8,13 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+  $(window).load(resizeHeight);
+</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
 <script type="text/javascript">
@@ -26,7 +33,7 @@
    <div id="projectname">Cuda SPH Fluid Simulation - Declan Russell
    &#160;<span id="projectnumber">1.0</span>
    </div>
-   <div id="projectbrief">SPH fluid simulation that uses cuda and dynamic parellism and some neat shading techniques</div>
+   <div id="projectbrief">SPH fluid simulation that uses cuda optimizations and some neat shading techniques</div>
   </td>
  </tr>
  </tbody>
@@ -68,6 +75,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     </ul>
   </div>
 </div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('files.html','');});
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -109,23 +130,28 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr id="row_2_"><td class="entry"><img id="arr_2_" src="ftv2mnode.png" alt="o" width="16" height="22" onclick="toggleFolder('2_')"/><img id="img_2_" src="ftv2folderopen.png" alt="-" width="24" height="22" onclick="toggleFolder('2_')"/><a class="el" href="dir_95c752037a97b41030102703686a0a90.html" target="_self">shaders</a></td><td class="desc"></td></tr>
 <tr id="row_2_0_" class="even"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="bilateral_filter_frag_8glsl.html" target="_self">bilateralFilterFrag.glsl</a></td><td class="desc"></td></tr>
 <tr id="row_2_1_"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="bilateral_filter_vert_8glsl.html" target="_self">bilateralFilterVert.glsl</a></td><td class="desc"></td></tr>
-<tr id="row_2_2_" class="even"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="fluid_shader_frag_8glsl.html" target="_self">fluidShaderFrag.glsl</a></td><td class="desc"></td></tr>
-<tr id="row_2_3_"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="fluid_shader_vert_8glsl.html" target="_self">fluidShaderVert.glsl</a></td><td class="desc"></td></tr>
-<tr id="row_2_4_" class="even"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="particle_depth_frag_8glsl.html" target="_self">particleDepthFrag.glsl</a></td><td class="desc"></td></tr>
-<tr id="row_2_5_"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="particle_depth_vert_8glsl.html" target="_self">particleDepthVert.glsl</a></td><td class="desc"></td></tr>
-<tr id="row_2_6_" class="even"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="sky_box_frag_8glsl.html" target="_self">skyBoxFrag.glsl</a></td><td class="desc"></td></tr>
-<tr id="row_2_7_"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="sky_box_vert_8glsl.html" target="_self">skyBoxVert.glsl</a></td><td class="desc"></td></tr>
-<tr id="row_2_8_" class="even"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="thickness_frag_8glsl.html" target="_self">thicknessFrag.glsl</a></td><td class="desc"></td></tr>
-<tr id="row_2_9_"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2lastnode.png" alt="\" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="thickness_vert_8glsl.html" target="_self">thicknessVert.glsl</a></td><td class="desc"></td></tr>
+<tr id="row_2_2_" class="even"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="cuboid_geom_8glsl.html" target="_self">cuboidGeom.glsl</a></td><td class="desc"></td></tr>
+<tr id="row_2_3_"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="cuboid_vert_8glsl.html" target="_self">cuboidVert.glsl</a></td><td class="desc"></td></tr>
+<tr id="row_2_4_" class="even"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="fluid_shader_frag_8glsl.html" target="_self">fluidShaderFrag.glsl</a></td><td class="desc"></td></tr>
+<tr id="row_2_5_"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="fluid_shader_vert_8glsl.html" target="_self">fluidShaderVert.glsl</a></td><td class="desc"></td></tr>
+<tr id="row_2_6_" class="even"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="particle_depth_frag_8glsl.html" target="_self">particleDepthFrag.glsl</a></td><td class="desc"></td></tr>
+<tr id="row_2_7_"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="particle_depth_vert_8glsl.html" target="_self">particleDepthVert.glsl</a></td><td class="desc"></td></tr>
+<tr id="row_2_8_" class="even"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="sky_box_frag_8glsl.html" target="_self">skyBoxFrag.glsl</a></td><td class="desc"></td></tr>
+<tr id="row_2_9_"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="sky_box_vert_8glsl.html" target="_self">skyBoxVert.glsl</a></td><td class="desc"></td></tr>
+<tr id="row_2_10_" class="even"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2node.png" alt="o" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="thickness_frag_8glsl.html" target="_self">thicknessFrag.glsl</a></td><td class="desc"></td></tr>
+<tr id="row_2_11_"><td class="entry"><img src="ftv2vertline.png" alt="|" width="16" height="22" /><img src="ftv2lastnode.png" alt="\" width="16" height="22" /><img src="ftv2doc.png" alt="*" width="24" height="22" /><a class="el" href="thickness_vert_8glsl.html" target="_self">thicknessVert.glsl</a></td><td class="desc"></td></tr>
 <tr id="row_3_" class="even"><td class="entry"><img src="ftv2lastnode.png" alt="\" width="16" height="22" /><a href="ui__mainwindow_8h_source.html"><img src="ftv2doc.png" alt="*" width="24" height="22" /></a><b>ui_mainwindow.h</b></td><td class="desc"></td></tr>
 </table>
 </div><!-- directory -->
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated on Sat May 2 2015 02:57:37 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.6
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated on Tue May 5 2015 01:42:21 for Cuda SPH Fluid Simulation - Declan Russell by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
+  </ul>
+</div>
 </body>
 </html>

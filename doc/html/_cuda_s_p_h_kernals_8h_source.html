@@ -8,6 +8,13 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+  $(window).load(resizeHeight);
+</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
 <script type="text/javascript">
@@ -26,7 +33,7 @@
    <div id="projectname">Cuda SPH Fluid Simulation - Declan Russell
    &#160;<span id="projectnumber">1.0</span>
    </div>
-   <div id="projectbrief">SPH fluid simulation that uses cuda and dynamic parellism and some neat shading techniques</div>
+   <div id="projectbrief">SPH fluid simulation that uses cuda optimizations and some neat shading techniques</div>
   </td>
  </tr>
  </tbody>
@@ -67,6 +74,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="globals.html"><span>File&#160;Members</span></a></li>
     </ul>
   </div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('_cuda_s_p_h_kernals_8h_source.html','');});
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -81,11 +103,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<div id="nav-path" class="navpath">
-  <ul>
-<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li>  </ul>
-</div>
-</div><!-- top -->
 <div class="header">
   <div class="headertitle">
 <div class="title">CudaSPHKernals.h</div>  </div>
@@ -133,30 +150,34 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="comment"></span><span class="comment">//----------------------------------------------------------------------------------------------------------------------</span></div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_cuda_s_p_h_kernals_8h.html#a32490018a3312806721e0576ff6f8c7b">fillUint</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> *_pointer, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _arraySize, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _fill);</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="comment">//----------------------------------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="comment"></span><span class="comment">//----------------------------------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_cuda_s_p_h_kernals_8h.html#ad577148366bb4870495f49a68e5637dc">fluidSolver</a>(cudaStream_t _stream,float3 *d_posArray, float3 *d_velArray, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> *d_cellOccArray, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> *d_cellIndxArray, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _hashTableSize, <span class="keywordtype">int</span> _hashResolution, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _maxNumThreads, <span class="keywordtype">float</span> _smoothingLength, <span class="keywordtype">float</span> _timestep, <span class="keywordtype">float</span> _particleMass = 1, <span class="keywordtype">float</span> _restDensity = 1, <span class="keywordtype">float</span> _gasConstant = 1, <span class="keywordtype">float</span> _visCoef = 1, <span class="keywordtype">float</span> _densKernConst = 1, <span class="keywordtype">float</span> _pressKernConst = 1, <span class="keywordtype">float</span> _viscKernConst = 1);</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="comment">//----------------------------------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="comment"></span><span class="comment">//----------------------------------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_cuda_s_p_h_kernals_8h.html#a1985239f9afd133a3db010848f3950f6">collisionDetectionSolver</a>(cudaStream_t _stream, <a class="code" href="struct_simple_cuboid_collision_object.html">SimpleCuboidCollisionObject</a>* d_planeArray, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _numObjects, float3 *d_posArray, float3 *d_velArray, <span class="keywordtype">float</span> _timeStep, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _numParticles, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _maxNumThreads);</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="comment">//----------------------------------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="preprocessor">#endif // HELLOCUDA_H</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="comment"></span><span class="comment">//----------------------------------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_cuda_s_p_h_kernals_8h.html#adb6bcaa76e0b8b0bffe9b300e9579ade">fluidSolver</a>(cudaStream_t _stream, float3 *d_posArray, float3 *d_velArray, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> *d_cellOccArray, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> *d_cellIndxArray, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _hashTableSize, <span class="keywordtype">int</span> _hashResolution, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _maxNumThreads, <span class="keywordtype">float</span> _smoothingLength, <span class="keywordtype">float</span> _timestep, <span class="keywordtype">float</span> _particleMass = 1, <span class="keywordtype">float</span> _restDensity = 1, <span class="keywordtype">float</span> _gasConstant = 1, <span class="keywordtype">float</span> _visCoef = 1, <span class="keywordtype">float</span> _velCorrection = 0.3, <span class="keywordtype">float</span> _densKernConst = 1, <span class="keywordtype">float</span> _pressKernConst = 1, <span class="keywordtype">float</span> _viscKernConst = 1);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="comment">//----------------------------------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="comment"></span><span class="comment">//----------------------------------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="keywordtype">void</span> <a class="code" href="_cuda_s_p_h_kernals_8h.html#a1985239f9afd133a3db010848f3950f6">collisionDetectionSolver</a>(cudaStream_t _stream, <a class="code" href="struct_simple_cuboid_collision_object.html">SimpleCuboidCollisionObject</a>* d_planeArray, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _numObjects, float3 *d_posArray, float3 *d_velArray, <span class="keywordtype">float</span> _timeStep, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _numParticles, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> _maxNumThreads);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="comment">//----------------------------------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="preprocessor">#endif // HELLOCUDA_H</span></div>
 <div class="ttc" id="_cuda_s_p_h_kernals_8h_html_a1541f8b1ee73799a0cecc7030773a6a9"><div class="ttname"><a href="_cuda_s_p_h_kernals_8h.html#a1541f8b1ee73799a0cecc7030773a6a9">sortByKey</a></div><div class="ttdeci">void sortByKey(unsigned int *d_hashArray, float3 *d_posArray, float3 *d_velArray, unsigned int _numParticles)</div><div class="ttdoc">Sorts our hash key buffer and postion buffer such that points of the same key occupy contiguous memor...</div><div class="ttdef"><b>Definition:</b> CudaSPHKernals.cu:428</div></div>
 <div class="ttc" id="structparticle_cell_prop_html"><div class="ttname"><a href="structparticle_cell_prop.html">particleCellProp</a></div><div class="ttdoc">a structure to hold the properties of our particle cell </div><div class="ttdef"><b>Definition:</b> CudaSPHKernals.h:19</div></div>
 <div class="ttc" id="struct_simple_cuboid_collision_object_html_a82b63456b55c9f85d9437b996311a61f"><div class="ttname"><a href="struct_simple_cuboid_collision_object.html#a82b63456b55c9f85d9437b996311a61f">SimpleCuboidCollisionObject::collide</a></div><div class="ttdeci">__device__ void collide(float3 &amp;_pos, float3 &amp;_vel)</div><div class="ttdoc">implimentation of our container collide function. Very simple AABB but it works! </div><div class="ttdef"><b>Definition:</b> CudaSPHKernals.cu:273</div></div>
 <div class="ttc" id="_cuda_s_p_h_kernals_8h_html_a5ef63636297ac3ddbc0866064a75e12d"><div class="ttname"><a href="_cuda_s_p_h_kernals_8h.html#a5ef63636297ac3ddbc0866064a75e12d">createCellIdx</a></div><div class="ttdeci">void createCellIdx(unsigned int *d_cellOccArray, unsigned int _size, unsigned int *d_cellIdxArray)</div><div class="ttdoc">Creates an index array for our cells using thrusts exclusive scan. </div><div class="ttdef"><b>Definition:</b> CudaSPHKernals.cu:494</div></div>
+<div class="ttc" id="_cuda_s_p_h_kernals_8h_html_adb6bcaa76e0b8b0bffe9b300e9579ade"><div class="ttname"><a href="_cuda_s_p_h_kernals_8h.html#adb6bcaa76e0b8b0bffe9b300e9579ade">fluidSolver</a></div><div class="ttdeci">void fluidSolver(cudaStream_t _stream, float3 *d_posArray, float3 *d_velArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, int _hashResolution, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass=1, float _restDensity=1, float _gasConstant=1, float _visCoef=1, float _velCorrection=0.3, float _densKernConst=1, float _pressKernConst=1, float _viscKernConst=1)</div><div class="ttdoc">Solver function that will call our solver kernal to calculate the new positions of the particles in...</div><div class="ttdef"><b>Definition:</b> CudaSPHKernals.cu:516</div></div>
 <div class="ttc" id="_cuda_s_p_h_kernals_8h_html_a32490018a3312806721e0576ff6f8c7b"><div class="ttname"><a href="_cuda_s_p_h_kernals_8h.html#a32490018a3312806721e0576ff6f8c7b">fillUint</a></div><div class="ttdeci">void fillUint(unsigned int *_pointer, unsigned int _arraySize, unsigned int _fill)</div><div class="ttdoc">simple function so that we can fill a buffer with unsigned ints. </div><div class="ttdef"><b>Definition:</b> CudaSPHKernals.cu:475</div></div>
 <div class="ttc" id="_cuda_s_p_h_kernals_8h_html_a5f674fd3497767724a4425bbb91a2248"><div class="ttname"><a href="_cuda_s_p_h_kernals_8h.html#a5f674fd3497767724a4425bbb91a2248">countCellOccupancy</a></div><div class="ttdeci">void countCellOccupancy(cudaStream_t _stream, unsigned int *d_hashArray, unsigned int *d_cellOccArray, unsigned int _hashTableSize, unsigned int _numPoints, unsigned int _maxNumThreads)</div><div class="ttdoc">Computes the particle occupancy of our hash cell. </div><div class="ttdef"><b>Definition:</b> CudaSPHKernals.cu:454</div></div>
 <div class="ttc" id="struct_simple_cuboid_collision_object_html"><div class="ttname"><a href="struct_simple_cuboid_collision_object.html">SimpleCuboidCollisionObject</a></div><div class="ttdoc">a cuboid collion object properties </div><div class="ttdef"><b>Definition:</b> CudaSPHKernals.h:28</div></div>
-<div class="ttc" id="_cuda_s_p_h_kernals_8h_html_ad577148366bb4870495f49a68e5637dc"><div class="ttname"><a href="_cuda_s_p_h_kernals_8h.html#ad577148366bb4870495f49a68e5637dc">fluidSolver</a></div><div class="ttdeci">void fluidSolver(cudaStream_t _stream, float3 *d_posArray, float3 *d_velArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, int _hashResolution, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass=1, float _restDensity=1, float _gasConstant=1, float _visCoef=1, float _densKernConst=1, float _pressKernConst=1, float _viscKernConst=1)</div><div class="ttdoc">Solver function that will call our solver kernal to calculate the new positions of the particles in...</div><div class="ttdef"><b>Definition:</b> CudaSPHKernals.cu:516</div></div>
 <div class="ttc" id="_cuda_s_p_h_kernals_8h_html_afdcf7b761d59cb7dc7242693f8098380"><div class="ttname"><a href="_cuda_s_p_h_kernals_8h.html#afdcf7b761d59cb7dc7242693f8098380">createHashTable</a></div><div class="ttdeci">void createHashTable(cudaStream_t _stream, unsigned int *d_hashArray, float3 *d_posArray, unsigned int _numParticles, float _smoothingLength, float _gridSize, int _maxNumThreads)</div><div class="ttdoc">Creates a spatial hash key based on our particle postion. </div><div class="ttdef"><b>Definition:</b> CudaSPHKernals.cu:407</div></div>
 <div class="ttc" id="_cuda_s_p_h_kernals_8h_html_a1985239f9afd133a3db010848f3950f6"><div class="ttname"><a href="_cuda_s_p_h_kernals_8h.html#a1985239f9afd133a3db010848f3950f6">collisionDetectionSolver</a></div><div class="ttdeci">void collisionDetectionSolver(cudaStream_t _stream, SimpleCuboidCollisionObject *d_planeArray, unsigned int _numObjects, float3 *d_posArray, float3 *d_velArray, float _timeStep, unsigned int _numParticles, unsigned int _maxNumThreads)</div><div class="ttdoc">Collision detection between particles and planes. </div><div class="ttdef"><b>Definition:</b> CudaSPHKernals.cu:537</div></div>
 </div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated on Sat May 2 2015 02:57:37 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.6
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="_cuda_s_p_h_kernals_8h.html">CudaSPHKernals.h</a></li>
+    <li class="footer">Generated on Tue May 5 2015 01:42:20 for Cuda SPH Fluid Simulation - Declan Russell by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
+  </ul>
+</div>
 </body>
 </html>

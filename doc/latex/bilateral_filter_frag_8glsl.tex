@@ -1,0 +1,66 @@
+\hypertarget{bilateral_filter_frag_8glsl}{\section{shaders/bilateral\-Filter\-Frag.glsl File Reference}
+\label{bilateral_filter_frag_8glsl}\index{shaders/bilateral\-Filter\-Frag.\-glsl@{shaders/bilateral\-Filter\-Frag.\-glsl}}
+}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+float \hyperlink{bilateral_filter_frag_8glsl_a7fc9433dc7caa1f33078fafa0bf43dda}{filter} (vec2 blur\-Dir, float depth)
+\begin{DoxyCompactList}\small\item\em our bilateral filter function \end{DoxyCompactList}\item 
+\hypertarget{bilateral_filter_frag_8glsl_a6288eba0f8e8ad3ab1544ad731eb7667}{void \hyperlink{bilateral_filter_frag_8glsl_a6288eba0f8e8ad3ab1544ad731eb7667}{main} (void)}\label{bilateral_filter_frag_8glsl_a6288eba0f8e8ad3ab1544ad731eb7667}
+
+\begin{DoxyCompactList}\small\item\em our main shader function \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{bilateral_filter_frag_8glsl_a3b19027caa70314998e90a0e13d915d3}{in vec2 \hyperlink{bilateral_filter_frag_8glsl_a3b19027caa70314998e90a0e13d915d3}{V\-Tex\-Coord}}\label{bilateral_filter_frag_8glsl_a3b19027caa70314998e90a0e13d915d3}
+
+\begin{DoxyCompactList}\small\item\em in variable of the texture coordinates \end{DoxyCompactList}\item 
+\hypertarget{bilateral_filter_frag_8glsl_ab59292ab7df136fb38e0290755f90dea}{uniform sampler2\-D \hyperlink{bilateral_filter_frag_8glsl_ab59292ab7df136fb38e0290755f90dea}{depth\-Tex}}\label{bilateral_filter_frag_8glsl_ab59292ab7df136fb38e0290755f90dea}
+
+\begin{DoxyCompactList}\small\item\em texture for holding the depth pass \end{DoxyCompactList}\item 
+\hypertarget{bilateral_filter_frag_8glsl_a834f840f0604abea8d2500555d4fb854}{uniform float \hyperlink{bilateral_filter_frag_8glsl_a834f840f0604abea8d2500555d4fb854}{blur\-Depth\-Falloff}}\label{bilateral_filter_frag_8glsl_a834f840f0604abea8d2500555d4fb854}
+
+\begin{DoxyCompactList}\small\item\em unifrom to set the blur falloff \end{DoxyCompactList}\item 
+\hypertarget{bilateral_filter_frag_8glsl_a2d45ac1478cca0b31f3b65fff9cb3530}{uniform float \hyperlink{bilateral_filter_frag_8glsl_a2d45ac1478cca0b31f3b65fff9cb3530}{filter\-Radius}}\label{bilateral_filter_frag_8glsl_a2d45ac1478cca0b31f3b65fff9cb3530}
+
+\begin{DoxyCompactList}\small\item\em uniform to set the blur radius \end{DoxyCompactList}\item 
+\hypertarget{bilateral_filter_frag_8glsl_a8a381e990c0bb33ed6cf2e9f97faf0d9}{uniform float \hyperlink{bilateral_filter_frag_8glsl_a8a381e990c0bb33ed6cf2e9f97faf0d9}{texel\-Size}}\label{bilateral_filter_frag_8glsl_a8a381e990c0bb33ed6cf2e9f97faf0d9}
+
+\begin{DoxyCompactList}\small\item\em uniform for the size of our texel \end{DoxyCompactList}\item 
+\hypertarget{bilateral_filter_frag_8glsl_a575f888600764d6ebd67a3fd89a7d034}{out vec4 \hyperlink{bilateral_filter_frag_8glsl_a575f888600764d6ebd67a3fd89a7d034}{fragout}}\label{bilateral_filter_frag_8glsl_a575f888600764d6ebd67a3fd89a7d034}
+
+\begin{DoxyCompactList}\small\item\em our out our fragment \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+Declan Russell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+14/03/15 
+\end{DoxyDate}
+\begin{DoxyVersion}{Version}
+2.\-0  G\-L\-S\-L 
+\end{DoxyVersion}
+
+
+\subsection{Function Documentation}
+\hypertarget{bilateral_filter_frag_8glsl_a7fc9433dc7caa1f33078fafa0bf43dda}{\index{bilateral\-Filter\-Frag.\-glsl@{bilateral\-Filter\-Frag.\-glsl}!filter@{filter}}
+\index{filter@{filter}!bilateralFilterFrag.glsl@{bilateral\-Filter\-Frag.\-glsl}}
+\subsubsection[{filter}]{\setlength{\rightskip}{0pt plus 5cm}float filter (
+\begin{DoxyParamCaption}
+\item[{vec2}]{blur\-Dir, }
+\item[{float}]{depth}
+\end{DoxyParamCaption}
+)}}\label{bilateral_filter_frag_8glsl_a7fc9433dc7caa1f33078fafa0bf43dda}
+
+
+our bilateral filter function 
+
+
+\begin{DoxyParams}{Parameters}
+{\em blur\-Dir} & -\/ the direction of our blur \\
+\hline
+{\em depth} & -\/ the depth of our current input fragment \\
+\hline
+\end{DoxyParams}

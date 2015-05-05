@@ -26,6 +26,9 @@ void \hyperlink{class_s_p_h_engine_a1a17b5c04756850b68cf95b917019241}{update} (f
 \hypertarget{class_s_p_h_engine_a91f224d67175615716059dba23c38a98}{void \hyperlink{class_s_p_h_engine_a91f224d67175615716059dba23c38a98}{draw\-Arrays} ()}\label{class_s_p_h_engine_a91f224d67175615716059dba23c38a98}
 
 \begin{DoxyCompactList}\small\item\em Draws our V\-A\-O. This contatins a buffer of positions mapped to vertex\-Attri\-B\-Array 0. \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_ab5811f68d71d923ac3a8e24d2d220d7b}{float \hyperlink{class_s_p_h_engine_ab5811f68d71d923ac3a8e24d2d220d7b}{get\-Grid\-Size} ()}\label{class_s_p_h_engine_ab5811f68d71d923ac3a8e24d2d220d7b}
+
+\begin{DoxyCompactList}\small\item\em accessor to the grid size of our simulation \end{DoxyCompactList}\item 
 \hypertarget{class_s_p_h_engine_aee51f7802e02c838732d9acab37da89a}{G\-Luint \hyperlink{class_s_p_h_engine_aee51f7802e02c838732d9acab37da89a}{get\-Position\-Buffer} ()}\label{class_s_p_h_engine_aee51f7802e02c838732d9acab37da89a}
 
 \begin{DoxyCompactList}\small\item\em returns the output postion open\-G\-L buffer of our particles \end{DoxyCompactList}\item 
@@ -56,12 +59,8 @@ void \hyperlink{class_s_p_h_engine_a1a17b5c04756850b68cf95b917019241}{update} (f
 \hypertarget{class_s_p_h_engine_a6d3709693af1379db5b60b02171d8c8b}{float \hyperlink{class_s_p_h_engine_a6d3709693af1379db5b60b02171d8c8b}{get\-Visc\-Coef} ()}\label{class_s_p_h_engine_a6d3709693af1379db5b60b02171d8c8b}
 
 \begin{DoxyCompactList}\small\item\em accessor to query the viscosity coeficient of our fluid \end{DoxyCompactList}\item 
-\hypertarget{class_s_p_h_engine_ac1e6f83f2da1ec79a6e6a633b810daba}{void \hyperlink{class_s_p_h_engine_ac1e6f83f2da1ec79a6e6a633b810daba}{set\-Tension\-Coef} (float \-\_\-tens\-Coef)}\label{class_s_p_h_engine_ac1e6f83f2da1ec79a6e6a633b810daba}
-
-\begin{DoxyCompactList}\small\item\em mutation for our tension coeficient of our fluid \end{DoxyCompactList}\item 
-\hypertarget{class_s_p_h_engine_afa874402b050ea1f618bf2caf7f988b4}{float \hyperlink{class_s_p_h_engine_afa874402b050ea1f618bf2caf7f988b4}{get\-Tension\-Coef} ()}\label{class_s_p_h_engine_afa874402b050ea1f618bf2caf7f988b4}
-
-\begin{DoxyCompactList}\small\item\em accessor to query our tension coeficient of our fluid \end{DoxyCompactList}\item 
+void \hyperlink{class_s_p_h_engine_a25796b907bd55473b09ac5683918c0c5}{set\-Velocity\-Correction} (float \-\_\-val)
+\begin{DoxyCompactList}\small\item\em mutator for our velocity correction \end{DoxyCompactList}\item 
 \hypertarget{class_s_p_h_engine_a6b418198ceab591b1abfa5f645dbc9d7}{void \hyperlink{class_s_p_h_engine_a6b418198ceab591b1abfa5f645dbc9d7}{set\-Vel\-Cor\-Coef} (float \-\_\-vel\-Cor\-Coef)}\label{class_s_p_h_engine_a6b418198ceab591b1abfa5f645dbc9d7}
 
 \begin{DoxyCompactList}\small\item\em mutator to our velocity correction \end{DoxyCompactList}\item 
@@ -242,6 +241,22 @@ set the size of our spawn box
 
 \begin{DoxyParams}{Parameters}
 {\em \-\_\-size} & -\/ the size of our spawn box \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_s_p_h_engine_a25796b907bd55473b09ac5683918c0c5}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!set\-Velocity\-Correction@{set\-Velocity\-Correction}}
+\index{set\-Velocity\-Correction@{set\-Velocity\-Correction}!SPHEngine@{S\-P\-H\-Engine}}
+\subsubsection[{set\-Velocity\-Correction}]{\setlength{\rightskip}{0pt plus 5cm}void S\-P\-H\-Engine\-::set\-Velocity\-Correction (
+\begin{DoxyParamCaption}
+\item[{float}]{\-\_\-val}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_s_p_h_engine_a25796b907bd55473b09ac5683918c0c5}
+
+
+mutator for our velocity correction 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-desired} & velocity correction \\
 \hline
 \end{DoxyParams}
 \hypertarget{class_s_p_h_engine_a4e61b1f56e20ab4eee7edd111c59912f}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!signal\-Add\-Particles@{signal\-Add\-Particles}}

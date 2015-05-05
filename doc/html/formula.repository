@@ -1,0 +1,54 @@
+\form#0:\[ \rho\frac{du}{dt}=-\bigtriangledown\rho+\mu\bigtriangledown^2 u + f \]
+\form#1:$\rho$
+\form#2:$\frac{du}{dt}$
+\form#3:\[ -\bigtriangledown\rho \]
+\form#4:\[ \mu\bigtriangledown^2 u \]
+\form#5:$\mu$
+\form#6:\[ f \]
+\form#7:\[ \rho(x_i) = \]
+\form#8:$m$
+\form#9:$m_j$
+\form#10:$\rho_j$
+\form#11:$p_j$
+\form#12:\[ p_i = l(\rho_i - \rho_0) \]
+\form#13:$k$
+\form#14:$\rho_i$
+\form#15:$\rho_0$
+\form#16:\[ \rho(x_i)= \]
+\form#17:\[ p_i = k(\rho_i - \rho_0) \]
+\form#18:$W$
+\form#19:$j$
+\form#20:$i$
+\form#21:\[ \rho(x_i)= \sum \]
+\form#22:\[ \rho(x_i)= \sum\limits \]
+\form#23:\[ \rho(x_i)= \sum\limits_{j\neq j}^{} \]
+\form#24:\[ \rho(x_i)= \sum\limits_{j\neq j} \]
+\form#25:\[ \rho(x_i)= \sum\limits_{j\neq j}\frac{m_j}{\rho_j}\bigtriangledown W(x_i-x_j,h) \]
+\form#26:\[ \rho(x_i)= \sum\limits_{j\neq j}\frac{m_j}{\rho_j}\bigtriangledown W_{Density}(x_i-x_j,h) \]
+\form#27:\[ \rho(x_i)= \sum\limits_{j\neq j}m_j W_{Density}(x_i-x_j,h) \]
+\form#28:\[ f_i^{presure} = -\sum\limits_{j\neq j}p_j\frac{m_j}{\rho_j}\bigtriangledown W_{Density}(x_i-x_j,h) \]
+\form#29:\[ \rho(x_i)= \sum\limits_{j}m_j W_{Density}(x_i-x_j,h) \]
+\form#30:\[ f_i^{presure} = -\sum\limits_{j\neq j}p_j\frac{m_j}{\rho_j}\bigtriangledown W_{Presure}(x_i-x_j,h) \]
+\form#31:\[ f_i^{pressure} = -\sum\limits_{j\neq j}p_j\frac{m_j}{\rho_j}\bigtriangledown W_{Pressure}(x_i-x_j,h) \]
+\form#32:\[ \rho(x_i)= \sum\limits_{j}m_j W_{default}(x_i-x_j,h) \]
+\form#33:\[ f_i^{pressure} = -\sum\limits_{i\neq j}p_j\frac{m_j}{\rho_j}\bigtriangledown W_{pressure}(x_i-x_j,h) \]
+\form#34:\[ f_i^{pressure} = -\sum\limits_{i\neq j}(\frac{p_i}{\rho_i^2} + \frac{p_j}{\rho_j^2} \]
+\form#35:\[ f_i^{pressure} = -\sum\limits_{i\neq j}(\frac{p_i}{\rho_i^2} + \frac{p_j}{\rho_j^2})m_j\bigtriangledown W_{pressure}(x_i-x_j,h) \]
+\form#36:\[ f_i^{viscosity} = \mu\sum\limits_{i\neq j}(u_j-u_i)\bigtriangledown^2 W_{viscosity}(x_i-x_j,h) \]
+\form#37:$f$
+\form#38:$W_{default}$
+\form#39:\[ \newcommand{\twopartdef}[4] { \left\{ \begin{array}{ll} #1 & \mbox{if } #2 \\ #3 & \mbox{if } #4 \end{array} \right. } W_{default} = \frac{315}{64\pi h^9}\twopartdef{(h^2-||r||^2)^3}{0\leq ||r|| <h}{0}{||r||>h} \]
+\form#40:\[ \newcommand{\twopartdef}[4] { \left\{ \begin{array}{ll} #1 & \mbox{if } #2 \\ #3 & \mbox{if } #4 \end{array} \right. } W_{default}(r,h) = \frac{315}{64\pi h^9}\twopartdef{(h^2-||r||^2)^3}{0\leq ||r|| <h}{0}{||r||>h} \]
+\form#41:$r$
+\form#42:$h$
+\form#43:\[ W_{pressure}(r,h) = W_{spikey}(r,h) = -\frac{45}{\pi h^6} \frac{r}{||r||}(h-||r||)^2 \]
+\form#44:\[ W_{viscosity}(r,h) = -\frac{45}{\pi h^6}r(h-||r||) \]
+\form#45:\[ u = u + adt \]
+\form#46:\[ x = x + udt \]
+\form#47:$x$
+\form#48:$u$
+\form#49:$a$
+\form#50:$dt$
+\form#51:\[ u_{t+\frac{1}{2} \triangle t} = u_{t- \frac{1}{2} \triangle t} + \triangle t a_t \]
+\form#52:\[ u_{t-\frac{1}{2} \triangle t} = u_0 - \frac{1}{2}\triangle t a_0 \]
+\form#53:\[ x_{t+\frac{1}{2} \triangle t} = x_t - \triangle tu_{t+\frac{1}{2} \triangle t} \]

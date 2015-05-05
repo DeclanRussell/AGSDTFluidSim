@@ -1,0 +1,265 @@
+\hypertarget{class_fluid_shader}{\section{Fluid\-Shader Class Reference}
+\label{class_fluid_shader}\index{Fluid\-Shader@{Fluid\-Shader}}
+}
+
+
+Fluid shader. Method can be found at \href{http://developer.download.nvidia.com/presentations/2010/gdc/Direct3D_Effects.pdf}{\tt http\-://developer.\-download.\-nvidia.\-com/presentations/2010/gdc/\-Direct3\-D\-\_\-\-Effects.\-pdf}.  
+
+
+
+
+{\ttfamily \#include $<$Fluid\-Shader.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_fluid_shader_ad3f76a7573c376b87189c0074d323e19}{Fluid\-Shader} (int \-\_\-width, int \-\_\-height)
+\begin{DoxyCompactList}\small\item\em our default constructor that sets up our shader \end{DoxyCompactList}\item 
+\hypertarget{class_fluid_shader_a00151325231de231c26c85bde9a7587d}{\hyperlink{class_fluid_shader_a00151325231de231c26c85bde9a7587d}{$\sim$\-Fluid\-Shader} ()}\label{class_fluid_shader_a00151325231de231c26c85bde9a7587d}
+
+\begin{DoxyCompactList}\small\item\em our default destructor \end{DoxyCompactList}\item 
+void \hyperlink{class_fluid_shader_ae4a324bbc4f7926bab3d45fb58ba59f6}{draw} (G\-Luint \-\_\-position\-V\-A\-O, int \-\_\-num\-Points, ngl\-::\-Mat4 \-\_\-\-M, ngl\-::\-Mat4 \-\_\-\-V, ngl\-::\-Mat4 \-\_\-\-P, ngl\-::\-Mat4 \-\_\-rot\-M, ngl\-::\-Vec4 \-\_\-eye\-Pos)
+\begin{DoxyCompactList}\small\item\em draws input points buffer with our fluid shader \end{DoxyCompactList}\item 
+\hypertarget{class_fluid_shader_ae91addca716706b77c3d78df77bf9860}{void \hyperlink{class_fluid_shader_ae91addca716706b77c3d78df77bf9860}{set\-Refraction\-Ratio} (float \-\_\-eta)}\label{class_fluid_shader_ae91addca716706b77c3d78df77bf9860}
+
+\begin{DoxyCompactList}\small\item\em sets our refraction ratio \end{DoxyCompactList}\item 
+\hypertarget{class_fluid_shader_ae02755692742b4c8e5fb5ed139709a42}{void \hyperlink{class_fluid_shader_ae02755692742b4c8e5fb5ed139709a42}{set\-Fresnal\-Power} (float \-\_\-power)}\label{class_fluid_shader_ae02755692742b4c8e5fb5ed139709a42}
+
+\begin{DoxyCompactList}\small\item\em mutator for the fresnal power. this effects the reflection of our fluid \end{DoxyCompactList}\item 
+void \hyperlink{class_fluid_shader_aa48f21bea9b0fbb456753442f874d10d}{set\-Point\-Size} (float \-\_\-size)
+\begin{DoxyCompactList}\small\item\em set how big we want to draw our fluid particles \end{DoxyCompactList}\item 
+void \hyperlink{class_fluid_shader_a076afe8aa143ad01ac4fc2a3b9078305}{set\-Thickness} (float \-\_\-thickness)
+\begin{DoxyCompactList}\small\item\em set how thick we want to render each particle \end{DoxyCompactList}\item 
+void \hyperlink{class_fluid_shader_a5180f954e326d1f70b83efe5fcaea748}{set\-Blur\-Falloff} (float \-\_\-falloff)
+\begin{DoxyCompactList}\small\item\em set the blur fall off of our bilateral filter shader \end{DoxyCompactList}\item 
+void \hyperlink{class_fluid_shader_ac9b7d6ee1135c3089894e5db3292bd0e}{set\-Blur\-Radius} (float \-\_\-radius)
+\begin{DoxyCompactList}\small\item\em set the blur ratius of our bilateral filter shader \end{DoxyCompactList}\item 
+void \hyperlink{class_fluid_shader_a21f895c071bf27ba60f780138211c710}{set\-Color} (float \-\_\-col\-R, float \-\_\-col\-G, float \-\_\-col\-B)
+\begin{DoxyCompactList}\small\item\em set the desired color of our fluid. Color values from 0-\/1. \end{DoxyCompactList}\item 
+\hypertarget{class_fluid_shader_ae719bbf1e465c9cc116682c3e5ac6604}{void \hyperlink{class_fluid_shader_ae719bbf1e465c9cc116682c3e5ac6604}{init} ()}\label{class_fluid_shader_ae719bbf1e465c9cc116682c3e5ac6604}
+
+\begin{DoxyCompactList}\small\item\em creates our shader \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \hyperlink{class_fluid_shader_a59302f1395ebd10872da9eb9d733d749}{set\-Screen\-Size} (int \-\_\-w, int \-\_\-h)
+\begin{DoxyCompactList}\small\item\em informas the shader of the screen size \end{DoxyCompactList}\item 
+static void \hyperlink{class_fluid_shader_a46a269869d9c2efa74a8e89d7a8e4960}{resize} (int \-\_\-w, int \-\_\-h)
+\begin{DoxyCompactList}\small\item\em resizes our shader output \end{DoxyCompactList}\item 
+static void \hyperlink{class_fluid_shader_a1e3a4859b77f0420d2ae201c3f09b5f4}{set\-Cube\-Map} (int \-\_\-width, int \-\_\-height, const G\-Lvoid $\ast$\-\_\-front, const G\-Lvoid $\ast$\-\_\-back, const G\-Lvoid $\ast$\-\_\-top, const G\-Lvoid $\ast$\-\_\-bottom, const G\-Lvoid $\ast$\-\_\-left, const G\-Lvoid $\ast$\-\_\-right)
+\begin{DoxyCompactList}\small\item\em sets the shading cube map \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Fluid shader. Method can be found at \href{http://developer.download.nvidia.com/presentations/2010/gdc/Direct3D_Effects.pdf}{\tt http\-://developer.\-download.\-nvidia.\-com/presentations/2010/gdc/\-Direct3\-D\-\_\-\-Effects.\-pdf}. 
+
+\begin{DoxyAuthor}{Author}
+Declan Russell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+28/04/2015 
+\end{DoxyDate}
+\begin{DoxyVersion}{Version}
+1.\-0 
+\end{DoxyVersion}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_fluid_shader_ad3f76a7573c376b87189c0074d323e19}{\index{Fluid\-Shader@{Fluid\-Shader}!Fluid\-Shader@{Fluid\-Shader}}
+\index{Fluid\-Shader@{Fluid\-Shader}!FluidShader@{Fluid\-Shader}}
+\subsubsection[{Fluid\-Shader}]{\setlength{\rightskip}{0pt plus 5cm}Fluid\-Shader\-::\-Fluid\-Shader (
+\begin{DoxyParamCaption}
+\item[{int}]{\-\_\-width, }
+\item[{int}]{\-\_\-height}
+\end{DoxyParamCaption}
+)}}\label{class_fluid_shader_ad3f76a7573c376b87189c0074d323e19}
+
+
+our default constructor that sets up our shader 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-width} & -\/ the width of the window  \-\_\-height -\/ the height of the window \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_fluid_shader_ae4a324bbc4f7926bab3d45fb58ba59f6}{\index{Fluid\-Shader@{Fluid\-Shader}!draw@{draw}}
+\index{draw@{draw}!FluidShader@{Fluid\-Shader}}
+\subsubsection[{draw}]{\setlength{\rightskip}{0pt plus 5cm}void Fluid\-Shader\-::draw (
+\begin{DoxyParamCaption}
+\item[{G\-Luint}]{\-\_\-position\-V\-A\-O, }
+\item[{int}]{\-\_\-num\-Points, }
+\item[{ngl\-::\-Mat4}]{\-\_\-\-M, }
+\item[{ngl\-::\-Mat4}]{\-\_\-\-V, }
+\item[{ngl\-::\-Mat4}]{\-\_\-\-P, }
+\item[{ngl\-::\-Mat4}]{\-\_\-rot\-M, }
+\item[{ngl\-::\-Vec4}]{\-\_\-eye\-Pos}
+\end{DoxyParamCaption}
+)}}\label{class_fluid_shader_ae4a324bbc4f7926bab3d45fb58ba59f6}
+
+
+draws input points buffer with our fluid shader 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-position\-V\-A\-O} & -\/ V\-A\-O that hold the position data of our particles \\
+\hline
+{\em \-\_\-num\-Points} & -\/ the number of points to draw \\
+\hline
+{\em \-\_\-\-M} & -\/ model matrix of our scene \\
+\hline
+{\em \-\_\-\-V} & -\/ view matrix of our scene \\
+\hline
+{\em \-\_\-\-P} & -\/ projection matrix of our scene \\
+\hline
+{\em \-\_\-rot\-M} & -\/ the rotation matrix of our scene to rotate our cube map \\
+\hline
+{\em \-\_\-eye\-Pos} & -\/ position of the camera in the scene \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_fluid_shader_a46a269869d9c2efa74a8e89d7a8e4960}{\index{Fluid\-Shader@{Fluid\-Shader}!resize@{resize}}
+\index{resize@{resize}!FluidShader@{Fluid\-Shader}}
+\subsubsection[{resize}]{\setlength{\rightskip}{0pt plus 5cm}void Fluid\-Shader\-::resize (
+\begin{DoxyParamCaption}
+\item[{int}]{\-\_\-w, }
+\item[{int}]{\-\_\-h}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}}\label{class_fluid_shader_a46a269869d9c2efa74a8e89d7a8e4960}
+
+
+resizes our shader output 
+
+if the screen resizes we need to notify this shader as it uses render targets 
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-w} & -\/ width to resize \\
+\hline
+{\em \-\_\-h} & -\/ height to risize \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_fluid_shader_a5180f954e326d1f70b83efe5fcaea748}{\index{Fluid\-Shader@{Fluid\-Shader}!set\-Blur\-Falloff@{set\-Blur\-Falloff}}
+\index{set\-Blur\-Falloff@{set\-Blur\-Falloff}!FluidShader@{Fluid\-Shader}}
+\subsubsection[{set\-Blur\-Falloff}]{\setlength{\rightskip}{0pt plus 5cm}void Fluid\-Shader\-::set\-Blur\-Falloff (
+\begin{DoxyParamCaption}
+\item[{float}]{\-\_\-falloff}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_fluid_shader_a5180f954e326d1f70b83efe5fcaea748}
+
+
+set the blur fall off of our bilateral filter shader 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-falloff} & -\/ desired fall off value \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_fluid_shader_ac9b7d6ee1135c3089894e5db3292bd0e}{\index{Fluid\-Shader@{Fluid\-Shader}!set\-Blur\-Radius@{set\-Blur\-Radius}}
+\index{set\-Blur\-Radius@{set\-Blur\-Radius}!FluidShader@{Fluid\-Shader}}
+\subsubsection[{set\-Blur\-Radius}]{\setlength{\rightskip}{0pt plus 5cm}void Fluid\-Shader\-::set\-Blur\-Radius (
+\begin{DoxyParamCaption}
+\item[{float}]{\-\_\-radius}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_fluid_shader_ac9b7d6ee1135c3089894e5db3292bd0e}
+
+
+set the blur ratius of our bilateral filter shader 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-\-\_\-radius} & -\/ desired blue radius value \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_fluid_shader_a21f895c071bf27ba60f780138211c710}{\index{Fluid\-Shader@{Fluid\-Shader}!set\-Color@{set\-Color}}
+\index{set\-Color@{set\-Color}!FluidShader@{Fluid\-Shader}}
+\subsubsection[{set\-Color}]{\setlength{\rightskip}{0pt plus 5cm}void Fluid\-Shader\-::set\-Color (
+\begin{DoxyParamCaption}
+\item[{float}]{\-\_\-col\-R, }
+\item[{float}]{\-\_\-col\-G, }
+\item[{float}]{\-\_\-col\-B}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_fluid_shader_a21f895c071bf27ba60f780138211c710}
+
+
+set the desired color of our fluid. Color values from 0-\/1. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-col\-R} & -\/ red value \\
+\hline
+{\em \-\_\-col\-G} & -\/ green value \\
+\hline
+{\em \-\_\-col\-B} & -\/ blue value \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_fluid_shader_a1e3a4859b77f0420d2ae201c3f09b5f4}{\index{Fluid\-Shader@{Fluid\-Shader}!set\-Cube\-Map@{set\-Cube\-Map}}
+\index{set\-Cube\-Map@{set\-Cube\-Map}!FluidShader@{Fluid\-Shader}}
+\subsubsection[{set\-Cube\-Map}]{\setlength{\rightskip}{0pt plus 5cm}void Fluid\-Shader\-::set\-Cube\-Map (
+\begin{DoxyParamCaption}
+\item[{int}]{\-\_\-width, }
+\item[{int}]{\-\_\-height, }
+\item[{const G\-Lvoid $\ast$}]{\-\_\-front, }
+\item[{const G\-Lvoid $\ast$}]{\-\_\-back, }
+\item[{const G\-Lvoid $\ast$}]{\-\_\-top, }
+\item[{const G\-Lvoid $\ast$}]{\-\_\-bottom, }
+\item[{const G\-Lvoid $\ast$}]{\-\_\-left, }
+\item[{const G\-Lvoid $\ast$}]{\-\_\-right}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}}\label{class_fluid_shader_a1e3a4859b77f0420d2ae201c3f09b5f4}
+
+
+sets the shading cube map 
+
+\-\_\-width -\/ width of our cube map textures \-\_\-height -\/ height of our cube map textures \-\_\-front -\/ front cube map texture \-\_\-back -\/ back cube map texture \-\_\-top -\/ top cube map texture \-\_\-bottom -\/ bottom cube map texture \-\_\-left -\/ left cube map texture \-\_\-right -\/ right cube map texture \hypertarget{class_fluid_shader_aa48f21bea9b0fbb456753442f874d10d}{\index{Fluid\-Shader@{Fluid\-Shader}!set\-Point\-Size@{set\-Point\-Size}}
+\index{set\-Point\-Size@{set\-Point\-Size}!FluidShader@{Fluid\-Shader}}
+\subsubsection[{set\-Point\-Size}]{\setlength{\rightskip}{0pt plus 5cm}void Fluid\-Shader\-::set\-Point\-Size (
+\begin{DoxyParamCaption}
+\item[{float}]{\-\_\-size}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_fluid_shader_aa48f21bea9b0fbb456753442f874d10d}
+
+
+set how big we want to draw our fluid particles 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-size} & -\/ desired size \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_fluid_shader_a59302f1395ebd10872da9eb9d733d749}{\index{Fluid\-Shader@{Fluid\-Shader}!set\-Screen\-Size@{set\-Screen\-Size}}
+\index{set\-Screen\-Size@{set\-Screen\-Size}!FluidShader@{Fluid\-Shader}}
+\subsubsection[{set\-Screen\-Size}]{\setlength{\rightskip}{0pt plus 5cm}static void Fluid\-Shader\-::set\-Screen\-Size (
+\begin{DoxyParamCaption}
+\item[{int}]{\-\_\-w, }
+\item[{int}]{\-\_\-h}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}}\label{class_fluid_shader_a59302f1395ebd10872da9eb9d733d749}
+
+
+informas the shader of the screen size 
+
+\begin{DoxyWarning}{Warning}
+This need to be done before you initialise shader 
+\end{DoxyWarning}
+\hypertarget{class_fluid_shader_a076afe8aa143ad01ac4fc2a3b9078305}{\index{Fluid\-Shader@{Fluid\-Shader}!set\-Thickness@{set\-Thickness}}
+\index{set\-Thickness@{set\-Thickness}!FluidShader@{Fluid\-Shader}}
+\subsubsection[{set\-Thickness}]{\setlength{\rightskip}{0pt plus 5cm}void Fluid\-Shader\-::set\-Thickness (
+\begin{DoxyParamCaption}
+\item[{float}]{\-\_\-thickness}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_fluid_shader_a076afe8aa143ad01ac4fc2a3b9078305}
+
+
+set how thick we want to render each particle 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-thickness} & -\/ desired thickness \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{_fluid_shader_8h}{Fluid\-Shader.\-h}\item 
+src/Fluid\-Shader.\-cpp\end{DoxyCompactItemize}

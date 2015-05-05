@@ -17,8 +17,9 @@ SPHEngine::SPHEngine(unsigned int _numParticles, float _mass, float _density, fl
                                                                                          m_gasConstant(10.0f),
                                                                                          m_viscCoef(0.3f),
                                                                                          m_resetPending(false),
-                                                                                            m_updating(false),
-                                                                                         m_addParticlesPending(false)
+                                                                                         m_updating(false),
+                                                                                         m_addParticlesPending(false),
+                                                                                         m_velocityCorrectionCoef(0.3)
 
 {
     std::cout<<"Particle Mass: "<<m_mass<<std::endl;
@@ -159,7 +160,7 @@ void SPHEngine::update(float _timeStep){
     cudaThreadSynchronize();
 
     //update our particle positions with navier stokes equations
-    fluidSolver(m_stream,d_posPtr,m_dVelBuffer,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_maxGridDim/m_smoothingLength,m_numThreadsPerBlock,m_smoothingLength,_timeStep,m_mass,m_density,m_gasConstant,m_viscCoef,m_densWeightConst,m_pressWeightConst,m_viscWeightConst);
+    fluidSolver(m_stream,d_posPtr,m_dVelBuffer,m_dCellOccBuffer,m_dCellIndexBuffer,m_hashTableSize,m_maxGridDim/m_smoothingLength,m_numThreadsPerBlock,m_smoothingLength,_timeStep,m_mass,m_density,m_gasConstant,m_viscCoef,m_velocityCorrectionCoef,m_densWeightConst,m_pressWeightConst,m_viscWeightConst);
 
     //make sure all our threads are done
     cudaThreadSynchronize();

@@ -96,11 +96,12 @@ void fillUint(unsigned int *_pointer, unsigned int _arraySize, unsigned int _fil
 /// @param _restDensity - the density of each particle at rest. Defaults to 1.
 /// @param _gasConstant - the gas constant of our fluid. Used for calculating pressure. Defaults to 1.
 /// @param _visCoef - the coeficient of viscosity in our fluid simulation. Defaults to 1.
+/// @param _velCorrection - velocity correction using our XSPH method. Helps with compression, defaults to 0.3.
 /// @param _densKernConst - constant part of the density kernal. Faster to compute once on CPU and load in.
 /// @param _pressKernConst - constant part of the pressure kernal. Faster to compute once on CPU and load in.
 /// @param _viscKernConst - constant part of the viscosity kernal. Faster to compute once on CPU and load in.
 //----------------------------------------------------------------------------------------------------------------------
-void fluidSolver(cudaStream_t _stream,float3 *d_posArray, float3 *d_velArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, int _hashResolution, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass = 1, float _restDensity = 1, float _gasConstant = 1, float _visCoef = 1, float _densKernConst = 1, float _pressKernConst = 1, float _viscKernConst = 1);
+void fluidSolver(cudaStream_t _stream, float3 *d_posArray, float3 *d_velArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, int _hashResolution, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass = 1, float _restDensity = 1, float _gasConstant = 1, float _visCoef = 1, float _velCorrection = 0.3, float _densKernConst = 1, float _pressKernConst = 1, float _viscKernConst = 1);
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Collision detection between particles and planes
 /// @param _stream - the cuda stream we wish this kernal to run on

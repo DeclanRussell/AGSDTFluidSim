@@ -1,0 +1,45 @@
+\hypertarget{particle_depth_vert_8glsl}{\section{shaders/particle\-Depth\-Vert.glsl File Reference}
+\label{particle_depth_vert_8glsl}\index{shaders/particle\-Depth\-Vert.\-glsl@{shaders/particle\-Depth\-Vert.\-glsl}}
+}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{particle_depth_vert_8glsl_a3a9bed495f596aa8aed4121aacc43fdd}{\hyperlink{particle_depth_vert_8glsl_a3a9bed495f596aa8aed4121aacc43fdd}{layout} (location=0) in vec3 vertex\-Position}\label{particle_depth_vert_8glsl_a3a9bed495f596aa8aed4121aacc43fdd}
+
+\begin{DoxyCompactList}\small\item\em position of particles buffer \end{DoxyCompactList}\item 
+\hypertarget{particle_depth_vert_8glsl_acdef7a1fd863a6d3770c1268cb06add3}{void \hyperlink{particle_depth_vert_8glsl_acdef7a1fd863a6d3770c1268cb06add3}{main} ()}\label{particle_depth_vert_8glsl_acdef7a1fd863a6d3770c1268cb06add3}
+
+\begin{DoxyCompactList}\small\item\em vertex main. Scales point sprites with projection matrix and passes through eye space postion to fragment shader \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{particle_depth_vert_8glsl_af78042b263da1185c97c3202ced45aab}{out vec3 \hyperlink{particle_depth_vert_8glsl_af78042b263da1185c97c3202ced45aab}{position}}\label{particle_depth_vert_8glsl_af78042b263da1185c97c3202ced45aab}
+
+\begin{DoxyCompactList}\small\item\em eye space position to be sent to fragment shader \end{DoxyCompactList}\item 
+\hypertarget{particle_depth_vert_8glsl_a06f273d5c491bfbe3897fc9c73dcf0d5}{uniform mat4 \hyperlink{particle_depth_vert_8glsl_a06f273d5c491bfbe3897fc9c73dcf0d5}{P}}\label{particle_depth_vert_8glsl_a06f273d5c491bfbe3897fc9c73dcf0d5}
+
+\begin{DoxyCompactList}\small\item\em our projection matrix \end{DoxyCompactList}\item 
+\hypertarget{particle_depth_vert_8glsl_aea165d91373502f69ddf839215635405}{uniform mat4 \hyperlink{particle_depth_vert_8glsl_aea165d91373502f69ddf839215635405}{M\-V}}\label{particle_depth_vert_8glsl_aea165d91373502f69ddf839215635405}
+
+\begin{DoxyCompactList}\small\item\em our model view matrix \end{DoxyCompactList}\item 
+\hypertarget{particle_depth_vert_8glsl_ae56d8b04842b99426c8844c0785d3090}{uniform mat4 \hyperlink{particle_depth_vert_8glsl_ae56d8b04842b99426c8844c0785d3090}{M\-V\-P}}\label{particle_depth_vert_8glsl_ae56d8b04842b99426c8844c0785d3090}
+
+\begin{DoxyCompactList}\small\item\em our model view projection matrix \end{DoxyCompactList}\item 
+\hypertarget{particle_depth_vert_8glsl_a62a808a061d03e4a62f2d46d3e6efb38}{uniform int \hyperlink{particle_depth_vert_8glsl_a62a808a061d03e4a62f2d46d3e6efb38}{screen\-Width}}\label{particle_depth_vert_8glsl_a62a808a061d03e4a62f2d46d3e6efb38}
+
+\begin{DoxyCompactList}\small\item\em the width of our screen \end{DoxyCompactList}\item 
+\hypertarget{particle_depth_vert_8glsl_a9550a4bf60e3039a98ab946ba37ae067}{uniform float \hyperlink{particle_depth_vert_8glsl_a9550a4bf60e3039a98ab946ba37ae067}{point\-Size}}\label{particle_depth_vert_8glsl_a9550a4bf60e3039a98ab946ba37ae067}
+
+\begin{DoxyCompactList}\small\item\em the size of our particles \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+Declan Russell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+8/03/15 
+\end{DoxyDate}
+\begin{DoxyVersion}{Version}
+1.\-0  G\-L\-S\-L 
+\end{DoxyVersion}

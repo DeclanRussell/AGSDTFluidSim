@@ -55,7 +55,10 @@ OTHER_FILES += shaders/*glsl \
     shaders/thicknessVert.glsl \
     shaders/skyBoxFrag.glsl \
     shaders/skyBoxVert.glsl \
-    mainpage.dox
+    mainpage.dox \
+    shaders/cuboidVert.glsl \
+    shaders/cuboidGeom.glsl \
+    shaders/cuboidFrag.glsl
 
 
 INCLUDEPATH +=./include /opt/local/include $$(HOME)/NGL/include/

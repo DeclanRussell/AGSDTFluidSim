@@ -8,6 +8,13 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+  $(window).load(resizeHeight);
+</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
 <script type="text/javascript">
@@ -26,7 +33,7 @@
    <div id="projectname">Cuda SPH Fluid Simulation - Declan Russell
    &#160;<span id="projectnumber">1.0</span>
    </div>
-   <div id="projectbrief">SPH fluid simulation that uses cuda and dynamic parellism and some neat shading techniques</div>
+   <div id="projectbrief">SPH fluid simulation that uses cuda optimizations and some neat shading techniques</div>
   </td>
  </tr>
  </tbody>
@@ -69,6 +76,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('structqt__meta__stringdata___open_g_l_widget__t.html','');});
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -83,7 +105,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-</div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-attribs">Public Attributes</a> &#124;
@@ -95,22 +116,26 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a605d0e49bd6082e25748f24ffa29b54c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a605d0e49bd6082e25748f24ffa29b54c"></a>
-QByteArrayData&#160;</td><td class="memItemRight" valign="bottom"><b>data</b> [44]</td></tr>
-<tr class="separator:a605d0e49bd6082e25748f24ffa29b54c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87d138a16a2a0d2bf6249092e86eb0d1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a87d138a16a2a0d2bf6249092e86eb0d1"></a>
-char&#160;</td><td class="memItemRight" valign="bottom"><b>stringdata</b> [472]</td></tr>
-<tr class="separator:a87d138a16a2a0d2bf6249092e86eb0d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ce4865f07ea977452665daad2e78032"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4ce4865f07ea977452665daad2e78032"></a>
+QByteArrayData&#160;</td><td class="memItemRight" valign="bottom"><b>data</b> [46]</td></tr>
+<tr class="separator:a4ce4865f07ea977452665daad2e78032"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b9af1c5937a500e235481279d4355c5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9b9af1c5937a500e235481279d4355c5"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><b>stringdata</b> [494]</td></tr>
+<tr class="separator:a9b9af1c5937a500e235481279d4355c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>moc/moc_OpenGLWidget.cpp</li>
 </ul>
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated on Sat May 2 2015 02:57:37 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.6
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="structqt__meta__stringdata___open_g_l_widget__t.html">qt_meta_stringdata_OpenGLWidget_t</a></li>
+    <li class="footer">Generated on Tue May 5 2015 01:42:21 for Cuda SPH Fluid Simulation - Declan Russell by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
+  </ul>
+</div>
 </body>
 </html>

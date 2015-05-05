@@ -8,6 +8,13 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+  $(window).load(resizeHeight);
+</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
 <script type="text/javascript">
@@ -26,7 +33,7 @@
    <div id="projectname">Cuda SPH Fluid Simulation - Declan Russell
    &#160;<span id="projectnumber">1.0</span>
    </div>
-   <div id="projectbrief">SPH fluid simulation that uses cuda and dynamic parellism and some neat shading techniques</div>
+   <div id="projectbrief">SPH fluid simulation that uses cuda optimizations and some neat shading techniques</div>
   </td>
  </tr>
  </tbody>
@@ -99,6 +106,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     </ul>
   </div>
 </div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('functions.html','');});
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -202,6 +223,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>getGasConst()
 : <a class="el" href="class_s_p_h_engine.html#a683d29b540672f364c306b304bd50ea7">SPHEngine</a>
 </li>
+<li>getGridSize()
+: <a class="el" href="class_s_p_h_engine.html#ab5811f68d71d923ac3a8e24d2d220d7b">SPHEngine</a>
+</li>
 <li>getHandle()
 : <a class="el" href="class_g_l_texture.html#a0232aa38a299d2570a06367cd8ebd688">GLTexture</a>
 </li>
@@ -226,9 +250,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>getSpawnBoxSize()
 : <a class="el" href="class_s_p_h_engine.html#a234554f5b25de8cc34541e1fd0a4b52b">SPHEngine</a>
-</li>
-<li>getTensionCoef()
-: <a class="el" href="class_s_p_h_engine.html#afa874402b050ea1f618bf2caf7f988b4">SPHEngine</a>
 </li>
 <li>getViscCoef()
 : <a class="el" href="class_s_p_h_engine.html#a6d3709693af1379db5b60b02171d8c8b">SPHEngine</a>
@@ -435,9 +456,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="class_open_g_l_widget.html#a60e5e6f2845384c3faeaa11c0fb800b4">OpenGLWidget</a>
 , <a class="el" href="class_s_p_h_engine.html#a2bf5d2bc9fc8bcc39d42108150123663">SPHEngine</a>
 </li>
-<li>setTensionCoef()
-: <a class="el" href="class_s_p_h_engine.html#ac1e6f83f2da1ec79a6e6a633b810daba">SPHEngine</a>
-</li>
 <li>setTexParamiterf()
 : <a class="el" href="class_g_l_texture.html#a2a2d0c69601ba7843dd33def3f0d28a2">GLTexture</a>
 </li>
@@ -453,6 +471,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>setVelCorCoef()
 : <a class="el" href="class_s_p_h_engine.html#a6b418198ceab591b1abfa5f645dbc9d7">SPHEngine</a>
+</li>
+<li>setVelCorrection()
+: <a class="el" href="class_fluid_prop_dock_widget.html#a7c06460036dcca6716dea7b7fc70ad66">FluidPropDockWidget</a>
+, <a class="el" href="class_open_g_l_widget.html#a9ca3397753dcfbc56ada94d1e91000ed">OpenGLWidget</a>
+</li>
+<li>setVelocityCorrection()
+: <a class="el" href="class_s_p_h_engine.html#a25796b907bd55473b09ac5683918c0c5">SPHEngine</a>
 </li>
 <li>setViscCoef()
 : <a class="el" href="class_open_g_l_widget.html#aad4c9ceaedc57507d3e9504d15dd8f4a">OpenGLWidget</a>
@@ -530,11 +555,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 </ul>
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated on Sat May 2 2015 02:57:37 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.6
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated on Tue May 5 2015 01:42:21 for Cuda SPH Fluid Simulation - Declan Russell by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
+  </ul>
+</div>
 </body>
 </html>

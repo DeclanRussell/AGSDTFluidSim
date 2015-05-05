@@ -6,7 +6,7 @@
 
 #include <ngl/NGLInit.h>
 #include <ngl/Random.h>
-
+#include <ngl/ShaderLib.h>
 
 #include "GLTextureLib.h"
 #include "RenderTargetLib.h"
@@ -80,6 +80,47 @@ void OpenGLWidget::initializeGL(){
     // The final two are near and far clipping planes of 0.1 and 100
     m_cam->setShape(45,(float)width()/height(),1,100);
 
+
+    //get an instance of our shader library
+    ngl::ShaderLib *shader=ngl::ShaderLib::instance();
+    //create our cuboid shader
+    //Not the fastest way to draw cubes but could save some valuable global memory?
+    //Also the geometry shader is really fun to use so why not!
+    //create the program
+    shader->createShaderProgram("CuboidShader");
+    //add our shaders
+    shader->attachShader("cuboidVert",ngl::VERTEX);
+    shader->attachShader("cuboidGeom",ngl::GEOMETRY);
+    shader->attachShader("cuboidFrag",ngl::FRAGMENT);
+    //load the source
+    shader->loadShaderSource("cuboidVert","shaders/cuboidVert.glsl");
+    shader->loadShaderSource("cuboidGeom","shaders/cuboidGeom.glsl");
+    shader->loadShaderSource("cuboidFrag","shaders/cuboidFrag.glsl");
+    //compile them
+    shader->compileShader("cuboidVert");
+    shader->compileShader("cuboidGeom");
+    shader->compileShader("cuboidFrag");
+    //attach them to our program
+    shader->attachShaderToProgram("CuboidShader","cuboidVert");
+    shader->attachShaderToProgram("CuboidShader","cuboidGeom");
+    shader->attachShaderToProgram("CuboidShader","cuboidFrag");
+    //link our shader to opengl
+    shader->linkProgramObject("CuboidShader");
+
+    //create our dummy VAO for our shader
+    glGenVertexArrays(1,&m_cubeVAO);
+    glBindVertexArray(m_cubeVAO);
+    GLuint cubeVBO;
+    glGenBuffers(1, &cubeVBO);
+    glBindBuffer(GL_ARRAY_BUFFER,cubeVBO);
+    ngl::Vec3 nullpos(0,0,0);
+    glBufferData(GL_ARRAY_BUFFER,sizeof(ngl::Vec3),&nullpos,GL_STATIC_DRAW);
+    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,sizeof(ngl::Vec3),(GLvoid*)(0*sizeof(GL_FLOAT)));
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER,0);
+    glBindVertexArray(0);
+
+
     m_currentTime = m_currentTime.currentTime();
     startTimer(0);
 }
@@ -127,6 +168,8 @@ void OpenGLWidget::paintGL(){
     rotY.rotateY(m_spinYFace);
     rotXY = rotX*rotY;
 
+    //get an instance of our shader library
+    ngl::ShaderLib *shader=ngl::ShaderLib::instance();
     //draw our fluid
     ngl::Mat4 V = m_cam->getViewMatrix();
     ngl::Mat4 P = m_cam->getProjectionMatrix();
@@ -140,6 +183,27 @@ void OpenGLWidget::paintGL(){
         M.m_m[3][1] += m_modelPos.m_y;
         M.m_m[3][2] += m_modelPos.m_z;
         m_fluidShaders[i]->draw(m_SPHEngines[i]->getPositionBuffer(),m_SPHEngines[i]->getNumParticles(),M,V,P,rotXY,m_cam->getEye());
+
+        (*shader)["CuboidShader"]->use();
+        shader->setUniform("color",1.f,0.f,0.f);
+        shader->setUniform("cubeMin",0.f,0.f,0.f);
+        float boxSize = m_SPHEngines[i]->getGridSize();
+        shader->setUniform("cubeMax",boxSize,boxSize,boxSize);
+        ngl::Mat4 MVP = M*m_cam->getVPMatrix();
+        shader->setUniform("MVP",MVP);
+        glDisable(GL_DEPTH_TEST);
+        glBindVertexArray(m_cubeVAO);
+        glDrawArrays(GL_POINTS,0,1);
+        shader->setUniform("color",0.f,1.f,0.f);
+        float3 spawnPos = m_SPHEngines[i]->getSpawnBoxPos();
+        shader->setUniform("cubeMin",spawnPos.x,spawnPos.y,spawnPos.z);
+        float spawnboxSize = m_SPHEngines[i]->getSpawnBoxSize();
+        shader->setUniform("cubeMax",spawnPos.x+spawnboxSize,spawnPos.y+spawnboxSize,spawnPos.z+spawnboxSize);
+        glDisable(GL_DEPTH_TEST);
+        glBindVertexArray(m_cubeVAO);
+        glDrawArrays(GL_POINTS,0,1);
+        glEnable(GL_DEPTH_TEST);
+
     }
 
     //write our framerate

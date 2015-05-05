@@ -27,7 +27,7 @@ void \hyperlink{_cuda_s_p_h_kernals_8h_a5f674fd3497767724a4425bbb91a2248}{count\
 \begin{DoxyCompactList}\small\item\em Computes the particle occupancy of our hash cell. \end{DoxyCompactList}\item 
 void \hyperlink{_cuda_s_p_h_kernals_8h_a32490018a3312806721e0576ff6f8c7b}{fill\-Uint} (unsigned int $\ast$\-\_\-pointer, unsigned int \-\_\-array\-Size, unsigned int \-\_\-fill)
 \begin{DoxyCompactList}\small\item\em simple function so that we can fill a buffer with unsigned ints. \end{DoxyCompactList}\item 
-void \hyperlink{_cuda_s_p_h_kernals_8h_ad577148366bb4870495f49a68e5637dc}{fluid\-Solver} (cuda\-Stream\-\_\-t \-\_\-stream, float3 $\ast$d\-\_\-pos\-Array, float3 $\ast$d\-\_\-vel\-Array, unsigned int $\ast$d\-\_\-cell\-Occ\-Array, unsigned int $\ast$d\-\_\-cell\-Indx\-Array, unsigned int \-\_\-hash\-Table\-Size, int \-\_\-hash\-Resolution, unsigned int \-\_\-max\-Num\-Threads, float \-\_\-smoothing\-Length, float \-\_\-timestep, float \-\_\-particle\-Mass=1, float \-\_\-rest\-Density=1, float \-\_\-gas\-Constant=1, float \-\_\-vis\-Coef=1, float \-\_\-dens\-Kern\-Const=1, float \-\_\-press\-Kern\-Const=1, float \-\_\-visc\-Kern\-Const=1)
+void \hyperlink{_cuda_s_p_h_kernals_8h_adb6bcaa76e0b8b0bffe9b300e9579ade}{fluid\-Solver} (cuda\-Stream\-\_\-t \-\_\-stream, float3 $\ast$d\-\_\-pos\-Array, float3 $\ast$d\-\_\-vel\-Array, unsigned int $\ast$d\-\_\-cell\-Occ\-Array, unsigned int $\ast$d\-\_\-cell\-Indx\-Array, unsigned int \-\_\-hash\-Table\-Size, int \-\_\-hash\-Resolution, unsigned int \-\_\-max\-Num\-Threads, float \-\_\-smoothing\-Length, float \-\_\-timestep, float \-\_\-particle\-Mass=1, float \-\_\-rest\-Density=1, float \-\_\-gas\-Constant=1, float \-\_\-vis\-Coef=1, float \-\_\-vel\-Correction=0.\-3, float \-\_\-dens\-Kern\-Const=1, float \-\_\-press\-Kern\-Const=1, float \-\_\-visc\-Kern\-Const=1)
 \begin{DoxyCompactList}\small\item\em Solver function that will call our solver kernal to calculate the new positions of the particles in. \end{DoxyCompactList}\item 
 void \hyperlink{_cuda_s_p_h_kernals_8h_a1985239f9afd133a3db010848f3950f6}{collision\-Detection\-Solver} (cuda\-Stream\-\_\-t \-\_\-stream, \hyperlink{struct_simple_cuboid_collision_object}{Simple\-Cuboid\-Collision\-Object} $\ast$d\-\_\-plane\-Array, unsigned int \-\_\-num\-Objects, float3 $\ast$d\-\_\-pos\-Array, float3 $\ast$d\-\_\-vel\-Array, float \-\_\-time\-Step, unsigned int \-\_\-num\-Particles, unsigned int \-\_\-max\-Num\-Threads)
 \begin{DoxyCompactList}\small\item\em Collision detection between particles and planes. \end{DoxyCompactList}\end{DoxyCompactItemize}
@@ -192,7 +192,7 @@ simple function so that we can fill a buffer with unsigned ints.
 {\em \-\_\-fill} & -\/ what you wish to fill it with \\
 \hline
 \end{DoxyParams}
-\hypertarget{_cuda_s_p_h_kernals_8h_ad577148366bb4870495f49a68e5637dc}{\index{Cuda\-S\-P\-H\-Kernals.\-h@{Cuda\-S\-P\-H\-Kernals.\-h}!fluid\-Solver@{fluid\-Solver}}
+\hypertarget{_cuda_s_p_h_kernals_8h_adb6bcaa76e0b8b0bffe9b300e9579ade}{\index{Cuda\-S\-P\-H\-Kernals.\-h@{Cuda\-S\-P\-H\-Kernals.\-h}!fluid\-Solver@{fluid\-Solver}}
 \index{fluid\-Solver@{fluid\-Solver}!CudaSPHKernals.h@{Cuda\-S\-P\-H\-Kernals.\-h}}
 \subsubsection[{fluid\-Solver}]{\setlength{\rightskip}{0pt plus 5cm}void fluid\-Solver (
 \begin{DoxyParamCaption}
@@ -210,11 +210,12 @@ simple function so that we can fill a buffer with unsigned ints.
 \item[{float}]{\-\_\-rest\-Density = {\ttfamily 1}, }
 \item[{float}]{\-\_\-gas\-Constant = {\ttfamily 1}, }
 \item[{float}]{\-\_\-vis\-Coef = {\ttfamily 1}, }
+\item[{float}]{\-\_\-vel\-Correction = {\ttfamily 0.3}, }
 \item[{float}]{\-\_\-dens\-Kern\-Const = {\ttfamily 1}, }
 \item[{float}]{\-\_\-press\-Kern\-Const = {\ttfamily 1}, }
 \item[{float}]{\-\_\-visc\-Kern\-Const = {\ttfamily 1}}
 \end{DoxyParamCaption}
-)}}\label{_cuda_s_p_h_kernals_8h_ad577148366bb4870495f49a68e5637dc}
+)}}\label{_cuda_s_p_h_kernals_8h_adb6bcaa76e0b8b0bffe9b300e9579ade}
 
 
 Solver function that will call our solver kernal to calculate the new positions of the particles in. 
@@ -248,6 +249,8 @@ our fluid simulation.
 {\em \-\_\-gas\-Constant} & -\/ the gas constant of our fluid. Used for calculating pressure. Defaults to 1. \\
 \hline
 {\em \-\_\-vis\-Coef} & -\/ the coeficient of viscosity in our fluid simulation. Defaults to 1. \\
+\hline
+{\em \-\_\-vel\-Correction} & -\/ velocity correction using our X\-S\-P\-H method. Helps with compression, defaults to 0.\-3. \\
 \hline
 {\em \-\_\-dens\-Kern\-Const} & -\/ constant part of the density kernal. Faster to compute once on C\-P\-U and load in. \\
 \hline

@@ -8,6 +8,13 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+  $(window).load(resizeHeight);
+</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
 <script type="text/javascript">
@@ -26,7 +33,7 @@
    <div id="projectname">Cuda SPH Fluid Simulation - Declan Russell
    &#160;<span id="projectnumber">1.0</span>
    </div>
-   <div id="projectbrief">SPH fluid simulation that uses cuda and dynamic parellism and some neat shading techniques</div>
+   <div id="projectbrief">SPH fluid simulation that uses cuda optimizations and some neat shading techniques</div>
   </td>
  </tr>
  </tbody>
@@ -94,6 +101,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     </ul>
   </div>
 </div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('globals.html','');});
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -145,12 +166,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="_cuda_s_p_h_kernals_8cu.html#a5ef63636297ac3ddbc0866064a75e12d">CudaSPHKernals.cu</a>
 </li>
 <li>createHashTable()
-: <a class="el" href="_cuda_s_p_h_kernals_8h.html#afdcf7b761d59cb7dc7242693f8098380">CudaSPHKernals.h</a>
-, <a class="el" href="_cuda_s_p_h_kernals_8cu.html#afdcf7b761d59cb7dc7242693f8098380">CudaSPHKernals.cu</a>
+: <a class="el" href="_cuda_s_p_h_kernals_8cu.html#afdcf7b761d59cb7dc7242693f8098380">CudaSPHKernals.cu</a>
+, <a class="el" href="_cuda_s_p_h_kernals_8h.html#afdcf7b761d59cb7dc7242693f8098380">CudaSPHKernals.h</a>
 </li>
 <li>cubeMapTex
 : <a class="el" href="fluid_shader_frag_8glsl.html#a9dac566b8dcb58f380dec54a9a51b3fa">fluidShaderFrag.glsl</a>
 , <a class="el" href="sky_box_frag_8glsl.html#a9dac566b8dcb58f380dec54a9a51b3fa">skyBoxFrag.glsl</a>
+</li>
+<li>cubeMax
+: <a class="el" href="cuboid_geom_8glsl.html#a1333c25924e0f8a2d9564b22bd94365e">cuboidGeom.glsl</a>
+</li>
+<li>cubeMin
+: <a class="el" href="cuboid_geom_8glsl.html#a9a625896ccde883c2853dc8e2a988134">cuboidGeom.glsl</a>
 </li>
 </ul>
 
@@ -178,8 +205,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="bilateral_filter_frag_8glsl.html#a2d45ac1478cca0b31f3b65fff9cb3530">bilateralFilterFrag.glsl</a>
 </li>
 <li>fluidSolver()
-: <a class="el" href="_cuda_s_p_h_kernals_8cu.html#a6590e698dd7a57fe937bd17a21a59a40">CudaSPHKernals.cu</a>
-, <a class="el" href="_cuda_s_p_h_kernals_8h.html#ad577148366bb4870495f49a68e5637dc">CudaSPHKernals.h</a>
+: <a class="el" href="_cuda_s_p_h_kernals_8cu.html#a59c1e6aa2f1fb9792cde8f2ab4eba1d5">CudaSPHKernals.cu</a>
+, <a class="el" href="_cuda_s_p_h_kernals_8h.html#adb6bcaa76e0b8b0bffe9b300e9579ade">CudaSPHKernals.h</a>
 </li>
 <li>FragColor
 : <a class="el" href="fluid_shader_frag_8glsl.html#af5639df2ce0dea4170bb8b47a599911e">fluidShaderFrag.glsl</a>
@@ -217,10 +244,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <h3><a class="anchor" id="index_l"></a>- l -</h3><ul>
 <li>layout()
 : <a class="el" href="bilateral_filter_vert_8glsl.html#a76e82f4a2abee8cef9ec3419ca1ad185">bilateralFilterVert.glsl</a>
-, <a class="el" href="fluid_shader_vert_8glsl.html#a76e82f4a2abee8cef9ec3419ca1ad185">fluidShaderVert.glsl</a>
+, <a class="el" href="cuboid_geom_8glsl.html#ababb901a0b8e6f569760cb90d5292d76">cuboidGeom.glsl</a>
 , <a class="el" href="thickness_vert_8glsl.html#a3a9bed495f596aa8aed4121aacc43fdd">thicknessVert.glsl</a>
-, <a class="el" href="sky_box_vert_8glsl.html#a3a9bed495f596aa8aed4121aacc43fdd">skyBoxVert.glsl</a>
+, <a class="el" href="cuboid_geom_8glsl.html#ac1bd88519adba220230ec968a9589e71">cuboidGeom.glsl</a>
 , <a class="el" href="particle_depth_vert_8glsl.html#a3a9bed495f596aa8aed4121aacc43fdd">particleDepthVert.glsl</a>
+, <a class="el" href="fluid_shader_vert_8glsl.html#a76e82f4a2abee8cef9ec3419ca1ad185">fluidShaderVert.glsl</a>
+, <a class="el" href="cuboid_vert_8glsl.html#a3a9bed495f596aa8aed4121aacc43fdd">cuboidVert.glsl</a>
+, <a class="el" href="sky_box_vert_8glsl.html#a3a9bed495f596aa8aed4121aacc43fdd">skyBoxVert.glsl</a>
 </li>
 <li>light
 : <a class="el" href="fluid_shader_frag_8glsl.html#a2d61698f25b9852932908e6c44421549">fluidShaderFrag.glsl</a>
@@ -232,23 +262,26 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>main()
 : <a class="el" href="bilateral_filter_frag_8glsl.html#a6288eba0f8e8ad3ab1544ad731eb7667">bilateralFilterFrag.glsl</a>
 , <a class="el" href="bilateral_filter_vert_8glsl.html#a6288eba0f8e8ad3ab1544ad731eb7667">bilateralFilterVert.glsl</a>
-, <a class="el" href="fluid_shader_frag_8glsl.html#a6288eba0f8e8ad3ab1544ad731eb7667">fluidShaderFrag.glsl</a>
-, <a class="el" href="fluid_shader_vert_8glsl.html#a6288eba0f8e8ad3ab1544ad731eb7667">fluidShaderVert.glsl</a>
-, <a class="el" href="particle_depth_frag_8glsl.html#acdef7a1fd863a6d3770c1268cb06add3">particleDepthFrag.glsl</a>
-, <a class="el" href="particle_depth_vert_8glsl.html#acdef7a1fd863a6d3770c1268cb06add3">particleDepthVert.glsl</a>
 , <a class="el" href="thickness_vert_8glsl.html#acdef7a1fd863a6d3770c1268cb06add3">thicknessVert.glsl</a>
-, <a class="el" href="sky_box_vert_8glsl.html#acdef7a1fd863a6d3770c1268cb06add3">skyBoxVert.glsl</a>
+, <a class="el" href="particle_depth_frag_8glsl.html#acdef7a1fd863a6d3770c1268cb06add3">particleDepthFrag.glsl</a>
+, <a class="el" href="fluid_shader_vert_8glsl.html#a6288eba0f8e8ad3ab1544ad731eb7667">fluidShaderVert.glsl</a>
 , <a class="el" href="thickness_frag_8glsl.html#acdef7a1fd863a6d3770c1268cb06add3">thicknessFrag.glsl</a>
+, <a class="el" href="cuboid_vert_8glsl.html#acdef7a1fd863a6d3770c1268cb06add3">cuboidVert.glsl</a>
+, <a class="el" href="sky_box_vert_8glsl.html#acdef7a1fd863a6d3770c1268cb06add3">skyBoxVert.glsl</a>
+, <a class="el" href="fluid_shader_frag_8glsl.html#a6288eba0f8e8ad3ab1544ad731eb7667">fluidShaderFrag.glsl</a>
+, <a class="el" href="particle_depth_vert_8glsl.html#acdef7a1fd863a6d3770c1268cb06add3">particleDepthVert.glsl</a>
 , <a class="el" href="sky_box_frag_8glsl.html#acdef7a1fd863a6d3770c1268cb06add3">skyBoxFrag.glsl</a>
+, <a class="el" href="cuboid_geom_8glsl.html#acdef7a1fd863a6d3770c1268cb06add3">cuboidGeom.glsl</a>
 </li>
 <li>MV
 : <a class="el" href="thickness_vert_8glsl.html#aea165d91373502f69ddf839215635405">thicknessVert.glsl</a>
 , <a class="el" href="particle_depth_vert_8glsl.html#aea165d91373502f69ddf839215635405">particleDepthVert.glsl</a>
 </li>
 <li>MVP
-: <a class="el" href="particle_depth_vert_8glsl.html#ae56d8b04842b99426c8844c0785d3090">particleDepthVert.glsl</a>
-, <a class="el" href="thickness_vert_8glsl.html#ae56d8b04842b99426c8844c0785d3090">thicknessVert.glsl</a>
+: <a class="el" href="cuboid_geom_8glsl.html#ae56d8b04842b99426c8844c0785d3090">cuboidGeom.glsl</a>
+, <a class="el" href="particle_depth_vert_8glsl.html#ae56d8b04842b99426c8844c0785d3090">particleDepthVert.glsl</a>
 , <a class="el" href="sky_box_vert_8glsl.html#ae56d8b04842b99426c8844c0785d3090">skyBoxVert.glsl</a>
+, <a class="el" href="thickness_vert_8glsl.html#ae56d8b04842b99426c8844c0785d3090">thicknessVert.glsl</a>
 </li>
 </ul>
 
@@ -356,11 +389,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 </ul>
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated on Sat May 2 2015 02:57:37 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.6
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated on Tue May 5 2015 01:42:21 for Cuda SPH Fluid Simulation - Declan Russell by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
+  </ul>
+</div>
 </body>
 </html>

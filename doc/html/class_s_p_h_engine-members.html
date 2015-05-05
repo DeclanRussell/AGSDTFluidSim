@@ -8,6 +8,13 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+  $(window).load(resizeHeight);
+</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
 <script type="text/javascript">
@@ -26,7 +33,7 @@
    <div id="projectname">Cuda SPH Fluid Simulation - Declan Russell
    &#160;<span id="projectnumber">1.0</span>
    </div>
-   <div id="projectbrief">SPH fluid simulation that uses cuda and dynamic parellism and some neat shading techniques</div>
+   <div id="projectbrief">SPH fluid simulation that uses cuda optimizations and some neat shading techniques</div>
   </td>
  </tr>
  </tbody>
@@ -69,6 +76,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('class_s_p_h_engine.html','');});
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -83,7 +105,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-</div><!-- top -->
 <div class="header">
   <div class="headertitle">
 <div class="title">SPHEngine Member List</div>  </div>
@@ -96,12 +117,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <tr><td class="entry"><a class="el" href="class_s_p_h_engine.html#a91f224d67175615716059dba23c38a98">drawArrays</a>()</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_s_p_h_engine.html#a8ee29d26f9451d81a07abde5b1aa53c6">getDensity</a>()</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr><td class="entry"><a class="el" href="class_s_p_h_engine.html#a683d29b540672f364c306b304bd50ea7">getGasConst</a>()</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_s_p_h_engine.html#a387ab48532ca20b2eb31319e862e243b">getNumParticles</a>()</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="class_s_p_h_engine.html#aee51f7802e02c838732d9acab37da89a">getPositionBuffer</a>()</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_s_p_h_engine.html#a5eebbb4eaf3c773e263396d49a76fc3e">getSmoothingLength</a>()</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="class_s_p_h_engine.html#a452295b33bfa893db3c9484da9ce9fb5">getSpawnBoxPos</a>()</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_s_p_h_engine.html#a234554f5b25de8cc34541e1fd0a4b52b">getSpawnBoxSize</a>()</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="class_s_p_h_engine.html#afa874402b050ea1f618bf2caf7f988b4">getTensionCoef</a>()</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_s_p_h_engine.html#ab5811f68d71d923ac3a8e24d2d220d7b">getGridSize</a>()</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_s_p_h_engine.html#a387ab48532ca20b2eb31319e862e243b">getNumParticles</a>()</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_s_p_h_engine.html#aee51f7802e02c838732d9acab37da89a">getPositionBuffer</a>()</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_s_p_h_engine.html#a5eebbb4eaf3c773e263396d49a76fc3e">getSmoothingLength</a>()</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_s_p_h_engine.html#a452295b33bfa893db3c9484da9ce9fb5">getSpawnBoxPos</a>()</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_s_p_h_engine.html#a234554f5b25de8cc34541e1fd0a4b52b">getSpawnBoxSize</a>()</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_s_p_h_engine.html#a6d3709693af1379db5b60b02171d8c8b">getViscCoef</a>()</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr><td class="entry"><a class="el" href="class_s_p_h_engine.html#a0df6d1b33d50afb152e2992de5af5700">init</a>()</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_s_p_h_engine.html#acbc638f7ab8fa2ab356dadf677df10c6">setDesity</a>(float _density)</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
@@ -111,8 +132,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <tr class="even"><td class="entry"><a class="el" href="class_s_p_h_engine.html#a196e04ba23d9d9c73924f3af8a8240ed">setSmoothingLength</a>(float _length)</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr><td class="entry"><a class="el" href="class_s_p_h_engine.html#a130606677b2c3edbc9b95006672c1578">setSpawnBoxPos</a>(float _x, float _y, float _z)</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_s_p_h_engine.html#a2bf5d2bc9fc8bcc39d42108150123663">setSpawnBoxSize</a>(float _size)</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="class_s_p_h_engine.html#ac1e6f83f2da1ec79a6e6a633b810daba">setTensionCoef</a>(float _tensCoef)</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_s_p_h_engine.html#a6b418198ceab591b1abfa5f645dbc9d7">setVelCorCoef</a>(float _velCorCoef)</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_s_p_h_engine.html#a6b418198ceab591b1abfa5f645dbc9d7">setVelCorCoef</a>(float _velCorCoef)</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_s_p_h_engine.html#a25796b907bd55473b09ac5683918c0c5">setVelocityCorrection</a>(float _val)</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr><td class="entry"><a class="el" href="class_s_p_h_engine.html#a296c06a01cb0a93dfa150c3acea64493">setViscCoef</a>(float _viscCoef)</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_s_p_h_engine.html#a4e61b1f56e20ab4eee7edd111c59912f">signalAddParticles</a>(int _numParticles)</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"></td></tr>
   <tr><td class="entry"><a class="el" href="class_s_p_h_engine.html#a692ed8ae0cdb67f4a774fa2a94ad635f">signalReset</a>()</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
@@ -120,11 +141,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <tr><td class="entry"><a class="el" href="class_s_p_h_engine.html#a1a17b5c04756850b68cf95b917019241">update</a>(float _timeStep)</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_s_p_h_engine.html#a0969407c141667c1147d409a0397257d">~SPHEngine</a>()</td><td class="entry"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></td><td class="entry"></td></tr>
 </table></div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated on Sat May 2 2015 02:57:37 for Cuda SPH Fluid Simulation - Declan Russell by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.6
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated on Tue May 5 2015 01:42:21 for Cuda SPH Fluid Simulation - Declan Russell by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
+  </ul>
+</div>
 </body>
 </html>

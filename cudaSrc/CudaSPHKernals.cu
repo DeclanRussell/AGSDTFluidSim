@@ -117,7 +117,7 @@ __device__ float3 viscosityWeighting(float3 _r, float _dst,float _smoothingLengt
     return _r;
 }
 //----------------------------------------------------------------------------------------------------------------------
-__global__ void fluidSolverPerCellKernal(int _maxSamples, float3 *d_posArray, float3 *d_velArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, int _hashResolution, int _hashTableSize, float _smoothingLength, float _timestep, float _particleMass, float _restDensity, float _gasConstant, float _visCoef, float densKernConst, float pressKernConst, float viscKernConst){
+__global__ void fluidSolverPerCellKernal(int _maxSamples, float3 *d_posArray, float3 *d_velArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, int _hashResolution, int _hashTableSize, float _smoothingLength, float _timestep, float _particleMass, float _restDensity, float _gasConstant, float _visCoef, float _velCorrection, float densKernConst, float pressKernConst, float viscKernConst){
 
 
     // In this solver we will be exploiting the shared memory of the this block
@@ -252,7 +252,7 @@ __global__ void fluidSolverPerCellKernal(int _maxSamples, float3 *d_posArray, fl
             if((nParticleData[threadIdx.x].density>0)&&(nParticleData[i].density>0))
             newVel += (2.0f/(nParticleData[threadIdx.x].density+nParticleData[i].density)) * (nParticleData[i].vel - velHalfBack) * densityWeighting(length(nParticleData[threadIdx.x].pos-nParticleData[i].pos),_smoothingLength,densKernConst);
         }
-        newVel = velHalfFor + 0.3f * newVel;
+        newVel = velHalfFor + _velCorrection * newVel;
 
         //finally we calculate our position from our velocity
         float3 newPos = nParticleData[threadIdx.x].pos + (newVel * _timestep);
@@ -513,13 +513,13 @@ void createCellIdx(unsigned int* d_cellOccArray, unsigned int _size,unsigned int
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
-void fluidSolver(cudaStream_t _stream, float3 *d_posArray, float3 *d_velArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, int _hashResolution, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass, float _restDensity, float _gasConstant, float _visCoef, float _densKernConst, float _pressKernConst, float _viscKernConst){
+void fluidSolver(cudaStream_t _stream, float3 *d_posArray, float3 *d_velArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, int _hashResolution, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass, float _restDensity, float _gasConstant, float _visCoef, float _velCorrection, float _densKernConst, float _pressKernConst, float _viscKernConst){
     //std::cout<<"fluidSolver"<<std::endl;
     //printf("memory allocated: %d",_maxNumThreads*(sizeof(particleCellProp)));
     //fluidSolverKernal<<<_hashTableSize, 30>>>(d_posArray,d_velArray,d_cellOccArray,d_cellIndxArray,_smoothingLength,_timestep, _particleMass, _restDensity,_gasConstant,_visCoef, _densKernConst, _pressKernConst, _viscKernConst);
 
     int totalSamples = 500;
-    fluidSolverPerCellKernal<<<_hashTableSize,totalSamples,totalSamples*sizeof(particleCellProp),_stream>>>(totalSamples,d_posArray,d_velArray,d_cellOccArray,d_cellIndxArray,_hashResolution,_hashTableSize,_smoothingLength,_timestep,_particleMass,_restDensity,_gasConstant,_visCoef,_densKernConst,_pressKernConst,_viscKernConst);
+    fluidSolverPerCellKernal<<<_hashTableSize,totalSamples,totalSamples*sizeof(particleCellProp),_stream>>>(totalSamples,d_posArray,d_velArray,d_cellOccArray,d_cellIndxArray,_hashResolution,_hashTableSize,_smoothingLength,_timestep,_particleMass,_restDensity,_gasConstant,_visCoef,_velCorrection,_densKernConst,_pressKernConst,_viscKernConst);
 
     //std::cout<<std::endl;
 
