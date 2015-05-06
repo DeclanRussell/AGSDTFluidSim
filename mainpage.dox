@@ -13,8 +13,8 @@ maths used, optimisations made and the implimentation of this artifact.
 Smoothed Particle Hydrodynamics and Fluid Theory
 ================================================
 When implimenting fluid simulations there is an array of techniques in which you can use. Each of which have there own advantages and disadvanteges. The most
-prominent of these techniques are Eularian and Langrangian.
- - Eularian Method
+prominent of these techniques are Eulerian and Langrangian.
+ - Eulerian Method
       Looks at fluid motion through specific locations in space.  Space is devided up into cells which store attributes about the fluid in that location such as
       pressure, velocity and desity etc...
        - Advanteges
@@ -63,7 +63,7 @@ Smoothed Particle Hydrodynamics
 -------------------------------
 Smoothed particle hydrodynamics is a technique that provides a collection of approximation formulae to solve our Navier Stokes equations. It focuses on scaling the forces
 in our Navier Stokes equation based on the distance between particles. Closer particles will have a much higher influence on our forces than particles further away.
-To do this we will specify a wighting kernal which I will specify later.
+To do this we will specify a wighting kernel which I will specify later.
 
 Calculating our forces
 ----------------------
@@ -76,7 +76,7 @@ must be the density of our particles. To do this we use the formulae bellow.\n
 \f]\n
 
 This formulae represents the sum of \f$m\f$ which is the mass of our neightbouring particle. In our simluation our mass will be a constant with all particles having the same mass.
-This is then multiplied by function \f$W\f$ which is our weighting kernal. More on how we calculate that later.
+This is then multiplied by function \f$W\f$ which is our weighting kernel. More on how we calculate that later.
 
 Pressure Gradient
 -----------------
@@ -93,7 +93,7 @@ Now that we have our pressure per particle, we can use this to to compute our pr
     f_i^{pressure} = -\sum\limits_{i\neq j}p_j\frac{m_j}{\rho_j}\bigtriangledown W_{pressure}(x_i-x_j,h)
 \f]\n
 The formulae above represents the summation of particle properties \f$j\f$ when \f$j\f$ is not equal to \f$i\f$. The variable \f$m_j\f$ is our particle mass, \f$\rho_j\f$ is the density of our particle
-which we calculated using the equation in the previous section and \f$W\f$ is our pressure weighting kernal which I will discuss later. However there is a problem when using this equation. The pressure
+which we calculated using the equation in the previous section and \f$W\f$ is our pressure weighting kernel which I will discuss later. However there is a problem when using this equation. The pressure
 force calculated is not symetrical as particle \f$i\f$ only uses the the pressure at particle \f$j\f$ to compute the pressure gradient. This problem can be solved however by using an different proposed
 equation [MJ92],
 \f[
@@ -108,17 +108,17 @@ we use the following equation,
     f_i^{viscosity} = \mu\sum\limits_{i\neq j}(u_j-u_i)\bigtriangledown^2 W_{viscosity}(x_i-x_j,h)
 \f]\n
 In this equation we have one more unknown \f$\mu\f$, this represents the viscosity force. This is a scaler value set by the user to for the desired visocity influence on the fluid. Also you may notice that
-this formulae also contains a third weighting kernal which will be explained in the next section.
+this formulae also contains a third weighting kernel which will be explained in the next section.
 
 Other forces
 ------------
 Finally our final unknown is \f$f\f$. For this implimentation \f$f\f$ will only represent gravity which we will assume is a constant 9.8m/s in the negative y direction. However for
 future work this can be extented to also include any other forces you may want to include such as surface tension or some kind of interaction forces.
 
-Weighting Kernals
+Weighting kernels
 -----------------
-As mentioned in the previous sections all our force equations use a weighting kernal which scales the force value calculated based on the distance particles are from each other.
-The first of these kernals we encountered was the function \f$W_{default}\f$ which can be denoted,\n
+As mentioned in the previous sections all our force equations use a weighting kernel which scales the force value calculated based on the distance particles are from each other.
+The first of these kernels we encountered was the function \f$W_{default}\f$ which can be denoted,\n
 \f[
     \newcommand{\twopartdef}[4]
     {
@@ -134,35 +134,35 @@ The first of these kernals we encountered was the function \f$W_{default}\f$ whi
 
 In this equation \f$r\f$ is equivilent to vector from our neighbour particle to our current particle. The letter \f$h\f$ is the smoothing length of our equation. This variable is set before the simulation is run and will affect the behaviour
 of our fluid.\n
-The above weighting kernal will look like this when assuming that the soomthing length is 1,\n
-\image html DefaultWK.png "Default weighting kernal with smoothing length 1"
+The above weighting kernel will look like this when assuming that the soomthing length is 1,\n
+\image html DefaultWK.png "Default weighting kernel with smoothing length 1"
 
-This smoothing kernal is sutible for use on our density calculations but however will not be suitible for when we calculate our pressure. This is due to the gradient of the function tending to 0 as the distance of our particles tends to 0.
-To use this weighting kernal would create clustering of our particles. Ideally we would want our pressure kernal to continually get larger as our distance approaches 0 and is at the point of highest pressure. This is solved in [MM03] with
-their proposed "Spikey" kernal.
+This smoothing kernel is sutible for use on our density calculations but however will not be suitible for when we calculate our pressure. This is due to the gradient of the function tending to 0 as the distance of our particles tends to 0.
+To use this weighting kernel would create clustering of our particles. Ideally we would want our pressure kernel to continually get larger as our distance approaches 0 and is at the point of highest pressure. This is solved in [MM03] with
+their proposed "Spikey" kernel.
 \f[
     W_{pressure}(r,h) = W_{spikey}(r,h) = -\frac{45}{\pi h^6} \frac{r}{||r||}(h-||r||)^2
 \f]
 
-Again assuming that our smoothing length \f$h\f$ is 1 our smoothing kernal will look like,\n
-\image html PressureWK.png "Pressure weighting kernal with smoothing length 1"
+Again assuming that our smoothing length \f$h\f$ is 1 our smoothing kernel will look like,\n
+\image html PressureWK.png "Pressure weighting kernel with smoothing length 1"
 
-Notice how our kernal now tends to infinity due to our devision of the length of \f$r\f$ solving our clustering problem.
+Notice how our kernel now tends to infinity due to our division of the length of \f$r\f$ solving our clustering problem.
 
-Our final weighting kernal is for our viscosity term. Also proposed [MM03] is the following kernal,\n
+Our final weighting kernel is for our viscosity term. Also proposed [MM03] is the following kernel,\n
 \f[
     W_{viscosity}(r,h) = -\frac{45}{\pi h^6}r(h-||r||)
 \f]
-If is important to note that unlike the pressure weighting kernal, the values from our viscosity weighing are always positive. This is because the viscosity term acts as a damping force, if values were to become negative it would increase
+If is important to note that unlike the pressure weighting kernel, the values from our viscosity weighing are always positive. This is because the viscosity term acts as a damping force, if values were to become negative it would increase
 the energy of our particles.\n
-Again assuming that our smoothing length \f$h\f$ is 1 our smoothing kernal will look like,\n
-\image html ViscosityWK.png "Viscosity weighting kernal with smoothing length 1"
+Again assuming that our smoothing length \f$h\f$ is 1 our smoothing kernel will look like,\n
+\image html ViscosityWK.png "Viscosity weighting kernel with smoothing length 1"
 
 Integration Methods
 -------------------
-Eular
+Euler
 -----
-To update our particles position we must integrate our acceleration to calculate first our velocity and then our displacement. The most basic integration we can use is Eular integration which goes as follows,\n
+To update our particles position we must integrate our acceleration to calculate first our velocity and then our displacement. The most basic integration we can use is Euler integration which goes as follows,\n
 \f[
     u = u + adt
 \f]
@@ -170,12 +170,12 @@ To update our particles position we must integrate our acceleration to calculate
     x = x + udt
 \f]
 
-We have four unknowns in these equations. \f$x\f$,\f$u\f$ and \f$a\f$ are our position, velocity and accelerationl. Our final unknown \f$dt\f$ is the timestep of our update. However the problem with this method
-is that as the simulation the chance of error when using these equations increases over time. These means the longer the simulation is running for the more unaccurate and unstable it will get.
+We have four unknowns in these equations. \f$x\f$,\f$u\f$ and \f$a\f$ are our position, velocity and acceleration. Our final unknown \f$dt\f$ is the timestep of our update. However the problem with this method
+is that as the simulation the chance of error when using these equations increases over time. These means the longer the simulation is running for the more inaccurate and unstable it will get.
 Leap Frog
 ---------
-A more stable method to use is the Leap Frog method. This method uses future half step velocity and a previous half step velocity to calculate the position at the next half time step. This method prooves much
-more stable than our Eular method. It is achieved with the equations below,\n
+A more stable method to use is the Leap Frog method. This method uses future half step velocity and a previous half step velocity to calculate the position at the next half time step. This method proves much
+more stable than our Euler method. It is achieved with the equations below,\n
 \f[
     u_{t+\frac{1}{2} \triangle t} = u_{t- \frac{1}{2} \triangle t} + \triangle t a_t
 \f]
@@ -185,7 +185,7 @@ more stable than our Eular method. It is achieved with the equations below,\n
 \f[
     x_{t+\frac{1}{2} \triangle t} = x_t - \triangle tu_{t+\frac{1}{2} \triangle t}
 \f]
-Below is a graph comparing the percentage of error of Leap Frog compared to other popular integration techniques over time with a deliberately high timestep used.\n
+Below is a graph comparing the error of Leap Frog compared to other popular integration techniques over time with a deliberately high timestep used.\n
 \image html leapFrogGraph.png "Comparison of Integration Techniques. Source: http://einstein.drexel.edu/courses/Comp_Phys/Integrators/leapfrog/"
 As you can see from the graph although the accuracy may drop the integration technique stays very stable over long periods of time.
 
@@ -193,5 +193,127 @@ Optimisations
 =============
 Spacial Hash
 ------------
+When sampling neighbouring particles it it computationally inificient to sample all the particles in our scene. If every particle \f$n\f$ samples every orther particle \f$n\f$ then
+we reach an overall computational complexity of \f$O(n^2)\f$ which means our simulation will get exponetially slower the more particles we simulate in our scene. Any particles outside
+our smoothing length are given an influence of 0 on our particle, this means we can exclude them from our calculations. Idealy we want to only sample a set number of particles within
+our smoothing length which we can accomplish this with the use of a spacial hash. This spacial hash will assign particles that are near each other a unique key. we can then use this
+key to identify the particles that we need to sample. If we choose the maximum number of particles to sample and keep that as a constant value this reduces our complexity to \f$O(n)\f$
+which is fast. For this implimentation I have used a very simple hash function,\n
+\f[
+    p_n = p/s_g
+\f]
+\f[
+    r = s_g/h
+\f]
+\f[
+    p_g = \lfloor p_n*r \rfloor
+\f]
+\f[
+    idx = p_{gx}*r^2 + p_{gy}*r +p_{gz}
+\f]
+Where \f$p\f$ is our position, \f$s_g\f$ is the dimention size of our hash grid and \f$h\f$ is our smoothing length. \f$r\f$ refers to the resolution of our grid. We compute it this
+way so that every cell in our hash is the size of our smoothing length and particles of this cell and neighbouring cells are likely to be within our smoothing length. This is visualised
+in the image bellow.\n
+\image html HashCells.png "Hash Cells Source: Mark Harris, CUDA Fluid Simulation in NVIDIA PhysX http://sa08.idav.ucdavis.edu/CUDA_physx_fluids.Harris.pdf"
+As you can see from the image above, neighbouring cells particles must be taken into account in our samples as they may still lie within the smoothing length of our particle.
+Finding neighbouring hash keys is fast though and can be computed in the following way,\n
+\f[
+    neighbour idx = idx + (dx*r^2 + dy*r + dz)
+\f]
+Where \f$dx,dy\f$ and \f$dz\f$ are the offset of the neighbour hash cell we desire.
+
+CUDA
+----
+CUDA or Compute Unified Device Architecture is a parallel computing API create from Nvidia which allows you to take control of your GPU's parallel architecture. This is ideal for
+our fluid simulation as it gives us the ability to process all our particle calculations at the same time rather than if we were to do this on the CPU in serial. This gives us the
+ability to simulate a much larger number of particles in our simulation. In the following sections I will discuss the implimentation of this.
+
+CUDA implimentation
+-------------------
+Important things to take into account when programming on the GPU.\n
+ - Copying from GPU to CPU is slow, preferably we want to keep everything on the GPU as much as possible.
+ - Accessing global memory from the GPU is slow, we should keep this to a minumum as much as possible.
+\n
+First of all we need to set up some buffers to make our implimentation posible. The buffers needed are
+ - Position buffer, size of how many particles we have.
+ - Velocity buffer, size of how many particles we have.
+ - Hash key buffer, size of how many particles we have.
+ - Cell Occupancy buffer, size of our hash table. This can be calculated from the resolution cubed.
+ - Cell Index buffer, size of our hash table.
+\n
+
+ -# Hashing partilces\n
+    The first thing we need to do is hash our particles to give them a key based on their position. To do this we assign a thread to for everyparticle. Now simply use the equation
+    from the previous section to out put our hash keys into a new buffer.
+ -# Sort our particle data by hash key.\n
+    This is important to reduce banking conflicts when accessing from the global memory of our GPU. Global memory copies are slow so we want to do as little of them as possible.
+    When you tell a cuda kernal to access global memory the bus will also give you the data from contiguous memory locations aswell. So for speed improvements we need to keep our memory
+    as contiguous as possible reducing the number of global memory copies we do. To achieve this sort we can simply use thrust, a library of prewritten cuda functions. Thrust has its own
+    sort_by_key function which is perfectly suitible for our needs.
+ -# Count Cell Occupancy\n
+    We need to know the cell occupancy to know how many particles are in each cell. This also helps use identify where our particles are stored in memory. To count the cell occupancy is fairly simple. We assign
+    a thread for every entry in our hash key buffer and we increment the value in our Cell Occupancy buffer relative to this hash key. However it is important to know that to avoid race conditions between threads.
+    To solve this we can use CUDA's atomic add function to do this. This uses a mutex to lock the memory address while it is being modified by the current thread.
+ -# Create our cell index buffer\n
+    This will give us the particle index of particles that belong in our cell. To compute this we can just create a running total of all the entries in our cell occupancy buffer. Thrust can again be used as its
+    exlusive_scan function does just this in paralell.
+ -# Fluid Solving
+    Now we have all our buffers prepared we can use our navier stokes equations and solve for our new particle position.
+    -# Assign a block of threads to every cell in our hash table.
+    -# Load our neighbouring particle data into shared memory.\n
+       As we need to access neighbour particle data a lot in our calculations accessing global memory multiple times is going to add a lot of overhead to our solver. In the GPU architecture however every block has
+       its own shared memory which can be accessed by all threads in that block. This shared memory is considerably faster than accessing global memory. Therefore its more efficient for us to copy once from global
+       memory into shared memory than continuously copy from global memory.
+    -# Assign every thread a particle.
+    -# Perform our calculations on each particle
+    -# Update particle positions
+ -# Collision detection\n
+    The collision detection in this implimentation is very simple. I simply assign every particle to a thread and perform AABB collision detection on every position. If it has collided with the collision object the
+    position is simply pushed back and the velocity of the particle is flipped.
+
+Reducing some arithmetic computation
+------------------------------------
+Threads on the GPU do not have as much arithmetic power when compared to the CPU. This means that arithmetic operations that we perfrom on the GPU will have an impact on overhead on each kernal launch.
+To improve this we want to limit the number of operations as much as we can. A good example of this is our weighting kernals,
+\f[
+    \newcommand{\twopartdef}[4]
+    {
+            \left\{
+                    \begin{array}{ll}
+                            #1 & \mbox{if   } #2 \\
+                            #3 & \mbox{if   } #4
+                    \end{array}
+            \right.
+    }
+    W_{default}(r,h) = \frac{315}{64\pi h^9}\twopartdef{(h^2-||r||^2)^3}{0\leq ||r|| <h}{0}{||r||>h}
+\f]
+Notice that during our simulation assuming that we dont regularly change our smoothing length then \f$\frac{315}{64\pi h^9}\f$ will remain constant. It actually become more efficient if we precalculate this on the CPU
+and load it in as a paramiter to our CUDA kernal. We can see another example in our pressure kernal,\n
+\f[
+    f_i^{pressure} = -\sum\limits_{i\neq j}(\frac{p_i}{\rho_i^2} + \frac{p_j}{\rho_j^2})m_j\bigtriangledown W_{pressure}(x_i-x_j,h)
+\f]
+Throughout our sum loop \f$\frac{p_i}{\rho_i^2}\f$ will be the same. Instead of recomputing this every loop we can just compute it once, store the value and use it when needed. Secondly our mass \f$m_j\f$ is constant,
+this means we can move it out side our loop reducing our multiply operations to just 1 time rather than \f$j\f$ times. Our final equation will look like this,
+\f[
+    p1 = \frac{p_i}{\rho_i^2}
+\f]
+\f[
+    f_i^{pressure} = -m_j\sum\limits_{i\neq j}(p1 + \frac{p_j}{\rho_j^2})\bigtriangledown W_{pressure}(x_i-x_j,h)
+\f]
+Simplifications like this can be made to all our equations.
+CUDA Streams and Multiple Simulations
+-------------------------------------
+Another optimisation that CUDA provides are streams. This allows you to launch CUDA operations with a chance of operations in different streams being run concurrently. For this implimentation I have used this when creating
+seperate fluid simulations at the same time. This technique could be explored in further research to improve on how we launch the kernals to update our fluid simulation.
+More information about CUDA streams here: http://on-demand.gputechconf.com/gtc-express/2011/presentations/StreamsAndConcurrencyWebinar.pdf
+Simulation Performance
+----------------------
+Bellow you can see a graph representing the simulation performance when simulating different quantities of particles.
+\image html UpdateTime.png
+
+Rendering
+=========
+
+
 
 */

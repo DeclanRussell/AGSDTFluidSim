@@ -6,6 +6,7 @@
 #include <cmath>
 #include "helper_math.h"  //< some math operations with cuda types
 
+
 #define pi 3.14159265359f
 //----------------------------------------------------------------------------------------------------------------------
 SPHEngine::SPHEngine(unsigned int _numParticles, float _mass, float _density, float _contanerSize) : m_numParticles(_numParticles),
@@ -139,6 +140,9 @@ void SPHEngine::update(float _timeStep){
 
     //calculate our hash keys
     createHashTable(m_stream,m_dhashKeys,d_posPtr,m_numParticles,m_smoothingLength, m_maxGridDim, m_numThreadsPerBlock);
+
+    //make sure all our threads are done
+    cudaThreadSynchronize();
 
     //sort our particle postions based on there key to make
     //points of the same key occupy contiguous memory

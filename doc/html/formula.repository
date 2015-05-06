@@ -52,3 +52,19 @@
 \form#51:\[ u_{t+\frac{1}{2} \triangle t} = u_{t- \frac{1}{2} \triangle t} + \triangle t a_t \]
 \form#52:\[ u_{t-\frac{1}{2} \triangle t} = u_0 - \frac{1}{2}\triangle t a_0 \]
 \form#53:\[ x_{t+\frac{1}{2} \triangle t} = x_t - \triangle tu_{t+\frac{1}{2} \triangle t} \]
+\form#54:$n$
+\form#55:$O(n^2)$
+\form#56:$O(n)$
+\form#57:\[ p_n = p/s_g \]
+\form#58:\[ r = s_g/h \]
+\form#59:\[ p_g = \lfloor p_n*r \rfloor \]
+\form#60:\[ idx = p_{gx}*r^2 + p_{gy}*r +p_{gz} \]
+\form#61:$p$
+\form#62:$s_g$
+\form#63:\[ neighbour idx = idx + (dx*r^2 + dy*r + dz) \]
+\form#64:$dx,dy$
+\form#65:$dz$
+\form#66:$\frac{315}{64\pi h^9}$
+\form#67:$\frac{p_i}{\rho_i^2}$
+\form#68:\[ p1 = \frac{p_i}{\rho_i^2} \]
+\form#69:\[ f_i^{pressure} = -m_j\sum\limits_{i\neq j}(p1 + \frac{p_j}{\rho_j^2})\bigtriangledown W_{pressure}(x_i-x_j,h) \]
