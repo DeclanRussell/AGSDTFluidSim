@@ -79,6 +79,7 @@ void main(void)
 
     fragout = vec4(result,result,result,1.0);
 
+    //Debug: output = input.
     //fragout = texture(depthTex, VTexCoord);
 
 }

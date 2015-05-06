@@ -131,6 +131,11 @@ public slots:
     //----------------------------------------------------------------------------------------------------------------------
     inline void setVelCorrection(double _val){m_fluidGLWidget->setVelCorrection(_val,m_instanceNo);}
     //----------------------------------------------------------------------------------------------------------------------
+    /// @brief slot to toggle the hud of our simulation
+    /// @param _display - bool to indicate if we want to display our hud
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setDisplayHud(bool _display){m_fluidGLWidget->setDisplayHud(_display,m_instanceNo);}
+    //----------------------------------------------------------------------------------------------------------------------
 private:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a pointer to our fluid sim openGlWidget

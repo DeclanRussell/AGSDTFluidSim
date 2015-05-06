@@ -183,26 +183,27 @@ void OpenGLWidget::paintGL(){
         M.m_m[3][1] += m_modelPos.m_y;
         M.m_m[3][2] += m_modelPos.m_z;
         m_fluidShaders[i]->draw(m_SPHEngines[i]->getPositionBuffer(),m_SPHEngines[i]->getNumParticles(),M,V,P,rotXY,m_cam->getEye());
-
-        (*shader)["CuboidShader"]->use();
-        shader->setUniform("color",1.f,0.f,0.f);
-        shader->setUniform("cubeMin",0.f,0.f,0.f);
-        float boxSize = m_SPHEngines[i]->getGridSize();
-        shader->setUniform("cubeMax",boxSize,boxSize,boxSize);
-        ngl::Mat4 MVP = M*m_cam->getVPMatrix();
-        shader->setUniform("MVP",MVP);
-        glDisable(GL_DEPTH_TEST);
-        glBindVertexArray(m_cubeVAO);
-        glDrawArrays(GL_POINTS,0,1);
-        shader->setUniform("color",0.f,1.f,0.f);
-        float3 spawnPos = m_SPHEngines[i]->getSpawnBoxPos();
-        shader->setUniform("cubeMin",spawnPos.x,spawnPos.y,spawnPos.z);
-        float spawnboxSize = m_SPHEngines[i]->getSpawnBoxSize();
-        shader->setUniform("cubeMax",spawnPos.x+spawnboxSize,spawnPos.y+spawnboxSize,spawnPos.z+spawnboxSize);
-        glDisable(GL_DEPTH_TEST);
-        glBindVertexArray(m_cubeVAO);
-        glDrawArrays(GL_POINTS,0,1);
-        glEnable(GL_DEPTH_TEST);
+        if(m_fluidSimProps[i].m_displayHud){
+            (*shader)["CuboidShader"]->use();
+            shader->setUniform("color",1.f,0.f,0.f);
+            shader->setUniform("cubeMin",0.f,0.f,0.f);
+            float boxSize = m_SPHEngines[i]->getGridSize();
+            shader->setUniform("cubeMax",boxSize,boxSize,boxSize);
+            ngl::Mat4 MVP = M*m_cam->getVPMatrix();
+            shader->setUniform("MVP",MVP);
+            glDisable(GL_DEPTH_TEST);
+            glBindVertexArray(m_cubeVAO);
+            glDrawArrays(GL_POINTS,0,1);
+            shader->setUniform("color",0.f,1.f,0.f);
+            float3 spawnPos = m_SPHEngines[i]->getSpawnBoxPos();
+            shader->setUniform("cubeMin",spawnPos.x,spawnPos.y,spawnPos.z);
+            float spawnboxSize = m_SPHEngines[i]->getSpawnBoxSize();
+            shader->setUniform("cubeMax",spawnPos.x+spawnboxSize,spawnPos.y+spawnboxSize,spawnPos.z+spawnboxSize);
+            glDisable(GL_DEPTH_TEST);
+            glBindVertexArray(m_cubeVAO);
+            glDrawArrays(GL_POINTS,0,1);
+            glEnable(GL_DEPTH_TEST);
+        }
 
     }
 
@@ -256,6 +257,7 @@ void OpenGLWidget::addFluidSim(){
     props.m_timeStep = 0.004;
     props.m_updateWithFixedTimeStep = true;
     props.m_playSpeed = 1;
+    props.m_displayHud = false;
 
     m_fluidSimProps.push_back(props);
 

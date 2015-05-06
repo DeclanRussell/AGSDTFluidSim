@@ -7,6 +7,7 @@ var class_fluid_prop_dock_widget =
     [ "setBlurFalloff", "class_fluid_prop_dock_widget.html#ae7b93e96ca395cbd0301ec297480ee04", null ],
     [ "setBlurRadius", "class_fluid_prop_dock_widget.html#a2ae578e791a6768c99dc8e2e297ea4bb", null ],
     [ "setDensity", "class_fluid_prop_dock_widget.html#af8a936150aa411f15498bce8c8bd409f", null ],
+    [ "setDisplayHud", "class_fluid_prop_dock_widget.html#a6e6423b9cdf21dd02577b72339d5babd", null ],
     [ "setFluidColor", "class_fluid_prop_dock_widget.html#aa17ebb5265733ed6d0bb6d7f5305c687", null ],
     [ "setFresnalPower", "class_fluid_prop_dock_widget.html#a7993dd47f7e625c8b1a3f12def0d1d72", null ],
     [ "setGasConst", "class_fluid_prop_dock_widget.html#aa9cb10cd748f9bce2f751e535bc5a286", null ],

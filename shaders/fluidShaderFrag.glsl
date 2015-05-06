@@ -188,6 +188,8 @@ void main(void)
     refractColor = mix(refractColor,phong,(thickness>1)?1:thickness);
     FragColor  = vec4(mix(refractColor, reflectColor, fresnalRatio),1.0);
 
+
+    //Debug:
     //position shading
     //FragColor = vec4(posEye,1.0);
 
@@ -196,5 +198,6 @@ void main(void)
 
     //raw input generally depth
     //FragColor = texture(depthTex, VTexCoord);
+    //FragColor = texture(thicknessTex, VTexCoord);
 
 }

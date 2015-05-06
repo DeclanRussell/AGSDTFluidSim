@@ -17,6 +17,7 @@ var class_open_g_l_widget =
     [ "setBlurFalloff", "class_open_g_l_widget.html#a8e96b44ed40ec8a5fe726f427f01e6fe", null ],
     [ "setBlurRadius", "class_open_g_l_widget.html#add467ba5217218564d08ffb638b2f190", null ],
     [ "setDensity", "class_open_g_l_widget.html#a785cd8493ea4c1a24a19a16835de4577", null ],
+    [ "setDisplayHud", "class_open_g_l_widget.html#ac4dea29c4b53c1c4906dacd4aa35d975", null ],
     [ "setFluidColor", "class_open_g_l_widget.html#a559ba717c412258c234ce5865c0b6976", null ],
     [ "setFresnalPower", "class_open_g_l_widget.html#adc34d0b2bed5d7a7f2d5b92fa1b82889", null ],
     [ "setGasConst", "class_open_g_l_widget.html#a806e81697e0c6bf0992696ab948bc1c5", null ],

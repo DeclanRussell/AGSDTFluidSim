@@ -12,6 +12,7 @@
 #include <QGroupBox>
 #include <QSlider>
 #include <QDesktopServices>
+#include <QCheckBox>
 
 //declare our static members
 int FluidPropDockWidget::m_instanceCount;
@@ -87,7 +88,7 @@ FluidPropDockWidget::FluidPropDockWidget(OpenGLWidget *_fluidWidget, QWidget *pa
     QLabel *blurRadLbl = new QLabel("Blur Radius:",shaderProperties);
     shadPropLayout->addWidget(blurRadLbl,4,0,1,1);
     QDoubleSpinBox *blurRadSpnBx = new QDoubleSpinBox(shaderProperties);
-    blurRadSpnBx->setValue(10);
+    blurRadSpnBx->setValue(15);
     blurRadSpnBx->setDecimals(2);
     blurRadSpnBx->setSingleStep(0.5);
     connect(blurRadSpnBx,SIGNAL(valueChanged(double)), this, SLOT(setBlurRadius(double)));
@@ -273,6 +274,14 @@ FluidPropDockWidget::FluidPropDockWidget(OpenGLWidget *_fluidWidget, QWidget *pa
     m_numPartToAddSpn->setMaximum(INFINITY);
     m_numPartToAddSpn->setValue(50000);
     fluidSimLayout->addWidget(m_numPartToAddSpn,8,1,1,1);
+
+    //add a check box for showing the hud
+    QLabel *tglHudLbl = new QLabel("Toggle HUD:",fluidSimProp);
+    fluidSimLayout->addWidget(tglHudLbl,9,0,1,1);
+    QCheckBox *hudChkBox = new QCheckBox(fluidSimProp);
+    hudChkBox->setChecked(false);
+    connect(hudChkBox,SIGNAL(toggled(bool)),this,SLOT(setDisplayHud(bool)));
+    fluidSimLayout->addWidget(hudChkBox,9,1,1,1);
 
     //Group box for our playback settings
     QGroupBox *playbackGrb = new QGroupBox("Playback:",this);

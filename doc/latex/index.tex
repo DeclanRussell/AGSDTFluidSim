@@ -39,7 +39,7 @@ For this implimentation I will be following the Langrangian method.
 
 \subsection*{Navier Stokes Equations }
 
-Navier stokes equations mathematically model the behaviour of fluid. The they look at calculating forces apparent in the fluid and give us an acceleration with from the sum all these forces. Bellow is the Langrangian fluid equation for weakly compressible flow.\par
+Navier stokes equations mathematically model the behaviour of fluid. The they look at calculating forces apparent in the fluid and give us an acceleration with from the sum all these forces. below is the Langrangian fluid equation for weakly compressible flow.\par
  \[ \rho\frac{du}{dt}=-\bigtriangledown\rho+\mu\bigtriangledown^2 u + f \]\par
  On the left of this equation you will see the greek symbol $\rho$ which stands for the density of the of the fluid. This is multiplied by $\frac{du}{dt}$ which is the excelleration of our particle at the next timestep. Now lets break down the three componts on the right hand side of the equation.\par
  \[ -\bigtriangledown\rho \]\par
@@ -57,7 +57,7 @@ Smoothed particle hydrodynamics is a technique that provides a collection of app
 
 \subsection*{Density }
 
-As you can see from our Navier Stokes equations every force must be devided by the particles density to calculate the acceleration therefore the first force we must calculate must be the density of our particles. To do this we use the formulae bellow.\par
+As you can see from our Navier Stokes equations every force must be devided by the particles density to calculate the acceleration therefore the first force we must calculate must be the density of our particles. To do this we use the formulae below.\par
  \[ \rho(x_i)= \sum\limits_{j}m_j W_{default}(x_i-x_j,h) \]\par
  This formulae represents the sum of $m$ which is the mass of our neightbouring particle. In our simluation our mass will be a constant with all particles having the same mass. This is then multiplied by function $W$ which is our weighting kernel. More on how we calculate that later.
 
@@ -111,7 +111,7 @@ As you can see from the graph although the accuracy may drop the integration tec
 \subsection*{Spacial Hash }
 
 When sampling neighbouring particles it it computationally inificient to sample all the particles in our scene. If every particle $n$ samples every orther particle $n$ then we reach an overall computational complexity of $O(n^2)$ which means our simulation will get exponetially slower the more particles we simulate in our scene. Any particles outside our smoothing length are given an influence of 0 on our particle, this means we can exclude them from our calculations. Idealy we want to only sample a set number of particles within our smoothing length which we can accomplish this with the use of a spacial hash. This spacial hash will assign particles that are near each other a unique key. we can then use this key to identify the particles that we need to sample. If we choose the maximum number of particles to sample and keep that as a constant value this reduces our complexity to $O(n)$ which is fast. For this implimentation I have used a very simple hash function,\par
- \[ p_n = p/s_g \] \[ r = s_g/h \] \[ p_g = \lfloor p_n*r \rfloor \] \[ idx = p_{gx}*r^2 + p_{gy}*r +p_{gz} \] Where $p$ is our position, $s_g$ is the dimention size of our hash grid and $h$ is our smoothing length. $r$ refers to the resolution of our grid. We compute it this way so that every cell in our hash is the size of our smoothing length and particles of this cell and neighbouring cells are likely to be within our smoothing length. This is visualised in the image bellow.\par
+ \[ p_n = p/s_g \] \[ r = s_g/h \] \[ p_g = \lfloor p_n*r \rfloor \] \[ idx = p_{gx}*r^2 + p_{gy}*r +p_{gz} \] Where $p$ is our position, $s_g$ is the dimention size of our hash grid and $h$ is our smoothing length. $r$ refers to the resolution of our grid. We compute it this way so that every cell in our hash is the size of our smoothing length and particles of this cell and neighbouring cells are likely to be within our smoothing length. This is visualised in the image below.\par
 As you can see from the image above, neighbouring cells particles must be taken into account in our samples as they may still lie within the smoothing length of our particle. Finding neighbouring hash keys is fast though and can be computed in the following way,\par
  \[ neighbour idx = idx + (dx*r^2 + dy*r + dz) \] Where $dx,dy$ and $dz$ are the offset of the neighbour hash cell we desire.
 
@@ -163,6 +163,34 @@ Threads on the G\-P\-U do not have as much arithmetic power when compared to the
 
 Another optimisation that C\-U\-D\-A provides are streams. This allows you to launch C\-U\-D\-A operations with a chance of operations in different streams being run concurrently. For this implimentation I have used this when creating seperate fluid simulations at the same time. This technique could be explored in further research to improve on how we launch the kernals to update our fluid simulation. More information about C\-U\-D\-A streams here\-: \href{http://on-demand.gputechconf.com/gtc-express/2011/presentations/StreamsAndConcurrencyWebinar.pdf}{\tt http\-://on-\/demand.\-gputechconf.\-com/gtc-\/express/2011/presentations/\-Streams\-And\-Concurrency\-Webinar.\-pdf} \subsection*{Simulation Performance }
 
-Bellow you can see a graph representing the simulation performance when simulating different quantities of particles. 
+Below you can see a graph representing the simulation performance when simulating different quantities of particles. 
 
 \section*{Rendering }
+
+The rendering technique of this simulation is taken from \mbox{[}G\-S10\mbox{]} and provides an efficient way of rendering particles as an implicit surface without the need for any descrete geomtry or polygonization techniques. In this section I will discuss how it is achieved,
+
+
+\begin{DoxyEnumerate}
+\item Rendering Particle Spheres\par
+ It is possible to render point sprites as spheres. For detail about how this is done please refer to my particle\-Depth shader. To do this is very cheap and is possible to render millions of spheres without any framerate drop. When compared to instanced descrete spheres the performance is not even close.
+\item Render Depth Pass of Particles\par
+ The first pass of our shader will be to render our particle spheres as a depth parse to a render target. It should look something like this,\par
+ 
+\item Bilateral filter\par
+ Now we blur the depth pass to create a smooth surface to our render. It is important to note that the type of blur you choose to do this will makes a big difference to the final render. The Bilateral Filter (see implimentation for more details) takes depth into account when blurring so that particles in the foreground are not blended into the background. We also render this pass to a render target and should look something like this,\par
+ 
+\item Calculate Normals\par
+ From this blured depth pass we can calculate the normals by converting from screen position and depth values to world space. We can then use partial derivatives to produce the normal at the position in eyespace. See below,\par
+ 
+\item Thickness\par
+ We can generate a thickness pass by rendering our particle spheres with additive blending and no depth test. This will mean that particles will render on top of each other. When particles are rendered on top of each other the values are accumilated thus giving us higher color values in bigger densities.\par
+ 
+\item Final Shading For our final shading I do simple cube map reflection and refraction on our surface using the eyespace normal. You then blend your disired water colour with the refraction colour based on value from our thickness pass.\par
+  
+\end{DoxyEnumerate}
+
+\section*{References }
+
+\mbox{[}M\-J92\mbox{]} Monaghan, J. (1992). Smoothed particle hydrodynamics, Annual Review of Astronomy and Astrophysics, pp. 543–574.\par
+\mbox{[}M\-M03\mbox{]} Muller, M., Charypar, D. and Gross, M. (2003). Particle-\/based fluid simulation for interactive applications, S\-C\-A ’03\-: Proceedings of the 2003 A\-C\-M S\-I\-G\-G\-R\-A\-P\-H\par
+\mbox{[}G\-S10\mbox{]} Green, S., 2010 Screen Space Fluid Rendering for Games., \href{http://developer.download.nvidia.com/presentations/2010/gdc/Direct3D_Effects.pdf}{\tt http\-://developer.\-download.\-nvidia.\-com/presentations/2010/gdc/\-Direct3\-D\-\_\-\-Effects.\-pdf}\par

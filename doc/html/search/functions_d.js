@@ -7,6 +7,7 @@ var searchData=
   ['setdata',['setData',['../class_g_l_texture.html#a9214dfefb40db4fbb7450bcc0ba70b61',1,'GLTexture::setData(const GLvoid *_data, GLsizei _width=-1, GLsizei _height=-1)'],['../class_g_l_texture.html#af20871f52b9705409078558a33a2c73d',1,'GLTexture::setData(const GLvoid *_front, const GLvoid *_back, const GLvoid *_top, const GLvoid *_bottom, const GLvoid *_left, const GLvoid *_right, GLsizei _width=-1, GLsizei _height=-1)']]],
   ['setdensity',['setDensity',['../class_fluid_prop_dock_widget.html#af8a936150aa411f15498bce8c8bd409f',1,'FluidPropDockWidget::setDensity()'],['../class_open_g_l_widget.html#a785cd8493ea4c1a24a19a16835de4577',1,'OpenGLWidget::setDensity()']]],
   ['setdesity',['setDesity',['../class_s_p_h_engine.html#acbc638f7ab8fa2ab356dadf677df10c6',1,'SPHEngine']]],
+  ['setdisplayhud',['setDisplayHud',['../class_fluid_prop_dock_widget.html#a6e6423b9cdf21dd02577b72339d5babd',1,'FluidPropDockWidget::setDisplayHud()'],['../class_open_g_l_widget.html#ac4dea29c4b53c1c4906dacd4aa35d975',1,'OpenGLWidget::setDisplayHud()']]],
   ['setdrawbuffers',['setDrawbuffers',['../class_frame_buffer.html#a399edc3b7d856ead72e5e04d73223643',1,'FrameBuffer']]],
   ['setfluidcolor',['setFluidColor',['../class_fluid_prop_dock_widget.html#aa17ebb5265733ed6d0bb6d7f5305c687',1,'FluidPropDockWidget::setFluidColor()'],['../class_open_g_l_widget.html#a559ba717c412258c234ce5865c0b6976',1,'OpenGLWidget::setFluidColor()']]],
   ['setframebuffertexture',['setFrameBufferTexture',['../class_frame_buffer.html#a3acf3a4afec2ebecd93fae3bfba00808',1,'FrameBuffer']]],

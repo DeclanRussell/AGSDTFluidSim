@@ -65,7 +65,9 @@ void \hyperlink{class_open_g_l_widget_a60e5e6f2845384c3faeaa11c0fb800b4}{set\-Sp
 void \hyperlink{class_open_g_l_widget_adce23eb4fa8b5a1d1ac0403c911abb37}{add\-Particles\-To\-Sim} (int \-\_\-num\-Particles, int \-\_\-sim\-No=0)
 \begin{DoxyCompactList}\small\item\em slot to add particles to our simulation \end{DoxyCompactList}\item 
 void \hyperlink{class_open_g_l_widget_a9ca3397753dcfbc56ada94d1e91000ed}{set\-Vel\-Correction} (float \-\_\-val, int \-\_\-sim\-No=0)
-\begin{DoxyCompactList}\small\item\em slot to set the velocity correction of our simulation \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em slot to set the velocity correction of our simulation \end{DoxyCompactList}\item 
+void \hyperlink{class_open_g_l_widget_ac4dea29c4b53c1c4906dacd4aa35d975}{set\-Display\-Hud} (bool \-\_\-display, int \-\_\-sim\-No=0)
+\begin{DoxyCompactList}\small\item\em slot to toggle display of the hud of our simulatio \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -254,6 +256,25 @@ set density of our fluid slot
 {\em \-\_\-den} & -\/ desired rest density \\
 \hline
 {\em \-\_\-sim\-No} & -\/ which simulation we want to change \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_open_g_l_widget_ac4dea29c4b53c1c4906dacd4aa35d975}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Display\-Hud@{set\-Display\-Hud}}
+\index{set\-Display\-Hud@{set\-Display\-Hud}!OpenGLWidget@{Open\-G\-L\-Widget}}
+\subsubsection[{set\-Display\-Hud}]{\setlength{\rightskip}{0pt plus 5cm}void Open\-G\-L\-Widget\-::set\-Display\-Hud (
+\begin{DoxyParamCaption}
+\item[{bool}]{\-\_\-display, }
+\item[{int}]{\-\_\-sim\-No = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_open_g_l_widget_ac4dea29c4b53c1c4906dacd4aa35d975}
+
+
+slot to toggle display of the hud of our simulatio 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-display} & -\/ bool to indicate if we want to display it or not \\
+\hline
+{\em \-\_\-sim\-No} & -\/ simulation we wish to display Hud \\
 \hline
 \end{DoxyParams}
 \hypertarget{class_open_g_l_widget_a559ba717c412258c234ce5865c0b6976}{\index{Open\-G\-L\-Widget@{Open\-G\-L\-Widget}!set\-Fluid\-Color@{set\-Fluid\-Color}}

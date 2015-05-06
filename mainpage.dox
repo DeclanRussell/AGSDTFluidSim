@@ -2,7 +2,7 @@
 \mainpage
 Cuda Smoothed Particle Hydrodynamics Report
 ===========================================
-\image html IntroFluidPic.png
+\image html FinalRender2.png
 Introduction
 ============
 The contents of this report follows the design and implimentation of a real time fluid simulation. This implimentation takes the form of a 3D Langrangian grid
@@ -36,7 +36,7 @@ For this implimentation I will be following the Langrangian method.
 Navier Stokes Equations
 -----------------------
 Navier stokes equations mathematically model the behaviour of fluid. The they look at calculating forces apparent in the fluid and give us an acceleration with
-from the sum all these forces. Bellow is the Langrangian fluid equation for weakly compressible flow.\n
+from the sum all these forces. below is the Langrangian fluid equation for weakly compressible flow.\n
 \f[
     \rho\frac{du}{dt}=-\bigtriangledown\rho+\mu\bigtriangledown^2 u + f
 \f]\n
@@ -70,7 +70,7 @@ Calculating our forces
 Density
 -------
 As you can see from our Navier Stokes equations every force must be devided by the particles density to calculate the acceleration therefore the first force we must calculate
-must be the density of our particles. To do this we use the formulae bellow.\n
+must be the density of our particles. To do this we use the formulae below.\n
 \f[
     \rho(x_i)= \sum\limits_{j}m_j W_{default}(x_i-x_j,h)
 \f]\n
@@ -213,7 +213,7 @@ which is fast. For this implimentation I have used a very simple hash function,\
 \f]
 Where \f$p\f$ is our position, \f$s_g\f$ is the dimention size of our hash grid and \f$h\f$ is our smoothing length. \f$r\f$ refers to the resolution of our grid. We compute it this
 way so that every cell in our hash is the size of our smoothing length and particles of this cell and neighbouring cells are likely to be within our smoothing length. This is visualised
-in the image bellow.\n
+in the image below.\n
 \image html HashCells.png "Hash Cells Source: Mark Harris, CUDA Fluid Simulation in NVIDIA PhysX http://sa08.idav.ucdavis.edu/CUDA_physx_fluids.Harris.pdf"
 As you can see from the image above, neighbouring cells particles must be taken into account in our samples as they may still lie within the smoothing length of our particle.
 Finding neighbouring hash keys is fast though and can be computed in the following way,\n
@@ -308,12 +308,45 @@ seperate fluid simulations at the same time. This technique could be explored in
 More information about CUDA streams here: http://on-demand.gputechconf.com/gtc-express/2011/presentations/StreamsAndConcurrencyWebinar.pdf
 Simulation Performance
 ----------------------
-Bellow you can see a graph representing the simulation performance when simulating different quantities of particles.
+Below you can see a graph representing the simulation performance when simulating different quantities of particles.
 \image html UpdateTime.png
 
 Rendering
 =========
+The rendering technique of this simulation is taken from [GS10] and provides an efficient way of rendering particles as an implicit surface without the need for any descrete geomtry or polygonization techniques. In this section
+I will discuss how it is achieved,
 
+ -# Rendering Particle Spheres\n
+    It is possible to render point sprites as spheres. For detail about how this is done please refer to my particleDepth shader. To do this is very cheap and is possible to render millions of spheres without any framerate drop.
+    When compared to instanced descrete spheres the performance is not even close.
+ -# Render Depth Pass of Particles\n
+    The first pass of our shader will be to render our particle spheres as a depth parse to a render target. It should look something like this,\n
+    \image html DepthPass.png "Depth Pass of Particles"
+ -# Bilateral filter\n
+    Now we blur the depth pass to create a smooth surface to our render. It is important to note that the type of blur you choose to do this will makes a big difference to the final render. The Bilateral Filter (see implimentation for more details)
+    takes depth into account when blurring so that particles in the foreground are not blended into the background. We also render this pass to a render target and should look something like this,\n
+    \image html Blur.png "Bilateral Filter Blur Pass"
+ -# Calculate Normals\n
+    From this blured depth pass we can calculate the normals by converting from screen position and depth values to world space. We can then use partial derivatives to produce the normal at the position in eyespace. See below,\n
+    \image html Normals.png "Eyespace Normals Pass"
+ -# Thickness\n
+    We can generate a thickness pass by rendering our particle spheres with additive blending and no depth test. This will mean that particles will render on top of each other. When particles are rendered on top of each other the values are accumilated
+    thus giving us higher color values in bigger densities.\n
+    \image html Thickness.png "Thickness Render Pass
+ -# Final Shading
+    For our final shading I do simple cube map reflection and refraction on our surface using the eyespace normal. You then blend your disired water colour with the refraction colour based on value from our thickness pass.\n
+    \image html FinalRender.png
+    \image html FinalRender3.png
+
+References
+==========
+
+[MJ92] Monaghan, J. (1992). Smoothed particle hydrodynamics, Annual Review of
+Astronomy and Astrophysics, pp. 543–574.\n
+[MM03] Muller, M., Charypar, D. and Gross, M. (2003). Particle-based fluid simulation
+for interactive applications, SCA ’03: Proceedings of the 2003
+ACM SIGGRAPH\n
+[GS10] Green, S., 2010 Screen Space Fluid Rendering for Games., http://developer.download.nvidia.com/presentations/2010/gdc/Direct3D_Effects.pdf\n
 
 
 */

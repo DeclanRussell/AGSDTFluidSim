@@ -1,5 +1,5 @@
 var structqt__meta__stringdata___open_g_l_widget__t =
 [
-    [ "data", "structqt__meta__stringdata___open_g_l_widget__t.html#a4ce4865f07ea977452665daad2e78032", null ],
-    [ "stringdata", "structqt__meta__stringdata___open_g_l_widget__t.html#a9b9af1c5937a500e235481279d4355c5", null ]
+    [ "data", "structqt__meta__stringdata___open_g_l_widget__t.html#ad12a546ae59866732c758206e9e72938", null ],
+    [ "stringdata", "structqt__meta__stringdata___open_g_l_widget__t.html#a356daa95022344d6aa7de96775220623", null ]
 ];

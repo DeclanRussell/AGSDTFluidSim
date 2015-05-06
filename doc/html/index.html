@@ -104,7 +104,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 <div class="contents">
 <div class="textblock"><h1>Cuda Smoothed Particle Hydrodynamics Report </h1>
 <div class="image">
-<img src="IntroFluidPic.png" alt="IntroFluidPic.png"/>
+<img src="FinalRender2.png" alt="FinalRender2.png"/>
 </div>
  <h1>Introduction </h1>
 <p>The contents of this report follows the design and implimentation of a real time fluid simulation. This implimentation takes the form of a 3D Langrangian grid and takes advanteges of the speed of Nvidia's Cuda API to create a fast realistic fluid simulation. In the following sections you will find an explenation of maths used, optimisations made and the implimentation of this artifact.</p>
@@ -139,7 +139,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 </ul>
 <p>For this implimentation I will be following the Langrangian method.</p>
 <h2>Navier Stokes Equations </h2>
-<p>Navier stokes equations mathematically model the behaviour of fluid. The they look at calculating forces apparent in the fluid and give us an acceleration with from the sum all these forces. Bellow is the Langrangian fluid equation for weakly compressible flow.<br/>
+<p>Navier stokes equations mathematically model the behaviour of fluid. The they look at calculating forces apparent in the fluid and give us an acceleration with from the sum all these forces. below is the Langrangian fluid equation for weakly compressible flow.<br/>
  </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[ \rho\frac{du}{dt}=-\bigtriangledown\rho+\mu\bigtriangledown^2 u + f \]" src="form_0.png"/>
@@ -168,7 +168,7 @@ Our third and final term in this formulae represents any external forces acting 
 <p>Smoothed particle hydrodynamics is a technique that provides a collection of approximation formulae to solve our Navier Stokes equations. It focuses on scaling the forces in our Navier Stokes equation based on the distance between particles. Closer particles will have a much higher influence on our forces than particles further away. To do this we will specify a wighting kernel which I will specify later.</p>
 <h2>Calculating our forces </h2>
 <h2>Density </h2>
-<p>As you can see from our Navier Stokes equations every force must be devided by the particles density to calculate the acceleration therefore the first force we must calculate must be the density of our particles. To do this we use the formulae bellow.<br/>
+<p>As you can see from our Navier Stokes equations every force must be devided by the particles density to calculate the acceleration therefore the first force we must calculate must be the density of our particles. To do this we use the formulae below.<br/>
  </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[ \rho(x_i)= \sum\limits_{j}m_j W_{default}(x_i-x_j,h) \]" src="form_32.png"/>
@@ -283,7 +283,7 @@ Comparison of Integration Techniques. Source: http://einstein.drexel.edu/courses
  <p class="formulaDsp">
 <img class="formulaDsp" alt="\[ idx = p_{gx}*r^2 + p_{gy}*r +p_{gz} \]" src="form_60.png"/>
 </p>
-<p> Where <img class="formulaInl" alt="$p$" src="form_61.png"/> is our position, <img class="formulaInl" alt="$s_g$" src="form_62.png"/> is the dimention size of our hash grid and <img class="formulaInl" alt="$h$" src="form_42.png"/> is our smoothing length. <img class="formulaInl" alt="$r$" src="form_41.png"/> refers to the resolution of our grid. We compute it this way so that every cell in our hash is the size of our smoothing length and particles of this cell and neighbouring cells are likely to be within our smoothing length. This is visualised in the image bellow.<br/>
+<p> Where <img class="formulaInl" alt="$p$" src="form_61.png"/> is our position, <img class="formulaInl" alt="$s_g$" src="form_62.png"/> is the dimention size of our hash grid and <img class="formulaInl" alt="$h$" src="form_42.png"/> is our smoothing length. <img class="formulaInl" alt="$r$" src="form_41.png"/> refers to the resolution of our grid. We compute it this way so that every cell in our hash is the size of our smoothing length and particles of this cell and neighbouring cells are likely to be within our smoothing length. This is visualised in the image below.<br/>
 </p>
 <div class="image">
 <img src="HashCells.png" alt="HashCells.png"/>
@@ -353,17 +353,63 @@ First of all we need to set up some buffers to make our implimentation posible. 
 <h2>CUDA Streams and Multiple Simulations </h2>
 <p>Another optimisation that CUDA provides are streams. This allows you to launch CUDA operations with a chance of operations in different streams being run concurrently. For this implimentation I have used this when creating seperate fluid simulations at the same time. This technique could be explored in further research to improve on how we launch the kernals to update our fluid simulation. More information about CUDA streams here: <a href="http://on-demand.gputechconf.com/gtc-express/2011/presentations/StreamsAndConcurrencyWebinar.pdf">http://on-demand.gputechconf.com/gtc-express/2011/presentations/StreamsAndConcurrencyWebinar.pdf</a> </p>
 <h2>Simulation Performance </h2>
-<p>Bellow you can see a graph representing the simulation performance when simulating different quantities of particles. </p>
+<p>Below you can see a graph representing the simulation performance when simulating different quantities of particles. </p>
 <div class="image">
 <img src="UpdateTime.png" alt="UpdateTime.png"/>
 </div>
 <h1>Rendering </h1>
+<p>The rendering technique of this simulation is taken from [GS10] and provides an efficient way of rendering particles as an implicit surface without the need for any descrete geomtry or polygonization techniques. In this section I will discuss how it is achieved,</p>
+<ol type="1">
+<li>Rendering Particle Spheres<br/>
+ It is possible to render point sprites as spheres. For detail about how this is done please refer to my particleDepth shader. To do this is very cheap and is possible to render millions of spheres without any framerate drop. When compared to instanced descrete spheres the performance is not even close.</li>
+<li>Render Depth Pass of Particles<br/>
+ The first pass of our shader will be to render our particle spheres as a depth parse to a render target. It should look something like this,<br/>
+ <div class="image">
+<img src="DepthPass.png" alt="DepthPass.png"/>
+<div class="caption">
+Depth Pass of Particles</div></div>
+</li>
+<li>Bilateral filter<br/>
+ Now we blur the depth pass to create a smooth surface to our render. It is important to note that the type of blur you choose to do this will makes a big difference to the final render. The Bilateral Filter (see implimentation for more details) takes depth into account when blurring so that particles in the foreground are not blended into the background. We also render this pass to a render target and should look something like this,<br/>
+ <div class="image">
+<img src="Blur.png" alt="Blur.png"/>
+<div class="caption">
+Bilateral Filter Blur Pass</div></div>
+</li>
+<li>Calculate Normals<br/>
+ From this blured depth pass we can calculate the normals by converting from screen position and depth values to world space. We can then use partial derivatives to produce the normal at the position in eyespace. See below,<br/>
+ <div class="image">
+<img src="Normals.png" alt="Normals.png"/>
+<div class="caption">
+Eyespace Normals Pass</div></div>
+</li>
+<li>Thickness<br/>
+ We can generate a thickness pass by rendering our particle spheres with additive blending and no depth test. This will mean that particles will render on top of each other. When particles are rendered on top of each other the values are accumilated thus giving us higher color values in bigger densities.<br/>
+ <div class="image">
+<img src="Thickness.png" alt="Thickness.png"/>
+<div class="caption">
+Thickness Render Pass</div></div>
+</li>
+<li>Final Shading For our final shading I do simple cube map reflection and refraction on our surface using the eyespace normal. You then blend your disired water colour with the refraction colour based on value from our thickness pass.<br/>
+ <div class="image">
+<img src="FinalRender.png" alt="FinalRender.png"/>
+</div>
+ <div class="image">
+<img src="FinalRender3.png" alt="FinalRender3.png"/>
+</div>
+</li>
+</ol>
+<h1>References </h1>
+<p>[MJ92] Monaghan, J. (1992). Smoothed particle hydrodynamics, Annual Review of Astronomy and Astrophysics, pp. 543–574.<br/>
+[MM03] Muller, M., Charypar, D. and Gross, M. (2003). Particle-based fluid simulation for interactive applications, SCA ’03: Proceedings of the 2003 ACM SIGGRAPH<br/>
+[GS10] Green, S., 2010 Screen Space Fluid Rendering for Games., <a href="http://developer.download.nvidia.com/presentations/2010/gdc/Direct3D_Effects.pdf">http://developer.download.nvidia.com/presentations/2010/gdc/Direct3D_Effects.pdf</a><br/>
+</p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed May 6 2015 16:29:09 for Cuda SPH Fluid Simulation - Declan Russell by
+    <li class="footer">Generated on Wed May 6 2015 19:21:04 for Cuda SPH Fluid Simulation - Declan Russell by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>
