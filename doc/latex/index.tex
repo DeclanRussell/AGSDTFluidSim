@@ -74,6 +74,10 @@ The formulae above represents the summation of particle properties $j$ when $j$ 
 Next we can calculate our viscosity force, the larger this force is the more it gives the fluid a thicker or stickier appearence. An example of a very viscous fluid would be syrup. To calculate this force we use the following equation, \[ f_i^{viscosity} = \mu\sum\limits_{i\neq j}(u_j-u_i)\bigtriangledown^2 W_{viscosity}(x_i-x_j,h) \]\par
 In this equation we have one more unknown $\mu$, this represents the viscosity force. This is a scaler value set by the user to for the desired visocity influence on the fluid. Also you may notice that this formulae also contains a third weighting kernel which will be explained in the next section.
 
+\subsection*{Velocity Correction }
+
+A problem with our fluid is it can succumb to compression which will cause very high areas of density ultimately leading to our particles acting quite violently. One method to counter this is know as X\-S\-P\-H \mbox{[}P\-A09\mbox{]} which averages the velocity of our particles with its neighbours improving its overall flow. \[ v_i = v_i + \epsilon\sum\limits_j\frac{2m_j}{\rho_i+\rho_j}(v_j-v_i)W_{default}(x_i-x_j,h) \] Where $\epsilon$ is a scaler value of how much correction we want to apply to our particle. Its important to note however we do not want this to be too high as it will ruin the physical correctness of our simulation.
+
 \subsection*{Other forces }
 
 Finally our final unknown is $f$. For this implimentation $f$ will only represent gravity which we will assume is a constant 9.\-8m/s in the negative y direction. However for future work this can be extented to also include any other forces you may want to include such as surface tension or some kind of interaction forces.
@@ -189,8 +193,15 @@ The rendering technique of this simulation is taken from \mbox{[}G\-S10\mbox{]} 
   
 \end{DoxyEnumerate}
 
+\section*{Some Design Choices }
+
+The initial design for my main program is very basic. Firstly I have one class to manage the fluid simulation, essentially a class of accesors and mutators that calls our cuda kernals which do all the work. Secondly a class to manage our fluid shading. Keeping this as its own class means that It can be easily ported to another program if needs be. And finally our open\-G\-L context class which manages our cameral controls.\par
+ However when creating my shader class I realised that It required a lot of open\-G\-L texture and render target managment. In the desire to create cleaner code I have created library classes for each of these to support my shader class and make managment of these objects easier. These library classes are both singleton classes so that you may access them when and where you need to. The purpose of these classes are to create and store the relative open\-G\-L objects allowing you to easily access them when desired. See below the design of these classes.\par
+
+
 \section*{References }
 
+\mbox{[}P\-A09\mbox{]} Paiva, A., Petronetto, F., Lewiner, T. and Tavares, G. (2009). Particle-\/based viscoplastic fluid/solid simulation\par
 \mbox{[}M\-J92\mbox{]} Monaghan, J. (1992). Smoothed particle hydrodynamics, Annual Review of Astronomy and Astrophysics, pp. 543–574.\par
 \mbox{[}M\-M03\mbox{]} Muller, M., Charypar, D. and Gross, M. (2003). Particle-\/based fluid simulation for interactive applications, S\-C\-A ’03\-: Proceedings of the 2003 A\-C\-M S\-I\-G\-G\-R\-A\-P\-H\par
 \mbox{[}G\-S10\mbox{]} Green, S., 2010 Screen Space Fluid Rendering for Games., \href{http://developer.download.nvidia.com/presentations/2010/gdc/Direct3D_Effects.pdf}{\tt http\-://developer.\-download.\-nvidia.\-com/presentations/2010/gdc/\-Direct3\-D\-\_\-\-Effects.\-pdf}\par

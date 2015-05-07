@@ -10,6 +10,15 @@ our cuda libraries
 
 {\ttfamily \#include $<$S\-P\-H\-Engine.\-h$>$}
 
+
+
+Collaboration diagram for S\-P\-H\-Engine\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{class_s_p_h_engine__coll__graph}
+\end{center}
+\end{figure}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -84,6 +93,130 @@ void \hyperlink{class_s_p_h_engine_a2bf5d2bc9fc8bcc39d42108150123663}{set\-Spawn
 \begin{DoxyCompactList}\small\item\em set the size of our spawn box \end{DoxyCompactList}\item 
 float \hyperlink{class_s_p_h_engine_a234554f5b25de8cc34541e1fd0a4b52b}{get\-Spawn\-Box\-Size} ()
 \begin{DoxyCompactList}\small\item\em accessor to our spawn box size \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_s_p_h_engine_aee1d2a0c0bbc334c35924bc0a8ad8052}{void \hyperlink{class_s_p_h_engine_aee1d2a0c0bbc334c35924bc0a8ad8052}{signal\-Resize\-Hash\-Table} ()}\label{class_s_p_h_engine_aee1d2a0c0bbc334c35924bc0a8ad8052}
+
+\begin{DoxyCompactList}\small\item\em signal to resize our hash table after the next update has finished \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a3626e4be502cdce3eb88bcdbf5adb2f6}{void \hyperlink{class_s_p_h_engine_a3626e4be502cdce3eb88bcdbf5adb2f6}{resize\-Hash\-Table} ()}\label{class_s_p_h_engine_a3626e4be502cdce3eb88bcdbf5adb2f6}
+
+\begin{DoxyCompactList}\small\item\em resized our hash table and related buffers \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a8d1f44ed34bc68b564f7e5c730288d44}{void \hyperlink{class_s_p_h_engine_a8d1f44ed34bc68b564f7e5c730288d44}{add\-Particles} ()}\label{class_s_p_h_engine_a8d1f44ed34bc68b564f7e5c730288d44}
+
+\begin{DoxyCompactList}\small\item\em function to add particles to our simulation \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a5e5a0bc3c47805756cd697a16076800d}{void \hyperlink{class_s_p_h_engine_a5e5a0bc3c47805756cd697a16076800d}{reset\-Simulation} ()}\label{class_s_p_h_engine_a5e5a0bc3c47805756cd697a16076800d}
+
+\begin{DoxyCompactList}\small\item\em resets our simulation and deletes all related buffers \end{DoxyCompactList}\item 
+void \hyperlink{class_s_p_h_engine_adaa52f452f1f804bb6a60dea821f2543}{calc\-Kernal\-Consts} ()
+\begin{DoxyCompactList}\small\item\em calculate our kernal constance which depends on our hash cell size \end{DoxyCompactList}\item 
+unsigned int \hyperlink{class_s_p_h_engine_ac97832913d04297e83c33ada3ae5ae53}{next\-Prime\-Num} (int \-\_\-x)
+\begin{DoxyCompactList}\small\item\em a simple function to caluclate next prime number of the inpur variable \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_s_p_h_engine_a168c6bb74f1fcf56f9f48380746965c9}{bool \hyperlink{class_s_p_h_engine_a168c6bb74f1fcf56f9f48380746965c9}{m\-\_\-resize\-Hash\-Pending}}\label{class_s_p_h_engine_a168c6bb74f1fcf56f9f48380746965c9}
+
+\begin{DoxyCompactList}\small\item\em bool to indicate if we need to resize hash table after next update \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a2fec14da52b66230e474b56ffcae354f}{bool \hyperlink{class_s_p_h_engine_a2fec14da52b66230e474b56ffcae354f}{m\-\_\-add\-Particles\-Pending}}\label{class_s_p_h_engine_a2fec14da52b66230e474b56ffcae354f}
+
+\begin{DoxyCompactList}\small\item\em a bool to indicate that we need to add particles to our simulation after the current update is done \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a99cd34414259ac06e2c30e8e25507587}{unsigned int \hyperlink{class_s_p_h_engine_a99cd34414259ac06e2c30e8e25507587}{m\-\_\-num\-Particles\-To\-Add}}\label{class_s_p_h_engine_a99cd34414259ac06e2c30e8e25507587}
+
+\begin{DoxyCompactList}\small\item\em the number of particles to add to our simulation \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a05089c0e43a8e7de62d6c9778d07a877}{float3 \hyperlink{class_s_p_h_engine_a05089c0e43a8e7de62d6c9778d07a877}{m\-\_\-spawn\-Particles\-Pos}}\label{class_s_p_h_engine_a05089c0e43a8e7de62d6c9778d07a877}
+
+\begin{DoxyCompactList}\small\item\em the position of our spawn particles box \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a51899afcaa052f5d7c000a4c6f3bc6ac}{float \hyperlink{class_s_p_h_engine_a51899afcaa052f5d7c000a4c6f3bc6ac}{m\-\_\-spawn\-Box\-Size}}\label{class_s_p_h_engine_a51899afcaa052f5d7c000a4c6f3bc6ac}
+
+\begin{DoxyCompactList}\small\item\em the size of the box we wish to spawn particles in \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a9a0447cf722b2762d0deef8ba2207c4f}{bool \hyperlink{class_s_p_h_engine_a9a0447cf722b2762d0deef8ba2207c4f}{m\-\_\-reset\-Pending}}\label{class_s_p_h_engine_a9a0447cf722b2762d0deef8ba2207c4f}
+
+\begin{DoxyCompactList}\small\item\em flag to tell our program that a reset is pendeing. Important that we dont delete buffers while they're being used \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a410dece6ca52e90ffa4e133ae870bc19}{bool \hyperlink{class_s_p_h_engine_a410dece6ca52e90ffa4e133ae870bc19}{m\-\_\-updating}}\label{class_s_p_h_engine_a410dece6ca52e90ffa4e133ae870bc19}
+
+\begin{DoxyCompactList}\small\item\em bool to indicate if our engine is updating particles \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a68865be6752f47c93a2b193be86be37f}{float \hyperlink{class_s_p_h_engine_a68865be6752f47c93a2b193be86be37f}{m\-\_\-max\-Grid\-Dim}}\label{class_s_p_h_engine_a68865be6752f47c93a2b193be86be37f}
+
+\begin{DoxyCompactList}\small\item\em the max dimention of our hash grid. E.\-g. 1 is a cube of dimention 1$\ast$1$\ast$1. \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a8791d887a1c8119b62582a93cdfb98a1}{int \hyperlink{class_s_p_h_engine_a8791d887a1c8119b62582a93cdfb98a1}{m\-\_\-max\-Num\-Samples}}\label{class_s_p_h_engine_a8791d887a1c8119b62582a93cdfb98a1}
+
+\begin{DoxyCompactList}\small\item\em the max number of samples of neighbouring particles in our fluid solving \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a71f3956e5e1b50dbb14e979677923864}{unsigned int \hyperlink{class_s_p_h_engine_a71f3956e5e1b50dbb14e979677923864}{m\-\_\-num\-Collision\-Objects}}\label{class_s_p_h_engine_a71f3956e5e1b50dbb14e979677923864}
+
+\begin{DoxyCompactList}\small\item\em the number of collision objects we have in our buffer \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a51ddd3b4b93bd236fa8825c38b5a7885}{cuda\-Stream\-\_\-t \hyperlink{class_s_p_h_engine_a51ddd3b4b93bd236fa8825c38b5a7885}{m\-\_\-stream}}\label{class_s_p_h_engine_a51ddd3b4b93bd236fa8825c38b5a7885}
+
+\begin{DoxyCompactList}\small\item\em our cuda stream to run our kernals on \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_abbd48bc05ddd06c38ad6c3c4804d85c4}{\hyperlink{struct_simple_cuboid_collision_object}{Simple\-Cuboid\-Collision\-Object} $\ast$ \hyperlink{class_s_p_h_engine_abbd48bc05ddd06c38ad6c3c4804d85c4}{m\-\_\-d\-Collision\-Object\-Buffer}}\label{class_s_p_h_engine_abbd48bc05ddd06c38ad6c3c4804d85c4}
+
+\begin{DoxyCompactList}\small\item\em pointer to our plane buffer on our device \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a8c3989dffaa0a6a8e00ecc399ae841a4}{float \hyperlink{class_s_p_h_engine_a8c3989dffaa0a6a8e00ecc399ae841a4}{m\-\_\-velocity\-Correction\-Coef}}\label{class_s_p_h_engine_a8c3989dffaa0a6a8e00ecc399ae841a4}
+
+\begin{DoxyCompactList}\small\item\em velocity correction used for X\-S\-P\-H in our fluid sovler \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_adcb21acd9bb63b005ea99f389deb57ed}{float \hyperlink{class_s_p_h_engine_adcb21acd9bb63b005ea99f389deb57ed}{m\-\_\-dens\-Weight\-Const}}\label{class_s_p_h_engine_adcb21acd9bb63b005ea99f389deb57ed}
+
+\begin{DoxyCompactList}\small\item\em constant to calculate our density kernal. Cheaper to calculate once on C\-P\-U. \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a76e3d96571be7875343f02b29c4fa1c3}{float \hyperlink{class_s_p_h_engine_a76e3d96571be7875343f02b29c4fa1c3}{m\-\_\-press\-Weight\-Const}}\label{class_s_p_h_engine_a76e3d96571be7875343f02b29c4fa1c3}
+
+\begin{DoxyCompactList}\small\item\em constant to calculate our pressure kernal. Cheaper to calculate once on C\-P\-U. \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_ab9cc2ab7a2caed7c9a7a29b56285af05}{float \hyperlink{class_s_p_h_engine_ab9cc2ab7a2caed7c9a7a29b56285af05}{m\-\_\-visc\-Weight\-Const}}\label{class_s_p_h_engine_ab9cc2ab7a2caed7c9a7a29b56285af05}
+
+\begin{DoxyCompactList}\small\item\em constant to calculate our viscosity kernal. Cheaper to calculate once on C\-P\-U. \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a81f5be51a8eeb86e0e5a42e4a2f40ef7}{float \hyperlink{class_s_p_h_engine_a81f5be51a8eeb86e0e5a42e4a2f40ef7}{m\-\_\-smoothing\-Length}}\label{class_s_p_h_engine_a81f5be51a8eeb86e0e5a42e4a2f40ef7}
+
+\begin{DoxyCompactList}\small\item\em the smoothing length of our simulation. \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_aec655d6cf4f291f096a3a00118944fae}{float \hyperlink{class_s_p_h_engine_aec655d6cf4f291f096a3a00118944fae}{m\-\_\-cell\-Size}}\label{class_s_p_h_engine_aec655d6cf4f291f096a3a00118944fae}
+
+\begin{DoxyCompactList}\small\item\em the cell size of our hash function \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a751b81e76082f5e8aa030a6d7e4f339e}{unsigned int \hyperlink{class_s_p_h_engine_a751b81e76082f5e8aa030a6d7e4f339e}{m\-\_\-num\-Particle\-Per\-Cell}}\label{class_s_p_h_engine_a751b81e76082f5e8aa030a6d7e4f339e}
+
+\begin{DoxyCompactList}\small\item\em the maximum number of particles per cell \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a6537ae88a9250d75192b1a9fdab1645d}{float \hyperlink{class_s_p_h_engine_a6537ae88a9250d75192b1a9fdab1645d}{m\-\_\-mass}}\label{class_s_p_h_engine_a6537ae88a9250d75192b1a9fdab1645d}
+
+\begin{DoxyCompactList}\small\item\em The mass of our fluid.  Defaults to 1. User can modify density and volume to change this. \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_abd4a680dc909727e3026e7c3387bc3a8}{float \hyperlink{class_s_p_h_engine_abd4a680dc909727e3026e7c3387bc3a8}{m\-\_\-density}}\label{class_s_p_h_engine_abd4a680dc909727e3026e7c3387bc3a8}
+
+\begin{DoxyCompactList}\small\item\em the density of our fluid.  Defaults to 1. User may modify this. \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_ae85b89c5347bb6c5c1097e3f0d16d2b5}{float \hyperlink{class_s_p_h_engine_ae85b89c5347bb6c5c1097e3f0d16d2b5}{m\-\_\-gas\-Constant}}\label{class_s_p_h_engine_ae85b89c5347bb6c5c1097e3f0d16d2b5}
+
+\begin{DoxyCompactList}\small\item\em our gas constant for our fluid solving \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a277d7add22691d816b05198c53bb94ab}{float \hyperlink{class_s_p_h_engine_a277d7add22691d816b05198c53bb94ab}{m\-\_\-visc\-Coef}}\label{class_s_p_h_engine_a277d7add22691d816b05198c53bb94ab}
+
+\begin{DoxyCompactList}\small\item\em our viscosity coeficient for our fluid solving \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a1b1e56bc8e188a5c85bbadb9d3ff0d6b}{unsigned int \hyperlink{class_s_p_h_engine_a1b1e56bc8e188a5c85bbadb9d3ff0d6b}{m\-\_\-num\-Particles}}\label{class_s_p_h_engine_a1b1e56bc8e188a5c85bbadb9d3ff0d6b}
+
+\begin{DoxyCompactList}\small\item\em the number of particles in our simulation \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_af7bb756facfeba1f59c195c680794fc1}{G\-Luint \hyperlink{class_s_p_h_engine_af7bb756facfeba1f59c195c680794fc1}{m\-\_\-\-V\-A\-O}}\label{class_s_p_h_engine_af7bb756facfeba1f59c195c680794fc1}
+
+\begin{DoxyCompactList}\small\item\em our open\-G\-L V\-A\-O \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a7bd9da54d4924eb97c8dda6cab2bd249}{G\-Luint \hyperlink{class_s_p_h_engine_a7bd9da54d4924eb97c8dda6cab2bd249}{m\-\_\-\-V\-B\-O}}\label{class_s_p_h_engine_a7bd9da54d4924eb97c8dda6cab2bd249}
+
+\begin{DoxyCompactList}\small\item\em open\-G\-L buffer that hold the positions of our particles on the G\-P\-U \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a9f83c73c2df1b2472f1733c14cf3ea30}{cuda\-Graphics\-Resource\-\_\-t \hyperlink{class_s_p_h_engine_a9f83c73c2df1b2472f1733c14cf3ea30}{m\-\_\-cuda\-Buffer\-Ptr}}\label{class_s_p_h_engine_a9f83c73c2df1b2472f1733c14cf3ea30}
+
+\begin{DoxyCompactList}\small\item\em Cuda resource used to access our Open\-G\-L position buffer by Cuda. \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a3cce64f08ed66cf93de0f6f0b4b5f2f6}{float3 $\ast$ \hyperlink{class_s_p_h_engine_a3cce64f08ed66cf93de0f6f0b4b5f2f6}{m\-\_\-d\-Vel\-Buffer}}\label{class_s_p_h_engine_a3cce64f08ed66cf93de0f6f0b4b5f2f6}
+
+\begin{DoxyCompactList}\small\item\em pointer to our particle velocity buffer on our device \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_ad68cedae42d547750a6d603faf005bf7}{unsigned int $\ast$ \hyperlink{class_s_p_h_engine_ad68cedae42d547750a6d603faf005bf7}{m\-\_\-dhash\-Keys}}\label{class_s_p_h_engine_ad68cedae42d547750a6d603faf005bf7}
+
+\begin{DoxyCompactList}\small\item\em pointer to our hash keys buffer on our device \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_acc7f76fa822e1f14cf8d5bd69f2eefb6}{unsigned int \hyperlink{class_s_p_h_engine_acc7f76fa822e1f14cf8d5bd69f2eefb6}{m\-\_\-hash\-Table\-Size}}\label{class_s_p_h_engine_acc7f76fa822e1f14cf8d5bd69f2eefb6}
+
+\begin{DoxyCompactList}\small\item\em the size of our hash table \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a14d0c9cc89000c1f1159f29e451bd769}{unsigned int $\ast$ \hyperlink{class_s_p_h_engine_a14d0c9cc89000c1f1159f29e451bd769}{m\-\_\-d\-Cell\-Occ\-Buffer}}\label{class_s_p_h_engine_a14d0c9cc89000c1f1159f29e451bd769}
+
+\begin{DoxyCompactList}\small\item\em pointer to our cell occupancy buffer on our device \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a7331c8fe13df74d92acc3800b7b5b00c}{unsigned int $\ast$ \hyperlink{class_s_p_h_engine_a7331c8fe13df74d92acc3800b7b5b00c}{m\-\_\-d\-Cell\-Index\-Buffer}}\label{class_s_p_h_engine_a7331c8fe13df74d92acc3800b7b5b00c}
+
+\begin{DoxyCompactList}\small\item\em a buffer that holds the index's of where the points in our hash cell begin. \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a06cf7d9593592386dcf87f83e9689dc6}{int \hyperlink{class_s_p_h_engine_a06cf7d9593592386dcf87f83e9689dc6}{m\-\_\-num\-Threads\-Per\-Block}}\label{class_s_p_h_engine_a06cf7d9593592386dcf87f83e9689dc6}
+
+\begin{DoxyCompactList}\small\item\em the number of threads that our device will haveper block \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a691da6a3ddfee175915f4360ad53c080}{int \hyperlink{class_s_p_h_engine_a691da6a3ddfee175915f4360ad53c080}{m\-\_\-max\-Num\-Blocks}}\label{class_s_p_h_engine_a691da6a3ddfee175915f4360ad53c080}
+
+\begin{DoxyCompactList}\small\item\em the max number of blocks that we can have \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
@@ -132,6 +265,17 @@ defualt constructor
 \end{DoxyParams}
 
 
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_s_p_h_engine_a8be3b3f99242c3548ade6ff9314fc46c_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
 \subsection{Member Function Documentation}
 \hypertarget{class_s_p_h_engine_afe2b02e535cf064f91f2de4312c8ae39}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!add\-Collision\-Object@{add\-Collision\-Object}}
 \index{add\-Collision\-Object@{add\-Collision\-Object}!SPHEngine@{S\-P\-H\-Engine}}
@@ -161,6 +305,39 @@ Very simple A\-A\-B\-B collision. Probably rubish and unoptimized
 {\em \-\_\-is\-Container} & -\/ indicate whether or not we are adding a container of a box \\
 \hline
 \end{DoxyParams}
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_s_p_h_engine_afe2b02e535cf064f91f2de4312c8ae39_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_s_p_h_engine_adaa52f452f1f804bb6a60dea821f2543}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!calc\-Kernal\-Consts@{calc\-Kernal\-Consts}}
+\index{calc\-Kernal\-Consts@{calc\-Kernal\-Consts}!SPHEngine@{S\-P\-H\-Engine}}
+\subsubsection[{calc\-Kernal\-Consts}]{\setlength{\rightskip}{0pt plus 5cm}void S\-P\-H\-Engine\-::calc\-Kernal\-Consts (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}}\label{class_s_p_h_engine_adaa52f452f1f804bb6a60dea821f2543}
+
+
+calculate our kernal constance which depends on our hash cell size 
+
+smoothing kernals taken from M¨uller, M., Charypar, D. and Gross, M. (2003). Particle-\/based fluid simulation for interactive applications, S\-C\-A ’03\-: Proceedings of the 2003 A\-C\-M S\-I\-G\-G\-R\-A\-P\-H 
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_s_p_h_engine_adaa52f452f1f804bb6a60dea821f2543_icgraph}
+\end{center}
+\end{figure}
+
+
 \hypertarget{class_s_p_h_engine_a452295b33bfa893db3c9484da9ce9fb5}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!get\-Spawn\-Box\-Pos@{get\-Spawn\-Box\-Pos}}
 \index{get\-Spawn\-Box\-Pos@{get\-Spawn\-Box\-Pos}!SPHEngine@{S\-P\-H\-Engine}}
 \subsubsection[{get\-Spawn\-Box\-Pos}]{\setlength{\rightskip}{0pt plus 5cm}float3 S\-P\-H\-Engine\-::get\-Spawn\-Box\-Pos (
@@ -188,6 +365,25 @@ accessor to our spawn box size
 
 \begin{DoxyReturn}{Returns}
 float spawn box size 
+\end{DoxyReturn}
+\hypertarget{class_s_p_h_engine_ac97832913d04297e83c33ada3ae5ae53}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!next\-Prime\-Num@{next\-Prime\-Num}}
+\index{next\-Prime\-Num@{next\-Prime\-Num}!SPHEngine@{S\-P\-H\-Engine}}
+\subsubsection[{next\-Prime\-Num}]{\setlength{\rightskip}{0pt plus 5cm}unsigned int S\-P\-H\-Engine\-::next\-Prime\-Num (
+\begin{DoxyParamCaption}
+\item[{int}]{\-\_\-x}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}}\label{class_s_p_h_engine_ac97832913d04297e83c33ada3ae5ae53}
+
+
+a simple function to caluclate next prime number of the inpur variable 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-x} & -\/ vaule you wish to calculate next prime number for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the next lowest prime number higher than our input value \-\_\-\-X 
 \end{DoxyReturn}
 \hypertarget{class_s_p_h_engine_aad9d9bc9a1a7e5f64a5e045c339f8b3e}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!set\-Max\-Num\-Samples@{set\-Max\-Num\-Samples}}
 \index{set\-Max\-Num\-Samples@{set\-Max\-Num\-Samples}!SPHEngine@{S\-P\-H\-Engine}}
@@ -275,6 +471,28 @@ signals the engine to add particles to our simulation
 {\em \-\_\-num\-Particles} & -\/ the number of particles to add to our simulation \\
 \hline
 \end{DoxyParams}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_s_p_h_engine_a4e61b1f56e20ab4eee7edd111c59912f_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_s_p_h_engine_a4e61b1f56e20ab4eee7edd111c59912f_icgraph}
+\end{center}
+\end{figure}
+
+
 \hypertarget{class_s_p_h_engine_a1a17b5c04756850b68cf95b917019241}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!update@{update}}
 \index{update@{update}!SPHEngine@{S\-P\-H\-Engine}}
 \subsubsection[{update}]{\setlength{\rightskip}{0pt plus 5cm}void S\-P\-H\-Engine\-::update (
@@ -291,6 +509,17 @@ updates our particles positions with navier-\/stokes equations based on timestep
 {\em \-\_\-time\-Step} & -\/ the timestep we wish to update our particles with. \\
 \hline
 \end{DoxyParams}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_s_p_h_engine_a1a17b5c04756850b68cf95b917019241_cgraph}
+\end{center}
+\end{figure}
+
+
 
 
 The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}

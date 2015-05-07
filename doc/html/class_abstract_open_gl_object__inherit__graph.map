@@ -1,0 +1,5 @@
+<map id="AbstractOpenGlObject" name="AbstractOpenGlObject">
+<area shape="rect" id="node2" href="$class_frame_buffer.html" title="Class for creating frame buffers. " alt="" coords="5,293,181,443"/>
+<area shape="rect" id="node3" href="$class_g_l_texture.html" title="{GLTexture\n|&#45; m_isCubeMap\l&#45; m_level\l&#45; m_internalFormat\l&#45; m_width\l&#45; m_height\l&#45; m_border\l&#45; m_format\l&#45; m_type\l|+ GLTexture()\l+ GLTexture()\l+ ~GLTexture()\l+ setTexParamiteri()\l+ setTexParamiterf()\l+ resize()\l+ setData()\l+ setData()\l+ bind()\l+ bind()\l+ unbind()\l+ getHandle()\l&#45; GLTexture()\l}" alt="" coords="206,190,348,546"/>
+<area shape="rect" id="node4" href="$class_render_buffer.html" title="Class for creating render buffers. " alt="" coords="372,285,501,451"/>
+</map>

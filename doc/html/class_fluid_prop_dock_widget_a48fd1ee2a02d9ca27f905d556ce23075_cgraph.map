@@ -1,0 +1,49 @@
+<map id="FluidPropDockWidget::FluidPropDockWidget" name="FluidPropDockWidget::FluidPropDockWidget">
+<area shape="rect" id="node2" href="$class_open_g_l_widget.html#a9ccb72da15f23a16fb74b270a9e19489" title="slot to add a fluid simulation to our scene " alt="" coords="211,5,402,32"/>
+<area shape="rect" id="node4" href="$class_fluid_prop_dock_widget.html#afeb4fe68de9245e8fc3696870ed239b1" title="slot to set the point size of our simulation " alt="" coords="232,122,381,163"/>
+<area shape="rect" id="node6" href="$class_fluid_prop_dock_widget.html#a350d3512b0f415f51ea121e6f1136028" title="slot to set the thickness or the particles in our simulation " alt="" coords="232,187,381,229"/>
+<area shape="rect" id="node8" href="$class_fluid_prop_dock_widget.html#ae7b93e96ca395cbd0301ec297480ee04" title="slot to set our bilateral filter blur fall off " alt="" coords="232,253,381,294"/>
+<area shape="rect" id="node10" href="$class_fluid_prop_dock_widget.html#a2ae578e791a6768c99dc8e2e297ea4bb" title="slot to set our bilateral filter blur radius " alt="" coords="232,318,381,359"/>
+<area shape="rect" id="node12" href="$class_fluid_prop_dock_widget.html#a7993dd47f7e625c8b1a3f12def0d1d72" title="slot to set the fresnal power of our fluid " alt="" coords="232,383,381,425"/>
+<area shape="rect" id="node14" href="$class_fluid_prop_dock_widget.html#a2f07e4371b46ccbd7c649264e94646de" title="slot to set the refraction ratio of our fluid " alt="" coords="232,449,381,490"/>
+<area shape="rect" id="node16" href="$class_fluid_prop_dock_widget.html#aa17ebb5265733ed6d0bb6d7f5305c687" title="slot to set the color of our fluid " alt="" coords="232,514,381,555"/>
+<area shape="rect" id="node18" href="$class_fluid_prop_dock_widget.html#ab9c0a7c3635a4cbf4ab44229df363e48" title="slot to change our environment map " alt="" coords="232,57,381,98"/>
+<area shape="rect" id="node19" href="$class_fluid_prop_dock_widget.html#ae4ee0f4372a699416af91c0b111e95fe" title="slot to set the mass of our fluid " alt="" coords="232,579,381,621"/>
+<area shape="rect" id="node21" href="$class_fluid_prop_dock_widget.html#af8a936150aa411f15498bce8c8bd409f" title="slot to set the rest density of our fluid " alt="" coords="232,645,381,686"/>
+<area shape="rect" id="node23" href="$class_fluid_prop_dock_widget.html#a473ce1156c2ab118e6af5d99ec700764" title="slot to set the viscosity coeficient of our fluid " alt="" coords="232,710,381,751"/>
+<area shape="rect" id="node25" href="$class_fluid_prop_dock_widget.html#aa9cb10cd748f9bce2f751e535bc5a286" title="slot to set the gas constant of our fluid " alt="" coords="232,775,381,817"/>
+<area shape="rect" id="node27" href="$class_fluid_prop_dock_widget.html#a04366783099838b9a2b364ecd3d53da3" title="slot to set the smoothing length of our fluid simulation " alt="" coords="232,841,381,882"/>
+<area shape="rect" id="node29" href="$class_fluid_prop_dock_widget.html#aa4d9a3ef7ced0c9864550554fdc626b1" title="slot to set the simulation postion " alt="" coords="232,906,381,947"/>
+<area shape="rect" id="node31" href="$class_fluid_prop_dock_widget.html#a7c06460036dcca6716dea7b7fc70ad66" title="slot to set the velocity correction of our simulatin " alt="" coords="232,971,381,1013"/>
+<area shape="rect" id="node33" href="$class_fluid_prop_dock_widget.html#aac86685277d0b7f6c631e5f53efdc247" title="slot to set the spawn box position " alt="" coords="232,1037,381,1078"/>
+<area shape="rect" id="node35" href="$class_fluid_prop_dock_widget.html#ae59c72dfb12faf77940e805e94b78cbf" title="slot to set the spawn box size " alt="" coords="232,1102,381,1143"/>
+<area shape="rect" id="node37" href="$class_fluid_prop_dock_widget.html#a1e3b987049f5f5ff5958a7cd3dcdbdff" title="slot to add particles to our simulation " alt="" coords="232,1167,381,1209"/>
+<area shape="rect" id="node39" href="$class_fluid_prop_dock_widget.html#a6e6423b9cdf21dd02577b72339d5babd" title="slot to toggle the hud of our simulation " alt="" coords="232,1233,381,1274"/>
+<area shape="rect" id="node41" href="$class_fluid_prop_dock_widget.html#a16076f5d56b8d79f74726915d0f51b0b" title="slot to toggle play of our simulation " alt="" coords="232,1298,381,1339"/>
+<area shape="rect" id="node43" href="$class_fluid_prop_dock_widget.html#a03628de74620c25af71461a255163a84" title="slot to set the time step our simulation " alt="" coords="232,1363,381,1405"/>
+<area shape="rect" id="node45" href="$class_fluid_prop_dock_widget.html#a6264d4d89eeeb8adf5bec124598fbcf1" title="slot to set the play back speed of our simulation " alt="" coords="232,1429,381,1470"/>
+<area shape="rect" id="node47" href="$class_fluid_prop_dock_widget.html#aba723bc2dc92241efbde8434ab3f711b" title="slot to reset our simulation " alt="" coords="232,1494,381,1535"/>
+<area shape="rect" id="node3" href="$class_open_g_l_widget.html#a39018f8fc74ce591bfac884c277621e6" title="slot to load cube maps to for our enironment map " alt="" coords="465,35,663,61"/>
+<area shape="rect" id="node5" href="$class_open_g_l_widget.html#a3cdaf60ea4f98ee4782dec21b4810a41" title="a slot to change our particle size " alt="" coords="461,129,667,156"/>
+<area shape="rect" id="node7" href="$class_open_g_l_widget.html#aec967838bdff11519892bc05a5d930b0" title="a slot to change our particle thickess " alt="" coords="473,187,655,229"/>
+<area shape="rect" id="node9" href="$class_open_g_l_widget.html#a8e96b44ed40ec8a5fe726f427f01e6fe" title="a slot to change our bilateral filter blur falloff " alt="" coords="466,260,662,287"/>
+<area shape="rect" id="node11" href="$class_open_g_l_widget.html#add467ba5217218564d08ffb638b2f190" title="a slot to change our bilateral filter blur radius " alt="" coords="463,325,665,352"/>
+<area shape="rect" id="node13" href="$class_open_g_l_widget.html#adc34d0b2bed5d7a7f2d5b92fa1b82889" title="a slot to set the fresnal power of our fluid " alt="" coords="474,383,654,425"/>
+<area shape="rect" id="node15" href="$class_open_g_l_widget.html#a9ad49f35e3a76ec5ea58cedbe73afa34" title="a slot to set the refraction ratio of our fluid " alt="" coords="465,449,663,490"/>
+<area shape="rect" id="node17" href="$class_open_g_l_widget.html#a559ba717c412258c234ce5865c0b6976" title="set the color of our fluid slot " alt="" coords="466,521,662,548"/>
+<area shape="rect" id="node20" href="$class_open_g_l_widget.html#a84585fd40a1fad03bbd118436f5fc477" title="set volume of our fluid slot " alt="" coords="479,587,649,613"/>
+<area shape="rect" id="node22" href="$class_open_g_l_widget.html#a785cd8493ea4c1a24a19a16835de4577" title="set density of our fluid slot " alt="" coords="473,652,655,679"/>
+<area shape="rect" id="node24" href="$class_open_g_l_widget.html#aad4c9ceaedc57507d3e9504d15dd8f4a" title="set viscoty coeficient of our fluid slot " alt="" coords="469,717,659,744"/>
+<area shape="rect" id="node26" href="$class_open_g_l_widget.html#a806e81697e0c6bf0992696ab948bc1c5" title="set gas constant of our fluid slot " alt="" coords="466,783,662,809"/>
+<area shape="rect" id="node28" href="$class_open_g_l_widget.html#af0f0474b4ff16318e6cf2e7479b369c7" title="set smoothing length of our fluid slot " alt="" coords="465,841,663,882"/>
+<area shape="rect" id="node30" href="$class_open_g_l_widget.html#a6bc6106c82580697f386fdfd2fdb3a12" title="slot to set sim position " alt="" coords="461,913,667,940"/>
+<area shape="rect" id="node32" href="$class_open_g_l_widget.html#a9ca3397753dcfbc56ada94d1e91000ed" title="slot to set the velocity correction of our simulation " alt="" coords="456,979,672,1005"/>
+<area shape="rect" id="node34" href="$class_open_g_l_widget.html#ac4d67ea702f268f7d072e94a569cb5f0" title="a slot to set the spawn box position in our simulation " alt="" coords="464,1037,664,1078"/>
+<area shape="rect" id="node36" href="$class_open_g_l_widget.html#a60e5e6f2845384c3faeaa11c0fb800b4" title="a slot to set the spawn box size in our simulation " alt="" coords="451,1109,677,1136"/>
+<area shape="rect" id="node38" href="$class_open_g_l_widget.html#adce23eb4fa8b5a1d1ac0403c911abb37" title="slot to add particles to our simulation " alt="" coords="469,1167,659,1209"/>
+<area shape="rect" id="node40" href="$class_open_g_l_widget.html#ac4dea29c4b53c1c4906dacd4aa35d975" title="slot to toggle display of the hud of our simulatio " alt="" coords="461,1240,667,1267"/>
+<area shape="rect" id="node42" href="$class_open_g_l_widget.html#a2d1d9bb18d20f1479cb86e832ab17fd2" title="play/pause toggle slot " alt="" coords="473,1305,655,1332"/>
+<area shape="rect" id="node44" href="$class_open_g_l_widget.html#ac8a71d325740372032c0061d3bf1daa0" title="a slot to set the time step of our simulation " alt="" coords="456,1371,672,1397"/>
+<area shape="rect" id="node46" href="$class_open_g_l_widget.html#a3c415ea6ecc1ccf6df49b08df74bbd1a" title="a slot to set the playback speed of our simulation " alt="" coords="469,1429,659,1470"/>
+<area shape="rect" id="node48" href="$class_open_g_l_widget.html#acc54210918549bd628db0080d576b483" title="a slot to reset our simulation and remove all particles " alt="" coords="479,1501,649,1528"/>
+</map>

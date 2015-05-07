@@ -110,6 +110,16 @@ we use the following equation,
 In this equation we have one more unknown \f$\mu\f$, this represents the viscosity force. This is a scaler value set by the user to for the desired visocity influence on the fluid. Also you may notice that
 this formulae also contains a third weighting kernel which will be explained in the next section.
 
+Velocity Correction
+-------------------
+A problem with our fluid is it can succumb to compression which will cause very high areas of density ultimately leading to our particles acting quite violently. One method to counter this
+is know as XSPH [PA09] which averages the velocity of our particles with its neighbours improving its overall flow.
+\f[
+    v_i = v_i + \epsilon\sum\limits_j\frac{2m_j}{\rho_i+\rho_j}(v_j-v_i)W_{default}(x_i-x_j,h)
+\f]
+Where \f$\epsilon\f$ is a scaler value of how much correction we want to apply to our particle. Its important to note however we do not want this to be too high as it will ruin the
+physical correctness of our simulation.
+
 Other forces
 ------------
 Finally our final unknown is \f$f\f$. For this implimentation \f$f\f$ will only represent gravity which we will assume is a constant 9.8m/s in the negative y direction. However for
@@ -338,9 +348,23 @@ I will discuss how it is achieved,
     \image html FinalRender.png
     \image html FinalRender3.png
 
+Some Design Choices
+===================
+The initial design for my main program is very basic. Firstly I have one class to manage the fluid simulation, essentially a class of accesors and mutators that calls our cuda kernals which do all the work. Secondly a class to manage our fluid shading.
+Keeping this as its own class means that It can be easily ported to another program if needs be. And finally our openGL context class which manages our cameral controls.\n
+\image html UMLMain.png "Initial Program Design"
+
+However when creating my shader class I realised that It required a lot of openGL texture and render target managment. In the desire to create cleaner code I have created library classes for each of these to support my shader class and make managment
+of these objects easier. These library classes are both singleton classes so that you may access them when and where you need to. The purpose of these classes are to create and store the relative openGL objects allowing you to easily access them when desired.
+See below the design of these classes.\n
+\image html RenderTargetLib.png "OpenGL Render Target Library Class design"
+\image html TextureLib.png "OpenGL Texture Library Class design"
+
+
 References
 ==========
-
+[PA09] Paiva, A., Petronetto, F., Lewiner, T. and Tavares, G. (2009). Particle-based
+viscoplastic fluid/solid simulation\n
 [MJ92] Monaghan, J. (1992). Smoothed particle hydrodynamics, Annual Review of
 Astronomy and Astrophysics, pp. 543–574.\n
 [MM03] Muller, M., Charypar, D. and Gross, M. (2003). Particle-based fluid simulation

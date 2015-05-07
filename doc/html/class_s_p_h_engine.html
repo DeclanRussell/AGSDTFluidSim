@@ -72,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
-      <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="inherits.html"><span>Class&#160;Hierarchy</span></a></li>
       <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
@@ -108,6 +108,8 @@ $(document).ready(function(){initNavTree('class_s_p_h_engine.html','');});
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_s_p_h_engine-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">SPHEngine Class Reference</div>  </div>
@@ -118,6 +120,13 @@ $(document).ready(function(){initNavTree('class_s_p_h_engine.html','');});
  <a href="class_s_p_h_engine.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_s_p_h_engine_8h_source.html">SPHEngine.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for SPHEngine:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_s_p_h_engine__coll__graph.png" border="0" usemap="#_s_p_h_engine_coll__map" alt="Collaboration graph"/></div>
+<map name="_s_p_h_engine_coll__map" id="_s_p_h_engine_coll__map">
+<area shape="rect" id="node2" href="struct_simple_cuboid_collision_object.html" title="a cuboid collion object properties " alt="" coords="5,6,195,127"/></map>
+</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -219,6 +228,170 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:a234554f5b25de8cc34541e1fd0a4b52b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a234554f5b25de8cc34541e1fd0a4b52b">getSpawnBoxSize</a> ()</td></tr>
 <tr class="memdesc:a234554f5b25de8cc34541e1fd0a4b52b"><td class="mdescLeft">&#160;</td><td class="mdescRight">accessor to our spawn box size  <a href="#a234554f5b25de8cc34541e1fd0a4b52b">More...</a><br/></td></tr>
 <tr class="separator:a234554f5b25de8cc34541e1fd0a4b52b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:aee1d2a0c0bbc334c35924bc0a8ad8052"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aee1d2a0c0bbc334c35924bc0a8ad8052"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#aee1d2a0c0bbc334c35924bc0a8ad8052">signalResizeHashTable</a> ()</td></tr>
+<tr class="memdesc:aee1d2a0c0bbc334c35924bc0a8ad8052"><td class="mdescLeft">&#160;</td><td class="mdescRight">signal to resize our hash table after the next update has finished <br/></td></tr>
+<tr class="separator:aee1d2a0c0bbc334c35924bc0a8ad8052"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3626e4be502cdce3eb88bcdbf5adb2f6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3626e4be502cdce3eb88bcdbf5adb2f6"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a3626e4be502cdce3eb88bcdbf5adb2f6">resizeHashTable</a> ()</td></tr>
+<tr class="memdesc:a3626e4be502cdce3eb88bcdbf5adb2f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">resized our hash table and related buffers <br/></td></tr>
+<tr class="separator:a3626e4be502cdce3eb88bcdbf5adb2f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d1f44ed34bc68b564f7e5c730288d44"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8d1f44ed34bc68b564f7e5c730288d44"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a8d1f44ed34bc68b564f7e5c730288d44">addParticles</a> ()</td></tr>
+<tr class="memdesc:a8d1f44ed34bc68b564f7e5c730288d44"><td class="mdescLeft">&#160;</td><td class="mdescRight">function to add particles to our simulation <br/></td></tr>
+<tr class="separator:a8d1f44ed34bc68b564f7e5c730288d44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e5a0bc3c47805756cd697a16076800d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5e5a0bc3c47805756cd697a16076800d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a5e5a0bc3c47805756cd697a16076800d">resetSimulation</a> ()</td></tr>
+<tr class="memdesc:a5e5a0bc3c47805756cd697a16076800d"><td class="mdescLeft">&#160;</td><td class="mdescRight">resets our simulation and deletes all related buffers <br/></td></tr>
+<tr class="separator:a5e5a0bc3c47805756cd697a16076800d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adaa52f452f1f804bb6a60dea821f2543"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#adaa52f452f1f804bb6a60dea821f2543">calcKernalConsts</a> ()</td></tr>
+<tr class="memdesc:adaa52f452f1f804bb6a60dea821f2543"><td class="mdescLeft">&#160;</td><td class="mdescRight">calculate our kernal constance which depends on our hash cell size  <a href="#adaa52f452f1f804bb6a60dea821f2543">More...</a><br/></td></tr>
+<tr class="separator:adaa52f452f1f804bb6a60dea821f2543"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac97832913d04297e83c33ada3ae5ae53"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#ac97832913d04297e83c33ada3ae5ae53">nextPrimeNum</a> (int _x)</td></tr>
+<tr class="memdesc:ac97832913d04297e83c33ada3ae5ae53"><td class="mdescLeft">&#160;</td><td class="mdescRight">a simple function to caluclate next prime number of the inpur variable  <a href="#ac97832913d04297e83c33ada3ae5ae53">More...</a><br/></td></tr>
+<tr class="separator:ac97832913d04297e83c33ada3ae5ae53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a168c6bb74f1fcf56f9f48380746965c9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a168c6bb74f1fcf56f9f48380746965c9"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a168c6bb74f1fcf56f9f48380746965c9">m_resizeHashPending</a></td></tr>
+<tr class="memdesc:a168c6bb74f1fcf56f9f48380746965c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">bool to indicate if we need to resize hash table after next update <br/></td></tr>
+<tr class="separator:a168c6bb74f1fcf56f9f48380746965c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fec14da52b66230e474b56ffcae354f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2fec14da52b66230e474b56ffcae354f"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a2fec14da52b66230e474b56ffcae354f">m_addParticlesPending</a></td></tr>
+<tr class="memdesc:a2fec14da52b66230e474b56ffcae354f"><td class="mdescLeft">&#160;</td><td class="mdescRight">a bool to indicate that we need to add particles to our simulation after the current update is done <br/></td></tr>
+<tr class="separator:a2fec14da52b66230e474b56ffcae354f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99cd34414259ac06e2c30e8e25507587"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a99cd34414259ac06e2c30e8e25507587"></a>
+unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a99cd34414259ac06e2c30e8e25507587">m_numParticlesToAdd</a></td></tr>
+<tr class="memdesc:a99cd34414259ac06e2c30e8e25507587"><td class="mdescLeft">&#160;</td><td class="mdescRight">the number of particles to add to our simulation <br/></td></tr>
+<tr class="separator:a99cd34414259ac06e2c30e8e25507587"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05089c0e43a8e7de62d6c9778d07a877"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a05089c0e43a8e7de62d6c9778d07a877"></a>
+float3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a05089c0e43a8e7de62d6c9778d07a877">m_spawnParticlesPos</a></td></tr>
+<tr class="memdesc:a05089c0e43a8e7de62d6c9778d07a877"><td class="mdescLeft">&#160;</td><td class="mdescRight">the position of our spawn particles box <br/></td></tr>
+<tr class="separator:a05089c0e43a8e7de62d6c9778d07a877"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51899afcaa052f5d7c000a4c6f3bc6ac"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a51899afcaa052f5d7c000a4c6f3bc6ac"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a51899afcaa052f5d7c000a4c6f3bc6ac">m_spawnBoxSize</a></td></tr>
+<tr class="memdesc:a51899afcaa052f5d7c000a4c6f3bc6ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">the size of the box we wish to spawn particles in <br/></td></tr>
+<tr class="separator:a51899afcaa052f5d7c000a4c6f3bc6ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a0447cf722b2762d0deef8ba2207c4f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9a0447cf722b2762d0deef8ba2207c4f"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a9a0447cf722b2762d0deef8ba2207c4f">m_resetPending</a></td></tr>
+<tr class="memdesc:a9a0447cf722b2762d0deef8ba2207c4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">flag to tell our program that a reset is pendeing. Important that we dont delete buffers while they're being used <br/></td></tr>
+<tr class="separator:a9a0447cf722b2762d0deef8ba2207c4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a410dece6ca52e90ffa4e133ae870bc19"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a410dece6ca52e90ffa4e133ae870bc19"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a410dece6ca52e90ffa4e133ae870bc19">m_updating</a></td></tr>
+<tr class="memdesc:a410dece6ca52e90ffa4e133ae870bc19"><td class="mdescLeft">&#160;</td><td class="mdescRight">bool to indicate if our engine is updating particles <br/></td></tr>
+<tr class="separator:a410dece6ca52e90ffa4e133ae870bc19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68865be6752f47c93a2b193be86be37f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a68865be6752f47c93a2b193be86be37f"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a68865be6752f47c93a2b193be86be37f">m_maxGridDim</a></td></tr>
+<tr class="memdesc:a68865be6752f47c93a2b193be86be37f"><td class="mdescLeft">&#160;</td><td class="mdescRight">the max dimention of our hash grid. E.g. 1 is a cube of dimention 1*1*1. <br/></td></tr>
+<tr class="separator:a68865be6752f47c93a2b193be86be37f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8791d887a1c8119b62582a93cdfb98a1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8791d887a1c8119b62582a93cdfb98a1"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a8791d887a1c8119b62582a93cdfb98a1">m_maxNumSamples</a></td></tr>
+<tr class="memdesc:a8791d887a1c8119b62582a93cdfb98a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">the max number of samples of neighbouring particles in our fluid solving <br/></td></tr>
+<tr class="separator:a8791d887a1c8119b62582a93cdfb98a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71f3956e5e1b50dbb14e979677923864"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a71f3956e5e1b50dbb14e979677923864"></a>
+unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a71f3956e5e1b50dbb14e979677923864">m_numCollisionObjects</a></td></tr>
+<tr class="memdesc:a71f3956e5e1b50dbb14e979677923864"><td class="mdescLeft">&#160;</td><td class="mdescRight">the number of collision objects we have in our buffer <br/></td></tr>
+<tr class="separator:a71f3956e5e1b50dbb14e979677923864"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51ddd3b4b93bd236fa8825c38b5a7885"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a51ddd3b4b93bd236fa8825c38b5a7885"></a>
+cudaStream_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a51ddd3b4b93bd236fa8825c38b5a7885">m_stream</a></td></tr>
+<tr class="memdesc:a51ddd3b4b93bd236fa8825c38b5a7885"><td class="mdescLeft">&#160;</td><td class="mdescRight">our cuda stream to run our kernals on <br/></td></tr>
+<tr class="separator:a51ddd3b4b93bd236fa8825c38b5a7885"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbd48bc05ddd06c38ad6c3c4804d85c4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abbd48bc05ddd06c38ad6c3c4804d85c4"></a>
+<a class="el" href="struct_simple_cuboid_collision_object.html">SimpleCuboidCollisionObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#abbd48bc05ddd06c38ad6c3c4804d85c4">m_dCollisionObjectBuffer</a></td></tr>
+<tr class="memdesc:abbd48bc05ddd06c38ad6c3c4804d85c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">pointer to our plane buffer on our device <br/></td></tr>
+<tr class="separator:abbd48bc05ddd06c38ad6c3c4804d85c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c3989dffaa0a6a8e00ecc399ae841a4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8c3989dffaa0a6a8e00ecc399ae841a4"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a8c3989dffaa0a6a8e00ecc399ae841a4">m_velocityCorrectionCoef</a></td></tr>
+<tr class="memdesc:a8c3989dffaa0a6a8e00ecc399ae841a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">velocity correction used for XSPH in our fluid sovler <br/></td></tr>
+<tr class="separator:a8c3989dffaa0a6a8e00ecc399ae841a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcb21acd9bb63b005ea99f389deb57ed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adcb21acd9bb63b005ea99f389deb57ed"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#adcb21acd9bb63b005ea99f389deb57ed">m_densWeightConst</a></td></tr>
+<tr class="memdesc:adcb21acd9bb63b005ea99f389deb57ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">constant to calculate our density kernal. Cheaper to calculate once on CPU. <br/></td></tr>
+<tr class="separator:adcb21acd9bb63b005ea99f389deb57ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76e3d96571be7875343f02b29c4fa1c3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a76e3d96571be7875343f02b29c4fa1c3"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a76e3d96571be7875343f02b29c4fa1c3">m_pressWeightConst</a></td></tr>
+<tr class="memdesc:a76e3d96571be7875343f02b29c4fa1c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">constant to calculate our pressure kernal. Cheaper to calculate once on CPU. <br/></td></tr>
+<tr class="separator:a76e3d96571be7875343f02b29c4fa1c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9cc2ab7a2caed7c9a7a29b56285af05"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab9cc2ab7a2caed7c9a7a29b56285af05"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#ab9cc2ab7a2caed7c9a7a29b56285af05">m_viscWeightConst</a></td></tr>
+<tr class="memdesc:ab9cc2ab7a2caed7c9a7a29b56285af05"><td class="mdescLeft">&#160;</td><td class="mdescRight">constant to calculate our viscosity kernal. Cheaper to calculate once on CPU. <br/></td></tr>
+<tr class="separator:ab9cc2ab7a2caed7c9a7a29b56285af05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81f5be51a8eeb86e0e5a42e4a2f40ef7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a81f5be51a8eeb86e0e5a42e4a2f40ef7"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a81f5be51a8eeb86e0e5a42e4a2f40ef7">m_smoothingLength</a></td></tr>
+<tr class="memdesc:a81f5be51a8eeb86e0e5a42e4a2f40ef7"><td class="mdescLeft">&#160;</td><td class="mdescRight">the smoothing length of our simulation. <br/></td></tr>
+<tr class="separator:a81f5be51a8eeb86e0e5a42e4a2f40ef7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec655d6cf4f291f096a3a00118944fae"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aec655d6cf4f291f096a3a00118944fae"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#aec655d6cf4f291f096a3a00118944fae">m_cellSize</a></td></tr>
+<tr class="memdesc:aec655d6cf4f291f096a3a00118944fae"><td class="mdescLeft">&#160;</td><td class="mdescRight">the cell size of our hash function <br/></td></tr>
+<tr class="separator:aec655d6cf4f291f096a3a00118944fae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a751b81e76082f5e8aa030a6d7e4f339e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a751b81e76082f5e8aa030a6d7e4f339e"></a>
+unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a751b81e76082f5e8aa030a6d7e4f339e">m_numParticlePerCell</a></td></tr>
+<tr class="memdesc:a751b81e76082f5e8aa030a6d7e4f339e"><td class="mdescLeft">&#160;</td><td class="mdescRight">the maximum number of particles per cell <br/></td></tr>
+<tr class="separator:a751b81e76082f5e8aa030a6d7e4f339e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6537ae88a9250d75192b1a9fdab1645d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6537ae88a9250d75192b1a9fdab1645d"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a6537ae88a9250d75192b1a9fdab1645d">m_mass</a></td></tr>
+<tr class="memdesc:a6537ae88a9250d75192b1a9fdab1645d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The mass of our fluid.  Defaults to 1. User can modify density and volume to change this. <br/></td></tr>
+<tr class="separator:a6537ae88a9250d75192b1a9fdab1645d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd4a680dc909727e3026e7c3387bc3a8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abd4a680dc909727e3026e7c3387bc3a8"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#abd4a680dc909727e3026e7c3387bc3a8">m_density</a></td></tr>
+<tr class="memdesc:abd4a680dc909727e3026e7c3387bc3a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">the density of our fluid.  Defaults to 1. User may modify this. <br/></td></tr>
+<tr class="separator:abd4a680dc909727e3026e7c3387bc3a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae85b89c5347bb6c5c1097e3f0d16d2b5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae85b89c5347bb6c5c1097e3f0d16d2b5"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#ae85b89c5347bb6c5c1097e3f0d16d2b5">m_gasConstant</a></td></tr>
+<tr class="memdesc:ae85b89c5347bb6c5c1097e3f0d16d2b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">our gas constant for our fluid solving <br/></td></tr>
+<tr class="separator:ae85b89c5347bb6c5c1097e3f0d16d2b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a277d7add22691d816b05198c53bb94ab"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a277d7add22691d816b05198c53bb94ab"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a277d7add22691d816b05198c53bb94ab">m_viscCoef</a></td></tr>
+<tr class="memdesc:a277d7add22691d816b05198c53bb94ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">our viscosity coeficient for our fluid solving <br/></td></tr>
+<tr class="separator:a277d7add22691d816b05198c53bb94ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b1e56bc8e188a5c85bbadb9d3ff0d6b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1b1e56bc8e188a5c85bbadb9d3ff0d6b"></a>
+unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a1b1e56bc8e188a5c85bbadb9d3ff0d6b">m_numParticles</a></td></tr>
+<tr class="memdesc:a1b1e56bc8e188a5c85bbadb9d3ff0d6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">the number of particles in our simulation <br/></td></tr>
+<tr class="separator:a1b1e56bc8e188a5c85bbadb9d3ff0d6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7bb756facfeba1f59c195c680794fc1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af7bb756facfeba1f59c195c680794fc1"></a>
+GLuint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#af7bb756facfeba1f59c195c680794fc1">m_VAO</a></td></tr>
+<tr class="memdesc:af7bb756facfeba1f59c195c680794fc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">our openGL VAO <br/></td></tr>
+<tr class="separator:af7bb756facfeba1f59c195c680794fc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bd9da54d4924eb97c8dda6cab2bd249"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7bd9da54d4924eb97c8dda6cab2bd249"></a>
+GLuint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a7bd9da54d4924eb97c8dda6cab2bd249">m_VBO</a></td></tr>
+<tr class="memdesc:a7bd9da54d4924eb97c8dda6cab2bd249"><td class="mdescLeft">&#160;</td><td class="mdescRight">openGL buffer that hold the positions of our particles on the GPU <br/></td></tr>
+<tr class="separator:a7bd9da54d4924eb97c8dda6cab2bd249"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f83c73c2df1b2472f1733c14cf3ea30"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9f83c73c2df1b2472f1733c14cf3ea30"></a>
+cudaGraphicsResource_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a9f83c73c2df1b2472f1733c14cf3ea30">m_cudaBufferPtr</a></td></tr>
+<tr class="memdesc:a9f83c73c2df1b2472f1733c14cf3ea30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cuda resource used to access our OpenGL position buffer by Cuda. <br/></td></tr>
+<tr class="separator:a9f83c73c2df1b2472f1733c14cf3ea30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cce64f08ed66cf93de0f6f0b4b5f2f6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3cce64f08ed66cf93de0f6f0b4b5f2f6"></a>
+float3 *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a3cce64f08ed66cf93de0f6f0b4b5f2f6">m_dVelBuffer</a></td></tr>
+<tr class="memdesc:a3cce64f08ed66cf93de0f6f0b4b5f2f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">pointer to our particle velocity buffer on our device <br/></td></tr>
+<tr class="separator:a3cce64f08ed66cf93de0f6f0b4b5f2f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad68cedae42d547750a6d603faf005bf7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad68cedae42d547750a6d603faf005bf7"></a>
+unsigned int *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#ad68cedae42d547750a6d603faf005bf7">m_dhashKeys</a></td></tr>
+<tr class="memdesc:ad68cedae42d547750a6d603faf005bf7"><td class="mdescLeft">&#160;</td><td class="mdescRight">pointer to our hash keys buffer on our device <br/></td></tr>
+<tr class="separator:ad68cedae42d547750a6d603faf005bf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc7f76fa822e1f14cf8d5bd69f2eefb6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acc7f76fa822e1f14cf8d5bd69f2eefb6"></a>
+unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#acc7f76fa822e1f14cf8d5bd69f2eefb6">m_hashTableSize</a></td></tr>
+<tr class="memdesc:acc7f76fa822e1f14cf8d5bd69f2eefb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">the size of our hash table <br/></td></tr>
+<tr class="separator:acc7f76fa822e1f14cf8d5bd69f2eefb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14d0c9cc89000c1f1159f29e451bd769"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a14d0c9cc89000c1f1159f29e451bd769"></a>
+unsigned int *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a14d0c9cc89000c1f1159f29e451bd769">m_dCellOccBuffer</a></td></tr>
+<tr class="memdesc:a14d0c9cc89000c1f1159f29e451bd769"><td class="mdescLeft">&#160;</td><td class="mdescRight">pointer to our cell occupancy buffer on our device <br/></td></tr>
+<tr class="separator:a14d0c9cc89000c1f1159f29e451bd769"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7331c8fe13df74d92acc3800b7b5b00c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7331c8fe13df74d92acc3800b7b5b00c"></a>
+unsigned int *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a7331c8fe13df74d92acc3800b7b5b00c">m_dCellIndexBuffer</a></td></tr>
+<tr class="memdesc:a7331c8fe13df74d92acc3800b7b5b00c"><td class="mdescLeft">&#160;</td><td class="mdescRight">a buffer that holds the index's of where the points in our hash cell begin. <br/></td></tr>
+<tr class="separator:a7331c8fe13df74d92acc3800b7b5b00c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06cf7d9593592386dcf87f83e9689dc6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a06cf7d9593592386dcf87f83e9689dc6"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a06cf7d9593592386dcf87f83e9689dc6">m_numThreadsPerBlock</a></td></tr>
+<tr class="memdesc:a06cf7d9593592386dcf87f83e9689dc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">the number of threads that our device will haveper block <br/></td></tr>
+<tr class="separator:a06cf7d9593592386dcf87f83e9689dc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a691da6a3ddfee175915f4360ad53c080"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a691da6a3ddfee175915f4360ad53c080"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a691da6a3ddfee175915f4360ad53c080">m_maxNumBlocks</a></td></tr>
+<tr class="memdesc:a691da6a3ddfee175915f4360ad53c080"><td class="mdescLeft">&#160;</td><td class="mdescRight">the max number of blocks that we can have <br/></td></tr>
+<tr class="separator:a691da6a3ddfee175915f4360ad53c080"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>our cuda libraries </p>
@@ -275,6 +448,15 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
   </dd>
 </dl>
 
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_s_p_h_engine_a8be3b3f99242c3548ade6ff9314fc46c_cgraph.png" border="0" usemap="#class_s_p_h_engine_a8be3b3f99242c3548ade6ff9314fc46c_cgraph" alt=""/></div>
+<map name="class_s_p_h_engine_a8be3b3f99242c3548ade6ff9314fc46c_cgraph" id="class_s_p_h_engine_a8be3b3f99242c3548ade6ff9314fc46c_cgraph">
+<area shape="rect" id="node2" href="class_s_p_h_engine.html#adaa52f452f1f804bb6a60dea821f2543" title="calculate our kernal constance which depends on our hash cell size " alt="" coords="222,5,423,32"/><area shape="rect" id="node3" href="class_s_p_h_engine.html#a0df6d1b33d50afb152e2992de5af5700" title="Initialises our class. This allocates all memory needed for the simulation. " alt="" coords="265,56,380,83"/><area shape="rect" id="node4" href="class_s_p_h_engine.html#afe2b02e535cf064f91f2de4312c8ae39" title="adds a colllision object for our fluid. So far supports containers and collision cuboids ..." alt="" coords="473,5,679,32"/><area shape="rect" id="node5" href="class_s_p_h_engine.html#a4e61b1f56e20ab4eee7edd111c59912f" title="signals the engine to add particles to our simulation " alt="" coords="473,56,679,83"/><area shape="rect" id="node7" href="_cuda_s_p_h_kernals_8cu.html#a32490018a3312806721e0576ff6f8c7b" title="simple function so that we can fill a buffer with unsigned ints. " alt="" coords="547,107,605,133"/><area shape="rect" id="node6" href="class_s_p_h_engine.html#a8d1f44ed34bc68b564f7e5c730288d44" title="function to add particles to our simulation " alt="" coords="728,56,899,83"/></map>
+</div>
+</p>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -325,6 +507,50 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
   </table>
   </dd>
 </dl>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_s_p_h_engine_afe2b02e535cf064f91f2de4312c8ae39_icgraph.png" border="0" usemap="#class_s_p_h_engine_afe2b02e535cf064f91f2de4312c8ae39_icgraph" alt=""/></div>
+<map name="class_s_p_h_engine_afe2b02e535cf064f91f2de4312c8ae39_icgraph" id="class_s_p_h_engine_afe2b02e535cf064f91f2de4312c8ae39_icgraph">
+<area shape="rect" id="node2" href="class_s_p_h_engine.html#a0df6d1b33d50afb152e2992de5af5700" title="Initialises our class. This allocates all memory needed for the simulation. " alt="" coords="261,5,376,32"/><area shape="rect" id="node3" href="class_s_p_h_engine.html#a8be3b3f99242c3548ade6ff9314fc46c" title="defualt constructor " alt="" coords="425,5,591,32"/></map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="adaa52f452f1f804bb6a60dea821f2543"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SPHEngine::calcKernalConsts </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>calculate our kernal constance which depends on our hash cell size </p>
+<p>smoothing kernals taken from M¨uller, M., Charypar, D. and Gross, M. (2003). Particle-based fluid simulation for interactive applications, SCA ’03: Proceedings of the 2003 ACM SIGGRAPH </p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_s_p_h_engine_adaa52f452f1f804bb6a60dea821f2543_icgraph.png" border="0" usemap="#class_s_p_h_engine_adaa52f452f1f804bb6a60dea821f2543_icgraph" alt=""/></div>
+<map name="class_s_p_h_engine_adaa52f452f1f804bb6a60dea821f2543_icgraph" id="class_s_p_h_engine_adaa52f452f1f804bb6a60dea821f2543_icgraph">
+<area shape="rect" id="node2" href="class_s_p_h_engine.html#a196e04ba23d9d9c73924f3af8a8240ed" title="Mutator for the smoothing length of our simulation. Can also be thought of as hash cell size..." alt="" coords="257,5,474,32"/><area shape="rect" id="node3" href="class_s_p_h_engine.html#a8be3b3f99242c3548ade6ff9314fc46c" title="defualt constructor " alt="" coords="282,56,449,83"/></map>
+</div>
+</p>
 
 </div>
 </div>
@@ -377,6 +603,39 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 <p>accessor to our spawn box size </p>
 <dl class="section return"><dt>Returns</dt><dd>float spawn box size </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ac97832913d04297e83c33ada3ae5ae53"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int SPHEngine::nextPrimeNum </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>_x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>a simple function to caluclate next prime number of the inpur variable </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_x</td><td>- vaule you wish to calculate next prime number for </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the next lowest prime number higher than our input value _X </dd></dl>
 
 </div>
 </div>
@@ -548,6 +807,24 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
   </dd>
 </dl>
 
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_s_p_h_engine_a4e61b1f56e20ab4eee7edd111c59912f_cgraph.png" border="0" usemap="#class_s_p_h_engine_a4e61b1f56e20ab4eee7edd111c59912f_cgraph" alt=""/></div>
+<map name="class_s_p_h_engine_a4e61b1f56e20ab4eee7edd111c59912f_cgraph" id="class_s_p_h_engine_a4e61b1f56e20ab4eee7edd111c59912f_cgraph">
+<area shape="rect" id="node2" href="class_s_p_h_engine.html#a8d1f44ed34bc68b564f7e5c730288d44" title="function to add particles to our simulation " alt="" coords="261,5,432,32"/></map>
+</div>
+</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_s_p_h_engine_a4e61b1f56e20ab4eee7edd111c59912f_icgraph.png" border="0" usemap="#class_s_p_h_engine_a4e61b1f56e20ab4eee7edd111c59912f_icgraph" alt=""/></div>
+<map name="class_s_p_h_engine_a4e61b1f56e20ab4eee7edd111c59912f_icgraph" id="class_s_p_h_engine_a4e61b1f56e20ab4eee7edd111c59912f_icgraph">
+<area shape="rect" id="node2" href="class_s_p_h_engine.html#a0df6d1b33d50afb152e2992de5af5700" title="Initialises our class. This allocates all memory needed for the simulation. " alt="" coords="261,5,376,32"/><area shape="rect" id="node3" href="class_s_p_h_engine.html#a8be3b3f99242c3548ade6ff9314fc46c" title="defualt constructor " alt="" coords="425,5,591,32"/></map>
+</div>
+</p>
+
 </div>
 </div>
 <a class="anchor" id="a1a17b5c04756850b68cf95b917019241"></a>
@@ -572,6 +849,15 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
   </dd>
 </dl>
 
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_s_p_h_engine_a1a17b5c04756850b68cf95b917019241_cgraph.png" border="0" usemap="#class_s_p_h_engine_a1a17b5c04756850b68cf95b917019241_cgraph" alt=""/></div>
+<map name="class_s_p_h_engine_a1a17b5c04756850b68cf95b917019241_cgraph" id="class_s_p_h_engine_a1a17b5c04756850b68cf95b917019241_cgraph">
+<area shape="rect" id="node2" href="_cuda_s_p_h_kernals_8cu.html#afdcf7b761d59cb7dc7242693f8098380" title="Creates a spatial hash key based on our particle postion. " alt="" coords="230,5,351,32"/><area shape="rect" id="node3" href="_cuda_s_p_h_kernals_8cu.html#a1541f8b1ee73799a0cecc7030773a6a9" title="Sorts our hash key buffer and postion buffer such that points of the same key occupy contiguous memor..." alt="" coords="249,56,332,83"/><area shape="rect" id="node4" href="_cuda_s_p_h_kernals_8cu.html#a5f674fd3497767724a4425bbb91a2248" title="Computes the particle occupancy of our hash cell. " alt="" coords="219,107,362,133"/><area shape="rect" id="node5" href="_cuda_s_p_h_kernals_8cu.html#a5ef63636297ac3ddbc0866064a75e12d" title="Creates an index array for our cells using thrusts exclusive scan. " alt="" coords="241,157,340,184"/><area shape="rect" id="node6" href="_cuda_s_p_h_kernals_8cu.html#a59c1e6aa2f1fb9792cde8f2ab4eba1d5" title="Solver function that will call our solver kernal to calculate the new positions of the particles in..." alt="" coords="249,208,332,235"/><area shape="rect" id="node7" href="_cuda_s_p_h_kernals_8cu.html#a1985239f9afd133a3db010848f3950f6" title="Collision detection between particles and planes. " alt="" coords="209,259,372,285"/><area shape="rect" id="node8" href="_cuda_s_p_h_kernals_8cu.html#a32490018a3312806721e0576ff6f8c7b" title="simple function so that we can fill a buffer with unsigned ints. " alt="" coords="437,385,496,412"/><area shape="rect" id="node9" href="class_s_p_h_engine.html#a5e5a0bc3c47805756cd697a16076800d" title="resets our simulation and deletes all related buffers " alt="" coords="197,360,385,387"/><area shape="rect" id="node10" href="class_s_p_h_engine.html#a8d1f44ed34bc68b564f7e5c730288d44" title="function to add particles to our simulation " alt="" coords="205,411,376,437"/><area shape="rect" id="node11" href="class_s_p_h_engine.html#a3626e4be502cdce3eb88bcdbf5adb2f6" title="resized our hash table and related buffers " alt="" coords="193,461,389,488"/></map>
+</div>
+</p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
@@ -584,7 +870,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></li>
-    <li class="footer">Generated on Wed May 6 2015 19:21:03 for Cuda SPH Fluid Simulation - Declan Russell by
+    <li class="footer">Generated on Thu May 7 2015 01:21:13 for Cuda SPH Fluid Simulation - Declan Russell by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

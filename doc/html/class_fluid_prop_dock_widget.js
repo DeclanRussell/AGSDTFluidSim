@@ -23,5 +23,14 @@ var class_fluid_prop_dock_widget =
     [ "setTimeStep", "class_fluid_prop_dock_widget.html#a03628de74620c25af71461a255163a84", null ],
     [ "setVelCorrection", "class_fluid_prop_dock_widget.html#a7c06460036dcca6716dea7b7fc70ad66", null ],
     [ "setViscosity", "class_fluid_prop_dock_widget.html#a473ce1156c2ab118e6af5d99ec700764", null ],
-    [ "togglePlay", "class_fluid_prop_dock_widget.html#a16076f5d56b8d79f74726915d0f51b0b", null ]
+    [ "togglePlay", "class_fluid_prop_dock_widget.html#a16076f5d56b8d79f74726915d0f51b0b", null ],
+    [ "m_fluidGLWidget", "class_fluid_prop_dock_widget.html#a4c4c2a709cbe2075aec6515d0dc3827f", null ],
+    [ "m_instanceNo", "class_fluid_prop_dock_widget.html#aeb7969c3b9eda8f9c5bd321c0595365f", null ],
+    [ "m_numPartToAddSpn", "class_fluid_prop_dock_widget.html#af5ae6a4d95070ebdd3a0dd434cbdeb48", null ],
+    [ "m_spawnPosX", "class_fluid_prop_dock_widget.html#af29dabe6b5caab6510415ff01ac6bc80", null ],
+    [ "m_spawnPosY", "class_fluid_prop_dock_widget.html#a8f2f0459bf7cab6f0f4184b538dbb0c0", null ],
+    [ "m_spawnPosZ", "class_fluid_prop_dock_widget.html#a520d14921acb438e884ef66d4d702921", null ],
+    [ "m_spinPosX", "class_fluid_prop_dock_widget.html#a771c88921c30df2716850909d7874750", null ],
+    [ "m_spinPosY", "class_fluid_prop_dock_widget.html#a9023519e1ec5b0e60c2f3f2a705298ae", null ],
+    [ "m_spinPosZ", "class_fluid_prop_dock_widget.html#a4e544ec628583e2b587e22f6c08369ab", null ]
 ];

@@ -1,0 +1,5 @@
+<map id="OpenGLWidget::loadCubeMap" name="OpenGLWidget::loadCubeMap">
+<area shape="rect" id="node2" href="$class_fluid_prop_dock_widget.html#ab9c0a7c3635a4cbf4ab44229df363e48" title="slot to change our environment map " alt="" coords="275,5,424,46"/>
+<area shape="rect" id="node4" href="$class_open_g_l_widget.html#a9ccb72da15f23a16fb74b270a9e19489" title="slot to add a fluid simulation to our scene " alt="" coords="254,71,445,97"/>
+<area shape="rect" id="node3" href="$class_fluid_prop_dock_widget.html#a48fd1ee2a02d9ca27f905d556ce23075" title="default constructor. " alt="" coords="493,34,651,75"/>
+</map>

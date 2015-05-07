@@ -18,7 +18,8 @@ var dir_d44c64559bbebec7f509842c48db8b23 =
     [ "helper_math.h", "helper__math_8h_source.html", null ],
     [ "mainwindow.h", "mainwindow_8h_source.html", null ],
     [ "OpenGLWidget.h", "_open_g_l_widget_8h.html", [
-      [ "OpenGLWidget", "class_open_g_l_widget.html", "class_open_g_l_widget" ]
+      [ "OpenGLWidget", "class_open_g_l_widget.html", "class_open_g_l_widget" ],
+      [ "fluidSimProps", "struct_open_g_l_widget_1_1fluid_sim_props.html", "struct_open_g_l_widget_1_1fluid_sim_props" ]
     ] ],
     [ "RenderBuffer.h", "_render_buffer_8h.html", [
       [ "RenderBuffer", "class_render_buffer.html", "class_render_buffer" ]

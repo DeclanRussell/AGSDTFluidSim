@@ -13,6 +13,7 @@ var hierarchy =
     [ "FluidShader", "class_fluid_shader.html", null ],
     [ "fluidShaderFrag", "classfluid_shader_frag.html", null ],
     [ "fluidShaderVert", "classfluid_shader_vert.html", null ],
+    [ "OpenGLWidget::fluidSimProps", "struct_open_g_l_widget_1_1fluid_sim_props.html", null ],
     [ "GLTextureLib", "class_g_l_texture_lib.html", null ],
     [ "lightInfo", "structlight_info.html", null ],
     [ "particleCellProp", "structparticle_cell_prop.html", null ],

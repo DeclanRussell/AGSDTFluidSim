@@ -68,3 +68,6 @@
 \form#67:$\frac{p_i}{\rho_i^2}$
 \form#68:\[ p1 = \frac{p_i}{\rho_i^2} \]
 \form#69:\[ f_i^{pressure} = -m_j\sum\limits_{i\neq j}(p1 + \frac{p_j}{\rho_j^2})\bigtriangledown W_{pressure}(x_i-x_j,h) \]
+\form#70:\[ v_i = v_i + \epsilon\sum\limits_j\frac{2m_j}{\rho_i+\rho_j} \]
+\form#71:\[ v_i = v_i + \epsilon\sum\limits_j\frac{2m_j}{\rho_i+\rho_j}(v_j-v_i)W_{default}(x_i-x_j,h) \]
+\form#72:$\epsilon$

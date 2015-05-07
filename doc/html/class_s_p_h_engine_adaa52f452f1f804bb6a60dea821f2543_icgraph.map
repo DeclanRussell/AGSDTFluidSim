@@ -1,0 +1,4 @@
+<map id="SPHEngine::calcKernalConsts" name="SPHEngine::calcKernalConsts">
+<area shape="rect" id="node2" href="$class_s_p_h_engine.html#a196e04ba23d9d9c73924f3af8a8240ed" title="Mutator for the smoothing length of our simulation. Can also be thought of as hash cell size..." alt="" coords="257,5,474,32"/>
+<area shape="rect" id="node3" href="$class_s_p_h_engine.html#a8be3b3f99242c3548ade6ff9314fc46c" title="defualt constructor " alt="" coords="282,56,449,83"/>
+</map>

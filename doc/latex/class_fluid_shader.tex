@@ -10,6 +10,15 @@ Fluid shader. Method can be found at \href{http://developer.download.nvidia.com/
 
 {\ttfamily \#include $<$Fluid\-Shader.\-h$>$}
 
+
+
+Collaboration diagram for Fluid\-Shader\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=192pt]{class_fluid_shader__coll__graph}
+\end{center}
+\end{figure}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -48,6 +57,57 @@ static void \hyperlink{class_fluid_shader_a46a269869d9c2efa74a8e89d7a8e4960}{res
 \begin{DoxyCompactList}\small\item\em resizes our shader output \end{DoxyCompactList}\item 
 static void \hyperlink{class_fluid_shader_a1e3a4859b77f0420d2ae201c3f09b5f4}{set\-Cube\-Map} (int \-\_\-width, int \-\_\-height, const G\-Lvoid $\ast$\-\_\-front, const G\-Lvoid $\ast$\-\_\-back, const G\-Lvoid $\ast$\-\_\-top, const G\-Lvoid $\ast$\-\_\-bottom, const G\-Lvoid $\ast$\-\_\-left, const G\-Lvoid $\ast$\-\_\-right)
 \begin{DoxyCompactList}\small\item\em sets the shading cube map \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_fluid_shader_ac5d0650a0b155d50a85c71a97fa92494}{int \hyperlink{class_fluid_shader_ac5d0650a0b155d50a85c71a97fa92494}{m\-\_\-instance\-No}}\label{class_fluid_shader_ac5d0650a0b155d50a85c71a97fa92494}
+
+\begin{DoxyCompactList}\small\item\em the id number of our shader instance \end{DoxyCompactList}\item 
+\hypertarget{class_fluid_shader_a33b99afb36290dd90bc54c48b0a88ba4}{ngl\-::\-Vec3 \hyperlink{class_fluid_shader_a33b99afb36290dd90bc54c48b0a88ba4}{m\-\_\-fluid\-Color}}\label{class_fluid_shader_a33b99afb36290dd90bc54c48b0a88ba4}
+
+\begin{DoxyCompactList}\small\item\em our fluid color \end{DoxyCompactList}\item 
+\hypertarget{class_fluid_shader_a67b0f8349a22d7ed52f6f2081a4871d1}{float \hyperlink{class_fluid_shader_a67b0f8349a22d7ed52f6f2081a4871d1}{m\-\_\-blur\-Radius}}\label{class_fluid_shader_a67b0f8349a22d7ed52f6f2081a4871d1}
+
+\begin{DoxyCompactList}\small\item\em Bilateral filter blur radius. \end{DoxyCompactList}\item 
+\hypertarget{class_fluid_shader_afb00e888a3e963d94d06dd49132e3e42}{float \hyperlink{class_fluid_shader_afb00e888a3e963d94d06dd49132e3e42}{m\-\_\-blur\-Falloff}}\label{class_fluid_shader_afb00e888a3e963d94d06dd49132e3e42}
+
+\begin{DoxyCompactList}\small\item\em Bilateral filter blur falloff. \end{DoxyCompactList}\item 
+\hypertarget{class_fluid_shader_ac286b2c5dcc2c68ae69e87f74a4c1efa}{float \hyperlink{class_fluid_shader_ac286b2c5dcc2c68ae69e87f74a4c1efa}{m\-\_\-point\-Thickness}}\label{class_fluid_shader_ac286b2c5dcc2c68ae69e87f74a4c1efa}
+
+\begin{DoxyCompactList}\small\item\em the thickness of our points \end{DoxyCompactList}\item 
+\hypertarget{class_fluid_shader_aef86b483692d6e7c8fa5349ef6c53f19}{float \hyperlink{class_fluid_shader_aef86b483692d6e7c8fa5349ef6c53f19}{m\-\_\-fresnal\-Const}}\label{class_fluid_shader_aef86b483692d6e7c8fa5349ef6c53f19}
+
+\begin{DoxyCompactList}\small\item\em fresnal constant \end{DoxyCompactList}\item 
+\hypertarget{class_fluid_shader_a7959268c3e8f2371debe83375cc3113c}{float \hyperlink{class_fluid_shader_a7959268c3e8f2371debe83375cc3113c}{m\-\_\-fresnal\-Power}}\label{class_fluid_shader_a7959268c3e8f2371debe83375cc3113c}
+
+\begin{DoxyCompactList}\small\item\em our Fresnal power, this effects our reflection \end{DoxyCompactList}\item 
+\hypertarget{class_fluid_shader_a59895f7e705bf3c0c874d61a03e24324}{float \hyperlink{class_fluid_shader_a59895f7e705bf3c0c874d61a03e24324}{m\-\_\-refraction\-Ratio}}\label{class_fluid_shader_a59895f7e705bf3c0c874d61a03e24324}
+
+\begin{DoxyCompactList}\small\item\em our refraction ratio \end{DoxyCompactList}\item 
+\hypertarget{class_fluid_shader_a00339308061f3acdd4ae9d2ee019e0c4}{G\-Luint \hyperlink{class_fluid_shader_a00339308061f3acdd4ae9d2ee019e0c4}{m\-\_\-cube\-V\-A\-O}}\label{class_fluid_shader_a00339308061f3acdd4ae9d2ee019e0c4}
+
+\begin{DoxyCompactList}\small\item\em cube V\-A\-O for rendering cube maps \end{DoxyCompactList}\item 
+\hypertarget{class_fluid_shader_a93f87bf852746ded66803552309534e6}{float \hyperlink{class_fluid_shader_a93f87bf852746ded66803552309534e6}{m\-\_\-point\-Size}}\label{class_fluid_shader_a93f87bf852746ded66803552309534e6}
+
+\begin{DoxyCompactList}\small\item\em the size to draw our water particles \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_fluid_shader_a7222716799d6097618fce425d1da13fc}{static int \hyperlink{class_fluid_shader_a7222716799d6097618fce425d1da13fc}{m\-\_\-instance\-Count}}\label{class_fluid_shader_a7222716799d6097618fce425d1da13fc}
+
+\begin{DoxyCompactList}\small\item\em static member so we know how many instances of the shader there are \end{DoxyCompactList}\item 
+\hypertarget{class_fluid_shader_adeec5576690fb6c4bff765932037e286}{static bool \hyperlink{class_fluid_shader_adeec5576690fb6c4bff765932037e286}{m\-\_\-cube\-Map\-Created}}\label{class_fluid_shader_adeec5576690fb6c4bff765932037e286}
+
+\begin{DoxyCompactList}\small\item\em bool to indicate if our cube map has been loaded in \end{DoxyCompactList}\item 
+\hypertarget{class_fluid_shader_ade4ee84f9ee1068e17ba3a0e980aa11b}{static G\-Luint \hyperlink{class_fluid_shader_ade4ee84f9ee1068e17ba3a0e980aa11b}{m\-\_\-billboard\-V\-A\-O}}\label{class_fluid_shader_ade4ee84f9ee1068e17ba3a0e980aa11b}
+
+\begin{DoxyCompactList}\small\item\em billboard V\-A\-O for rendering textures to screen \end{DoxyCompactList}\item 
+\hypertarget{class_fluid_shader_aab541db2bd8b6063bb98d4d1d94d8d13}{static int \hyperlink{class_fluid_shader_aab541db2bd8b6063bb98d4d1d94d8d13}{m\-\_\-width}}\label{class_fluid_shader_aab541db2bd8b6063bb98d4d1d94d8d13}
+
+\begin{DoxyCompactList}\small\item\em the width of the screen to shade in \end{DoxyCompactList}\item 
+\hypertarget{class_fluid_shader_a85d49ca361e2b85558466c9db1215c24}{static int \hyperlink{class_fluid_shader_a85d49ca361e2b85558466c9db1215c24}{m\-\_\-height}}\label{class_fluid_shader_a85d49ca361e2b85558466c9db1215c24}
+
+\begin{DoxyCompactList}\small\item\em the height of the screen to shade in \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
@@ -82,6 +142,17 @@ our default constructor that sets up our shader
 {\em \-\_\-width} & -\/ the width of the window  \-\_\-height -\/ the height of the window \\
 \hline
 \end{DoxyParams}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_fluid_shader_ad3f76a7573c376b87189c0074d323e19_cgraph}
+\end{center}
+\end{figure}
+
+
 
 
 \subsection{Member Function Documentation}
@@ -119,6 +190,17 @@ draws input points buffer with our fluid shader
 {\em \-\_\-eye\-Pos} & -\/ position of the camera in the scene \\
 \hline
 \end{DoxyParams}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_fluid_shader_ae4a324bbc4f7926bab3d45fb58ba59f6_cgraph}
+\end{center}
+\end{figure}
+
+
 \hypertarget{class_fluid_shader_a46a269869d9c2efa74a8e89d7a8e4960}{\index{Fluid\-Shader@{Fluid\-Shader}!resize@{resize}}
 \index{resize@{resize}!FluidShader@{Fluid\-Shader}}
 \subsubsection[{resize}]{\setlength{\rightskip}{0pt plus 5cm}void Fluid\-Shader\-::resize (
@@ -138,6 +220,17 @@ if the screen resizes we need to notify this shader as it uses render targets
 {\em \-\_\-h} & -\/ height to risize \\
 \hline
 \end{DoxyParams}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_fluid_shader_a46a269869d9c2efa74a8e89d7a8e4960_cgraph}
+\end{center}
+\end{figure}
+
+
 \hypertarget{class_fluid_shader_a5180f954e326d1f70b83efe5fcaea748}{\index{Fluid\-Shader@{Fluid\-Shader}!set\-Blur\-Falloff@{set\-Blur\-Falloff}}
 \index{set\-Blur\-Falloff@{set\-Blur\-Falloff}!FluidShader@{Fluid\-Shader}}
 \subsubsection[{set\-Blur\-Falloff}]{\setlength{\rightskip}{0pt plus 5cm}void Fluid\-Shader\-::set\-Blur\-Falloff (
@@ -210,7 +303,18 @@ set the desired color of our fluid. Color values from 0-\/1.
 
 sets the shading cube map 
 
-\-\_\-width -\/ width of our cube map textures \-\_\-height -\/ height of our cube map textures \-\_\-front -\/ front cube map texture \-\_\-back -\/ back cube map texture \-\_\-top -\/ top cube map texture \-\_\-bottom -\/ bottom cube map texture \-\_\-left -\/ left cube map texture \-\_\-right -\/ right cube map texture \hypertarget{class_fluid_shader_aa48f21bea9b0fbb456753442f874d10d}{\index{Fluid\-Shader@{Fluid\-Shader}!set\-Point\-Size@{set\-Point\-Size}}
+\-\_\-width -\/ width of our cube map textures \-\_\-height -\/ height of our cube map textures \-\_\-front -\/ front cube map texture \-\_\-back -\/ back cube map texture \-\_\-top -\/ top cube map texture \-\_\-bottom -\/ bottom cube map texture \-\_\-left -\/ left cube map texture \-\_\-right -\/ right cube map texture 
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_fluid_shader_a1e3a4859b77f0420d2ae201c3f09b5f4_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_fluid_shader_aa48f21bea9b0fbb456753442f874d10d}{\index{Fluid\-Shader@{Fluid\-Shader}!set\-Point\-Size@{set\-Point\-Size}}
 \index{set\-Point\-Size@{set\-Point\-Size}!FluidShader@{Fluid\-Shader}}
 \subsubsection[{set\-Point\-Size}]{\setlength{\rightskip}{0pt plus 5cm}void Fluid\-Shader\-::set\-Point\-Size (
 \begin{DoxyParamCaption}

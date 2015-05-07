@@ -72,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
-      <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="inherits.html"><span>Class&#160;Hierarchy</span></a></li>
       <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
@@ -108,6 +108,7 @@ $(document).ready(function(){initNavTree('class_render_buffer.html','');});
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_render_buffer-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">RenderBuffer Class Reference</div>  </div>
@@ -121,12 +122,17 @@ $(document).ready(function(){initNavTree('class_render_buffer.html','');});
 <div class="dynheader">
 Inheritance diagram for RenderBuffer:</div>
 <div class="dyncontent">
- <div class="center">
-  <img src="class_render_buffer.png" usemap="#RenderBuffer_map" alt=""/>
-  <map id="RenderBuffer_map" name="RenderBuffer_map">
-<area href="class_abstract_open_gl_object.html" alt="AbstractOpenGlObject" shape="rect" coords="0,0,139,24"/>
-</map>
- </div></div>
+<div class="center"><img src="class_render_buffer__inherit__graph.png" border="0" usemap="#_render_buffer_inherit__map" alt="Inheritance graph"/></div>
+<map name="_render_buffer_inherit__map" id="_render_buffer_inherit__map">
+<area shape="rect" id="node2" href="class_abstract_open_gl_object.html" title="{AbstractOpenGlObject\n|# m_handle\l# m_target\l|+ AbstractOpenGlObject()\l+ ~AbstractOpenGlObject()\l+ bind()\l+ unbind()\l}" alt="" coords="5,5,187,141"/></map>
+</div>
+<div class="dynheader">
+Collaboration diagram for RenderBuffer:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_render_buffer__coll__graph.png" border="0" usemap="#_render_buffer_coll__map" alt="Collaboration graph"/></div>
+<map name="_render_buffer_coll__map" id="_render_buffer_coll__map">
+<area shape="rect" id="node2" href="class_abstract_open_gl_object.html" title="{AbstractOpenGlObject\n|# m_handle\l# m_target\l|+ AbstractOpenGlObject()\l+ ~AbstractOpenGlObject()\l+ bind()\l+ unbind()\l}" alt="" coords="5,5,187,141"/></map>
+</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -158,6 +164,21 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_abstract_open_gl_object.html#ac48ade8b59e497ef45e9238327f93873">~AbstractOpenGlObject</a> ()</td></tr>
 <tr class="memdesc:ac48ade8b59e497ef45e9238327f93873 inherit pub_methods_class_abstract_open_gl_object"><td class="mdescLeft">&#160;</td><td class="mdescRight">defalut destructor <br/></td></tr>
 <tr class="separator:ac48ade8b59e497ef45e9238327f93873 inherit pub_methods_class_abstract_open_gl_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a897cca2ee9529f82447fee545354135f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a897cca2ee9529f82447fee545354135f"></a>
+GLsizei&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_render_buffer.html#a897cca2ee9529f82447fee545354135f">m_width</a></td></tr>
+<tr class="memdesc:a897cca2ee9529f82447fee545354135f"><td class="mdescLeft">&#160;</td><td class="mdescRight">width of our render buffer <br/></td></tr>
+<tr class="separator:a897cca2ee9529f82447fee545354135f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a747f5fc28706771541141a6a581031dc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a747f5fc28706771541141a6a581031dc"></a>
+GLsizei&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_render_buffer.html#a747f5fc28706771541141a6a581031dc">m_height</a></td></tr>
+<tr class="memdesc:a747f5fc28706771541141a6a581031dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">height of our render buffer <br/></td></tr>
+<tr class="separator:a747f5fc28706771541141a6a581031dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07f819fc22c10d7aea614d9aef443c72"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a07f819fc22c10d7aea614d9aef443c72"></a>
+GLenum&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_render_buffer.html#a07f819fc22c10d7aea614d9aef443c72">m_internalFormat</a></td></tr>
+<tr class="memdesc:a07f819fc22c10d7aea614d9aef443c72"><td class="mdescLeft">&#160;</td><td class="mdescRight">internal format of our render target <br/></td></tr>
+<tr class="separator:a07f819fc22c10d7aea614d9aef443c72"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -210,6 +231,24 @@ GLenum&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
   </dd>
 </dl>
 
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_render_buffer_a7dfe2482e11ec51c8ebd687d9ff0a045_cgraph.png" border="0" usemap="#class_render_buffer_a7dfe2482e11ec51c8ebd687d9ff0a045_cgraph" alt=""/></div>
+<map name="class_render_buffer_a7dfe2482e11ec51c8ebd687d9ff0a045_cgraph" id="class_render_buffer_a7dfe2482e11ec51c8ebd687d9ff0a045_cgraph">
+<area shape="rect" id="node2" href="class_render_buffer.html#ae0ae7cf1d85a6a4bee741a0132b2b8ab" title="binds our render buffer " alt="" coords="205,5,336,32"/><area shape="rect" id="node3" href="class_render_buffer.html#aacb6894f0d626da9e35c383674be7f86" title="unbinds our render buffer " alt="" coords="198,56,343,83"/></map>
+</div>
+</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_render_buffer_a7dfe2482e11ec51c8ebd687d9ff0a045_icgraph.png" border="0" usemap="#class_render_buffer_a7dfe2482e11ec51c8ebd687d9ff0a045_icgraph" alt=""/></div>
+<map name="class_render_buffer_a7dfe2482e11ec51c8ebd687d9ff0a045_icgraph" id="class_render_buffer_a7dfe2482e11ec51c8ebd687d9ff0a045_icgraph">
+<area shape="rect" id="node2" href="class_fluid_shader.html#a46a269869d9c2efa74a8e89d7a8e4960" title="resizes our shader output " alt="" coords="198,5,333,32"/></map>
+</div>
+</p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
@@ -222,7 +261,7 @@ GLenum&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_render_buffer.html">RenderBuffer</a></li>
-    <li class="footer">Generated on Wed May 6 2015 19:21:03 for Cuda SPH Fluid Simulation - Declan Russell by
+    <li class="footer">Generated on Thu May 7 2015 01:21:13 for Cuda SPH Fluid Simulation - Declan Russell by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

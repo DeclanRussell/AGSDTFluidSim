@@ -72,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
-      <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="inherits.html"><span>Class&#160;Hierarchy</span></a></li>
       <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
@@ -109,6 +109,9 @@ $(document).ready(function(){initNavTree('class_render_target_lib.html','');});
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="class_render_target_lib-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">RenderTargetLib Class Reference</div>  </div>
@@ -119,6 +122,13 @@ $(document).ready(function(){initNavTree('class_render_target_lib.html','');});
  <a href="class_render_target_lib.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_render_target_lib_8h_source.html">RenderTargetLib.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for RenderTargetLib:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_render_target_lib__coll__graph.png" border="0" usemap="#_render_target_lib_coll__map" alt="Collaboration graph"/></div>
+<map name="_render_target_lib_coll__map" id="_render_target_lib_coll__map">
+<area shape="rect" id="node2" href="class_frame_buffer.html" title="Class for creating frame buffers. " alt="" coords="5,199,181,350"/><area shape="rect" id="node3" href="class_abstract_open_gl_object.html" title="{AbstractOpenGlObject\n|# m_handle\l# m_target\l|+ AbstractOpenGlObject()\l+ ~AbstractOpenGlObject()\l+ bind()\l+ unbind()\l}" alt="" coords="109,5,291,141"/><area shape="rect" id="node4" href="class_render_buffer.html" title="Class for creating render buffers. " alt="" coords="205,192,335,357"/></map>
+</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -156,6 +166,53 @@ Static Public Member Functions</h2></td></tr>
 static <a class="el" href="class_render_target_lib.html">RenderTargetLib</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_render_target_lib.html#a99e969c4379b3c037b3152ae4603e436">getInstance</a> ()</td></tr>
 <tr class="memdesc:a99e969c4379b3c037b3152ae4603e436"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns an instance of our render target library <br/></td></tr>
 <tr class="separator:a99e969c4379b3c037b3152ae4603e436"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a0ae1e327dc608b42223cf41de7363110"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0ae1e327dc608b42223cf41de7363110"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_render_target_lib.html#a0ae1e327dc608b42223cf41de7363110">~RenderTargetLib</a> ()</td></tr>
+<tr class="memdesc:a0ae1e327dc608b42223cf41de7363110"><td class="mdescLeft">&#160;</td><td class="mdescRight">our destructor. Removes all render targets from library <br/></td></tr>
+<tr class="separator:a0ae1e327dc608b42223cf41de7363110"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca1daab0d875c1e27e95d290851b1870"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aca1daab0d875c1e27e95d290851b1870"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_render_target_lib.html#aca1daab0d875c1e27e95d290851b1870">RenderTargetLib</a> ()</td></tr>
+<tr class="memdesc:aca1daab0d875c1e27e95d290851b1870"><td class="mdescLeft">&#160;</td><td class="mdescRight">our default constructor. Don't want this to be accessable as this is a singleton class <br/></td></tr>
+<tr class="separator:aca1daab0d875c1e27e95d290851b1870"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a10a29d0f5456445891d686049699ec14"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a10a29d0f5456445891d686049699ec14"></a>
+<a class="el" href="class_frame_buffer.html">FrameBuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_render_target_lib.html#a10a29d0f5456445891d686049699ec14">m_currentFramebuffer</a></td></tr>
+<tr class="memdesc:a10a29d0f5456445891d686049699ec14"><td class="mdescLeft">&#160;</td><td class="mdescRight">the current frame buffer in use <br/></td></tr>
+<tr class="separator:a10a29d0f5456445891d686049699ec14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab83afcc7cb835abfe5eaef18c135c6e5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab83afcc7cb835abfe5eaef18c135c6e5"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_render_target_lib.html#ab83afcc7cb835abfe5eaef18c135c6e5">m_currentFramebufferName</a></td></tr>
+<tr class="memdesc:ab83afcc7cb835abfe5eaef18c135c6e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">the current frame buffer in use name <br/></td></tr>
+<tr class="separator:ab83afcc7cb835abfe5eaef18c135c6e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10c9a7121f740588615e8b56da595268"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a10c9a7121f740588615e8b56da595268"></a>
+<a class="el" href="class_render_buffer.html">RenderBuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_render_target_lib.html#a10c9a7121f740588615e8b56da595268">m_currentRenderbuffer</a></td></tr>
+<tr class="memdesc:a10c9a7121f740588615e8b56da595268"><td class="mdescLeft">&#160;</td><td class="mdescRight">the current render buffer in use <br/></td></tr>
+<tr class="separator:a10c9a7121f740588615e8b56da595268"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af87a49cf916ae0bcf5b5581fa630c976"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af87a49cf916ae0bcf5b5581fa630c976"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_render_target_lib.html#af87a49cf916ae0bcf5b5581fa630c976">m_currentRenderbufferName</a></td></tr>
+<tr class="memdesc:af87a49cf916ae0bcf5b5581fa630c976"><td class="mdescLeft">&#160;</td><td class="mdescRight">the current render buffer in use name <br/></td></tr>
+<tr class="separator:af87a49cf916ae0bcf5b5581fa630c976"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae448ca67b07b4063d7c599eb9d8648e8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae448ca67b07b4063d7c599eb9d8648e8"></a>
+std::map&lt; std::string, <br class="typebreak"/>
+<a class="el" href="class_render_buffer.html">RenderBuffer</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_render_target_lib.html#ae448ca67b07b4063d7c599eb9d8648e8">m_renderBuffers</a></td></tr>
+<tr class="memdesc:ae448ca67b07b4063d7c599eb9d8648e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">mip map for storing our render buffers <br/></td></tr>
+<tr class="separator:ae448ca67b07b4063d7c599eb9d8648e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af046f7ba4ccb1a5750594ae3f3d4ce3a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af046f7ba4ccb1a5750594ae3f3d4ce3a"></a>
+std::map&lt; std::string, <br class="typebreak"/>
+<a class="el" href="class_frame_buffer.html">FrameBuffer</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_render_target_lib.html#af046f7ba4ccb1a5750594ae3f3d4ce3a">m_frameBuffers</a></td></tr>
+<tr class="memdesc:af046f7ba4ccb1a5750594ae3f3d4ce3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">mip map for storing our frame buffers <br/></td></tr>
+<tr class="separator:af046f7ba4ccb1a5750594ae3f3d4ce3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a010764661d409ec73902e644e9825a1f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a010764661d409ec73902e644e9825a1f"></a>
+static <a class="el" href="class_render_target_lib.html">RenderTargetLib</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_render_target_lib.html#a010764661d409ec73902e644e9825a1f">m_instance</a></td></tr>
+<tr class="memdesc:a010764661d409ec73902e644e9825a1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">our static instance of our render target library <br/></td></tr>
+<tr class="separator:a010764661d409ec73902e644e9825a1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Singleton class for creating and storing render targets in a library. </p>
@@ -213,6 +270,15 @@ static <a class="el" href="class_render_target_lib.html">RenderTargetLib</a> *&#
   </dd>
 </dl>
 
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_render_target_lib_a0ff27ec9ae3c085a2bce4e05c180e0e3_icgraph.png" border="0" usemap="#class_render_target_lib_a0ff27ec9ae3c085a2bce4e05c180e0e3_icgraph" alt=""/></div>
+<map name="class_render_target_lib_a0ff27ec9ae3c085a2bce4e05c180e0e3_icgraph" id="class_render_target_lib_a0ff27ec9ae3c085a2bce4e05c180e0e3_icgraph">
+<area shape="rect" id="node2" href="class_fluid_shader.html#ae719bbf1e465c9cc116682c3e5ac6604" title="creates our shader " alt="" coords="243,12,359,39"/></map>
+</div>
+</p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
@@ -225,7 +291,7 @@ static <a class="el" href="class_render_target_lib.html">RenderTargetLib</a> *&#
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_render_target_lib.html">RenderTargetLib</a></li>
-    <li class="footer">Generated on Wed May 6 2015 19:21:03 for Cuda SPH Fluid Simulation - Declan Russell by
+    <li class="footer">Generated on Thu May 7 2015 01:21:13 for Cuda SPH Fluid Simulation - Declan Russell by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

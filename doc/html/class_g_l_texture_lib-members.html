@@ -72,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
-      <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="inherits.html"><span>Class&#160;Hierarchy</span></a></li>
       <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
@@ -117,15 +117,20 @@ $(document).ready(function(){initNavTree('class_g_l_texture_lib.html','');});
   <tr><td class="entry"><a class="el" href="class_g_l_texture_lib.html#a778cde3734906f46649defdda30d7d7e">addTexture</a>(std::string _name, GLenum _target, GLint _level, GLint _internalFormat, GLsizei _width, GLsizei _height, GLint _border, GLenum _format, GLenum _type, const GLvoid *_data)</td><td class="entry"><a class="el" href="class_g_l_texture_lib.html">GLTextureLib</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_g_l_texture_lib.html#a49ba9410297b15f1f2988369853c108f">destroy</a>()</td><td class="entry"><a class="el" href="class_g_l_texture_lib.html">GLTextureLib</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr><td class="entry"><a class="el" href="class_g_l_texture_lib.html#aedb1360fe37f369eb290f773dbada309">getInstance</a>()</td><td class="entry"><a class="el" href="class_g_l_texture_lib.html">GLTextureLib</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_g_l_texture_lib.html#aa18a039ee29d50ccd34a7e1f7d24ce5b">operator[]</a>(const std::string &amp;_name)</td><td class="entry"><a class="el" href="class_g_l_texture_lib.html">GLTextureLib</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="class_g_l_texture_lib.html#ab4ab9d6def1eb2acecfbe062686ab98e">operator[]</a>(const char *_name)</td><td class="entry"><a class="el" href="class_g_l_texture_lib.html">GLTextureLib</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_g_l_texture_lib.html#aca4b2bd67c1af5b5c1ea304fe2622eac">~GLTextureLib</a>()</td><td class="entry"><a class="el" href="class_g_l_texture_lib.html">GLTextureLib</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_g_l_texture_lib.html#a7ac1f52801de2e75472f3bd495c40185">GLTextureLib</a>()</td><td class="entry"><a class="el" href="class_g_l_texture_lib.html">GLTextureLib</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">private</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_g_l_texture_lib.html#a148bbba73a37d5478e1f037699f51d94">m_currentTexture</a></td><td class="entry"><a class="el" href="class_g_l_texture_lib.html">GLTextureLib</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_g_l_texture_lib.html#a931a6e49b5a86564de11359436dfb745">m_currentTextureName</a></td><td class="entry"><a class="el" href="class_g_l_texture_lib.html">GLTextureLib</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_g_l_texture_lib.html#a54710e7dffef1a0d7e383802298c5c3a">m_instance</a></td><td class="entry"><a class="el" href="class_g_l_texture_lib.html">GLTextureLib</a></td><td class="entry"><span class="mlabel">private</span><span class="mlabel">static</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_g_l_texture_lib.html#adbacf6d620b239b381e955ef4277a6a6">m_textures</a></td><td class="entry"><a class="el" href="class_g_l_texture_lib.html">GLTextureLib</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_g_l_texture_lib.html#aa18a039ee29d50ccd34a7e1f7d24ce5b">operator[]</a>(const std::string &amp;_name)</td><td class="entry"><a class="el" href="class_g_l_texture_lib.html">GLTextureLib</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_g_l_texture_lib.html#ab4ab9d6def1eb2acecfbe062686ab98e">operator[]</a>(const char *_name)</td><td class="entry"><a class="el" href="class_g_l_texture_lib.html">GLTextureLib</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_g_l_texture_lib.html#aca4b2bd67c1af5b5c1ea304fe2622eac">~GLTextureLib</a>()</td><td class="entry"><a class="el" href="class_g_l_texture_lib.html">GLTextureLib</a></td><td class="entry"></td></tr>
 </table></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed May 6 2015 19:21:03 for Cuda SPH Fluid Simulation - Declan Russell by
+    <li class="footer">Generated on Thu May 7 2015 01:21:13 for Cuda SPH Fluid Simulation - Declan Russell by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

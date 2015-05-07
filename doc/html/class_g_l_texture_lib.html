@@ -72,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
-      <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="inherits.html"><span>Class&#160;Hierarchy</span></a></li>
       <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
@@ -109,6 +109,9 @@ $(document).ready(function(){initNavTree('class_g_l_texture_lib.html','');});
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="class_g_l_texture_lib-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">GLTextureLib Class Reference</div>  </div>
@@ -119,6 +122,13 @@ $(document).ready(function(){initNavTree('class_g_l_texture_lib.html','');});
  <a href="class_g_l_texture_lib.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_g_l_texture_8h_source.html">GLTexture.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for GLTextureLib:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_g_l_texture_lib__coll__graph.png" border="0" usemap="#_g_l_texture_lib_coll__map" alt="Collaboration graph"/></div>
+<map name="_g_l_texture_lib_coll__map" id="_g_l_texture_lib_coll__map">
+<area shape="rect" id="node2" href="class_g_l_texture.html" title="{GLTexture\n|&#45; m_isCubeMap\l&#45; m_level\l&#45; m_internalFormat\l&#45; m_width\l&#45; m_height\l&#45; m_border\l&#45; m_format\l&#45; m_type\l|+ GLTexture()\l+ GLTexture()\l+ ~GLTexture()\l+ setTexParamiteri()\l+ setTexParamiterf()\l+ resize()\l+ setData()\l+ setData()\l+ bind()\l+ bind()\l+ unbind()\l+ getHandle()\l&#45; GLTexture()\l}" alt="" coords="25,193,167,549"/><area shape="rect" id="node3" href="class_abstract_open_gl_object.html" title="{AbstractOpenGlObject\n|# m_handle\l# m_target\l|+ AbstractOpenGlObject()\l+ ~AbstractOpenGlObject()\l+ bind()\l+ unbind()\l}" alt="" coords="5,5,187,141"/></map>
+</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -151,6 +161,36 @@ Static Public Member Functions</h2></td></tr>
 static <a class="el" href="class_g_l_texture_lib.html">GLTextureLib</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_l_texture_lib.html#aedb1360fe37f369eb290f773dbada309">getInstance</a> ()</td></tr>
 <tr class="memdesc:aedb1360fe37f369eb290f773dbada309"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns an instance of our texture library <br/></td></tr>
 <tr class="separator:aedb1360fe37f369eb290f773dbada309"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a7ac1f52801de2e75472f3bd495c40185"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7ac1f52801de2e75472f3bd495c40185"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_l_texture_lib.html#a7ac1f52801de2e75472f3bd495c40185">GLTextureLib</a> ()</td></tr>
+<tr class="memdesc:a7ac1f52801de2e75472f3bd495c40185"><td class="mdescLeft">&#160;</td><td class="mdescRight">our default constructor. Don't want this to be accessable as this is a singleton class <br/></td></tr>
+<tr class="separator:a7ac1f52801de2e75472f3bd495c40185"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a148bbba73a37d5478e1f037699f51d94"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a148bbba73a37d5478e1f037699f51d94"></a>
+<a class="el" href="class_g_l_texture.html">GLTexture</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_l_texture_lib.html#a148bbba73a37d5478e1f037699f51d94">m_currentTexture</a></td></tr>
+<tr class="memdesc:a148bbba73a37d5478e1f037699f51d94"><td class="mdescLeft">&#160;</td><td class="mdescRight">the current texture in use <br/></td></tr>
+<tr class="separator:a148bbba73a37d5478e1f037699f51d94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a931a6e49b5a86564de11359436dfb745"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a931a6e49b5a86564de11359436dfb745"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_l_texture_lib.html#a931a6e49b5a86564de11359436dfb745">m_currentTextureName</a></td></tr>
+<tr class="memdesc:a931a6e49b5a86564de11359436dfb745"><td class="mdescLeft">&#160;</td><td class="mdescRight">the current texture in use name <br/></td></tr>
+<tr class="separator:a931a6e49b5a86564de11359436dfb745"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbacf6d620b239b381e955ef4277a6a6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adbacf6d620b239b381e955ef4277a6a6"></a>
+std::map&lt; std::string, <br class="typebreak"/>
+<a class="el" href="class_g_l_texture.html">GLTexture</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_l_texture_lib.html#adbacf6d620b239b381e955ef4277a6a6">m_textures</a></td></tr>
+<tr class="memdesc:adbacf6d620b239b381e955ef4277a6a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">mip map for storing our textures <br/></td></tr>
+<tr class="separator:adbacf6d620b239b381e955ef4277a6a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a54710e7dffef1a0d7e383802298c5c3a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a54710e7dffef1a0d7e383802298c5c3a"></a>
+static <a class="el" href="class_g_l_texture_lib.html">GLTextureLib</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_l_texture_lib.html#a54710e7dffef1a0d7e383802298c5c3a">m_instance</a></td></tr>
+<tr class="memdesc:a54710e7dffef1a0d7e383802298c5c3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">our static instance of our texture library <br/></td></tr>
+<tr class="separator:a54710e7dffef1a0d7e383802298c5c3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Simple class for loading in and managing OpenGL textures. </p>
@@ -269,6 +309,15 @@ static <a class="el" href="class_g_l_texture_lib.html">GLTextureLib</a> *&#160;<
   </dd>
 </dl>
 
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_g_l_texture_lib_aece253fdd6aad02adca2d743c463a9f2_icgraph.png" border="0" usemap="#class_g_l_texture_lib_aece253fdd6aad02adca2d743c463a9f2_icgraph" alt=""/></div>
+<map name="class_g_l_texture_lib_aece253fdd6aad02adca2d743c463a9f2_icgraph" id="class_g_l_texture_lib_aece253fdd6aad02adca2d743c463a9f2_icgraph">
+<area shape="rect" id="node2" href="class_fluid_shader.html#a1e3a4859b77f0420d2ae201c3f09b5f4" title="sets the shading cube map " alt="" coords="240,5,413,32"/></map>
+</div>
+</p>
+
 </div>
 </div>
 <a class="anchor" id="a778cde3734906f46649defdda30d7d7e"></a>
@@ -351,6 +400,15 @@ static <a class="el" href="class_g_l_texture_lib.html">GLTextureLib</a> *&#160;<
   </dd>
 </dl>
 
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_g_l_texture_lib_a778cde3734906f46649defdda30d7d7e_icgraph.png" border="0" usemap="#class_g_l_texture_lib_a778cde3734906f46649defdda30d7d7e_icgraph" alt=""/></div>
+<map name="class_g_l_texture_lib_a778cde3734906f46649defdda30d7d7e_icgraph" id="class_g_l_texture_lib_a778cde3734906f46649defdda30d7d7e_icgraph">
+<area shape="rect" id="node2" href="class_fluid_shader.html#ae719bbf1e465c9cc116682c3e5ac6604" title="creates our shader " alt="" coords="227,5,343,32"/></map>
+</div>
+</p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
@@ -363,7 +421,7 @@ static <a class="el" href="class_g_l_texture_lib.html">GLTextureLib</a> *&#160;<
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_g_l_texture_lib.html">GLTextureLib</a></li>
-    <li class="footer">Generated on Wed May 6 2015 19:21:03 for Cuda SPH Fluid Simulation - Declan Russell by
+    <li class="footer">Generated on Thu May 7 2015 01:21:13 for Cuda SPH Fluid Simulation - Declan Russell by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

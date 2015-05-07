@@ -199,6 +199,12 @@ The formulae above represents the summation of particle properties <img class="f
 </p>
 <p><br/>
 In this equation we have one more unknown <img class="formulaInl" alt="$\mu$" src="form_5.png"/>, this represents the viscosity force. This is a scaler value set by the user to for the desired visocity influence on the fluid. Also you may notice that this formulae also contains a third weighting kernel which will be explained in the next section.</p>
+<h2>Velocity Correction </h2>
+<p>A problem with our fluid is it can succumb to compression which will cause very high areas of density ultimately leading to our particles acting quite violently. One method to counter this is know as XSPH [PA09] which averages the velocity of our particles with its neighbours improving its overall flow. </p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ v_i = v_i + \epsilon\sum\limits_j\frac{2m_j}{\rho_i+\rho_j}(v_j-v_i)W_{default}(x_i-x_j,h) \]" src="form_71.png"/>
+</p>
+<p> Where <img class="formulaInl" alt="$\epsilon$" src="form_72.png"/> is a scaler value of how much correction we want to apply to our particle. Its important to note however we do not want this to be too high as it will ruin the physical correctness of our simulation.</p>
 <h2>Other forces </h2>
 <p>Finally our final unknown is <img class="formulaInl" alt="$f$" src="form_37.png"/>. For this implimentation <img class="formulaInl" alt="$f$" src="form_37.png"/> will only represent gravity which we will assume is a constant 9.8m/s in the negative y direction. However for future work this can be extented to also include any other forces you may want to include such as surface tension or some kind of interaction forces.</p>
 <h2>Weighting kernels </h2>
@@ -399,8 +405,26 @@ Thickness Render Pass</div></div>
 </div>
 </li>
 </ol>
+<h1>Some Design Choices </h1>
+<p>The initial design for my main program is very basic. Firstly I have one class to manage the fluid simulation, essentially a class of accesors and mutators that calls our cuda kernals which do all the work. Secondly a class to manage our fluid shading. Keeping this as its own class means that It can be easily ported to another program if needs be. And finally our openGL context class which manages our cameral controls.<br/>
+</p>
+<div class="image">
+<img src="UMLMain.png" alt="UMLMain.png"/>
+<div class="caption">
+Initial Program Design</div></div>
+<p> However when creating my shader class I realised that It required a lot of openGL texture and render target managment. In the desire to create cleaner code I have created library classes for each of these to support my shader class and make managment of these objects easier. These library classes are both singleton classes so that you may access them when and where you need to. The purpose of these classes are to create and store the relative openGL objects allowing you to easily access them when desired. See below the design of these classes.<br/>
+</p>
+<div class="image">
+<img src="RenderTargetLib.png" alt="RenderTargetLib.png"/>
+<div class="caption">
+OpenGL Render Target Library Class design</div></div>
+<div class="image">
+<img src="TextureLib.png" alt="TextureLib.png"/>
+<div class="caption">
+OpenGL Texture Library Class design</div></div>
 <h1>References </h1>
-<p>[MJ92] Monaghan, J. (1992). Smoothed particle hydrodynamics, Annual Review of Astronomy and Astrophysics, pp. 543–574.<br/>
+<p>[PA09] Paiva, A., Petronetto, F., Lewiner, T. and Tavares, G. (2009). Particle-based viscoplastic fluid/solid simulation<br/>
+[MJ92] Monaghan, J. (1992). Smoothed particle hydrodynamics, Annual Review of Astronomy and Astrophysics, pp. 543–574.<br/>
 [MM03] Muller, M., Charypar, D. and Gross, M. (2003). Particle-based fluid simulation for interactive applications, SCA ’03: Proceedings of the 2003 ACM SIGGRAPH<br/>
 [GS10] Green, S., 2010 Screen Space Fluid Rendering for Games., <a href="http://developer.download.nvidia.com/presentations/2010/gdc/Direct3D_Effects.pdf">http://developer.download.nvidia.com/presentations/2010/gdc/Direct3D_Effects.pdf</a><br/>
 </p>
@@ -409,7 +433,7 @@ Thickness Render Pass</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed May 6 2015 19:21:04 for Cuda SPH Fluid Simulation - Declan Russell by
+    <li class="footer">Generated on Thu May 7 2015 01:21:13 for Cuda SPH Fluid Simulation - Declan Russell by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

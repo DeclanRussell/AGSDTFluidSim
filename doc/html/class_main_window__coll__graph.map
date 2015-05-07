@@ -1,0 +1,5 @@
+<map id="MainWindow" name="MainWindow">
+<area shape="rect" id="node3" href="$class_ui_1_1_main_window.html" title="{Ui::MainWindow\n||}" alt="" coords="137,479,255,556"/>
+<area shape="rect" id="node4" href="$class_ui___main_window.html" title="{Ui_MainWindow\n|+ centralwidget\l+ gridLayout\l+ verticalSpacer\l+ menubar\l+ statusbar\l+ horizontalSpacer\l|+ setupUi()\l+ retranslateUi()\l+ setupUi()\l+ retranslateUi()\l}" alt="" coords="131,5,260,200"/>
+<area shape="rect" id="node5" href="$class_open_g_l_widget.html" title="Basic Qt widget that holds a OpenGL context. " alt="" coords="279,251,443,783"/>
+</map>

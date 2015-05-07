@@ -10,6 +10,15 @@ Simple class for loading in and managing Open\-G\-L textures.
 
 {\ttfamily \#include $<$G\-L\-Texture.\-h$>$}
 
+
+
+Collaboration diagram for G\-L\-Texture\-Lib\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{class_g_l_texture_lib__coll__graph}
+\end{center}
+\end{figure}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -35,6 +44,31 @@ Simple class for loading in and managing Open\-G\-L textures.
 \hypertarget{class_g_l_texture_lib_aedb1360fe37f369eb290f773dbada309}{static \hyperlink{class_g_l_texture_lib}{G\-L\-Texture\-Lib} $\ast$ \hyperlink{class_g_l_texture_lib_aedb1360fe37f369eb290f773dbada309}{get\-Instance} ()}\label{class_g_l_texture_lib_aedb1360fe37f369eb290f773dbada309}
 
 \begin{DoxyCompactList}\small\item\em returns an instance of our texture library \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_g_l_texture_lib_a7ac1f52801de2e75472f3bd495c40185}{\hyperlink{class_g_l_texture_lib_a7ac1f52801de2e75472f3bd495c40185}{G\-L\-Texture\-Lib} ()}\label{class_g_l_texture_lib_a7ac1f52801de2e75472f3bd495c40185}
+
+\begin{DoxyCompactList}\small\item\em our default constructor. Don't want this to be accessable as this is a singleton class \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_g_l_texture_lib_a148bbba73a37d5478e1f037699f51d94}{\hyperlink{class_g_l_texture}{G\-L\-Texture} $\ast$ \hyperlink{class_g_l_texture_lib_a148bbba73a37d5478e1f037699f51d94}{m\-\_\-current\-Texture}}\label{class_g_l_texture_lib_a148bbba73a37d5478e1f037699f51d94}
+
+\begin{DoxyCompactList}\small\item\em the current texture in use \end{DoxyCompactList}\item 
+\hypertarget{class_g_l_texture_lib_a931a6e49b5a86564de11359436dfb745}{std\-::string \hyperlink{class_g_l_texture_lib_a931a6e49b5a86564de11359436dfb745}{m\-\_\-current\-Texture\-Name}}\label{class_g_l_texture_lib_a931a6e49b5a86564de11359436dfb745}
+
+\begin{DoxyCompactList}\small\item\em the current texture in use name \end{DoxyCompactList}\item 
+\hypertarget{class_g_l_texture_lib_adbacf6d620b239b381e955ef4277a6a6}{std\-::map$<$ std\-::string, \\*
+\hyperlink{class_g_l_texture}{G\-L\-Texture} $\ast$ $>$ \hyperlink{class_g_l_texture_lib_adbacf6d620b239b381e955ef4277a6a6}{m\-\_\-textures}}\label{class_g_l_texture_lib_adbacf6d620b239b381e955ef4277a6a6}
+
+\begin{DoxyCompactList}\small\item\em mip map for storing our textures \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_g_l_texture_lib_a54710e7dffef1a0d7e383802298c5c3a}{static \hyperlink{class_g_l_texture_lib}{G\-L\-Texture\-Lib} $\ast$ \hyperlink{class_g_l_texture_lib_a54710e7dffef1a0d7e383802298c5c3a}{m\-\_\-instance}}\label{class_g_l_texture_lib_a54710e7dffef1a0d7e383802298c5c3a}
+
+\begin{DoxyCompactList}\small\item\em our static instance of our texture library \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
@@ -84,6 +118,17 @@ add a cube map to our texture library
 {\em \-\_\-name} & -\/ the name of our texture \\
 \hline
 \end{DoxyParams}
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_g_l_texture_lib_aece253fdd6aad02adca2d743c463a9f2_icgraph}
+\end{center}
+\end{figure}
+
+
 \hypertarget{class_g_l_texture_lib_a778cde3734906f46649defdda30d7d7e}{\index{G\-L\-Texture\-Lib@{G\-L\-Texture\-Lib}!add\-Texture@{add\-Texture}}
 \index{add\-Texture@{add\-Texture}!GLTextureLib@{G\-L\-Texture\-Lib}}
 \subsubsection[{add\-Texture}]{\setlength{\rightskip}{0pt plus 5cm}{\bf G\-L\-Texture} $\ast$ G\-L\-Texture\-Lib\-::add\-Texture (
@@ -109,6 +154,17 @@ add a texture to our texture library
 {\em \-\_\-name} & -\/ the name of our texture \\
 \hline
 \end{DoxyParams}
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=334pt]{class_g_l_texture_lib_a778cde3734906f46649defdda30d7d7e_icgraph}
+\end{center}
+\end{figure}
+
+
 
 
 The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}

@@ -29,6 +29,7 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     // mouse rotation values set to 0
     m_spinXFace=0;
     m_spinYFace=0;
+    m_pan = false;
     m_modelPos=ngl::Vec3(0.0);
     // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
     this->resize(_parent->size());
@@ -223,6 +224,9 @@ void OpenGLWidget::paintGL(){
     text.sprintf("Number of particles: %d",totalParticles);
     m_text->renderText(10,40,text);
 
+    //if we want our camera to pan the increment our rotation
+    if(m_pan){ m_spinYFace-=INCREMENT*5;}
+
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::loadCubeMap(QString _loc){
@@ -283,6 +287,9 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *_event){
         for(unsigned int i=0;i<m_SPHEngines.size();i++){
             m_SPHEngines[i]->update(0.001);
         }
+    }
+    if(_event->key()==Qt::Key_R){
+        m_pan = !m_pan;
     }
 }
 //----------------------------------------------------------------------------------------------------------------------

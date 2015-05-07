@@ -1,0 +1,4 @@
+<map id="OpenGLWidget::setDisplayHud" name="OpenGLWidget::setDisplayHud">
+<area shape="rect" id="node2" href="$class_fluid_prop_dock_widget.html#a6e6423b9cdf21dd02577b72339d5babd" title="slot to toggle the hud of our simulation " alt="" coords="259,5,408,46"/>
+<area shape="rect" id="node3" href="$class_fluid_prop_dock_widget.html#a48fd1ee2a02d9ca27f905d556ce23075" title="default constructor. " alt="" coords="456,5,613,46"/>
+</map>

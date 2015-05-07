@@ -7,6 +7,13 @@
 {\ttfamily \#include $<$thrust/scan.\-h$>$}\\*
 {\ttfamily \#include \char`\"{}Cuda\-S\-P\-H\-Kernals.\-h\char`\"{}}\\*
 {\ttfamily \#include \char`\"{}helper\-\_\-math.\-h\char`\"{}}\\*
+Include dependency graph for Cuda\-S\-P\-H\-Kernals.\-cu\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_cuda_s_p_h_kernals_8cu__incl}
+\end{center}
+\end{figure}
 \subsection*{Macros}
 \begin{DoxyCompactItemize}
 \item 
@@ -98,6 +105,17 @@ Collision detection between particles and planes.
 {\em \-\_\-max\-Num\-Threads} & -\/ the maximum nuber of threads we need to launch per block \\
 \hline
 \end{DoxyParams}
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=342pt]{_cuda_s_p_h_kernals_8cu_a1985239f9afd133a3db010848f3950f6_icgraph}
+\end{center}
+\end{figure}
+
+
 \hypertarget{_cuda_s_p_h_kernals_8cu_ad805b6eb0d36394de57c25b3d06718ca}{\index{Cuda\-S\-P\-H\-Kernals.\-cu@{Cuda\-S\-P\-H\-Kernals.\-cu}!count\-Cell\-Occ\-Kernal@{count\-Cell\-Occ\-Kernal}}
 \index{count\-Cell\-Occ\-Kernal@{count\-Cell\-Occ\-Kernal}!CudaSPHKernals.cu@{Cuda\-S\-P\-H\-Kernals.\-cu}}
 \subsubsection[{count\-Cell\-Occ\-Kernal}]{\setlength{\rightskip}{0pt plus 5cm}\-\_\-\-\_\-global\-\_\-\-\_\- void count\-Cell\-Occ\-Kernal (
@@ -154,6 +172,17 @@ Computes the particle occupancy of our hash cell.
 {\em \-\_\-max\-Num\-Threads} & -\/ the maximum number of threads that we have per block on our device \\
 \hline
 \end{DoxyParams}
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=328pt]{_cuda_s_p_h_kernals_8cu_a5f674fd3497767724a4425bbb91a2248_icgraph}
+\end{center}
+\end{figure}
+
+
 \hypertarget{_cuda_s_p_h_kernals_8cu_a5ef63636297ac3ddbc0866064a75e12d}{\index{Cuda\-S\-P\-H\-Kernals.\-cu@{Cuda\-S\-P\-H\-Kernals.\-cu}!create\-Cell\-Idx@{create\-Cell\-Idx}}
 \index{create\-Cell\-Idx@{create\-Cell\-Idx}!CudaSPHKernals.cu@{Cuda\-S\-P\-H\-Kernals.\-cu}}
 \subsubsection[{create\-Cell\-Idx}]{\setlength{\rightskip}{0pt plus 5cm}void create\-Cell\-Idx (
@@ -176,6 +205,17 @@ Creates an index array for our cells using thrusts exclusive scan.
 {\em d\-\_\-cell\-Idx\-Array} & -\/ our output buffer on our device to store our index's \\
 \hline
 \end{DoxyParams}
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=294pt]{_cuda_s_p_h_kernals_8cu_a5ef63636297ac3ddbc0866064a75e12d_icgraph}
+\end{center}
+\end{figure}
+
+
 \hypertarget{_cuda_s_p_h_kernals_8cu_afdcf7b761d59cb7dc7242693f8098380}{\index{Cuda\-S\-P\-H\-Kernals.\-cu@{Cuda\-S\-P\-H\-Kernals.\-cu}!create\-Hash\-Table@{create\-Hash\-Table}}
 \index{create\-Hash\-Table@{create\-Hash\-Table}!CudaSPHKernals.cu@{Cuda\-S\-P\-H\-Kernals.\-cu}}
 \subsubsection[{create\-Hash\-Table}]{\setlength{\rightskip}{0pt plus 5cm}void create\-Hash\-Table (
@@ -210,6 +250,17 @@ This is taken from Teschner, M., Heidelberger, B., Mueller, M., Pomeranets, D. a
 {\em \-\_\-max\-Num\-Threads} & -\/ the maximum number off threads we have in a block on our device. Can be found out with device query \\
 \hline
 \end{DoxyParams}
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=312pt]{_cuda_s_p_h_kernals_8cu_afdcf7b761d59cb7dc7242693f8098380_icgraph}
+\end{center}
+\end{figure}
+
+
 \hypertarget{_cuda_s_p_h_kernals_8cu_aaaee82afeb737d25fb86efb6949aa1b5}{\index{Cuda\-S\-P\-H\-Kernals.\-cu@{Cuda\-S\-P\-H\-Kernals.\-cu}!density\-Weighting@{density\-Weighting}}
 \index{density\-Weighting@{density\-Weighting}!CudaSPHKernals.cu@{Cuda\-S\-P\-H\-Kernals.\-cu}}
 \subsubsection[{density\-Weighting}]{\setlength{\rightskip}{0pt plus 5cm}\-\_\-\-\_\-device\-\_\-\-\_\- float density\-Weighting (
@@ -257,6 +308,17 @@ simple function so that we can fill a buffer with unsigned ints.
 {\em \-\_\-fill} & -\/ what you wish to fill it with \\
 \hline
 \end{DoxyParams}
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_cuda_s_p_h_kernals_8cu_a32490018a3312806721e0576ff6f8c7b_icgraph}
+\end{center}
+\end{figure}
+
+
 \hypertarget{_cuda_s_p_h_kernals_8cu_a59c1e6aa2f1fb9792cde8f2ab4eba1d5}{\index{Cuda\-S\-P\-H\-Kernals.\-cu@{Cuda\-S\-P\-H\-Kernals.\-cu}!fluid\-Solver@{fluid\-Solver}}
 \index{fluid\-Solver@{fluid\-Solver}!CudaSPHKernals.cu@{Cuda\-S\-P\-H\-Kernals.\-cu}}
 \subsubsection[{fluid\-Solver}]{\setlength{\rightskip}{0pt plus 5cm}void fluid\-Solver (
@@ -324,6 +386,17 @@ our fluid simulation.
 {\em \-\_\-visc\-Kern\-Const} & -\/ constant part of the viscosity kernal. Faster to compute once on C\-P\-U and load in. \\
 \hline
 \end{DoxyParams}
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=282pt]{_cuda_s_p_h_kernals_8cu_a59c1e6aa2f1fb9792cde8f2ab4eba1d5_icgraph}
+\end{center}
+\end{figure}
+
+
 \hypertarget{_cuda_s_p_h_kernals_8cu_afdcbd8ca539116cc7b8d030b1e418e77}{\index{Cuda\-S\-P\-H\-Kernals.\-cu@{Cuda\-S\-P\-H\-Kernals.\-cu}!point\-Hash@{point\-Hash}}
 \index{point\-Hash@{point\-Hash}!CudaSPHKernals.cu@{Cuda\-S\-P\-H\-Kernals.\-cu}}
 \subsubsection[{point\-Hash}]{\setlength{\rightskip}{0pt plus 5cm}\-\_\-\-\_\-global\-\_\-\-\_\- void point\-Hash (
@@ -407,6 +480,17 @@ Sorts our hash key buffer and postion buffer such that points of the same key oc
 {\em \-\_\-num\-Particles} & -\/ the number of particels in our buffer \\
 \hline
 \end{DoxyParams}
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=282pt]{_cuda_s_p_h_kernals_8cu_a1541f8b1ee73799a0cecc7030773a6a9_icgraph}
+\end{center}
+\end{figure}
+
+
 \hypertarget{_cuda_s_p_h_kernals_8cu_ad682f881cf72f537f3cad1ba7993b5b5}{\index{Cuda\-S\-P\-H\-Kernals.\-cu@{Cuda\-S\-P\-H\-Kernals.\-cu}!viscosity\-Weighting@{viscosity\-Weighting}}
 \index{viscosity\-Weighting@{viscosity\-Weighting}!CudaSPHKernals.cu@{Cuda\-S\-P\-H\-Kernals.\-cu}}
 \subsubsection[{viscosity\-Weighting}]{\setlength{\rightskip}{0pt plus 5cm}\-\_\-\-\_\-device\-\_\-\-\_\- float3 viscosity\-Weighting (
