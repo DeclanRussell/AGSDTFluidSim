@@ -2,7 +2,7 @@ TARGET=FluidSim
 OBJECTS_DIR=obj
 
 #Enter your gencode here!
-GENCODE = arch=compute_52,code=sm_52
+GENCODE = arch=compute_20,code=sm_20
 
 # as I want to support 4.8 and 5 this will set a flag for some of the mac stuff
 # mainly in the types.h file for the setMacVisual which is native in Qt5
@@ -102,10 +102,10 @@ CUDA_SOURCES += cudaSrc/*.cu
 
 # Path to cuda SDK install
 macx:CUDA_DIR = /Developer/NVIDIA/CUDA-6.5
-linux:CUDA_DIR = /usr/local/cuda-6.5
+linux:CUDA_DIR = /opt/cuda-6.5
 # Path to cuda toolkit install
 macx:CUDA_SDK = /Developer/NVIDIA/CUDA-6.5/samples
-linux:CUDA_SDK = /usr/local/cuda-6.5/samples
+linux:CUDA_SDK = /opt/cuda-6.5/samples
 
 #Cuda include paths
 INCLUDEPATH += $$CUDA_DIR/include
@@ -123,7 +123,7 @@ LIBS += -lcudart -lcudadevrt
 CUDA_INC = $$join(INCLUDEPATH,' -I','-I',' ')
 
 # nvcc flags (ptxas option verbose is always useful)
-NVCCFLAGS = --compiler-options  -fno-strict-aliasing --ptxas-options=-v -maxregcount 20
+NVCCFLAGS = --compiler-options  -fno-strict-aliasing --ptxas-options=-v -maxrregcount 20
 
 
 #prepare intermediat cuda compiler
