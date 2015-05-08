@@ -169,6 +169,9 @@ void main(void)
 
     vec3 i = normalize(posEye);
     float fresnalRatio = fresnalConst + (1.0 - fresnalConst) * pow((1.0 - dot(-i, n)), fresnalPower);
+    if(fresnalRatio>1)fresnalRatio= 1;
+    if(fresnalRatio<0)fresnalRatio= 0;
+
 
     vec3 normN = vec3(normalMatrix * vec4(n,1.0));
     vec3 Refract = refract(i, normN,refractRatio);

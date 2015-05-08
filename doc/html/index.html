@@ -104,7 +104,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 <div class="contents">
 <div class="textblock"><h1>Cuda Smoothed Particle Hydrodynamics Report </h1>
 <div class="image">
-<img src="FinalRender2.png" alt="FinalRender2.png"/>
+<img src="FluidRender.png" alt="FluidRender.png"/>
 </div>
  <h1>Introduction </h1>
 <p>The contents of this report follows the design and implimentation of a real time fluid simulation. This implimentation takes the form of a 3D Langrangian grid and takes advanteges of the speed of Nvidia's Cuda API to create a fast realistic fluid simulation. In the following sections you will find an explenation of maths used, optimisations made and the implimentation of this artifact.</p>
@@ -398,6 +398,12 @@ Thickness Render Pass</div></div>
 </li>
 <li>Final Shading For our final shading I do simple cube map reflection and refraction on our surface using the eyespace normal. You then blend your disired water colour with the refraction colour based on value from our thickness pass.<br/>
  <div class="image">
+<img src="FluidRender6.png" alt="FluidRender6.png"/>
+</div>
+ <div class="image">
+<img src="FluidRender5.png" alt="FluidRender5.png"/>
+</div>
+ <div class="image">
 <img src="FinalRender.png" alt="FinalRender.png"/>
 </div>
  <div class="image">
@@ -433,7 +439,7 @@ OpenGL Texture Library Class design</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri May 8 2015 01:16:24 for Cuda SPH Fluid Simulation - Declan Russell by
+    <li class="footer">Generated on Sat May 9 2015 00:02:44 for Cuda SPH Fluid Simulation - Declan Russell by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

@@ -190,7 +190,7 @@ The rendering technique of this simulation is taken from \mbox{[}G\-S10\mbox{]} 
  We can generate a thickness pass by rendering our particle spheres with additive blending and no depth test. This will mean that particles will render on top of each other. When particles are rendered on top of each other the values are accumilated thus giving us higher color values in bigger densities.\par
  
 \item Final Shading For our final shading I do simple cube map reflection and refraction on our surface using the eyespace normal. You then blend your disired water colour with the refraction colour based on value from our thickness pass.\par
-  
+    
 \end{DoxyEnumerate}
 
 \section*{Some Design Choices }

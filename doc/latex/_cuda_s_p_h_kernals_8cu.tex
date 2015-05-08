@@ -51,7 +51,7 @@ void \hyperlink{_cuda_s_p_h_kernals_8cu_a5ef63636297ac3ddbc0866064a75e12d}{creat
 \begin{DoxyCompactList}\small\item\em Creates an index array for our cells using thrusts exclusive scan. \end{DoxyCompactList}\item 
 void \hyperlink{_cuda_s_p_h_kernals_8cu_a59c1e6aa2f1fb9792cde8f2ab4eba1d5}{fluid\-Solver} (cuda\-Stream\-\_\-t \-\_\-stream, float3 $\ast$d\-\_\-pos\-Array, float3 $\ast$d\-\_\-vel\-Array, unsigned int $\ast$d\-\_\-cell\-Occ\-Array, unsigned int $\ast$d\-\_\-cell\-Indx\-Array, unsigned int \-\_\-hash\-Table\-Size, int \-\_\-hash\-Resolution, unsigned int \-\_\-max\-Num\-Threads, float \-\_\-smoothing\-Length, float \-\_\-timestep, float \-\_\-particle\-Mass, float \-\_\-rest\-Density, float \-\_\-gas\-Constant, float \-\_\-vis\-Coef, float \-\_\-vel\-Correction, float \-\_\-dens\-Kern\-Const, float \-\_\-press\-Kern\-Const, float \-\_\-visc\-Kern\-Const)
 \begin{DoxyCompactList}\small\item\em Solver function that will call our solver kernal to calculate the new positions of the particles in. \end{DoxyCompactList}\item 
-void \hyperlink{_cuda_s_p_h_kernals_8cu_a1985239f9afd133a3db010848f3950f6}{collision\-Detection\-Solver} (cuda\-Stream\-\_\-t \-\_\-stream, \hyperlink{struct_simple_cuboid_collision_object}{Simple\-Cuboid\-Collision\-Object} $\ast$d\-\_\-plane\-Array, unsigned int \-\_\-num\-Objects, float3 $\ast$d\-\_\-pos\-Array, float3 $\ast$d\-\_\-vel\-Array, float \-\_\-time\-Step, unsigned int \-\_\-num\-Particles, unsigned int \-\_\-max\-Num\-Threads)
+void \hyperlink{_cuda_s_p_h_kernals_8cu_a7a0632beb23e4ab002f75b630f13cdb8}{collision\-Detection\-Solver} (cuda\-Stream\-\_\-t \-\_\-stream, \hyperlink{struct_simple_cuboid_collision_object}{Simple\-Cuboid\-Collision\-Object} $\ast$d\-\_\-coll\-Obj\-Array, unsigned int \-\_\-num\-Objects, float3 $\ast$d\-\_\-pos\-Array, float3 $\ast$d\-\_\-vel\-Array, float \-\_\-time\-Step, unsigned int \-\_\-num\-Particles, unsigned int \-\_\-max\-Num\-Threads)
 \begin{DoxyCompactList}\small\item\em Collision detection between particles and planes. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -68,12 +68,12 @@ Declan Russell
 
 
 \subsection{Function Documentation}
-\hypertarget{_cuda_s_p_h_kernals_8cu_a1985239f9afd133a3db010848f3950f6}{\index{Cuda\-S\-P\-H\-Kernals.\-cu@{Cuda\-S\-P\-H\-Kernals.\-cu}!collision\-Detection\-Solver@{collision\-Detection\-Solver}}
+\hypertarget{_cuda_s_p_h_kernals_8cu_a7a0632beb23e4ab002f75b630f13cdb8}{\index{Cuda\-S\-P\-H\-Kernals.\-cu@{Cuda\-S\-P\-H\-Kernals.\-cu}!collision\-Detection\-Solver@{collision\-Detection\-Solver}}
 \index{collision\-Detection\-Solver@{collision\-Detection\-Solver}!CudaSPHKernals.cu@{Cuda\-S\-P\-H\-Kernals.\-cu}}
 \subsubsection[{collision\-Detection\-Solver}]{\setlength{\rightskip}{0pt plus 5cm}void collision\-Detection\-Solver (
 \begin{DoxyParamCaption}
 \item[{cuda\-Stream\-\_\-t}]{\-\_\-stream, }
-\item[{{\bf Simple\-Cuboid\-Collision\-Object} $\ast$}]{d\-\_\-plane\-Array, }
+\item[{{\bf Simple\-Cuboid\-Collision\-Object} $\ast$}]{d\-\_\-coll\-Obj\-Array, }
 \item[{unsigned int}]{\-\_\-num\-Objects, }
 \item[{float3 $\ast$}]{d\-\_\-pos\-Array, }
 \item[{float3 $\ast$}]{d\-\_\-vel\-Array, }
@@ -81,7 +81,7 @@ Declan Russell
 \item[{unsigned int}]{\-\_\-num\-Particles, }
 \item[{unsigned int}]{\-\_\-max\-Num\-Threads}
 \end{DoxyParamCaption}
-)}}\label{_cuda_s_p_h_kernals_8cu_a1985239f9afd133a3db010848f3950f6}
+)}}\label{_cuda_s_p_h_kernals_8cu_a7a0632beb23e4ab002f75b630f13cdb8}
 
 
 Collision detection between particles and planes. 
@@ -90,9 +90,9 @@ Collision detection between particles and planes.
 \begin{DoxyParams}{Parameters}
 {\em \-\_\-stream} & -\/ the cuda stream we wish this kernal to run on \\
 \hline
-{\em d\-\_\-\-Plane\-Array} & -\/ pointer to device buffer of our planes information \\
+{\em d\-\_\-coll\-Obj\-Array} & -\/ pointer to device buffer of our collision object array \\
 \hline
-{\em \-\_\-num\-Planes} & -\/ number of planes in our array \\
+{\em \-\_\-num\-Objects} & -\/ number of collision objects in our array \\
 \hline
 {\em d\-\_\-pos\-Array} & -\/ pointer to device buffer of our particle positions \\
 \hline
@@ -111,7 +111,7 @@ Here is the caller graph for this function\-:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=342pt]{_cuda_s_p_h_kernals_8cu_a1985239f9afd133a3db010848f3950f6_icgraph}
+\includegraphics[width=342pt]{_cuda_s_p_h_kernals_8cu_a7a0632beb23e4ab002f75b630f13cdb8_icgraph}
 \end{center}
 \end{figure}
 
@@ -233,7 +233,7 @@ Here is the caller graph for this function\-:\nopagebreak
 
 Creates a spatial hash key based on our particle postion. 
 
-This is taken from Teschner, M., Heidelberger, B., Mueller, M., Pomeranets, D. and Gross, M. (2003). Optimized spatial hashing for collision detection of deformable objects 
+
 \begin{DoxyParams}{Parameters}
 {\em \-\_\-stream} & -\/ the cuda stream we wish this kernal to run on \\
 \hline
@@ -355,13 +355,13 @@ our fluid simulation.
 \hline
 {\em d\-\_\-vel\-Array} & -\/ pointer to our gpu buffer that holds the velocities of our particles \\
 \hline
-{\em d\-\_\-acc\-Array} & -\/ pointer to our gpu buffer that holds the accelleration of our particles \\
-\hline
 {\em d\-\_\-cell\-Occ\-Array} & -\/ pointer to our gpu buffer that holds the cell occupancy count of our hash table \\
 \hline
 {\em d\-\_\-cell\-Indx\-Array} & -\/ pointer to our gpu buffer that holds the cell index's of our particles \\
 \hline
 {\em \-\_\-hash\-Table\-Size} & -\/ the size of our hash table. This is used to calculate how many blocks we need to launch our kernal with \\
+\hline
+{\em \-\_\-hash\-Resolution} & -\/ resolution of our hash table \\
 \hline
 {\em \-\_\-max\-Num\-Threads} & -\/ the maximum nuber of threads we need to launch per block \\
 \hline
@@ -474,8 +474,6 @@ Sorts our hash key buffer and postion buffer such that points of the same key oc
 {\em d\-\_\-pos\-Array} & -\/ pointer to our particle position buffer \\
 \hline
 {\em d\-\_\-vel\-Array} & -\/ pointer to our particle velocity buffer \\
-\hline
-{\em d\-\_\-acc\-Array} & -\/ pointer to our particle acceleration buffer \\
 \hline
 {\em \-\_\-num\-Particles} & -\/ the number of particels in our buffer \\
 \hline

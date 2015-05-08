@@ -2,7 +2,7 @@ var _cuda_s_p_h_kernals_8h =
 [
     [ "particleCellProp", "structparticle_cell_prop.html", "structparticle_cell_prop" ],
     [ "SimpleCuboidCollisionObject", "struct_simple_cuboid_collision_object.html", "struct_simple_cuboid_collision_object" ],
-    [ "collisionDetectionSolver", "_cuda_s_p_h_kernals_8h.html#a1985239f9afd133a3db010848f3950f6", null ],
+    [ "collisionDetectionSolver", "_cuda_s_p_h_kernals_8h.html#a7a0632beb23e4ab002f75b630f13cdb8", null ],
     [ "countCellOccupancy", "_cuda_s_p_h_kernals_8h.html#a5f674fd3497767724a4425bbb91a2248", null ],
     [ "createCellIdx", "_cuda_s_p_h_kernals_8h.html#a5ef63636297ac3ddbc0866064a75e12d", null ],
     [ "createHashTable", "_cuda_s_p_h_kernals_8h.html#afdcf7b761d59cb7dc7242693f8098380", null ],

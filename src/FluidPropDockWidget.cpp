@@ -53,7 +53,7 @@ FluidPropDockWidget::FluidPropDockWidget(OpenGLWidget *_fluidWidget, QWidget *pa
     QDoubleSpinBox *partSizeSpnBx = new QDoubleSpinBox(shaderProperties);
     partSizeSpnBx->setMinimum(0.0);
     partSizeSpnBx->setDecimals(3);
-    partSizeSpnBx->setValue(0.02);
+    partSizeSpnBx->setValue(0.2);
     partSizeSpnBx->setSingleStep(0.1);
     connect(partSizeSpnBx,SIGNAL(valueChanged(double)), this, SLOT(setPointSize(double)));
     shadPropLayout->addWidget(partSizeSpnBx,0,1,1,1);
@@ -64,7 +64,7 @@ FluidPropDockWidget::FluidPropDockWidget(OpenGLWidget *_fluidWidget, QWidget *pa
     QDoubleSpinBox *partThicknessSpnBx = new QDoubleSpinBox(shaderProperties);
     partThicknessSpnBx->setMinimum(0.0);
     partThicknessSpnBx->setDecimals(6);
-    partThicknessSpnBx->setValue(0.01);
+    partThicknessSpnBx->setValue(0.04);
     partThicknessSpnBx->setSingleStep(0.01);
     connect(partThicknessSpnBx,SIGNAL(valueChanged(double)), this, SLOT(setThickness(double)));
     shadPropLayout->addWidget(partThicknessSpnBx,1,1,1,1);
@@ -112,7 +112,7 @@ FluidPropDockWidget::FluidPropDockWidget(OpenGLWidget *_fluidWidget, QWidget *pa
     QLabel *refRatLbl = new QLabel("Refraction Ratio:",shaderProperties);
     shadPropLayout->addWidget(refRatLbl,7,0,1,1);
     QDoubleSpinBox *refRatSpnBx = new QDoubleSpinBox(shaderProperties);
-    refRatSpnBx->setValue(0.2);
+    refRatSpnBx->setValue(0.9);
     refRatSpnBx->setMaximum(1.0);
     refRatSpnBx->setMinimum(0.0);
     refRatSpnBx->setDecimals(3);

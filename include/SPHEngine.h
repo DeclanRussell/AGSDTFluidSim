@@ -122,7 +122,7 @@ public:
     /// @param _restCoef - coeficient of restitution of our container in our 3 axis
     /// @param _isContainer - indicate whether or not we are adding a container of a box
     //----------------------------------------------------------------------------------------------------------------------
-    void addCollisionObject(float3 _min, float3 _max, float3 _restCoef, bool _isContainer);
+    void addCollisionObject(float3 _min, float3 _max, float3 _restCoef);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief accessor to number of particles in simulation
     //----------------------------------------------------------------------------------------------------------------------

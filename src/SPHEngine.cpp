@@ -56,7 +56,7 @@ void SPHEngine::init(){
     m_dCellOccBuffer = 0;
 
     //add some walls to keep our particles in our grid
-    addCollisionObject(make_float3(0),make_float3(m_maxGridDim-m_smoothingLength),make_float3(1.f,0.f,1.f),true);
+    addCollisionObject(make_float3(0),make_float3(m_maxGridDim-m_smoothingLength),make_float3(1.f,0.5f,1.f));
     //create our initial particles
     m_spawnParticlesPos = make_float3(2,0,2);
     m_spawnParticlesPos.y = m_smoothingLength;
@@ -374,7 +374,7 @@ void SPHEngine::calcKernalConsts()
     std::cout<<"Viscosity Const: "<<m_viscWeightConst<<std::endl;
 }
 //----------------------------------------------------------------------------------------------------------------------
-void SPHEngine::addCollisionObject(float3 _min, float3 _max, float3 _restCoef,bool _isContainer){
+void SPHEngine::addCollisionObject(float3 _min, float3 _max, float3 _restCoef){
     if(m_numCollisionObjects==0){
         //increment our count
         m_numCollisionObjects++;
@@ -385,7 +385,6 @@ void SPHEngine::addCollisionObject(float3 _min, float3 _max, float3 _restCoef,bo
         c.p1 = make_float4(_min,1.0);
         c.p2 = make_float4(_max,1.0);
         c.restitution = _restCoef;
-        c.isContainer = _isContainer;
         //copy our data onto our device
         cudaMemcpy(m_dCollisionObjectBuffer, &c, sizeof(SimpleCuboidCollisionObject), cudaMemcpyHostToDevice);
     }
@@ -407,7 +406,6 @@ void SPHEngine::addCollisionObject(float3 _min, float3 _max, float3 _restCoef,bo
         cArray[m_numCollisionObjects-1].p1 = make_float4(_min,1.0);
         cArray[m_numCollisionObjects-1].p2 = make_float4(_max,1.0);
         cArray[m_numCollisionObjects-1].restitution = _restCoef;
-        cArray[m_numCollisionObjects-1].isContainer = _isContainer;
 
         //copy our data onto our device
         cudaMemcpy(tempBuffer, cArray, m_numCollisionObjects * sizeof(SimpleCuboidCollisionObject), cudaMemcpyHostToDevice);

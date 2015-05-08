@@ -18,12 +18,14 @@ int FluidShader::m_height;
 //----------------------------------------------------------------------------------------------------------------------
 FluidShader::FluidShader(int _width, int _height)
 {
+    m_width = _width;
+    m_height = _height;
     //init our point size
     m_pointSize = 0.2f;
     //init refraction and fresnal powers
-    setRefractionRatio(0.2f);
+    setRefractionRatio(0.9f);
     m_fresnalPower = 3;
-    m_pointThickness = 0.01f;
+    m_pointThickness = 0.04f;
     //our blur shading init params
     m_blurFalloff = 10.f;
     m_blurRadius = 7.f;

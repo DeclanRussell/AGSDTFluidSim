@@ -29,7 +29,6 @@ struct SimpleCuboidCollisionObject{
     float4 p1;
     float4 p2;
     float3 restitution;
-    bool isContainer;
     __device__ void collide(float3 &_pos, float3 &_vel);
 
 };
@@ -42,8 +41,6 @@ struct SimpleCuboidCollisionObject{
 void createCellIdx(unsigned int* d_cellOccArray, unsigned int _size, unsigned int *d_cellIdxArray);
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Creates a spatial hash key based on our particle postion
-/// @brief This is taken from Teschner, M., Heidelberger, B., Mueller, M., Pomeranets, D. and Gross, M.
-/// @brief (2003). Optimized spatial hashing for collision detection of deformable objects
 /// @param _stream - the cuda stream we wish this kernal to run on
 /// @param d_hashArray - a pointer to the cuda buffer that we wish to store our hash keys
 /// @param d_posArray - pointer to the cuda buffer that holds the particle postions we wish to hash
@@ -58,7 +55,6 @@ void createHashTable(cudaStream_t _stream,unsigned int* d_hashArray, float3* d_p
 /// @param d_hashArray - pointer to our hash key buffer
 /// @param d_posArray - pointer to our particle position buffer
 /// @param d_velArray - pointer to our particle velocity buffer
-/// @param d_accArray - pointer to our particle acceleration buffer
 /// @param _numParticles - the number of particels in our buffer
 //----------------------------------------------------------------------------------------------------------------------
 void sortByKey(unsigned int* d_hashArray, float3* d_posArray, float3 *d_velArray, unsigned int _numParticles);
@@ -85,10 +81,10 @@ void fillUint(unsigned int *_pointer, unsigned int _arraySize, unsigned int _fil
 /// @param _stream - the cuda stream we wish this kernal to run on
 /// @param d_posArray - pointer to our gpu buffer that holds the postions of our particles
 /// @param d_velArray - pointer to our gpu buffer that holds the velocities of our particles
-/// @param d_accArray - pointer to our gpu buffer that holds the accelleration of our particles
 /// @param d_cellOccArray - pointer to our gpu buffer that holds the cell occupancy count of our hash table
 /// @param d_cellIndxArray - pointer to our gpu buffer that holds the cell index's of our particles
 /// @param _hashTableSize - the size of our hash table. This is used to calculate how many blocks we need to launch our kernal with
+/// @param _hashResolution - resolution of our hash table
 /// @param _maxNumThreads - the maximum nuber of threads we need to launch per block
 /// @param _smoothingLength - smoothing length of our simulation. Can also be thought of as cell size.
 /// @param _timeStep - the timestep that we want to increment our particles positions in our solver
@@ -105,15 +101,15 @@ void fluidSolver(cudaStream_t _stream, float3 *d_posArray, float3 *d_velArray, u
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Collision detection between particles and planes
 /// @param _stream - the cuda stream we wish this kernal to run on
-/// @param d_PlaneArray - pointer to device buffer of our planes information
-/// @param _numPlanes - number of planes in our array
+/// @param d_collObjArray - pointer to device buffer of our collision object array
+/// @param _numObjects - number of collision objects in our array
 /// @param d_posArray - pointer to device buffer of our particle positions
 /// @param d_velArray - pointer to device buffer of our particle velocities
 /// @param _timeStep - time step of our update
 /// @param _numParticles - the number of particles in our scene
 /// @param _maxNumThreads - the maximum nuber of threads we need to launch per block
 //----------------------------------------------------------------------------------------------------------------------
-void collisionDetectionSolver(cudaStream_t _stream, SimpleCuboidCollisionObject* d_planeArray, unsigned int _numObjects, float3 *d_posArray, float3 *d_velArray, float _timeStep, unsigned int _numParticles, unsigned int _maxNumThreads);
+void collisionDetectionSolver(cudaStream_t _stream, SimpleCuboidCollisionObject* d_collObjArray, unsigned int _numObjects, float3 *d_posArray, float3 *d_velArray, float _timeStep, unsigned int _numParticles, unsigned int _maxNumThreads);
 //----------------------------------------------------------------------------------------------------------------------
 
 #endif // HELLOCUDA_H

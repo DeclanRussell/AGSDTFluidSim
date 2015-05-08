@@ -271,112 +271,31 @@ __global__ void fluidSolverPerCellKernal(int _maxSamples, float3 *d_posArray, fl
 /// @param _vel - velocity of the particle
 //----------------------------------------------------------------------------------------------------------------------
 __device__ void SimpleCuboidCollisionObject::collide(float3 &_pos, float3 &_vel){
-    if(isContainer){
-        if(_pos.x<p1.x){
-            _pos.x = p1.x;
-            _vel.x = -_vel.x * restitution.x;
-        }
-        if(_pos.x>p2.x){
-            _pos.x = p2.x;
-            _vel.x = -_vel.x * restitution.x;
-        }
-        if(_pos.y<p1.y){
-            _pos.y = p1.y;
-            _vel.y = -_vel.y * restitution.y;
-        }
-        if(_pos.y>p2.y){
-            _pos.y = p2.y;
-            _vel.y = -_vel.y * restitution.y;
-        }
-        if(_pos.z<p1.z){
-            _pos.z = p1.z;
-            _vel.z = -_vel.z * restitution.z;
-        }
-        if(_pos.z>p2.z){
-            _pos.z = p2.z;
-            _vel.z = -_vel.z * restitution.z;
-        }
+    if(_pos.x<p1.x){
+        _pos.x = p1.x;
+        _vel.x = -_vel.x * restitution.x;
     }
-    else{
-        if(_pos.x>p1.x&&_pos.x<p2.x&&_pos.y>p1.y&&_pos.y<p2.y&&_pos.z>p1.z&&_pos.z<p2.z){
-            float3 negVel = -_vel;
-            //test our velocity against all 6 planes of cube
-            float t = INFINITY;
-            bool validTFound = false;
-            float3 n = make_float3(1.f,0.f,0.f);
-            float3 p = make_float3(p1.x,0.f,0.f);
-            float temp;
-            float denom = dot(n,negVel);
-            //parallel no intesection
-            if(denom>0.f){ // more than something small
-                temp = dot(p-_pos,n)/denom;
-                if(temp<t&&temp>0){
-                    t=temp;
-                    validTFound = true;
-                }
-            }
-            n = make_float3(-1.f,0.f,0.f);
-            p = make_float3(p2.x,0.f,0.f);
-            denom = dot(n,negVel);
-            //parallel no intesection
-            if(denom>0.f){ // more than something small
-                temp = dot(p-_pos,n)/denom;
-                if(temp<t&&temp>0){
-                    t=temp;
-                    validTFound = true;
-                }
-            }
-            n = make_float3(0.f,1.f,0.f);
-            p = make_float3(0.f,p1.y,0.f);
-            denom = dot(n,negVel);
-            //parallel no intesection
-            if(denom>0.f){ // more than something small
-                temp = dot(p-_pos,n)/denom;
-                if(temp<t&&temp>0){
-                    t=temp;
-                    validTFound = true;
-                }
-            }
-            n = make_float3(0.f,-1.f,0.f);
-            p = make_float3(0.f,p2.y,0.f);
-            denom = dot(n,negVel);
-            //parallel no intesection
-            if(denom>0.f){ // more than something small
-                temp = dot(p-_pos,n)/denom;
-                if(temp<t&&temp>0){
-                    t=temp;
-                    validTFound = true;
-                }
-            }
-            n = make_float3(0.f,1.f,1.f);
-            p = make_float3(0.f,0.f,p1.z);
-            denom = dot(n,negVel);
-            //parallel no intesection
-            if(denom>0.f){ // more than something small
-                temp = dot(p-_pos,n)/denom;
-                if(temp<t&&temp>0){
-                    t=temp;
-                    validTFound = true;
-                }
-            }
-            n = make_float3(0.f,1.f,-1.f);
-            p = make_float3(0.f,0.f,p2.z);
-            denom = dot(n,negVel);
-            //parallel no intesection
-            if(denom>0.f){ // more than something small
-                temp = dot(p-_pos,n)/denom;
-                if(temp<t&&temp>0){
-                    t=temp;
-                    validTFound = true;
-                }
-            }
-            if(validTFound){
-                printf("found");
-                _pos = _pos + t*negVel;
-                _vel = negVel * restitution;
-            }
-        }
+    if(_pos.x>p2.x){
+        _pos.x = p2.x;
+        _vel.x = -_vel.x * restitution.x;
     }
+    if(_pos.y<p1.y){
+        _pos.y = p1.y;
+        _vel.y = -_vel.y * restitution.y;
+    }
+    if(_pos.y>p2.y){
+        _pos.y = p2.y;
+        _vel.y = -_vel.y * restitution.y;
+    }
+    if(_pos.z<p1.z){
+        _pos.z = p1.z;
+        _vel.z = -_vel.z * restitution.z;
+    }
+    if(_pos.z>p2.z){
+        _pos.z = p2.z;
+        _vel.z = -_vel.z * restitution.z;
+    }
+
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -534,10 +453,10 @@ void fluidSolver(cudaStream_t _stream, float3 *d_posArray, float3 *d_velArray, u
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void collisionDetectionSolver(cudaStream_t _stream, SimpleCuboidCollisionObject *d_planeArray, unsigned int _numObjects, float3 *d_posArray, float3 *d_velArray, float _timeStep, unsigned int _numParticles, unsigned int _maxNumThreads){
+void collisionDetectionSolver(cudaStream_t _stream, SimpleCuboidCollisionObject *d_collObjArray, unsigned int _numObjects, float3 *d_posArray, float3 *d_velArray, float _timeStep, unsigned int _numParticles, unsigned int _maxNumThreads){
     //calculate how many blocks we want
     int blocks = ceil(_numParticles/_maxNumThreads)+1;
     //launch collision solver
-    collisionDetKernal<<<blocks,_maxNumThreads,_numObjects*sizeof(SimpleCuboidCollisionObject),_stream>>>(d_planeArray,_numObjects,d_posArray,d_velArray,_numParticles,_timeStep);
+    collisionDetKernal<<<blocks,_maxNumThreads,_numObjects*sizeof(SimpleCuboidCollisionObject),_stream>>>(d_collObjArray,_numObjects,d_posArray,d_velArray,_numParticles,_timeStep);
 
 }

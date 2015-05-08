@@ -172,16 +172,16 @@ __global__ void&#160;</td><td class="memItemRight" valign="bottom"><b>collisionD
 <tr class="memitem:a59c1e6aa2f1fb9792cde8f2ab4eba1d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_cuda_s_p_h_kernals_8cu.html#a59c1e6aa2f1fb9792cde8f2ab4eba1d5">fluidSolver</a> (cudaStream_t _stream, float3 *d_posArray, float3 *d_velArray, unsigned int *d_cellOccArray, unsigned int *d_cellIndxArray, unsigned int _hashTableSize, int _hashResolution, unsigned int _maxNumThreads, float _smoothingLength, float _timestep, float _particleMass, float _restDensity, float _gasConstant, float _visCoef, float _velCorrection, float _densKernConst, float _pressKernConst, float _viscKernConst)</td></tr>
 <tr class="memdesc:a59c1e6aa2f1fb9792cde8f2ab4eba1d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Solver function that will call our solver kernal to calculate the new positions of the particles in.  <a href="#a59c1e6aa2f1fb9792cde8f2ab4eba1d5">More...</a><br/></td></tr>
 <tr class="separator:a59c1e6aa2f1fb9792cde8f2ab4eba1d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1985239f9afd133a3db010848f3950f6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_cuda_s_p_h_kernals_8cu.html#a1985239f9afd133a3db010848f3950f6">collisionDetectionSolver</a> (cudaStream_t _stream, <a class="el" href="struct_simple_cuboid_collision_object.html">SimpleCuboidCollisionObject</a> *d_planeArray, unsigned int _numObjects, float3 *d_posArray, float3 *d_velArray, float _timeStep, unsigned int _numParticles, unsigned int _maxNumThreads)</td></tr>
-<tr class="memdesc:a1985239f9afd133a3db010848f3950f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collision detection between particles and planes.  <a href="#a1985239f9afd133a3db010848f3950f6">More...</a><br/></td></tr>
-<tr class="separator:a1985239f9afd133a3db010848f3950f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a0632beb23e4ab002f75b630f13cdb8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_cuda_s_p_h_kernals_8cu.html#a7a0632beb23e4ab002f75b630f13cdb8">collisionDetectionSolver</a> (cudaStream_t _stream, <a class="el" href="struct_simple_cuboid_collision_object.html">SimpleCuboidCollisionObject</a> *d_collObjArray, unsigned int _numObjects, float3 *d_posArray, float3 *d_velArray, float _timeStep, unsigned int _numParticles, unsigned int _maxNumThreads)</td></tr>
+<tr class="memdesc:a7a0632beb23e4ab002f75b630f13cdb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collision detection between particles and planes.  <a href="#a7a0632beb23e4ab002f75b630f13cdb8">More...</a><br/></td></tr>
+<tr class="separator:a7a0632beb23e4ab002f75b630f13cdb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><dl class="section author"><dt>Author</dt><dd>Declan Russell </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>08/03/2015 </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>1.0 </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a1985239f9afd133a3db010848f3950f6"></a>
+<a class="anchor" id="a7a0632beb23e4ab002f75b630f13cdb8"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -195,7 +195,7 @@ __global__ void&#160;</td><td class="memItemRight" valign="bottom"><b>collisionD
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct_simple_cuboid_collision_object.html">SimpleCuboidCollisionObject</a> *&#160;</td>
-          <td class="paramname"><em>d_planeArray</em>, </td>
+          <td class="paramname"><em>d_collObjArray</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -245,8 +245,8 @@ __global__ void&#160;</td><td class="memItemRight" valign="bottom"><b>collisionD
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">_stream</td><td>- the cuda stream we wish this kernal to run on </td></tr>
-    <tr><td class="paramname">d_PlaneArray</td><td>- pointer to device buffer of our planes information </td></tr>
-    <tr><td class="paramname">_numPlanes</td><td>- number of planes in our array </td></tr>
+    <tr><td class="paramname">d_collObjArray</td><td>- pointer to device buffer of our collision object array </td></tr>
+    <tr><td class="paramname">_numObjects</td><td>- number of collision objects in our array </td></tr>
     <tr><td class="paramname">d_posArray</td><td>- pointer to device buffer of our particle positions </td></tr>
     <tr><td class="paramname">d_velArray</td><td>- pointer to device buffer of our particle velocities </td></tr>
     <tr><td class="paramname">_timeStep</td><td>- time step of our update </td></tr>
@@ -259,8 +259,8 @@ __global__ void&#160;</td><td class="memItemRight" valign="bottom"><b>collisionD
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="_cuda_s_p_h_kernals_8cu_a1985239f9afd133a3db010848f3950f6_icgraph.png" border="0" usemap="#_cuda_s_p_h_kernals_8cu_a1985239f9afd133a3db010848f3950f6_icgraph" alt=""/></div>
-<map name="_cuda_s_p_h_kernals_8cu_a1985239f9afd133a3db010848f3950f6_icgraph" id="_cuda_s_p_h_kernals_8cu_a1985239f9afd133a3db010848f3950f6_icgraph">
+<div class="center"><img src="_cuda_s_p_h_kernals_8cu_a7a0632beb23e4ab002f75b630f13cdb8_icgraph.png" border="0" usemap="#_cuda_s_p_h_kernals_8cu_a7a0632beb23e4ab002f75b630f13cdb8_icgraph" alt=""/></div>
+<map name="_cuda_s_p_h_kernals_8cu_a7a0632beb23e4ab002f75b630f13cdb8_icgraph" id="_cuda_s_p_h_kernals_8cu_a7a0632beb23e4ab002f75b630f13cdb8_icgraph">
 <area shape="rect" id="node2" href="class_s_p_h_engine.html#a1a17b5c04756850b68cf95b917019241" title="updates our particles positions with navier&#45;stokes equations based on timestep of the update..." alt="" coords="217,5,354,32"/></map>
 </div>
 </p>
@@ -494,7 +494,6 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p>Creates a spatial hash key based on our particle postion. </p>
-<p>This is taken from Teschner, M., Heidelberger, B., Mueller, M., Pomeranets, D. and Gross, M. (2003). Optimized spatial hashing for collision detection of deformable objects </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">_stream</td><td>- the cuda stream we wish this kernal to run on </td></tr>
@@ -740,10 +739,10 @@ Here is the caller graph for this function:</div>
     <tr><td class="paramname">_stream</td><td>- the cuda stream we wish this kernal to run on </td></tr>
     <tr><td class="paramname">d_posArray</td><td>- pointer to our gpu buffer that holds the postions of our particles </td></tr>
     <tr><td class="paramname">d_velArray</td><td>- pointer to our gpu buffer that holds the velocities of our particles </td></tr>
-    <tr><td class="paramname">d_accArray</td><td>- pointer to our gpu buffer that holds the accelleration of our particles </td></tr>
     <tr><td class="paramname">d_cellOccArray</td><td>- pointer to our gpu buffer that holds the cell occupancy count of our hash table </td></tr>
     <tr><td class="paramname">d_cellIndxArray</td><td>- pointer to our gpu buffer that holds the cell index's of our particles </td></tr>
     <tr><td class="paramname">_hashTableSize</td><td>- the size of our hash table. This is used to calculate how many blocks we need to launch our kernal with </td></tr>
+    <tr><td class="paramname">_hashResolution</td><td>- resolution of our hash table </td></tr>
     <tr><td class="paramname">_maxNumThreads</td><td>- the maximum nuber of threads we need to launch per block </td></tr>
     <tr><td class="paramname">_smoothingLength</td><td>- smoothing length of our simulation. Can also be thought of as cell size. </td></tr>
     <tr><td class="paramname">_timeStep</td><td>- the timestep that we want to increment our particles positions in our solver </td></tr>
@@ -919,7 +918,6 @@ Here is the caller graph for this function:</div>
     <tr><td class="paramname">d_hashArray</td><td>- pointer to our hash key buffer </td></tr>
     <tr><td class="paramname">d_posArray</td><td>- pointer to our particle position buffer </td></tr>
     <tr><td class="paramname">d_velArray</td><td>- pointer to our particle velocity buffer </td></tr>
-    <tr><td class="paramname">d_accArray</td><td>- pointer to our particle acceleration buffer </td></tr>
     <tr><td class="paramname">_numParticles</td><td>- the number of particels in our buffer </td></tr>
   </table>
   </dd>
@@ -992,7 +990,7 @@ Here is the caller graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_6467be6741eae6018a2fc0bfe9f0a53b.html">cudaSrc</a></li><li class="navelem"><a class="el" href="_cuda_s_p_h_kernals_8cu.html">CudaSPHKernals.cu</a></li>
-    <li class="footer">Generated on Fri May 8 2015 01:16:24 for Cuda SPH Fluid Simulation - Declan Russell by
+    <li class="footer">Generated on Sat May 9 2015 00:02:44 for Cuda SPH Fluid Simulation - Declan Russell by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>
