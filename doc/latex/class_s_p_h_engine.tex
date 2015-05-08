@@ -109,9 +109,7 @@ float \hyperlink{class_s_p_h_engine_a234554f5b25de8cc34541e1fd0a4b52b}{get\-Spaw
 
 \begin{DoxyCompactList}\small\item\em resets our simulation and deletes all related buffers \end{DoxyCompactList}\item 
 void \hyperlink{class_s_p_h_engine_adaa52f452f1f804bb6a60dea821f2543}{calc\-Kernal\-Consts} ()
-\begin{DoxyCompactList}\small\item\em calculate our kernal constance which depends on our hash cell size \end{DoxyCompactList}\item 
-unsigned int \hyperlink{class_s_p_h_engine_ac97832913d04297e83c33ada3ae5ae53}{next\-Prime\-Num} (int \-\_\-x)
-\begin{DoxyCompactList}\small\item\em a simple function to caluclate next prime number of the inpur variable \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em calculate our kernal constance which depends on our hash cell size \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -163,18 +161,21 @@ unsigned int \hyperlink{class_s_p_h_engine_ac97832913d04297e83c33ada3ae5ae53}{ne
 \hypertarget{class_s_p_h_engine_ab9cc2ab7a2caed7c9a7a29b56285af05}{float \hyperlink{class_s_p_h_engine_ab9cc2ab7a2caed7c9a7a29b56285af05}{m\-\_\-visc\-Weight\-Const}}\label{class_s_p_h_engine_ab9cc2ab7a2caed7c9a7a29b56285af05}
 
 \begin{DoxyCompactList}\small\item\em constant to calculate our viscosity kernal. Cheaper to calculate once on C\-P\-U. \end{DoxyCompactList}\item 
-\hypertarget{class_s_p_h_engine_a81f5be51a8eeb86e0e5a42e4a2f40ef7}{float \hyperlink{class_s_p_h_engine_a81f5be51a8eeb86e0e5a42e4a2f40ef7}{m\-\_\-smoothing\-Length}}\label{class_s_p_h_engine_a81f5be51a8eeb86e0e5a42e4a2f40ef7}
-
-\begin{DoxyCompactList}\small\item\em the smoothing length of our simulation. \end{DoxyCompactList}\item 
 \hypertarget{class_s_p_h_engine_aec655d6cf4f291f096a3a00118944fae}{float \hyperlink{class_s_p_h_engine_aec655d6cf4f291f096a3a00118944fae}{m\-\_\-cell\-Size}}\label{class_s_p_h_engine_aec655d6cf4f291f096a3a00118944fae}
 
 \begin{DoxyCompactList}\small\item\em the cell size of our hash function \end{DoxyCompactList}\item 
 \hypertarget{class_s_p_h_engine_a751b81e76082f5e8aa030a6d7e4f339e}{unsigned int \hyperlink{class_s_p_h_engine_a751b81e76082f5e8aa030a6d7e4f339e}{m\-\_\-num\-Particle\-Per\-Cell}}\label{class_s_p_h_engine_a751b81e76082f5e8aa030a6d7e4f339e}
 
 \begin{DoxyCompactList}\small\item\em the maximum number of particles per cell \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a1b1e56bc8e188a5c85bbadb9d3ff0d6b}{unsigned int \hyperlink{class_s_p_h_engine_a1b1e56bc8e188a5c85bbadb9d3ff0d6b}{m\-\_\-num\-Particles}}\label{class_s_p_h_engine_a1b1e56bc8e188a5c85bbadb9d3ff0d6b}
+
+\begin{DoxyCompactList}\small\item\em the number of particles in our simulation \end{DoxyCompactList}\item 
 \hypertarget{class_s_p_h_engine_a6537ae88a9250d75192b1a9fdab1645d}{float \hyperlink{class_s_p_h_engine_a6537ae88a9250d75192b1a9fdab1645d}{m\-\_\-mass}}\label{class_s_p_h_engine_a6537ae88a9250d75192b1a9fdab1645d}
 
 \begin{DoxyCompactList}\small\item\em The mass of our fluid.  Defaults to 1. User can modify density and volume to change this. \end{DoxyCompactList}\item 
+\hypertarget{class_s_p_h_engine_a81f5be51a8eeb86e0e5a42e4a2f40ef7}{float \hyperlink{class_s_p_h_engine_a81f5be51a8eeb86e0e5a42e4a2f40ef7}{m\-\_\-smoothing\-Length}}\label{class_s_p_h_engine_a81f5be51a8eeb86e0e5a42e4a2f40ef7}
+
+\begin{DoxyCompactList}\small\item\em the smoothing length of our simulation. \end{DoxyCompactList}\item 
 \hypertarget{class_s_p_h_engine_abd4a680dc909727e3026e7c3387bc3a8}{float \hyperlink{class_s_p_h_engine_abd4a680dc909727e3026e7c3387bc3a8}{m\-\_\-density}}\label{class_s_p_h_engine_abd4a680dc909727e3026e7c3387bc3a8}
 
 \begin{DoxyCompactList}\small\item\em the density of our fluid.  Defaults to 1. User may modify this. \end{DoxyCompactList}\item 
@@ -184,9 +185,6 @@ unsigned int \hyperlink{class_s_p_h_engine_ac97832913d04297e83c33ada3ae5ae53}{ne
 \hypertarget{class_s_p_h_engine_a277d7add22691d816b05198c53bb94ab}{float \hyperlink{class_s_p_h_engine_a277d7add22691d816b05198c53bb94ab}{m\-\_\-visc\-Coef}}\label{class_s_p_h_engine_a277d7add22691d816b05198c53bb94ab}
 
 \begin{DoxyCompactList}\small\item\em our viscosity coeficient for our fluid solving \end{DoxyCompactList}\item 
-\hypertarget{class_s_p_h_engine_a1b1e56bc8e188a5c85bbadb9d3ff0d6b}{unsigned int \hyperlink{class_s_p_h_engine_a1b1e56bc8e188a5c85bbadb9d3ff0d6b}{m\-\_\-num\-Particles}}\label{class_s_p_h_engine_a1b1e56bc8e188a5c85bbadb9d3ff0d6b}
-
-\begin{DoxyCompactList}\small\item\em the number of particles in our simulation \end{DoxyCompactList}\item 
 \hypertarget{class_s_p_h_engine_af7bb756facfeba1f59c195c680794fc1}{G\-Luint \hyperlink{class_s_p_h_engine_af7bb756facfeba1f59c195c680794fc1}{m\-\_\-\-V\-A\-O}}\label{class_s_p_h_engine_af7bb756facfeba1f59c195c680794fc1}
 
 \begin{DoxyCompactList}\small\item\em our open\-G\-L V\-A\-O \end{DoxyCompactList}\item 
@@ -365,25 +363,6 @@ accessor to our spawn box size
 
 \begin{DoxyReturn}{Returns}
 float spawn box size 
-\end{DoxyReturn}
-\hypertarget{class_s_p_h_engine_ac97832913d04297e83c33ada3ae5ae53}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!next\-Prime\-Num@{next\-Prime\-Num}}
-\index{next\-Prime\-Num@{next\-Prime\-Num}!SPHEngine@{S\-P\-H\-Engine}}
-\subsubsection[{next\-Prime\-Num}]{\setlength{\rightskip}{0pt plus 5cm}unsigned int S\-P\-H\-Engine\-::next\-Prime\-Num (
-\begin{DoxyParamCaption}
-\item[{int}]{\-\_\-x}
-\end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [private]}}}\label{class_s_p_h_engine_ac97832913d04297e83c33ada3ae5ae53}
-
-
-a simple function to caluclate next prime number of the inpur variable 
-
-
-\begin{DoxyParams}{Parameters}
-{\em \-\_\-x} & -\/ vaule you wish to calculate next prime number for \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-the next lowest prime number higher than our input value \-\_\-\-X 
 \end{DoxyReturn}
 \hypertarget{class_s_p_h_engine_aad9d9bc9a1a7e5f64a5e045c339f8b3e}{\index{S\-P\-H\-Engine@{S\-P\-H\-Engine}!set\-Max\-Num\-Samples@{set\-Max\-Num\-Samples}}
 \index{set\-Max\-Num\-Samples@{set\-Max\-Num\-Samples}!SPHEngine@{S\-P\-H\-Engine}}

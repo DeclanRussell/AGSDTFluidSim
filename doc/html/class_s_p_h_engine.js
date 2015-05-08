@@ -16,7 +16,6 @@ var class_s_p_h_engine =
     [ "getSpawnBoxSize", "class_s_p_h_engine.html#a234554f5b25de8cc34541e1fd0a4b52b", null ],
     [ "getViscCoef", "class_s_p_h_engine.html#a6d3709693af1379db5b60b02171d8c8b", null ],
     [ "init", "class_s_p_h_engine.html#a0df6d1b33d50afb152e2992de5af5700", null ],
-    [ "nextPrimeNum", "class_s_p_h_engine.html#ac97832913d04297e83c33ada3ae5ae53", null ],
     [ "resetSimulation", "class_s_p_h_engine.html#a5e5a0bc3c47805756cd697a16076800d", null ],
     [ "resizeHashTable", "class_s_p_h_engine.html#a3626e4be502cdce3eb88bcdbf5adb2f6", null ],
     [ "setDesity", "class_s_p_h_engine.html#acbc638f7ab8fa2ab356dadf677df10c6", null ],

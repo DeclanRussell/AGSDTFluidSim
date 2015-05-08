@@ -10,7 +10,11 @@
 /// @date 2/3/15 Initial version
 //----------------------------------------------------------------------------------------------------------------------
 
-#include <GL/glew.h>
+#include <ngl/NGLInit.h>
+#include <ngl/Mat4.h>
+#include <ngl/Vec3.h>
+#include <ngl/Camera.h>
+#include <ngl/Text.h> //<-- for writting in GL
 #include <QGLWidget>
 #include <QEvent>
 #include <QResizeEvent>
@@ -18,10 +22,6 @@
 #include <QString>
 #include <QTime>
 #include <QColor>
-#include <ngl/Mat4.h>
-#include <ngl/Vec3.h>
-#include <ngl/Camera.h>
-#include <ngl/Text.h> //<-- for writting in GL
 
 #include "SPHEngine.h"
 #include "FluidShader.h"

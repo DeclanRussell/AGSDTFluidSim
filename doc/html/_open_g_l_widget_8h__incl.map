@@ -1,5 +1,5 @@
 <map id="include/OpenGLWidget.h" name="include/OpenGLWidget.h">
-<area shape="rect" id="node14" href="$_s_p_h_engine_8h.html" title="SPHEngine.h" alt="" coords="1231,80,1333,107"/>
-<area shape="rect" id="node19" href="$_fluid_shader_8h.html" title="FluidShader.h" alt="" coords="756,80,858,107"/>
-<area shape="rect" id="node17" href="$_cuda_s_p_h_kernals_8h.html" title="Used for prototyping our our functions used for our SPH simulation calculations. " alt="" coords="1367,155,1502,181"/>
+<area shape="rect" id="node14" href="$_s_p_h_engine_8h.html" title="SPHEngine.h" alt="" coords="1319,80,1420,107"/>
+<area shape="rect" id="node21" href="$_fluid_shader_8h.html" title="FluidShader.h" alt="" coords="179,80,281,107"/>
+<area shape="rect" id="node19" href="$_cuda_s_p_h_kernals_8h.html" title="Used for prototyping our our functions used for our SPH simulation calculations. " alt="" coords="1596,155,1731,181"/>
 </map>

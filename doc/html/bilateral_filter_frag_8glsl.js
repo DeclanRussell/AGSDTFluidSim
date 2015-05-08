@@ -1,6 +1,6 @@
 var bilateral_filter_frag_8glsl =
 [
-    [ "filter", "bilateral_filter_frag_8glsl.html#a7fc9433dc7caa1f33078fafa0bf43dda", null ],
+    [ "bilFilter", "bilateral_filter_frag_8glsl.html#a4a4466509a3efe0b0eb00be16e5da684", null ],
     [ "main", "bilateral_filter_frag_8glsl.html#a6288eba0f8e8ad3ab1544ad731eb7667", null ],
     [ "blurDepthFalloff", "bilateral_filter_frag_8glsl.html#a834f840f0604abea8d2500555d4fb854", null ],
     [ "depthTex", "bilateral_filter_frag_8glsl.html#ab59292ab7df136fb38e0290755f90dea", null ],

@@ -4,8 +4,7 @@
 #include <iostream>
 #include <time.h>
 
-#include <ngl/NGLInit.h>
-#include <ngl/Random.h>
+
 #include <ngl/ShaderLib.h>
 
 #include "GLTextureLib.h"
@@ -49,7 +48,7 @@ void OpenGLWidget::initializeGL(){
     // gl commands from the lib, if this is not done program will crash
     ngl::NGLInit::instance();
 
-    glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     // enable depth testing for drawing
     glEnable(GL_DEPTH_TEST);
     // enable multisampling for smoother drawing
@@ -131,7 +130,7 @@ void OpenGLWidget::resizeGL(const int _w, const int _h){
     glViewport(0,0,_w,_h);
     m_cam->setShape(45,(float)_w/_h, m_cam->getNear(),m_cam->getFar());
     m_text->setScreenSize(_w,_h);
-    for(int i=0;i<m_fluidShaders.size();i++){
+    for(unsigned int i=0;i<m_fluidShaders.size();i++){
         m_fluidShaders[i]->resize(_w,_h);
     }
 }
@@ -174,7 +173,7 @@ void OpenGLWidget::paintGL(){
     //draw our fluid
     ngl::Mat4 V = m_cam->getViewMatrix();
     ngl::Mat4 P = m_cam->getProjectionMatrix();
-    for(int i=0;i<m_fluidShaders.size();i++){
+    for(unsigned int i=0;i<m_fluidShaders.size();i++){
         ngl::Mat4 M = m_mouseGlobalTX;
         M.m_m[3][0] = m_fluidSimProps[i].m_simPosition.m_x;
         M.m_m[3][1] = m_fluidSimProps[i].m_simPosition.m_y;
@@ -218,7 +217,7 @@ void OpenGLWidget::paintGL(){
     }
     m_text->renderText(10,20,text);
     int totalParticles = 0;
-    for(int i=0;i<m_SPHEngines.size();i++){
+    for(unsigned int i=0;i<m_SPHEngines.size();i++){
         totalParticles+=m_SPHEngines[i]->getNumParticles();
     }
     text.sprintf("Number of particles: %d",totalParticles);

@@ -26,7 +26,7 @@ FluidShader::FluidShader(int _width, int _height)
     m_pointThickness = 0.01f;
     //our blur shading init params
     m_blurFalloff = 10.f;
-    m_blurRadius = 15.f;
+    m_blurRadius = 7.f;
     m_cubeMapCreated = false;
     //set our init fluid color to something nice
     m_fluidColor = ngl::Vec3(0,1,1);

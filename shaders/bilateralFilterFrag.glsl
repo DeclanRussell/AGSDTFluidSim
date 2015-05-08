@@ -39,7 +39,7 @@ out vec4 fragout;
 /// @param blurDir - the direction of our blur
 /// @param depth  - the depth of our current input fragment
 //----------------------------------------------------------------------------------------------------------------------
-float filter(vec2 blurDir, float depth){
+float bilFilter(vec2 blurDir, float depth){
     float sum = 0;
     float wsum = 0;
     float r,w,r2,g;
@@ -73,8 +73,8 @@ void main(void)
         return;
     }
 
-    float result = filter(vec2(1.0f,0.0f),curDepth);
-    result += filter(vec2(0.0f,1.0f),curDepth);
+    float result = bilFilter(vec2(1.0f,0.0f),curDepth);
+    result += bilFilter(vec2(0.0f,1.0f),curDepth);
     result *= 0.5f;
 
     fragout = vec4(result,result,result,1.0);

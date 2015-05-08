@@ -88,7 +88,7 @@ FluidPropDockWidget::FluidPropDockWidget(OpenGLWidget *_fluidWidget, QWidget *pa
     QLabel *blurRadLbl = new QLabel("Blur Radius:",shaderProperties);
     shadPropLayout->addWidget(blurRadLbl,4,0,1,1);
     QDoubleSpinBox *blurRadSpnBx = new QDoubleSpinBox(shaderProperties);
-    blurRadSpnBx->setValue(15);
+    blurRadSpnBx->setValue(7);
     blurRadSpnBx->setDecimals(2);
     blurRadSpnBx->setSingleStep(0.5);
     connect(blurRadSpnBx,SIGNAL(valueChanged(double)), this, SLOT(setBlurRadius(double)));

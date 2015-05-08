@@ -250,9 +250,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:adaa52f452f1f804bb6a60dea821f2543"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#adaa52f452f1f804bb6a60dea821f2543">calcKernalConsts</a> ()</td></tr>
 <tr class="memdesc:adaa52f452f1f804bb6a60dea821f2543"><td class="mdescLeft">&#160;</td><td class="mdescRight">calculate our kernal constance which depends on our hash cell size  <a href="#adaa52f452f1f804bb6a60dea821f2543">More...</a><br/></td></tr>
 <tr class="separator:adaa52f452f1f804bb6a60dea821f2543"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac97832913d04297e83c33ada3ae5ae53"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#ac97832913d04297e83c33ada3ae5ae53">nextPrimeNum</a> (int _x)</td></tr>
-<tr class="memdesc:ac97832913d04297e83c33ada3ae5ae53"><td class="mdescLeft">&#160;</td><td class="mdescRight">a simple function to caluclate next prime number of the inpur variable  <a href="#ac97832913d04297e83c33ada3ae5ae53">More...</a><br/></td></tr>
-<tr class="separator:ac97832913d04297e83c33ada3ae5ae53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -320,10 +317,6 @@ float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cla
 float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#ab9cc2ab7a2caed7c9a7a29b56285af05">m_viscWeightConst</a></td></tr>
 <tr class="memdesc:ab9cc2ab7a2caed7c9a7a29b56285af05"><td class="mdescLeft">&#160;</td><td class="mdescRight">constant to calculate our viscosity kernal. Cheaper to calculate once on CPU. <br/></td></tr>
 <tr class="separator:ab9cc2ab7a2caed7c9a7a29b56285af05"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81f5be51a8eeb86e0e5a42e4a2f40ef7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a81f5be51a8eeb86e0e5a42e4a2f40ef7"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a81f5be51a8eeb86e0e5a42e4a2f40ef7">m_smoothingLength</a></td></tr>
-<tr class="memdesc:a81f5be51a8eeb86e0e5a42e4a2f40ef7"><td class="mdescLeft">&#160;</td><td class="mdescRight">the smoothing length of our simulation. <br/></td></tr>
-<tr class="separator:a81f5be51a8eeb86e0e5a42e4a2f40ef7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec655d6cf4f291f096a3a00118944fae"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aec655d6cf4f291f096a3a00118944fae"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#aec655d6cf4f291f096a3a00118944fae">m_cellSize</a></td></tr>
 <tr class="memdesc:aec655d6cf4f291f096a3a00118944fae"><td class="mdescLeft">&#160;</td><td class="mdescRight">the cell size of our hash function <br/></td></tr>
@@ -332,10 +325,18 @@ float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cla
 unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a751b81e76082f5e8aa030a6d7e4f339e">m_numParticlePerCell</a></td></tr>
 <tr class="memdesc:a751b81e76082f5e8aa030a6d7e4f339e"><td class="mdescLeft">&#160;</td><td class="mdescRight">the maximum number of particles per cell <br/></td></tr>
 <tr class="separator:a751b81e76082f5e8aa030a6d7e4f339e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b1e56bc8e188a5c85bbadb9d3ff0d6b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1b1e56bc8e188a5c85bbadb9d3ff0d6b"></a>
+unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a1b1e56bc8e188a5c85bbadb9d3ff0d6b">m_numParticles</a></td></tr>
+<tr class="memdesc:a1b1e56bc8e188a5c85bbadb9d3ff0d6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">the number of particles in our simulation <br/></td></tr>
+<tr class="separator:a1b1e56bc8e188a5c85bbadb9d3ff0d6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6537ae88a9250d75192b1a9fdab1645d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6537ae88a9250d75192b1a9fdab1645d"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a6537ae88a9250d75192b1a9fdab1645d">m_mass</a></td></tr>
 <tr class="memdesc:a6537ae88a9250d75192b1a9fdab1645d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The mass of our fluid.  Defaults to 1. User can modify density and volume to change this. <br/></td></tr>
 <tr class="separator:a6537ae88a9250d75192b1a9fdab1645d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81f5be51a8eeb86e0e5a42e4a2f40ef7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a81f5be51a8eeb86e0e5a42e4a2f40ef7"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a81f5be51a8eeb86e0e5a42e4a2f40ef7">m_smoothingLength</a></td></tr>
+<tr class="memdesc:a81f5be51a8eeb86e0e5a42e4a2f40ef7"><td class="mdescLeft">&#160;</td><td class="mdescRight">the smoothing length of our simulation. <br/></td></tr>
+<tr class="separator:a81f5be51a8eeb86e0e5a42e4a2f40ef7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd4a680dc909727e3026e7c3387bc3a8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abd4a680dc909727e3026e7c3387bc3a8"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#abd4a680dc909727e3026e7c3387bc3a8">m_density</a></td></tr>
 <tr class="memdesc:abd4a680dc909727e3026e7c3387bc3a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">the density of our fluid.  Defaults to 1. User may modify this. <br/></td></tr>
@@ -348,10 +349,6 @@ float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cla
 float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a277d7add22691d816b05198c53bb94ab">m_viscCoef</a></td></tr>
 <tr class="memdesc:a277d7add22691d816b05198c53bb94ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">our viscosity coeficient for our fluid solving <br/></td></tr>
 <tr class="separator:a277d7add22691d816b05198c53bb94ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b1e56bc8e188a5c85bbadb9d3ff0d6b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1b1e56bc8e188a5c85bbadb9d3ff0d6b"></a>
-unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#a1b1e56bc8e188a5c85bbadb9d3ff0d6b">m_numParticles</a></td></tr>
-<tr class="memdesc:a1b1e56bc8e188a5c85bbadb9d3ff0d6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">the number of particles in our simulation <br/></td></tr>
-<tr class="separator:a1b1e56bc8e188a5c85bbadb9d3ff0d6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7bb756facfeba1f59c195c680794fc1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af7bb756facfeba1f59c195c680794fc1"></a>
 GLuint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_p_h_engine.html#af7bb756facfeba1f59c195c680794fc1">m_VAO</a></td></tr>
 <tr class="memdesc:af7bb756facfeba1f59c195c680794fc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">our openGL VAO <br/></td></tr>
@@ -606,39 +603,6 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a class="anchor" id="ac97832913d04297e83c33ada3ae5ae53"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned int SPHEngine::nextPrimeNum </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>_x</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>a simple function to caluclate next prime number of the inpur variable </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">_x</td><td>- vaule you wish to calculate next prime number for </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>the next lowest prime number higher than our input value _X </dd></dl>
-
-</div>
-</div>
 <a class="anchor" id="aad9d9bc9a1a7e5f64a5e045c339f8b3e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -870,7 +834,7 @@ Here is the call graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_s_p_h_engine.html">SPHEngine</a></li>
-    <li class="footer">Generated on Thu May 7 2015 01:21:13 for Cuda SPH Fluid Simulation - Declan Russell by
+    <li class="footer">Generated on Fri May 8 2015 01:16:24 for Cuda SPH Fluid Simulation - Declan Russell by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

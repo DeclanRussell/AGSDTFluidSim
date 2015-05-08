@@ -1,6 +1,6 @@
-#include "SPHEngine.h"
 
 #include <QString>
+#include "SPHEngine.h"
 #include <vector>
 #include <iostream>
 #include <cmath>
@@ -373,34 +373,6 @@ void SPHEngine::calcKernalConsts()
     std::cout<<"Pressure Const: "<<m_pressWeightConst<<std::endl;
     std::cout<<"Viscosity Const: "<<m_viscWeightConst<<std::endl;
 }
-//----------------------------------------------------------------------------------------------------------------------
-unsigned int SPHEngine::nextPrimeNum(int _x){
-    int nextPrime = _x;
-    bool Prime = false;
-    if(_x<=0){
-        std::cerr<<"The number input is less than or equal to zero"<<std::endl;
-        return 1;
-    }
-    if(_x==2){
-        return 2;
-    }
-    if((_x % 2 ) == 0){
-        nextPrime+=1;
-    }
-    while(!Prime){
-        Prime = true;
-        for(int i = 3; i<sqrt(nextPrime); i+=2){
-            if((nextPrime % i)==0){
-                Prime = false;
-            }
-        }
-        if(!Prime){
-            nextPrime+=2;
-        }
-    }
-    return nextPrime;
-}
-
 //----------------------------------------------------------------------------------------------------------------------
 void SPHEngine::addCollisionObject(float3 _min, float3 _max, float3 _restCoef,bool _isContainer){
     if(m_numCollisionObjects==0){

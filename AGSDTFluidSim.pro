@@ -1,6 +1,9 @@
 TARGET=FluidSim
 OBJECTS_DIR=obj
 
+#Enter your gencode here!
+GENCODE = arch=compute_52,code=sm_52
+
 # as I want to support 4.8 and 5 this will set a flag for some of the mac stuff
 # mainly in the types.h file for the setMacVisual which is native in Qt5
 isEqual(QT_MAJOR_VERSION, 5) {
@@ -69,7 +72,7 @@ CONFIG += console
 CONFIG -= app_bundle
 
 # use this to suppress some warning from boost
-QMAKE_CXXFLAGS_WARN_ON += "-Wno-unused-parameter"
+QMAKE_CXXFLAGS_WARN_ON += "-Wno-unused-parameter -Wno-reorder"
 QMAKE_CXXFLAGS+= -msse -msse2 -msse3
 macx:QMAKE_CXXFLAGS+= -arch x86_64
 macx:INCLUDEPATH+=/usr/local/include/
@@ -120,7 +123,7 @@ LIBS += -lcudart -lcudadevrt
 CUDA_INC = $$join(INCLUDEPATH,' -I','-I',' ')
 
 # nvcc flags (ptxas option verbose is always useful)
-NVCCFLAGS = --compiler-options  -fno-strict-aliasing --ptxas-options=-v
+NVCCFLAGS = --compiler-options  -fno-strict-aliasing --ptxas-options=-v -maxregcount 20
 
 
 #prepare intermediat cuda compiler
@@ -128,7 +131,7 @@ cudaIntr.input = CUDA_SOURCES
 cudaIntr.output = ${OBJECTS_DIR}${QMAKE_FILE_BASE}.o
 
 ## Tweak arch according to your hw's compute capability
-cudaIntr.commands = $$CUDA_DIR/bin/nvcc -m64 -g -gencode arch=compute_52,code=sm_52 -dc $$NVCCFLAGS $$CUDA_INC $$LIBS  ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
+cudaIntr.commands = $$CUDA_DIR/bin/nvcc -m64 -g -gencode $$GENCODE -dc $$NVCCFLAGS $$CUDA_INC $$LIBS  ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
 
 #Set our variable out. These obj files need to be used to create the link obj file
 #and used in our final gcc compilation
@@ -144,7 +147,7 @@ cuda.input = CUDA_OBJ
 cuda.output = ${QMAKE_FILE_BASE}_link.o
 
 # Tweak arch according to your hw's compute capability
-cuda.commands = $$CUDA_DIR/bin/nvcc -m64 -g -gencode arch=compute_52,code=sm_52  -dlink    ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
+cuda.commands = $$CUDA_DIR/bin/nvcc -m64 -g -gencode $$GENCODE  -dlink    ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
 cuda.dependency_type = TYPE_C
 cuda.depend_command = $$CUDA_DIR/bin/nvcc -g -M $$CUDA_INC $$NVCCFLAGS   ${QMAKE_FILE_NAME}
 # Tell Qt that we want add more stuff to the Makefile
