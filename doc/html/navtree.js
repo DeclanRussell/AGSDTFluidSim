@@ -1,7 +1,7 @@
 var NAVTREE =
 [
   [ "Cuda SPH Fluid Simulation - Declan Russell", "index.html", [
-    [ "AGSDTFluidSim", "md__r_e_a_d_m_e.html", null ],
+    [ "AGSDTFluidSim", "md__home_dexternation__a_g_s_d_t_fluid_sim__r_e_a_d_m_e.html", null ],
     [ "Classes", null, [
       [ "Class List", "annotated.html", "annotated" ],
       [ "Class Index", "classes.html", null ],
