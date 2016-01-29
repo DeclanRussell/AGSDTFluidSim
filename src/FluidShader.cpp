@@ -251,8 +251,8 @@ void FluidShader::init(){
     //create the program
     shader->createShaderProgram("SkyBoxShader");
     //add our shaders
-    shader->attachShader("skyBoxVert",ngl::VERTEX);
-    shader->attachShader("skyBoxFrag",ngl::FRAGMENT);
+    shader->attachShader("skyBoxVert",ngl::ShaderType::VERTEX);
+    shader->attachShader("skyBoxFrag",ngl::ShaderType::FRAGMENT);
     //load the source
     shader->loadShaderSource("skyBoxVert","shaders/skyBoxVert.glsl");
     shader->loadShaderSource("skyBoxFrag","shaders/skyBoxFrag.glsl");
@@ -269,8 +269,8 @@ void FluidShader::init(){
     //create the program
     shader->createShaderProgram("ParticleDepth");
     //add our shaders
-    shader->attachShader("particleDepthVert",ngl::VERTEX);
-    shader->attachShader("particleDepthFrag",ngl::FRAGMENT);
+    shader->attachShader("particleDepthVert",ngl::ShaderType::VERTEX);
+    shader->attachShader("particleDepthFrag",ngl::ShaderType::FRAGMENT);
     //load the source
     shader->loadShaderSource("particleDepthVert","shaders/particleDepthVert.glsl");
     shader->loadShaderSource("particleDepthFrag","shaders/particleDepthFrag.glsl");
@@ -288,8 +288,8 @@ void FluidShader::init(){
     //create the program
     shader->createShaderProgram("ThicknessShader");
     //add our shaders
-    shader->attachShader("thicknessVert",ngl::VERTEX);
-    shader->attachShader("thicknessFrag",ngl::FRAGMENT);
+    shader->attachShader("thicknessVert",ngl::ShaderType::VERTEX);
+    shader->attachShader("thicknessFrag",ngl::ShaderType::FRAGMENT);
     //load the source
     shader->loadShaderSource("thicknessVert","shaders/thicknessVert.glsl");
     shader->loadShaderSource("thicknessFrag","shaders/thicknessFrag.glsl");
@@ -307,8 +307,8 @@ void FluidShader::init(){
     //creat program
     shader->createShaderProgram("BilateralFilter");
     //ass shaders
-    shader->attachShader("bilateralFilterVert",ngl::VERTEX);
-    shader->attachShader("bilateralFilterFrag",ngl::FRAGMENT);
+    shader->attachShader("bilateralFilterVert",ngl::ShaderType::VERTEX);
+    shader->attachShader("bilateralFilterFrag",ngl::ShaderType::FRAGMENT);
     //load source
     shader->loadShaderSource("bilateralFilterVert","shaders/bilateralFilterVert.glsl");
     shader->loadShaderSource("bilateralFilterFrag","shaders/bilateralFilterFrag.glsl");
@@ -325,8 +325,8 @@ void FluidShader::init(){
     //create program
     shader->createShaderProgram("FluidShader");
     //add shaders
-    shader->attachShader("fluidShaderVert",ngl::VERTEX);
-    shader->attachShader("fluidShaderFrag",ngl::FRAGMENT);
+    shader->attachShader("fluidShaderVert",ngl::ShaderType::VERTEX);
+    shader->attachShader("fluidShaderFrag",ngl::ShaderType::FRAGMENT);
     //load source
     shader->loadShaderSource("fluidShaderVert","shaders/fluidShaderVert.glsl");
     shader->loadShaderSource("fluidShaderFrag","shaders/fluidShaderFrag.glsl");

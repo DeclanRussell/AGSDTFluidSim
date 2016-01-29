@@ -13,11 +13,11 @@
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief the increment for x/y translation with mouse movement
 //----------------------------------------------------------------------------------------------------------------------
-const static float INCREMENT=0.01;
+const static float INCREMENT=0.01f;
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief the increment for the wheel zoom
 //----------------------------------------------------------------------------------------------------------------------
-const static float ZOOM=0.1;
+const static float ZOOM=0.1f;
 
 OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidget(_format,_parent){
     // set this widget to have the initial keyboard focus
@@ -37,9 +37,7 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
 OpenGLWidget::~OpenGLWidget(){
     RenderTargetLib::getInstance()->destroy();
     GLTextureLib::getInstance()->destroy();
-    ngl::NGLInit *Init = ngl::NGLInit::instance();
     std::cout<<"Shutting down NGL, removing VAO's and Shaders\n";
-    Init->NGLQuit();
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::initializeGL(){
@@ -47,7 +45,6 @@ void OpenGLWidget::initializeGL(){
     // we must call this first before any other GL commands to load and link the
     // gl commands from the lib, if this is not done program will crash
     ngl::NGLInit::instance();
-
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     // enable depth testing for drawing
     glEnable(GL_DEPTH_TEST);
@@ -89,9 +86,9 @@ void OpenGLWidget::initializeGL(){
     //create the program
     shader->createShaderProgram("CuboidShader");
     //add our shaders
-    shader->attachShader("cuboidVert",ngl::VERTEX);
-    shader->attachShader("cuboidGeom",ngl::GEOMETRY);
-    shader->attachShader("cuboidFrag",ngl::FRAGMENT);
+    shader->attachShader("cuboidVert",ngl::ShaderType::VERTEX);
+    shader->attachShader("cuboidGeom",ngl::ShaderType::GEOMETRY);
+    shader->attachShader("cuboidFrag",ngl::ShaderType::FRAGMENT);
     //load the source
     shader->loadShaderSource("cuboidVert","shaders/cuboidVert.glsl");
     shader->loadShaderSource("cuboidGeom","shaders/cuboidGeom.glsl");
@@ -228,6 +225,11 @@ void OpenGLWidget::paintGL(){
 
 }
 //----------------------------------------------------------------------------------------------------------------------
+void OpenGLWidget::resizeGL(QResizeEvent *_event)
+{
+    resizeGL(_event->size().width(),_event->size().height());
+}
+//----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::loadCubeMap(QString _loc){
     //seperate our cube map texture our into its 6 side textures
     QImage img(_loc);
@@ -257,9 +259,9 @@ void OpenGLWidget::addFluidSim(){
     fluidSimProps props;
     props.m_simPosition = ngl::Vec3(0,0,0);
     props.m_update = false;
-    props.m_timeStep = 0.004;
+    props.m_timeStep = 0.004f;
     props.m_updateWithFixedTimeStep = true;
-    props.m_playSpeed = 1;
+    props.m_playSpeed = 1.f;
     props.m_displayHud = false;
 
     m_fluidSimProps.push_back(props);
@@ -284,7 +286,7 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *_event){
     }
     if(_event->key()==Qt::Key_E){
         for(unsigned int i=0;i<m_SPHEngines.size();i++){
-            m_SPHEngines[i]->update(0.001);
+            m_SPHEngines[i]->update(0.001f);
         }
     }
     if(_event->key()==Qt::Key_R){

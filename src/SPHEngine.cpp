@@ -399,7 +399,7 @@ void SPHEngine::addCollisionObject(float3 _min, float3 _max, float3 _restCoef){
         //really going to be doing it that much so this is fine
 
         //copy our original data back to the host
-        SimpleCuboidCollisionObject cArray[m_numCollisionObjects];
+        SimpleCuboidCollisionObject *cArray = new SimpleCuboidCollisionObject[m_numCollisionObjects];
         cudaMemcpy(cArray, m_dCollisionObjectBuffer, (m_numCollisionObjects-1u) * sizeof(SimpleCuboidCollisionObject), cudaMemcpyDeviceToHost);
 
         //create our new wall

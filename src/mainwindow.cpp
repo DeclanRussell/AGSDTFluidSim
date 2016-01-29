@@ -1,13 +1,15 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
 #include <QFileDialog>
 #include <QPushButton>
 #include <QDesktopServices>
 #include "FluidPropDockWidget.h"
 
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
-    ui->setupUi(this);
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent){
+    QGroupBox *gb = new QGroupBox(this);
+    setCentralWidget(gb);
+    m_gridLayout = new QGridLayout(gb);
+    gb->setLayout(m_gridLayout);
 
     QGLFormat format;
     format.setVersion(4,1);
@@ -19,11 +21,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     //add our openGL context to our scene
     m_openGLWidget = new OpenGLWidget(format,this);
     m_openGLWidget->hide();
-    ui->gridLayout->addWidget(m_openGLWidget,0,0,7,1);
+    m_gridLayout->addWidget(m_openGLWidget,0,0,7,1);
 
     //Group box for our general UI buttons
     QGroupBox *docGrb = new QGroupBox("General:",this);
-    ui->gridLayout->addWidget(docGrb,8,0,1,1);
+    m_gridLayout->addWidget(docGrb,8,0,1,1);
     QGridLayout *docLayout = new QGridLayout(docGrb);
     docGrb->setLayout(docLayout);
 
@@ -51,7 +53,6 @@ void MainWindow::addFluidSim(){
 }
 
 MainWindow::~MainWindow(){
-    delete ui;
     delete m_openGLWidget;
 
 }

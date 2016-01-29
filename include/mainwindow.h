@@ -8,9 +8,6 @@
 #include <QSpacerItem>
 #include "OpenGLWidget.h"
 #include <iostream>
-namespace Ui {
-class MainWindow;
-}
 
 class MainWindow : public QMainWindow
 {
@@ -31,7 +28,7 @@ public slots:
     //----------------------------------------------------------------------------------------------------------------------
 
 private:
-    Ui::MainWindow *ui;
+    QGridLayout *m_gridLayout;
     OpenGLWidget *m_openGLWidget;
 
 
