@@ -83,7 +83,7 @@ void OpenGLWidget::initializeGL(){
     m_cam= new Camera(from,to,up);
     // set the shape using FOV 45 Aspect Ratio based on Width and Height
     // The final two are near and far clipping planes of 0.1 and 100
-    m_cam->setShape(90.f,(float)width(),(float)height(),0.1f,30.f);
+    m_cam->setShape(90.f,(float)width(),(float)height(),0.1f,100.f);
 
     //get an instance of our shader library
     ShaderLib *shader = ShaderLib::getInstance();
@@ -259,8 +259,6 @@ void OpenGLWidget::loadCubeMap(QString _loc){
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::addParticlesToSim(int _numParticles, int _simNo)
 {
-    std::cout<<"sim num "<<_simNo<<std::endl;
-    std::cout<<"here"<<std::endl;
     fluidSimProps props = m_fluidSimProps[_simNo];
 
     // Create our particle positions
@@ -273,8 +271,7 @@ void OpenGLWidget::addParticlesToSim(int _numParticles, int _simNo)
     tz=1.f;
     float3 tempF3;
     std::vector<float3> particles;
-    std::cout<<"here2 num p"<<_numParticles<<std::endl;
-    for(unsigned int i=0; i<_numParticles; i++){
+    for(int i=0; i<_numParticles; i++){
         if(tx>=(max.x)){ tx=min.x; tz+=increment;}
         if(tz>=(max.z)){ tz=min.z; ty+=increment;}
         tempF3.x = tx;
@@ -283,10 +280,8 @@ void OpenGLWidget::addParticlesToSim(int _numParticles, int _simNo)
         particles.push_back(tempF3);
         tx+=increment;
     }
-std::cout<<"here3"<<std::endl;
     // Add particles to sim
     m_SPHEngines[_simNo]->setParticles(particles);
-    std::cout<<"here4"<<std::endl;
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::addFluidSim(){

@@ -116,11 +116,10 @@ out vec4 FragColor;
 //----------------------------------------------------------------------------------------------------------------------
 vec3 uvToEye(vec2 _uv, float _depth){
     vec3 screenCoord = (vec3(_uv,_depth) * vec3(2.0)) - vec3(1.0);
-
     //float d = -1 / (-0 + _depth * ((1000.0-1)/1000.0));
     //return vec3(normUV,_depth) * d;
     vec4 eyeSpace = PInv * vec4(screenCoord,1.0);
-    eyeSpace.xyz / eyeSpace.w;
+    eyeSpace.xyz /= eyeSpace.w;
     return vec3(eyeSpace);
 
 }
@@ -189,9 +188,10 @@ void main(void)
     //our fluid is.
     //texture can be more than value of 1 so if it is lets clamp it to 1
     refractColor = mix(refractColor,phong,(thickness>1)?1:thickness);
-    FragColor  = vec4(mix(refractColor, reflectColor, 0.5/*fresnalRatio*/),1.0);
+    FragColor  = vec4(mix(refractColor, reflectColor, fresnalRatio),1.0);
 
-    //FragColor = vec4(phong,1.0);
+//    FragColor = vec4(phong,1.0);
+    FragColor = vec4(refractColor,1.0);
 
     //Debug:
     //position shading
@@ -203,5 +203,8 @@ void main(void)
     //raw input generally depth
     //FragColor = texture(depthTex, VTexCoord);
     //FragColor = texture(thicknessTex, VTexCoord);
+    //float d = uvToEye(VTexCoord,depth).z;
+    //d = abs(d);
+    //FragColor = vec4(d,d,d ,1.0);
 
 }

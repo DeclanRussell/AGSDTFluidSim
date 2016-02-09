@@ -199,6 +199,7 @@ __global__ void solveForcesKernal(int _numParticles, fluidBuffers _buff)
         float3 pi = _buff.posPtr[idx];
         float di = _buff.denPtr[idx];
         float3 acc = make_float3(0.f,0.f,0.f);
+        float3 vel = _buff.velPtr[idx];
 
         // Put this in its own scope means we get some registers back at the end of it (I think)
         if(di>0.f)
@@ -213,8 +214,8 @@ __global__ void solveForcesKernal(int _numParticles, fluidBuffers _buff)
             int cellOcc,cellIdx,nIdx;
             float dj,presi,presj,rLength,cWeight;
             float3 pj,r,w;
-            float3 presForce,coheForce;
-            presForce = coheForce = make_float3(0.f,0.f,0.f);
+            float3 presForce,coheForce,viscForce;
+            presForce = coheForce = viscForce = make_float3(0.f,0.f,0.f);
             for(int c=0; c<nCells.cNum; c++)
             {
                 // Get our cell occupancy total and start index
@@ -249,22 +250,29 @@ __global__ void solveForcesKernal(int _numParticles, fluidBuffers _buff)
                     // Accumilate our pressure force
                     presForce+= ((presi/(di*di)) + (presj/(dj*dj))) * props.mass * w;
 
-                    // Calculate our cohesion weighting
-                    cWeight = calcCoheWeighting(rLength);
-                    // Accumilate our cohesion weighting
-                    coheForce+=-props.tension*props.mass*props.mass*((2.f*props.restDensity)/(di+dj))*cWeight*r;
+                    // This shouldn't happen but for some reason it does :(
+                    if(rLength>0){
+                        // Calculate our cohesion weighting
+                        cWeight = calcCoheWeighting(rLength);
+                        // Accumilate our cohesion force
+                        coheForce+=-props.tension*props.mass*props.mass*((2.f*props.restDensity)/(di+dj))*cWeight*r;
 
+                        // Calculate the viscosity weighting
+                        w = calcViscosityWeighting(r,rLength);
+                        // Accumilate our viscosity force
+                        viscForce += props.viscosity * (_buff.velPtr[nIdx] - vel) * (props.mass/dj) * w;
+                    }
                 }
             }
             // Complete our pressure force term
             presForce*=-1.f*props.mass;
 
-            acc = (presForce /*+ coheForce*/ + props.gravity)/props.mass;
+            acc = (presForce + coheForce + viscForce + props.gravity)/props.mass;
         }
 
         // Now lets integerate our acceleration using leapfrog to get our new position
         float3 halfFwd,halfBwd;
-        halfBwd = _buff.velPtr[idx] - 0.5f*props.timeStep*acc;
+        halfBwd = vel - 0.5f*props.timeStep*acc;
         halfFwd = halfBwd + props.timeStep*acc;
 
         // Update our velocity

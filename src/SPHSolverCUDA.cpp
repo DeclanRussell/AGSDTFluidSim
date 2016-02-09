@@ -45,6 +45,7 @@ SPHSolverCUDA::SPHSolverCUDA()
     m_simProperties.gravity = make_float3(0.f,-9.8f,0.f);
     m_simProperties.k = SpeedOfSound;//*SpeedOfSound;
     m_simProperties.tension = 1.f;
+    m_simProperties.viscosity = 0.3f;
     m_simProperties.mass = 1.f;//0.0002f;
     m_simProperties.restDensity = 1000.f;
     // Send these to the GPU

@@ -42,7 +42,7 @@ void  main(){
     normal.xy = (gl_PointCoord*vec2(2.0)) - vec2(1.0);
     normal.y*=-1.0;
     float r2 = dot(normal.xy, normal.xy);
-    if (r2 > 1.0) {
+    if (r2 > 1.0){
         discard; // kill pixels outside circle
         return;
     }

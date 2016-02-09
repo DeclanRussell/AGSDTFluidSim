@@ -27,8 +27,9 @@ FluidShader::FluidShader(int _width, int _height)
     m_fresnalPower = 3;
     m_pointThickness = 0.04f;
     //our blur shading init params
-    m_blurFalloff = 10.f;
+    m_blurFalloff = 1.f;
     m_blurRadius = 7.f;
+    m_blurScale = 1.0f;
     m_cubeMapCreated = false;
     //set our init fluid color to something nice
     m_fluidColor = glm::vec3(0,1,1);
@@ -386,6 +387,7 @@ void FluidShader::resize(int _w, int _h){
     shader->setUniform("texelSizeX",1.0f/(float)_w);
     shader->setUniform("texelSizeY",1.0f/(float)_h);
 
+
     (*shader)["BilateralFilter"]->use();
     shader->setUniform("filterRadius",100.0f/*/width()*/);
     shader->setUniform("texelSize",2.0f/(_w+_h));
@@ -462,6 +464,7 @@ void FluidShader::draw(GLuint _positionVAO, int _numPoints, glm::mat4 _M, glm::m
     shader->setUniform("blurDepthFalloff",m_blurFalloff);
     float radius = (m_blurRadius/((float)(m_height+m_width)*0.5f));
     shader->setUniform("filterRadius",radius);
+    shader->setUniform("blurScale",m_blurScale);
     //bind our billboard and texture
     glActiveTexture(GL_TEXTURE0);
     GLTextureLib* tex = GLTextureLib::getInstance();

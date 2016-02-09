@@ -41,16 +41,12 @@ void  main(){
     if (r2 > 1.0) discard; // kill pixels outside circle
     normal.z = sqrt(1.0 - r2);
 
-
-
     // calculate depth
-    // point radius calculated from inverse projection * 0.5*pointSize
     vec4 pixelPos = vec4(position + (normal * pointSize * 0.5), 1.0);
     //pixelPos.z -= 1.5;
     vec4 clipSpacePos = P * pixelPos;
     vec3 depth = vec3(clipSpacePos.z / clipSpacePos.w);
 
     fragout = vec4(depth,1.0);
-    //fragout = vec4(normal,1.0);
 
 }

@@ -140,6 +140,12 @@ public slots:
     //----------------------------------------------------------------------------------------------------------------------
     inline void setBlurRadius(float _radius, int _simNo = 0){m_fluidShaders[_simNo]->setBlurRadius( _radius);}
     //----------------------------------------------------------------------------------------------------------------------
+    /// @brief a slot to change the blur scale of our bilateral filter blur radius
+    /// @param _scale - desired blur scale
+    /// @param _simNo - which simulation we want to change the blur scale in
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setBlurScale(float _scale, int _simNo = 0){m_fluidShaders[_simNo]->setBlurScale( _scale);}
+    //----------------------------------------------------------------------------------------------------------------------
     /// @brief a slot to set the refraction ratio of our fluid
     /// @param _eta - desired refraction ratio
     /// @param _simNo - which simulation we want to change the rafraction ratio in
@@ -173,7 +179,13 @@ public slots:
     /// @param _visc - viscosity coeficient
     /// @param _simNo - which simulation we want to change
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setViscCoef(float _visc, int _simNo = 0){}//m_SPHEngines[_simNo]->setViscCoef(_visc);}
+    inline void setViscCoef(float _visc, int _simNo = 0){m_SPHEngines[_simNo]->setViscConst(_visc);}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief set tension coeficient of our fluid slot
+    /// @param _t - tension coeficient
+    /// @param _simNo - which simulation we want to change
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setTensionCoef(float _t, int _simNo = 0){m_SPHEngines[_simNo]->setTensionConst(_t);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief set gas constant of our fluid slot
     /// @param _gasConst - gas constant
@@ -202,7 +214,7 @@ public slots:
     /// @brief a slot to reset our simulation and remove all particles
     /// @brief _simNo - simulation number to reset
     //----------------------------------------------------------------------------------------------------------------------
-    inline void resetSim(int _simNo){}//m_SPHEngines[_simNo]->signalReset();}
+    inline void resetSim(int _simNo){addParticlesToSim(m_SPHEngines[_simNo]->getNumParticles(),_simNo);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a slot to set the spawn box position in our simulation
     /// @param _x - x position of spawn box location
@@ -210,13 +222,13 @@ public slots:
     /// @param _z - z position of spawn box location
     /// @param _simNo - simulation number to set the spawn box location
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setSpawnBoxPosition(float _x, float _y, float _z,int _simNo = 0){}//m_SPHEngines[_simNo]->setSpawnBoxPos(_x,_y,_z);}
+    inline void setSpawnBoxPosition(float _x, float _y, float _z,int _simNo = 0){m_fluidSimProps[_simNo].m_spawnMin = make_float3(_x,_y,_z);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a slot to set the spawn box size in our simulation
     /// @param _size - desired spawn box size
     /// @param _simNo - simulation number to set the spawn box size
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setSpawnBoxSize(float _size,int _simNo = 0){}//m_SPHEngines[_simNo]->setSpawnBoxSize(_size);}
+    inline void setSpawnBoxSize(float _size,int _simNo = 0){m_fluidSimProps[_simNo].m_spawnDim = make_float3(_size,_size,_size);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief slot to add particles to our simulation
     /// @param _numParticles - number of particles to add to simulation

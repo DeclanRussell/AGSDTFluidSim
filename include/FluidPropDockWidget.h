@@ -59,6 +59,11 @@ public slots:
     //----------------------------------------------------------------------------------------------------------------------
     inline void setBlurRadius(double _radius){m_fluidGLWidget->setBlurRadius(_radius,m_instanceNo);}
     //----------------------------------------------------------------------------------------------------------------------
+    /// @brief slot to set our bilateral filter blur scale
+    /// @param _scale - desired blur scale
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setBlurScale(double _scale){m_fluidGLWidget->setBlurScale(_scale,m_instanceNo);}
+    //----------------------------------------------------------------------------------------------------------------------
     /// @brief slot to set the fresnal power of our fluid
     /// @param _power - desired fresnal power
     //----------------------------------------------------------------------------------------------------------------------
@@ -83,6 +88,11 @@ public slots:
     /// @param _visc - desired viscosity of fluid
     //----------------------------------------------------------------------------------------------------------------------
     inline void setViscosity(double _visc){m_fluidGLWidget->setViscCoef(_visc,m_instanceNo);}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief slot to set the tension coeficient of our fluid
+    /// @param _t - desired tension of fluid
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setTension(double _t){m_fluidGLWidget->setTensionCoef(_t,m_instanceNo);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief slot to set the gas constant of our fluid
     /// @param _gconst - desired gas constant of fluid

@@ -78,7 +78,7 @@ FluidPropDockWidget::FluidPropDockWidget(OpenGLWidget *_fluidWidget, QWidget *pa
     QLabel *falloffLbl = new QLabel("Blur Falloff:",shaderProperties);
     shadPropLayout->addWidget(falloffLbl,3,0,1,1);
     QDoubleSpinBox *falloffSpnBx = new QDoubleSpinBox(shaderProperties);
-    falloffSpnBx->setValue(10);
+    falloffSpnBx->setValue(1);
     falloffSpnBx->setMaximum(INFINITY);
     falloffSpnBx->setDecimals(3);
     falloffSpnBx->setSingleStep(0.1);
@@ -95,23 +95,34 @@ FluidPropDockWidget::FluidPropDockWidget(OpenGLWidget *_fluidWidget, QWidget *pa
     connect(blurRadSpnBx,SIGNAL(valueChanged(double)), this, SLOT(setBlurRadius(double)));
     shadPropLayout->addWidget(blurRadSpnBx,4,1,1,1);
 
+    //blur scale
+    QLabel *blurSclLbl = new QLabel("Blur Scale:",shaderProperties);
+    shadPropLayout->addWidget(blurSclLbl,5,0,1,1);
+    QDoubleSpinBox *blurSclSpnBx = new QDoubleSpinBox(shaderProperties);
+    blurSclSpnBx->setValue(1.0);
+    blurSclSpnBx->setDecimals(2);
+    blurSclSpnBx->setMaximum(INFINITY);
+    blurSclSpnBx->setSingleStep(0.5);
+    connect(blurSclSpnBx,SIGNAL(valueChanged(double)), this, SLOT(setBlurScale(double)));
+    shadPropLayout->addWidget(blurSclSpnBx,5,1,1,1);
+
     //Fluid properties field
     QLabel *fresPropLbl = new QLabel("Fresnal Properties:",shaderProperties);
-    shadPropLayout->addWidget(fresPropLbl,5,0,1,1);
+    shadPropLayout->addWidget(fresPropLbl,6,0,1,1);
 
     //Fresnal Power
     QLabel *fresPwLbl = new QLabel("Fresnal Power:",shaderProperties);
-    shadPropLayout->addWidget(fresPwLbl,6,0,1,1);
+    shadPropLayout->addWidget(fresPwLbl,7,0,1,1);
     QDoubleSpinBox *fresPwSpnBx = new QDoubleSpinBox(shaderProperties);
     fresPwSpnBx->setValue(3);
     fresPwSpnBx->setDecimals(3);
     fresPwSpnBx->setSingleStep(0.1);
     connect(fresPwSpnBx,SIGNAL(valueChanged(double)), this, SLOT(setFresnalPower(double)));
-    shadPropLayout->addWidget(fresPwSpnBx,6,1,1,1);
+    shadPropLayout->addWidget(fresPwSpnBx,7,1,1,1);
 
     //Refraction Ratio
     QLabel *refRatLbl = new QLabel("Refraction Ratio:",shaderProperties);
-    shadPropLayout->addWidget(refRatLbl,7,0,1,1);
+    shadPropLayout->addWidget(refRatLbl,8,0,1,1);
     QDoubleSpinBox *refRatSpnBx = new QDoubleSpinBox(shaderProperties);
     refRatSpnBx->setValue(0.9);
     refRatSpnBx->setMaximum(1.0);
@@ -119,23 +130,23 @@ FluidPropDockWidget::FluidPropDockWidget(OpenGLWidget *_fluidWidget, QWidget *pa
     refRatSpnBx->setDecimals(3);
     refRatSpnBx->setSingleStep(0.01);
     connect(refRatSpnBx,SIGNAL(valueChanged(double)), this, SLOT(setRefractionRatio(double)));
-    shadPropLayout->addWidget(refRatSpnBx,7,1,1,1);
+    shadPropLayout->addWidget(refRatSpnBx,8,1,1,1);
 
     //color wheel
     QLabel *colorLbl = new QLabel("Set Fluid Color:",shaderProperties);
-    shadPropLayout->addWidget(colorLbl,8,0,1,1);
+    shadPropLayout->addWidget(colorLbl,9,0,1,1);
     QColorDialog *colorWheel = new QColorDialog(QColor(0,255,255),shaderProperties);
     connect(colorWheel,SIGNAL(currentColorChanged(QColor)),this,SLOT(setFluidColor(QColor)));
     QPushButton *colorBtn = new QPushButton("Select Fluid Color",shaderProperties);
     connect(colorBtn,SIGNAL(clicked(bool)),colorWheel,SLOT(setHidden(bool)));
-    shadPropLayout->addWidget(colorBtn,8,1,1,1);
+    shadPropLayout->addWidget(colorBtn,9,1,1,1);
 
     //Environment map button
     QLabel *envLbl = new QLabel("Set Environment Map:",shaderProperties);
-    shadPropLayout->addWidget(envLbl,9,0,1,1);
+    shadPropLayout->addWidget(envLbl,10,0,1,1);
     QPushButton *envBtn = new QPushButton("Import Environment Map",shaderProperties);
     connect(envBtn,SIGNAL(pressed()),this,SLOT(importEnvMap()));
-    shadPropLayout->addWidget(envBtn,9,1,1,1);
+    shadPropLayout->addWidget(envBtn,10,1,1,1);
 
     //Group box for our fluid simulation properties
     QGroupBox *fluidSimProp = new QGroupBox("Fluid Simulation Properties",this);
@@ -147,10 +158,10 @@ FluidPropDockWidget::FluidPropDockWidget(OpenGLWidget *_fluidWidget, QWidget *pa
     QLabel *massLbl = new QLabel("Particle Mass:",fluidSimProp);
     fluidSimLayout->addWidget(massLbl,0,0,1,1);
     QDoubleSpinBox *massSpnBx = new QDoubleSpinBox(fluidSimProp);
-    massSpnBx->setValue(10);
+    massSpnBx->setValue(1);
     massSpnBx->setMinimum(0);
     massSpnBx->setMaximum(INFINITY);
-    massSpnBx->setSingleStep(0.01);
+    massSpnBx->setSingleStep(0.1);
     massSpnBx->setDecimals(3);
     connect(massSpnBx,SIGNAL(valueChanged(double)),this,SLOT(setMass(double)));
     fluidSimLayout->addWidget(massSpnBx,0,1,1,1);
@@ -161,9 +172,9 @@ FluidPropDockWidget::FluidPropDockWidget(OpenGLWidget *_fluidWidget, QWidget *pa
     QDoubleSpinBox *denSpnBx = new QDoubleSpinBox(fluidSimProp);
     denSpnBx->setDecimals(4);
     denSpnBx->setMaximum(INFINITY);
-    denSpnBx->setValue(998.2);
+    denSpnBx->setValue(1000.0);
     denSpnBx->setMinimum(0);
-    denSpnBx->setSingleStep(0.01);
+    denSpnBx->setSingleStep(1);
     denSpnBx->setDecimals(3);
     connect(denSpnBx,SIGNAL(valueChanged(double)),this,SLOT(setDensity(double)));
     fluidSimLayout->addWidget(denSpnBx,1,1,1,1);
@@ -179,84 +190,95 @@ FluidPropDockWidget::FluidPropDockWidget(OpenGLWidget *_fluidWidget, QWidget *pa
     connect(viscSpnBx,SIGNAL(valueChanged(double)),this,SLOT(setViscosity(double)));
     fluidSimLayout->addWidget(viscSpnBx,2,1,1,1);
 
+    //set tension coeficient field
+    QLabel *tenLbl = new QLabel("Tension Coeficient:",fluidSimProp);
+    fluidSimLayout->addWidget(tenLbl,3,0,1,1);
+    QDoubleSpinBox *tenSpnBx = new QDoubleSpinBox(fluidSimProp);
+    tenSpnBx->setValue(1.f);
+    tenSpnBx->setMinimum(0);
+    tenSpnBx->setSingleStep(0.1);
+    tenSpnBx->setDecimals(3);
+    connect(tenSpnBx,SIGNAL(valueChanged(double)),this,SLOT(setTension(double)));
+    fluidSimLayout->addWidget(tenSpnBx,3,1,1,1);
+
     //set gas constant field
     QLabel *gasConLbl = new QLabel("Gas Constant:",fluidSimProp);
-    fluidSimLayout->addWidget(gasConLbl,3,0,1,1);
+    fluidSimLayout->addWidget(gasConLbl,4,0,1,1);
     QDoubleSpinBox *gasConSpnBx = new QDoubleSpinBox(fluidSimProp);
-    gasConSpnBx->setValue(10.f);
+    gasConSpnBx->setValue(34.29f);
     gasConSpnBx->setMinimum(0);
     gasConSpnBx->setMaximum(INFINITY);
     gasConSpnBx->setSingleStep(0.1);
     gasConSpnBx->setDecimals(3);
     connect(gasConSpnBx,SIGNAL(valueChanged(double)),this,SLOT(setGasConst(double)));
-    fluidSimLayout->addWidget(gasConSpnBx,3,1,1,1);
+    fluidSimLayout->addWidget(gasConSpnBx,4,1,1,1);
 
     //set smoothing length field
     QLabel *smoothLenLbl = new QLabel("Smoothing Length:",fluidSimProp);
-    fluidSimLayout->addWidget(smoothLenLbl,4,0,1,1);
+    fluidSimLayout->addWidget(smoothLenLbl,5,0,1,1);
     QDoubleSpinBox *smoothLenSpnBx = new QDoubleSpinBox(fluidSimProp);
     smoothLenSpnBx->setValue(0.3f);
     smoothLenSpnBx->setMinimum(0);
     smoothLenSpnBx->setSingleStep(0.01);
     smoothLenSpnBx->setDecimals(3);
     connect(smoothLenSpnBx,SIGNAL(valueChanged(double)),this,SLOT(setSmoothingLength(double)));
-    fluidSimLayout->addWidget(smoothLenSpnBx,4,1,1,1);
+    fluidSimLayout->addWidget(smoothLenSpnBx,5,1,1,1);
 
     //Spinbox's to edit simulation postion
     QLabel *simPosLbl = new QLabel("Simulation Position:",fluidSimProp);
-    fluidSimLayout->addWidget(simPosLbl,5,0,1,1);
+    fluidSimLayout->addWidget(simPosLbl,6,0,1,1);
     m_spinPosX = new QDoubleSpinBox(fluidSimProp);
     m_spinPosX->setMaximum(INFINITY);
     m_spinPosX->setMinimum(-INFINITY);
     m_spinPosX->setValue(0);
     connect(m_spinPosX,SIGNAL(valueChanged(double)),this,SLOT(setSimPosition()));
-    fluidSimLayout->addWidget(m_spinPosX,5,1,1,1);
+    fluidSimLayout->addWidget(m_spinPosX,6,1,1,1);
     m_spinPosY = new QDoubleSpinBox(fluidSimProp);
     m_spinPosY->setMaximum(INFINITY);
     m_spinPosY->setMinimum(-INFINITY);
     m_spinPosY->setValue(0);
     connect(m_spinPosY,SIGNAL(valueChanged(double)),this,SLOT(setSimPosition()));
-    fluidSimLayout->addWidget(m_spinPosY,5,2,1,1);
+    fluidSimLayout->addWidget(m_spinPosY,6,2,1,1);
     m_spinPosZ = new QDoubleSpinBox(fluidSimProp);
     m_spinPosZ->setMaximum(INFINITY);
     m_spinPosZ->setMinimum(-INFINITY);
     m_spinPosZ->setValue(0);
     connect(m_spinPosZ,SIGNAL(valueChanged(double)),this,SLOT(setSimPosition()));
-    fluidSimLayout->addWidget(m_spinPosZ,5,3,1,1);
+    fluidSimLayout->addWidget(m_spinPosZ,6,3,1,1);
 
-    //our veolicty correction field
+    //our velocity correction field
     QLabel *velCorLbl = new QLabel("XSPH Velocity Correction",fluidSimProp);
-    fluidSimLayout->addWidget(velCorLbl,6,0,1,1);
+    fluidSimLayout->addWidget(velCorLbl,7,0,1,1);
     QDoubleSpinBox *velCorSpn = new QDoubleSpinBox(fluidSimProp);
     velCorSpn->setDecimals(3);
     velCorSpn->setSingleStep(0.05);
     velCorSpn->setMaximum(1);
     velCorSpn->setValue(0.3);
     connect(velCorSpn,SIGNAL(valueChanged(double)),this,SLOT(setVelCorrection(double)));
-    fluidSimLayout->addWidget(velCorSpn,6,1,1,1);
+    fluidSimLayout->addWidget(velCorSpn,7,1,1,1);
 
 
     //Spinbox's to edit spawn box postion
     QLabel *spwnPosLbl = new QLabel("Spawn Box Position:",fluidSimProp);
-    fluidSimLayout->addWidget(spwnPosLbl,7,0,1,1);
+    fluidSimLayout->addWidget(spwnPosLbl,8,0,1,1);
     m_spawnPosX = new QDoubleSpinBox(fluidSimProp);
     m_spawnPosX->setMaximum(INFINITY);
     m_spawnPosX->setMinimum(-INFINITY);
     m_spawnPosX->setValue(2);
     connect(m_spawnPosX,SIGNAL(valueChanged(double)),this,SLOT(setSpawnBoxPos()));
-    fluidSimLayout->addWidget(m_spawnPosX,7,1,1,1);
+    fluidSimLayout->addWidget(m_spawnPosX,8,1,1,1);
     m_spawnPosY = new QDoubleSpinBox(fluidSimProp);
     m_spawnPosY->setMaximum(INFINITY);
     m_spawnPosY->setMinimum(-INFINITY);
     m_spawnPosY->setValue(0);
     connect(m_spawnPosY,SIGNAL(valueChanged(double)),this,SLOT(setSpawnBoxPos()));
-    fluidSimLayout->addWidget(m_spawnPosY,7,2,1,1);
+    fluidSimLayout->addWidget(m_spawnPosY,8,2,1,1);
     m_spawnPosZ = new QDoubleSpinBox(fluidSimProp);
     m_spawnPosZ->setMaximum(INFINITY);
     m_spawnPosZ->setMinimum(-INFINITY);
     m_spawnPosZ->setValue(2);
     connect(m_spawnPosZ,SIGNAL(valueChanged(double)),this,SLOT(setSpawnBoxPos()));
-    fluidSimLayout->addWidget(m_spawnPosZ,7,3,1,1);
+    fluidSimLayout->addWidget(m_spawnPosZ,8,3,1,1);
     QLabel *spwnSizeLbl = new QLabel("Spawn Box Size:",fluidSimProp);
     fluidSimLayout->addWidget(spwnSizeLbl,7,4,1,1);
     QDoubleSpinBox *spwnSizeSpn = new QDoubleSpinBox(fluidSimProp);
@@ -264,27 +286,27 @@ FluidPropDockWidget::FluidPropDockWidget(OpenGLWidget *_fluidWidget, QWidget *pa
     spwnSizeSpn->setMinimum(-INFINITY);
     spwnSizeSpn->setValue(6);
     connect(spwnSizeSpn,SIGNAL(valueChanged(double)),this,SLOT(setSpawnBoxSize(double)));
-    fluidSimLayout->addWidget(spwnSizeSpn,7,5,1,1);
+    fluidSimLayout->addWidget(spwnSizeSpn,8,5,1,1);
 
     //add particles field
     QPushButton *addParticlesBtn = new QPushButton("Add Particles",fluidSimProp);
     connect(addParticlesBtn,SIGNAL(pressed()),this,SLOT(addPartToSim()));
-    fluidSimLayout->addWidget(addParticlesBtn,8,0,1,1);
+    fluidSimLayout->addWidget(addParticlesBtn,9,0,1,1);
 
     QSpinBox *numPartSPn = new QSpinBox(fluidSimProp);
     numPartSPn->setMaximum((int)1000000);
     numPartSPn->setSingleStep(1000);
     numPartSPn->setValue(50000);
     connect(numPartSPn,SIGNAL(valueChanged(int)),this,SLOT(setNumPart(int)));
-    fluidSimLayout->addWidget(numPartSPn,8,1,1,1);
+    fluidSimLayout->addWidget(numPartSPn,9,1,1,1);
 
     //add a check box for showing the hud
     QLabel *tglHudLbl = new QLabel("Toggle HUD:",fluidSimProp);
-    fluidSimLayout->addWidget(tglHudLbl,9,0,1,1);
+    fluidSimLayout->addWidget(tglHudLbl,10,0,1,1);
     QCheckBox *hudChkBox = new QCheckBox(fluidSimProp);
     hudChkBox->setChecked(false);
     connect(hudChkBox,SIGNAL(toggled(bool)),this,SLOT(setDisplayHud(bool)));
-    fluidSimLayout->addWidget(hudChkBox,9,1,1,1);
+    fluidSimLayout->addWidget(hudChkBox,10,1,1,1);
 
     //Group box for our playback settings
     QGroupBox *playbackGrb = new QGroupBox("Playback:",this);
