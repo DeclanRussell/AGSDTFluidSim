@@ -1,7 +1,7 @@
 #include "FluidShader.h"
 
 #include <iostream>
-#include <ngl/ShaderLib.h>
+#include "ShaderLib.h"
 #include "RenderTargetLib.h"
 #include "RenderBuffer.h"
 #include "FrameBuffer.h"
@@ -31,7 +31,7 @@ FluidShader::FluidShader(int _width, int _height)
     m_blurRadius = 7.f;
     m_cubeMapCreated = false;
     //set our init fluid color to something nice
-    m_fluidColor = ngl::Vec3(0,1,1);
+    m_fluidColor = glm::vec3(0,1,1);
     //set our instance number and increment
     m_instanceNo = m_instanceCount;
     if(m_instanceNo==0) m_cubeMapCreated=false;
@@ -245,20 +245,17 @@ void FluidShader::init(){
 
 
     //set up our particle shader to render depth information to a texture
-    ngl::ShaderLib *shader=ngl::ShaderLib::instance();
+    ShaderLib *shader=ShaderLib::getInstance();
 
     //Create our sky box shader
     //create the program
     shader->createShaderProgram("SkyBoxShader");
     //add our shaders
-    shader->attachShader("skyBoxVert",ngl::ShaderType::VERTEX);
-    shader->attachShader("skyBoxFrag",ngl::ShaderType::FRAGMENT);
+    shader->attachShader("skyBoxVert",GL_VERTEX_SHADER);
+    shader->attachShader("skyBoxFrag",GL_FRAGMENT_SHADER);
     //load the source
     shader->loadShaderSource("skyBoxVert","shaders/skyBoxVert.glsl");
     shader->loadShaderSource("skyBoxFrag","shaders/skyBoxFrag.glsl");
-    //compile them
-    shader->compileShader("skyBoxVert");
-    shader->compileShader("skyBoxFrag");
     //attach them to our program
     shader->attachShaderToProgram("SkyBoxShader","skyBoxVert");
     shader->attachShaderToProgram("SkyBoxShader","skyBoxFrag");
@@ -269,14 +266,11 @@ void FluidShader::init(){
     //create the program
     shader->createShaderProgram("ParticleDepth");
     //add our shaders
-    shader->attachShader("particleDepthVert",ngl::ShaderType::VERTEX);
-    shader->attachShader("particleDepthFrag",ngl::ShaderType::FRAGMENT);
+    shader->attachShader("particleDepthVert",GL_VERTEX_SHADER);
+    shader->attachShader("particleDepthFrag",GL_FRAGMENT_SHADER);
     //load the source
     shader->loadShaderSource("particleDepthVert","shaders/particleDepthVert.glsl");
     shader->loadShaderSource("particleDepthFrag","shaders/particleDepthFrag.glsl");
-    //compile them
-    shader->compileShader("particleDepthVert");
-    shader->compileShader("particleDepthFrag");
     //attach them to our program
     shader->attachShaderToProgram("ParticleDepth","particleDepthVert");
     shader->attachShaderToProgram("ParticleDepth","particleDepthFrag");
@@ -288,14 +282,11 @@ void FluidShader::init(){
     //create the program
     shader->createShaderProgram("ThicknessShader");
     //add our shaders
-    shader->attachShader("thicknessVert",ngl::ShaderType::VERTEX);
-    shader->attachShader("thicknessFrag",ngl::ShaderType::FRAGMENT);
+    shader->attachShader("thicknessVert",GL_VERTEX_SHADER);
+    shader->attachShader("thicknessFrag",GL_FRAGMENT_SHADER);
     //load the source
     shader->loadShaderSource("thicknessVert","shaders/thicknessVert.glsl");
     shader->loadShaderSource("thicknessFrag","shaders/thicknessFrag.glsl");
-    //compile them
-    shader->compileShader("thicknessVert");
-    shader->compileShader("thicknessFrag");
     //attach them to our program
     shader->attachShaderToProgram("ThicknessShader","thicknessVert");
     shader->attachShaderToProgram("ThicknessShader","thicknessFrag");
@@ -307,14 +298,11 @@ void FluidShader::init(){
     //creat program
     shader->createShaderProgram("BilateralFilter");
     //ass shaders
-    shader->attachShader("bilateralFilterVert",ngl::ShaderType::VERTEX);
-    shader->attachShader("bilateralFilterFrag",ngl::ShaderType::FRAGMENT);
+    shader->attachShader("bilateralFilterVert",GL_VERTEX_SHADER);
+    shader->attachShader("bilateralFilterFrag",GL_FRAGMENT_SHADER);
     //load source
     shader->loadShaderSource("bilateralFilterVert","shaders/bilateralFilterVert.glsl");
     shader->loadShaderSource("bilateralFilterFrag","shaders/bilateralFilterFrag.glsl");
-    //compile them
-    shader->compileShader("bilateralFilterVert");
-    shader->compileShader("bilateralFilterFrag");
     //attach them to our program
     shader->attachShaderToProgram("BilateralFilter","bilateralFilterVert");
     shader->attachShaderToProgram("BilateralFilter","bilateralFilterFrag");
@@ -325,14 +313,11 @@ void FluidShader::init(){
     //create program
     shader->createShaderProgram("FluidShader");
     //add shaders
-    shader->attachShader("fluidShaderVert",ngl::ShaderType::VERTEX);
-    shader->attachShader("fluidShaderFrag",ngl::ShaderType::FRAGMENT);
+    shader->attachShader("fluidShaderVert",GL_VERTEX_SHADER);
+    shader->attachShader("fluidShaderFrag",GL_FRAGMENT_SHADER);
     //load source
     shader->loadShaderSource("fluidShaderVert","shaders/fluidShaderVert.glsl");
     shader->loadShaderSource("fluidShaderFrag","shaders/fluidShaderFrag.glsl");
-    //compile them
-    shader->compileShader("fluidShaderVert");
-    shader->compileShader("fluidShaderFrag");
     //attach them to our program
     shader->attachShaderToProgram("FluidShader","fluidShaderVert");
     shader->attachShaderToProgram("FluidShader","fluidShaderFrag");
@@ -369,12 +354,12 @@ void FluidShader::init(){
     shader->setUniform("texelSizeY",1.0f/m_height);
 
     //to be used later with phong shading
-    shader->setShaderParam3f("light.position",-1,-1,-1);
-    shader->setShaderParam3f("light.intensity",0.8,0.8,0.8);
-    shader->setShaderParam3f("Kd",0.5, 0.5, 0.5);
-    shader->setShaderParam3f("Ka",0.5, 0.5, 0.5);
-    shader->setShaderParam3f("Ks",1.0,1.0,1.0);
-    shader->setShaderParam1f("shininess",1000.0);
+    shader->setUniform("light.position",-1.f,-1.f,-1.f);
+    shader->setUniform("light.intensity",0.8f,0.8f,0.8f);
+    shader->setUniform("Kd",0.5f, 0.5f, 0.5f);
+    shader->setUniform("Ka",0.5f, 0.5f, 0.5f);
+    shader->setUniform("Ks",1.0f,1.0f,1.0f);
+    shader->setUniform("shininess",1000.0f);
 }
 //----------------------------------------------------------------------------------------------------------------------
 void FluidShader::resize(int _w, int _h){
@@ -388,7 +373,7 @@ void FluidShader::resize(int _w, int _h){
     RenderBuffer* renderBuffer = RenderTargetLib::getInstance()->getRenderBuffer("depthRenderBuffer");
     renderBuffer->resize(_w,_h);
     //update our texel sizes
-    ngl::ShaderLib *shader=ngl::ShaderLib::instance();
+    ShaderLib *shader=ShaderLib::getInstance();
 
     //set some uniforms
     (*shader)["ParticleDepth"]->use();
@@ -406,25 +391,25 @@ void FluidShader::resize(int _w, int _h){
     shader->setUniform("texelSize",2.0f/(_w+_h));
 }
 //----------------------------------------------------------------------------------------------------------------------
-void FluidShader::draw(GLuint _positionVAO, int _numPoints, ngl::Mat4 _M, ngl::Mat4 _V, ngl::Mat4 _P,ngl::Mat4 _rotM, ngl::Vec4 _eyePos){
-    ngl::Mat4 MV = _M * _V;
-    ngl::Mat4 MVP = MV * _P;
-    ngl::Mat4 Pinv = _P.inverse();
-    ngl::Mat4 normalMatrix = _M.inverse();
-    normalMatrix.transpose();
+void FluidShader::draw(GLuint _positionVAO, int _numPoints, glm::mat4 _M, glm::mat4 _V, glm::mat4 _P, glm::mat4 _rotM, glm::vec4 _eyePos){
+    glm::mat4 MV = _V * _M;
+    glm::mat4 MVP = _P * MV;
+    glm::mat4 Pinv = glm::inverse(_P);
+    glm::mat4 normalMatrix = glm::inverse(_M);
+    normalMatrix = glm::transpose(normalMatrix);
 
     //Here is where we will ultimately load our matricies to shader once written
-    ngl::ShaderLib *shader=ngl::ShaderLib::instance();
+    ShaderLib *shader=ShaderLib::getInstance();
     (*shader)["ParticleDepth"]->use();
 
     //calculate the eyespace radius of our points
-    ngl::Vec4 esr(m_pointSize,0,0,1.0);
+    glm::vec4 esr(m_pointSize,0,0,1.0);
     esr = Pinv * esr;
     //std::cout<<"real world size: "<<esr.m_x<<" "<<esr.m_y<<" "<<esr.m_y<<" "<<esr.m_w<<std::endl;
 
     shader->setUniform("screenWidth",m_width);
     shader->setUniform("pointSize",m_pointSize);
-    shader->setUniform("pointRadius",esr.m_x/esr.m_w);
+    shader->setUniform("pointRadius",esr.x/esr.w);
     shader->setUniform("P",_P);
     shader->setUniform("MV",MV);
     shader->setUniform("MVP",MVP);
@@ -481,7 +466,7 @@ void FluidShader::draw(GLuint _positionVAO, int _numPoints, ngl::Mat4 _M, ngl::M
     //bind our bilateral filter shader
     (*shader)["BilateralFilter"]->use();
     shader->setUniform("blurDepthFalloff",m_blurFalloff);
-    float radius = (m_blurRadius/((m_height+m_width)*0.5));
+    float radius = (m_blurRadius/((float)(m_height+m_width)*0.5f));
     shader->setUniform("filterRadius",radius);
     //bind our billboard and texture
     glActiveTexture(GL_TEXTURE0);
@@ -506,14 +491,14 @@ void FluidShader::draw(GLuint _positionVAO, int _numPoints, ngl::Mat4 _M, ngl::M
     if(m_instanceNo==0){
         (*shader)["SkyBoxShader"]->use();
         //load our matricies to shader
-        ngl::Mat4 MCube = _rotM;
+        glm::mat4 MCube = _rotM;
         //move to where our camera is located
-        MCube.m_m[3][0] = _eyePos.m_x;
-        MCube.m_m[3][1] = _eyePos.m_y;
-        MCube.m_m[3][2] = _eyePos.m_z;
+        MCube[3][0] = _eyePos.x;
+        MCube[3][1] = _eyePos.y;
+        MCube[3][2] = _eyePos.z;
 
         //set our MVP matrix
-        ngl::Mat4 sbMVP = MCube*_V*_P;
+        glm::mat4 sbMVP =_P*_V*MCube;
         shader->setUniform("MVP",sbMVP);
 
         glDepthMask (GL_FALSE);
@@ -533,7 +518,7 @@ void FluidShader::draw(GLuint _positionVAO, int _numPoints, ngl::Mat4 _M, ngl::M
     shader->setUniform("fresnalPower",m_fresnalPower);
     shader->setUniform("refractRatio",m_refractionRatio);
     shader->setUniform("fresnalConst",m_fresnalConst);
-    shader->setUniform("color",(float)m_fluidColor.m_x,(float)m_fluidColor.m_y,(float)m_fluidColor.m_z);
+    shader->setUniform("color",(float)m_fluidColor.x,(float)m_fluidColor.y,(float)m_fluidColor.z);
     //bind our bilateral render texture
     glActiveTexture(GL_TEXTURE0);
     (*tex)["bilateralRender"]->bind();

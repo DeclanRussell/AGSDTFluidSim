@@ -3,12 +3,13 @@
 #include "OpenGLWidget.h"
 #include <iostream>
 #include <time.h>
-
-
-#include <ngl/ShaderLib.h>
+#include <math.h>
 
 #include "GLTextureLib.h"
 #include "RenderTargetLib.h"
+#include "ShaderLib.h"
+
+#define DtoR M_PI/180.f
 
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief the increment for x/y translation with mouse movement
@@ -29,22 +30,29 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     m_spinXFace=0;
     m_spinYFace=0;
     m_pan = false;
-    m_modelPos=ngl::Vec3(0.0);
+    m_modelPos=glm::vec3(0.0);
     // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
     this->resize(_parent->size());
 }
 //----------------------------------------------------------------------------------------------------------------------
 OpenGLWidget::~OpenGLWidget(){
+    // Remove all our
     RenderTargetLib::getInstance()->destroy();
     GLTextureLib::getInstance()->destroy();
+    ShaderLib::getInstance()->destroy();
     std::cout<<"Shutting down NGL, removing VAO's and Shaders\n";
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::initializeGL(){
 
-    // we must call this first before any other GL commands to load and link the
-    // gl commands from the lib, if this is not done program will crash
-    ngl::NGLInit::instance();
+#ifndef DARWIN
+    glewExperimental = GL_TRUE;
+    GLenum error = glewInit();
+    if(error != GLEW_OK){
+        std::cerr<<"GLEW IS NOT OK!!! "<<std::endl;
+    }
+#endif
+
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     // enable depth testing for drawing
     glEnable(GL_DEPTH_TEST);
@@ -58,45 +66,41 @@ void OpenGLWidget::initializeGL(){
     glViewport(0,0,width(),height());
 
     //used for drawing text later
-    m_text = new ngl::Text(QFont("calibri",14));
+    m_text = new Text(QFont("calibri",14));
     m_text->setColour(255,0,0);
     m_text->setScreenSize(width(),height());
 
     // Initialise the model matrix
-    m_modelMatrix = ngl::Mat4(1.0);
+    m_modelMatrix = glm::mat4(1.0);
 
     // Initialize the camera
     // Now we will create a basic Camera from the graphics library
     // This is a static camera so it only needs to be set once
     // First create Values for the camera position
-    ngl::Vec3 from(5,0,15);
-    ngl::Vec3 to(5,0,0);
-    ngl::Vec3 up(0,1,0);
-    m_cam= new ngl::Camera(from,to,up);
+    glm::vec3 from(5,0,15);
+    glm::vec3 to(5,0,0);
+    glm::vec3 up(0,1,0);
+    m_cam= new Camera(from,to,up);
     // set the shape using FOV 45 Aspect Ratio based on Width and Height
     // The final two are near and far clipping planes of 0.1 and 100
-    m_cam->setShape(45,(float)width()/height(),1,100);
+    m_cam->setShape(45,(float)width(),(float)height(),1,100);
 
 
     //get an instance of our shader library
-    ngl::ShaderLib *shader=ngl::ShaderLib::instance();
+    ShaderLib *shader = ShaderLib::getInstance();
     //create our cuboid shader
     //Not the fastest way to draw cubes but could save some valuable global memory?
     //Also the geometry shader is really fun to use so why not!
     //create the program
     shader->createShaderProgram("CuboidShader");
     //add our shaders
-    shader->attachShader("cuboidVert",ngl::ShaderType::VERTEX);
-    shader->attachShader("cuboidGeom",ngl::ShaderType::GEOMETRY);
-    shader->attachShader("cuboidFrag",ngl::ShaderType::FRAGMENT);
+    shader->attachShader("cuboidVert",GL_VERTEX_SHADER);
+    shader->attachShader("cuboidGeom",GL_GEOMETRY_SHADER);
+    shader->attachShader("cuboidFrag",GL_FRAGMENT_SHADER);
     //load the source
     shader->loadShaderSource("cuboidVert","shaders/cuboidVert.glsl");
     shader->loadShaderSource("cuboidGeom","shaders/cuboidGeom.glsl");
     shader->loadShaderSource("cuboidFrag","shaders/cuboidFrag.glsl");
-    //compile them
-    shader->compileShader("cuboidVert");
-    shader->compileShader("cuboidGeom");
-    shader->compileShader("cuboidFrag");
     //attach them to our program
     shader->attachShaderToProgram("CuboidShader","cuboidVert");
     shader->attachShaderToProgram("CuboidShader","cuboidGeom");
@@ -110,9 +114,9 @@ void OpenGLWidget::initializeGL(){
     GLuint cubeVBO;
     glGenBuffers(1, &cubeVBO);
     glBindBuffer(GL_ARRAY_BUFFER,cubeVBO);
-    ngl::Vec3 nullpos(0,0,0);
-    glBufferData(GL_ARRAY_BUFFER,sizeof(ngl::Vec3),&nullpos,GL_STATIC_DRAW);
-    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,sizeof(ngl::Vec3),(GLvoid*)(0*sizeof(GL_FLOAT)));
+    glm::vec3 nullpos(0,0,0);
+    glBufferData(GL_ARRAY_BUFFER,sizeof(glm::vec3),&nullpos,GL_STATIC_DRAW);
+    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,sizeof(glm::vec3),(GLvoid*)(0*sizeof(GL_FLOAT)));
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER,0);
     glBindVertexArray(0);
@@ -125,7 +129,7 @@ void OpenGLWidget::initializeGL(){
 void OpenGLWidget::resizeGL(const int _w, const int _h){
     // set the viewport for openGL
     glViewport(0,0,_w,_h);
-    m_cam->setShape(45,(float)_w/_h, m_cam->getNear(),m_cam->getFar());
+    m_cam->setShape(45,(float)_w,(float)_h, m_cam->getNear(),m_cam->getFar());
     m_text->setScreenSize(_w,_h);
     for(unsigned int i=0;i<m_fluidShaders.size();i++){
         m_fluidShaders[i]->resize(_w,_h);
@@ -156,37 +160,36 @@ void OpenGLWidget::paintGL(){
         }
     }
 
-
     // create the rotation matrices
-    ngl::Mat4 rotX;
-    ngl::Mat4 rotY;
-    ngl::Mat4 rotXY;
-    rotX.rotateX(m_spinXFace);
-    rotY.rotateY(m_spinYFace);
-    rotXY = rotX*rotY;
+    glm::mat4 rotX;
+    glm::mat4 rotY;
+    glm::mat4 rotXY;
+    rotX = glm::rotate(rotX,(float)DtoR*m_spinXFace,glm::vec3(1,0,0));
+    rotY = glm::rotate(rotY,(float)DtoR*m_spinYFace,glm::vec3(0,1,0));
+    rotXY = rotY*rotX;
 
     //get an instance of our shader library
-    ngl::ShaderLib *shader=ngl::ShaderLib::instance();
+    ShaderLib *shader=ShaderLib::getInstance();
     //draw our fluid
-    ngl::Mat4 V = m_cam->getViewMatrix();
-    ngl::Mat4 P = m_cam->getProjectionMatrix();
+    glm::mat4 V = m_cam->getViewMatrix();
+    glm::mat4 P = m_cam->getProjectionMatrix();
     for(unsigned int i=0;i<m_fluidShaders.size();i++){
-        ngl::Mat4 M = m_mouseGlobalTX;
-        M.m_m[3][0] = m_fluidSimProps[i].m_simPosition.m_x;
-        M.m_m[3][1] = m_fluidSimProps[i].m_simPosition.m_y;
-        M.m_m[3][2] = m_fluidSimProps[i].m_simPosition.m_z;
-        M = M * rotXY;
-        M.m_m[3][0] += m_modelPos.m_x;
-        M.m_m[3][1] += m_modelPos.m_y;
-        M.m_m[3][2] += m_modelPos.m_z;
-        m_fluidShaders[i]->draw(m_SPHEngines[i]->getPositionBuffer(),m_SPHEngines[i]->getNumParticles(),M,V,P,rotXY,m_cam->getEye());
+        glm::mat4 M = m_mouseGlobalTX;
+        M[3][0] = m_fluidSimProps[i].m_simPosition.x;
+        M[3][1] = m_fluidSimProps[i].m_simPosition.y;
+        M[3][2] = m_fluidSimProps[i].m_simPosition.z;
+        M = rotXY * M;
+        M[3][0] += m_modelPos.x;
+        M[3][1] += m_modelPos.y;
+        M[3][2] += m_modelPos.z;
+        m_fluidShaders[i]->draw(m_SPHEngines[i]->getPositionBuffer(),m_SPHEngines[i]->getNumParticles(),M,V,P,rotXY,glm::vec4(m_cam->getPos(),1.0f));
         if(m_fluidSimProps[i].m_displayHud){
             (*shader)["CuboidShader"]->use();
             shader->setUniform("color",1.f,0.f,0.f);
             shader->setUniform("cubeMin",0.f,0.f,0.f);
             float boxSize = m_SPHEngines[i]->getGridSize();
             shader->setUniform("cubeMax",boxSize,boxSize,boxSize);
-            ngl::Mat4 MVP = M*m_cam->getVPMatrix();
+            glm::mat4 MVP = m_cam->getVPMatrix()*M;
             shader->setUniform("MVP",MVP);
             glDisable(GL_DEPTH_TEST);
             glBindVertexArray(m_cubeVAO);
@@ -257,7 +260,7 @@ void OpenGLWidget::loadCubeMap(QString _loc){
 void OpenGLWidget::addFluidSim(){
     //set up some inofrmation for when we update these simulations
     fluidSimProps props;
-    props.m_simPosition = ngl::Vec3(0,0,0);
+    props.m_simPosition = glm::vec3(0,0,0);
     props.m_update = false;
     props.m_timeStep = 0.004f;
     props.m_updateWithFixedTimeStep = true;
@@ -315,8 +318,8 @@ void OpenGLWidget::mouseMoveEvent (QMouseEvent * _event)
         int diffY = (int)(_event->y() - m_origYPos);
         m_origXPos=_event->x();
         m_origYPos=_event->y();
-        m_modelPos.m_x += INCREMENT * diffX;
-        m_modelPos.m_y -= INCREMENT * diffY;
+        m_modelPos.x += INCREMENT * diffX;
+        m_modelPos.y -= INCREMENT * diffY;
         updateGL();
     }
 }
@@ -358,11 +361,11 @@ void OpenGLWidget::wheelEvent(QWheelEvent *_event)
     // check the diff of the wheel position (0 means no change)
     if(_event->delta() > 0)
     {
-        m_modelPos.m_z+=ZOOM;
+        m_modelPos.z+=ZOOM;
     }
     else if(_event->delta() <0 )
     {
-        m_modelPos.m_z-=ZOOM;
+        m_modelPos.z-=ZOOM;
     }
     updateGL();
 }

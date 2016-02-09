@@ -27,7 +27,13 @@ SOURCES += \
     src/RenderBuffer.cpp \
     src/RenderTargetLib.cpp \
     src/FluidShader.cpp \
-    src/FluidPropDockWidget.cpp
+    src/FluidPropDockWidget.cpp \
+    src/Camera.cpp \
+    src/Text.cpp \
+    src/ShaderLib.cpp \
+    src/Shader.cpp \
+    src/ShaderProgram.cpp \
+    src/ShaderUtils.cpp
 
 SOURCES -= cudaSrc/*.cu
 
@@ -43,7 +49,13 @@ HEADERS += \
     include/RenderTargetLib.h \
     include/AbstractOpenGLObject.h \
     include/FluidShader.h \
-    include/FluidPropDockWidget.h
+    include/FluidPropDockWidget.h \
+    include/Camera.h \
+    include/Text.h \
+    include/ShaderLib.h \
+    include/Shader.h \
+    include/ShaderProgram.h \
+    include/ShaderUtils.h
 
 OTHER_FILES += shaders/*glsl \
     shaders/fluidShaderFrag.glsl \
@@ -69,72 +81,82 @@ DESTDIR=./
 
 CONFIG += console
 
-# note each command you add needs a ; as it will be run as a single line
-# first check if we are shadow building or not easiest way is to check out against current
-!equals(PWD, $${OUT_PWD}){
-        copydata.commands = echo "creating destination dirs" ;
-        # now make a dir
-        copydata.commands += mkdir -p $$OUT_PWD/shaders ;
-        copydata.commands += echo "copying files" ;
-        # then copy the files
-        copydata.commands += $(COPY_DIR) $$PWD/shaders/* $$OUT_PWD/shaders/ ;
-        # now make sure the first target is built before copy
-        first.depends = $(first) copydata
-        export(first.depends)
-        export(copydata.commands)
-        # now add it as an extra target
-        QMAKE_EXTRA_TARGETS += first copydata
+DEFINES += _USE_MATH_DEFINES
+#in on mac define DARWIN
+macx:DEFINES+=DARWIN
+win32:{
+    DEFINES+=WIN32
+    DEFINES+=_WIN32
+    DEFINES += GLEW_STATIC
+    INCLUDEPATH+=C:/boost
+    LIBS+= -lopengl32 -lglew32s
 }
-NGLPATH=$$(NGLDIR)
-isEmpty(NGLPATH){ # note brace must be here
-        message("including $HOME/NGL")
-        linux:include($(HOME)/NGL/UseNGL.pri)
-        macx:include($(HOME)/NGL/UseNGL.pri)
-        win32:include(C:/NGL/UseNGL.pri)
-}
-else{ # note brace must be here
-        message("Using custom NGL location")
-        include($(NGLDIR)/UseNGL.pri)
-}
+# basic compiler flags (not all appropriate for all platforms)
+QMAKE_CXXFLAGS+= -msse -msse2 -msse3
+# use this to suppress some warning from boost
+unix*:QMAKE_CXXFLAGS_WARN_ON += "-Wno-unused-parameter"
+
 
 #----------------------------------------------------------------
 #-------------------------Cuda setup-----------------------------
 #----------------------------------------------------------------
 
+#Enter your gencode here!
+GENCODE = arch=compute_52,code=sm_52
+
+#We must define this as we get some confilcs in minwindef.h and helper_math.h
+DEFINES += NOMINMAX
+
 #set out cuda sources
 CUDA_SOURCES = "$$PWD"/cudaSrc/*.cu
 
-message($$CUDA_SOURCES)
+#This is to add our .cu files to our file browser in Qt
+SOURCES+=cudaSrc/*cu
+SOURCES-=cudaSrc/*cu
 
 # Path to cuda SDK install
 macx:CUDA_DIR = /Developer/NVIDIA/CUDA-6.5
 linux:CUDA_DIR = /usr/local/cuda-6.5
-win32:CUDA_DIR = "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.0"
+win32:CUDA_DIR = "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5"
 # Path to cuda toolkit install
 macx:CUDA_SDK = /Developer/NVIDIA/CUDA-6.5/samples
 linux:CUDA_SDK = /usr/local/cuda-6.5/samples
-win32:CUDA_SDK = "C:\ProgramData\NVIDIA Corporation\CUDA Samples\v7.0"
+win32:CUDA_SDK = "C:\ProgramData\NVIDIA Corporation\CUDA Samples\v7.5"
 
 #Cuda include paths
 INCLUDEPATH += $$CUDA_DIR/include
 #INCLUDEPATH += $$CUDA_DIR/common/inc/
 #INCLUDEPATH += $$CUDA_DIR/../shared/inc/
+#To get some prewritten helper functions from NVIDIA
+win32:INCLUDEPATH += $$CUDA_SDK\common\inc
 
 
 #cuda libs
 macx:QMAKE_LIBDIR += $$CUDA_DIR/lib
 linux:QMAKE_LIBDIR += $$CUDA_DIR/lib64
-win32:QMAKE_LIBDIR += $$CUDA_DIR\lib\Win32
+win32:QMAKE_LIBDIR += $$CUDA_DIR\lib\x64
 linux|macx:QMAKE_LIBDIR += $$CUDA_SDK/common/lib
-win32:QMAKE_LIBDIR +=$$CUDA_SDK/common/lib/x64
+win32:QMAKE_LIBDIR +=$$CUDA_SDK\common\lib\x64
 LIBS += -lcudart -lcudadevrt
 
 # join the includes in a line
 CUDA_INC = $$join(INCLUDEPATH,'" -I"','-I"','"')
 
 # nvcc flags (ptxas option verbose is always useful)
-NVCCFLAGS = --compiler-options  -fno-strict-aliasing --ptxas-options=-v #-maxrregcount 20
+NVCCFLAGS = --compiler-options  -fno-strict-aliasing --ptxas-options=-v -maxrregcount 20
 
+#On windows we must define if we are in debug mode or not
+CONFIG(debug, debug|release) {
+#DEBUG
+    # MSVCRT link option (static or dynamic, it must be the same with your Qt SDK link option)
+    win32:MSVCRT_LINK_FLAG_DEBUG = "/MDd"
+    win32:NVCCFLAGS += -D_DEBUG -Xcompiler $$MSVCRT_LINK_FLAG_DEBUG
+}
+else{
+#Release UNTESTED!!!
+    win32:MSVCRT_LINK_FLAG_RELEASE = "/MD"
+    win32:NVCCFLAGS += -Xcompiler $$MSVCRT_LINK_FLAG_RELEASE
+}
 
 #prepare intermediat cuda compiler
 cudaIntr.input = CUDA_SOURCES
@@ -167,4 +189,8 @@ cuda.dependency_type = TYPE_C
 cuda.depend_command = $$CUDA_DIR/bin/nvcc -g -M $$CUDA_INC $$NVCCFLAGS   ${QMAKE_FILE_NAME}
 # Tell Qt that we want add more stuff to the Makefile
 QMAKE_EXTRA_UNIX_COMPILERS += cuda
+
+DISTFILES += \
+    shaders/TextFrag.glsl \
+    shaders/TextVert.glsl
 

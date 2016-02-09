@@ -1,181 +1,170 @@
+#ifndef SHADERLIB_H
+#define SHADERLIB_H
+
 //----------------------------------------------------------------------------------------------------------------------
-/// @file FluidShader.h
-/// @class FluidShader
+/// @file ShaderLib.h
+/// @class ShaderLib
 /// @author Declan Russell
-/// @date 28/04/2015
+/// @date 08/02/1016
 /// @version 1.0
-/// @brief Fluid shader. Method can be found at http://developer.download.nvidia.com/presentations/2010/gdc/Direct3D_Effects.pdf
+/// @brief Singleton class for creating, storing OpenGL shaders in a library
 //----------------------------------------------------------------------------------------------------------------------
 
-#ifndef FLUIDSHADER_H
-#define FLUIDSHADER_H
+#include <map>
+#include "ShaderProgram.h"
 
-#ifdef DARWIN
-    #include <OpenGL/gl3.h>
-#else
-    #include <GL/glew.h>
-    #ifndef WIN32
-        #include <GL/gl.h>
-    #endif
-#endif
-
-#include <glm/matrix.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/matrix_inverse.hpp>
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
-
-class FluidShader
+class ShaderLib
 {
 public:
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our default constructor that sets up our shader
-    /// @param _width  - the width of the window
-    /// @parma _height - the height of the window
+    /// @brief Accessor to the instance of our class
     //----------------------------------------------------------------------------------------------------------------------
-    FluidShader(int _width, int _height);
+    static ShaderLib *getInstance();
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our default destructor
+    /// @brief Our default destructor.
     //----------------------------------------------------------------------------------------------------------------------
-    ~FluidShader();
+    ~ShaderLib();
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief informas the shader of the screen size
-    /// @warning This need to be done before you initialise shader
+    /// @brief overloaded operators to access a shader program in our library
+    /// @param _name - Name of shader program we want from our library
     //----------------------------------------------------------------------------------------------------------------------
-    static inline void setScreenSize(int _w, int _h){m_width = _w;m_height = _h;}
+    ShaderProgram * operator[](const std::string &_name);
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief draws input points buffer with our fluid shader
-    /// @param _positionVAO - VAO that hold the position data of our particles
-    /// @param _numPoints - the number of points to draw
-    /// @param _M - model matrix of our scene
-    /// @param _V - view matrix of our scene
-    /// @param _P - projection matrix of our scene
-    /// @param _rotM - the rotation matrix of our scene to rotate our cube map
-    /// @param _eyePos - position of the camera in the scene
+    /// @brief overloaded operators to access a shader program in our library
+    /// @param _name - Name of shader program we want from our library
     //----------------------------------------------------------------------------------------------------------------------
-    void draw(GLuint _positionVAO, int _numPoints, glm::mat4 _M, glm::mat4 _V, glm::mat4 _P, glm::mat4 _rotM, glm::vec4 _eyePos);
+    ShaderProgram * operator[](const char *_name);
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief resizes our shader output
-    /// @brief if the screen resizes we need to notify this shader as it uses render targets
-    /// @param _w - width to resize
-    /// @param _h - height to risize
+    /// @brief Creates a shader program and adds it to our library
+    /// @param _name - Desired name of shader
     //----------------------------------------------------------------------------------------------------------------------
-    static void resize(int _w, int _h);
+    void createShaderProgram(std::string _name);
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief sets the shading cube map
-    /// @brief _width - width of our cube map textures
-    /// @brief _height - height of our cube map textures
-    /// @brief _front - front cube map texture
-    /// @brief _back - back cube map texture
-    /// @brief _top - top cube map texture
-    /// @brief _bottom - bottom cube map texture
-    /// @brief _left - left cube map texture
-    /// @brief _right - right cube map texture
+    /// @brief Creates a shader and adds it to our library
+    /// @param _name - Desired name for our shader
+    /// @param _type - Desired type of shader we wish to create
     //----------------------------------------------------------------------------------------------------------------------
-    static void setCubeMap(int _width, int _height, const GLvoid * _front, const GLvoid * _back, const GLvoid * _top, const GLvoid * _bottom, const GLvoid * _left, const GLvoid * _right);
+    void attachShader(std::string _name, GLenum _type);
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief sets our refraction ratio
+    /// @brief Loads a shader from source file
+    /// @param _name - Desired name for our shader
+    /// @param _loc - Location of shader source file
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setRefractionRatio(float _eta){m_refractionRatio = _eta; m_fresnalConst = (float)((1.0 - _eta) * (1.0 - _eta)) / ((1.0 + _eta) * (1.0 + _eta));}
+    void loadShaderSource(std::string _name, std::string _loc);
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief mutator for the fresnal power. this effects the reflection of our fluid
+    /// @brief Attaches a shader in our library to a shader program in our library
+    /// @param _programName - name of the shader program in our library we wish to attach our shader to.
+    /// @param _shaderName - name of the shader in our library we wish to attach to our program.
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setFresnalPower(float _power){m_fresnalPower = _power;}
+    void attachShaderToProgram(std::string _programName, std::string _shaderName);
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief set how big we want to draw our fluid particles
-    /// @param _size - desired size
+    /// @brief Links our shader program object from our library.
+    /// @param _name - name of shader program we wish to link.
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setPointSize(float _size){m_pointSize = _size;}
+    void linkProgramObject(std::string _name);
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief set how thick we want to render each particle
-    /// @param _thickness - desired thickness
+    /// @brief Use a shader program from our library.
+    /// @param _name - name of shader program we wish to link.
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setThickness(float _thickness){m_pointThickness = _thickness;}
+    void use(std::string _name);
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief set the blur fall off of our bilateral filter shader
-    /// @param _falloff - desired fall off value
+    /// @brief Deletes our library
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setBlurFalloff(float _falloff){m_blurFalloff = _falloff;}
+    inline void destroy(){ if(m_instance) delete m_instance; }
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief set the blur ratius of our bilateral filter shader
-    /// @param __radius - desired blue radius value
+    /// @brief Sets float uniform in current shader program
+    /// @param _name - Uniform name
+    /// @param _x - Desired value for uniform
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setBlurRadius(float _radius){m_blurRadius = _radius;}
+    void setUniform(std::string _name, float _x);
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief set the desired color of our fluid. Color values from 0-1.
-    /// @param _colR - red value
-    /// @param _colG - green value
-    /// @param _colB - blue value
+    /// @brief Sets float2 uniform in current shader program
+    /// @param _name - Uniform name
+    /// @param _x - Desired value for uniform
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setColor(float _colR, float _colG, float _colB){m_fluidColor = glm::vec3(_colR,_colG,_colB);}
+    void setUniform(std::string _name, float _x, float _y);
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief creates our shader
+    /// @brief Sets float3 uniform in current shader program
+    /// @param _name - Uniform name
+    /// @param _x - Desired value for uniform
     //----------------------------------------------------------------------------------------------------------------------
-    void init();
+    void setUniform(std::string _name, float _x, float _y, float _z);
     //----------------------------------------------------------------------------------------------------------------------
+    /// @brief Sets float4 uniform in current shader program
+    /// @param _name - Uniform name
+    /// @param _x - Desired value for uniform
+    //----------------------------------------------------------------------------------------------------------------------
+    void setUniform(std::string _name, float _x, float _y, float _z, float _w);
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief Sets int uniform in current shader program
+    /// @param _name - Uniform name
+    /// @param _x - Desired value for uniform
+    //----------------------------------------------------------------------------------------------------------------------
+    void setUniform(std::string _name, int _x);
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief Sets int2 uniform in current shader program
+    /// @param _name - Uniform name
+    /// @param _x - Desired value for uniform
+    //----------------------------------------------------------------------------------------------------------------------
+    void setUniform(std::string _name, int _x, int _y);
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief Sets int3 uniform in current shader program
+    /// @param _name - Uniform name
+    /// @param _x - Desired value for uniform
+    //----------------------------------------------------------------------------------------------------------------------
+    void setUniform(std::string _name, int _x, int _y, int _z);
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief Sets int4 uniform in current shader program
+    /// @param _name - Uniform name
+    /// @param _x - Desired value for uniform
+    //----------------------------------------------------------------------------------------------------------------------
+    void setUniform(std::string _name, int _x, int _y, int _z, int _w);
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief Sets Mat2 uniform in current shader program
+    /// @param _name - Uniform name
+    /// @param _m - Desired value matrix for uniform
+    //----------------------------------------------------------------------------------------------------------------------
+    void setUniform(std::string _name, glm::mat2 &_m);
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief Sets Mat3 uniform in current shader program
+    /// @param _name - Uniform name
+    /// @param _m - Desired value matrix for uniform
+    //----------------------------------------------------------------------------------------------------------------------
+    void setUniform(std::string _name, glm::mat3 &_m);
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief Sets Mat4 uniform in current shader program
+    /// @param _name - Uniform name
+    /// @param _m - Desired value matrix for uniform
+    //----------------------------------------------------------------------------------------------------------------------
+    void setUniform(std::string _name, glm::mat4 &_m);
+    //----------------------------------------------------------------------------------------------------------------------
+
 private:
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief static member so we know how many instances of the shader there are
+    /// @brief Our default contructor. As this is a singleton class we dont want this to be availible to access.
     //----------------------------------------------------------------------------------------------------------------------
-    static int m_instanceCount;
+    ShaderLib();
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief the id number of our shader instance
+    /// @brief Our instance of our shader library
     //----------------------------------------------------------------------------------------------------------------------
-    int m_instanceNo;
+    static ShaderLib *m_instance;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief bool to indicate if our cube map has been loaded in
+    /// @brief Map to store our Shader programs
     //----------------------------------------------------------------------------------------------------------------------
-    static bool m_cubeMapCreated;
+    std::map<std::string,ShaderProgram*> m_shaderPrograms;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our fluid color
+    /// @brief Map to store our Shaders
     //----------------------------------------------------------------------------------------------------------------------
-    glm::vec3 m_fluidColor;
+    std::map<std::string,Shader*> m_shaders;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief Bilateral filter blur radius
+    /// @brief Our current selected shader program
     //----------------------------------------------------------------------------------------------------------------------
-    float m_blurRadius;
+    ShaderProgram *m_currentProgram;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief Bilateral filter blur falloff
+    /// @brief Our current selected shader program name
     //----------------------------------------------------------------------------------------------------------------------
-    float m_blurFalloff;
+    std::string m_currentProgramName;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief the thickness of our points
-    //----------------------------------------------------------------------------------------------------------------------
-    float m_pointThickness;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief fresnal constant
-    //----------------------------------------------------------------------------------------------------------------------
-    float m_fresnalConst;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our Fresnal power, this effects our reflection
-    //----------------------------------------------------------------------------------------------------------------------
-    float m_fresnalPower;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our refraction ratio
-    //----------------------------------------------------------------------------------------------------------------------
-    float m_refractionRatio;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief cube VAO for rendering cube maps
-    //----------------------------------------------------------------------------------------------------------------------
-    GLuint m_cubeVAO;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief billboard VAO for rendering textures to screen
-    //----------------------------------------------------------------------------------------------------------------------
-    static GLuint m_billboardVAO;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief the size to draw our water particles
-    //----------------------------------------------------------------------------------------------------------------------
-    float m_pointSize;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief the width of the screen to shade in
-    //----------------------------------------------------------------------------------------------------------------------
-    static int m_width;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief the height of the screen to shade in
-    //----------------------------------------------------------------------------------------------------------------------
-    static int m_height;
-    //----------------------------------------------------------------------------------------------------------------------
-
 };
 
-#endif // FLUIDSHADER_H
+#endif // SHADERLIB_H
