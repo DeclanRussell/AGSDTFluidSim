@@ -45,4 +45,5 @@ void Camera::setShape(float _fov,float _w, float _h, float _near, float _far){
     m_near = _near;
     m_far = _far;
     setProjectionMatrix(m_fov, _w/_h, m_near, m_far);
+    m_VPMatrix = m_projectionMatrix * m_viewMatrix;
 }

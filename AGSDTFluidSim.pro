@@ -19,8 +19,7 @@ SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
     src/OpenGLWidget.cpp \
-    src/SPHEngine.cpp \
-    cudaSrc/*.cu \
+    #src/SPHEngine.cpp \
     src/GLTexture.cpp \
     src/GLTextureLib.cpp \
     src/FrameBuffer.cpp \
@@ -33,15 +32,14 @@ SOURCES += \
     src/ShaderLib.cpp \
     src/Shader.cpp \
     src/ShaderProgram.cpp \
-    src/ShaderUtils.cpp
-
-SOURCES -= cudaSrc/*.cu
+    src/ShaderUtils.cpp \
+    src/SPHSolverCUDA.cpp
 
 HEADERS += \
     include/mainwindow.h \
     include/OpenGLWidget.h \
-    include/CudaSPHKernals.h \
-    include/SPHEngine.h \
+    #include/CudaSPHKernals.h \
+    #include/SPHEngine.h \
     include/GLTexture.h \
     include/GLTextureLib.h \
     include/FrameBuffer.h \
@@ -55,7 +53,9 @@ HEADERS += \
     include/ShaderLib.h \
     include/Shader.h \
     include/ShaderProgram.h \
-    include/ShaderUtils.h
+    include/ShaderUtils.h \
+    include/SPHSolverCUDAKernals.h \
+    include/SPHSolverCUDA.h
 
 OTHER_FILES += shaders/*glsl \
     shaders/fluidShaderFrag.glsl \
@@ -69,7 +69,9 @@ OTHER_FILES += shaders/*glsl \
     mainpage.dox \
     shaders/cuboidVert.glsl \
     shaders/cuboidGeom.glsl \
-    shaders/cuboidFrag.glsl
+    shaders/cuboidFrag.glsl \
+    shaders/TextFrag.glsl \
+    shaders/TextVert.gls
 
 
 INCLUDEPATH +=./include
@@ -108,11 +110,11 @@ GENCODE = arch=compute_52,code=sm_52
 DEFINES += NOMINMAX
 
 #set out cuda sources
-CUDA_SOURCES = "$$PWD"/cudaSrc/*.cu
+CUDA_SOURCES = "$$PWD"/cudaSrc/SPHSolverCUDAKernals.cu
 
 #This is to add our .cu files to our file browser in Qt
-SOURCES+=cudaSrc/*cu
-SOURCES-=cudaSrc/*cu
+SOURCES+=cudaSrc/SPHSolverCUDAKernals.cu
+SOURCES-=cudaSrc/SPHSolverCUDAKernals.cu
 
 # Path to cuda SDK install
 macx:CUDA_DIR = /Developer/NVIDIA/CUDA-6.5
@@ -189,8 +191,4 @@ cuda.dependency_type = TYPE_C
 cuda.depend_command = $$CUDA_DIR/bin/nvcc -g -M $$CUDA_INC $$NVCCFLAGS   ${QMAKE_FILE_NAME}
 # Tell Qt that we want add more stuff to the Makefile
 QMAKE_EXTRA_UNIX_COMPILERS += cuda
-
-DISTFILES += \
-    shaders/TextFrag.glsl \
-    shaders/TextVert.glsl
 

@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent){
     format.setProfile(QGLFormat::CoreProfile);
 
     //do this so everything isnt so bunched up
-    this->setMinimumHeight(600);
+    resize(1000,600);
 
     //add our openGL context to our scene
     m_openGLWidget = new OpenGLWidget(format,this);

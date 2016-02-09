@@ -189,8 +189,9 @@ void main(void)
     //our fluid is.
     //texture can be more than value of 1 so if it is lets clamp it to 1
     refractColor = mix(refractColor,phong,(thickness>1)?1:thickness);
-    FragColor  = vec4(mix(refractColor, reflectColor, fresnalRatio),1.0);
+    FragColor  = vec4(mix(refractColor, reflectColor, 0.5/*fresnalRatio*/),1.0);
 
+    //FragColor = vec4(phong,1.0);
 
     //Debug:
     //position shading

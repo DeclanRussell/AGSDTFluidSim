@@ -17,7 +17,7 @@ in vec3 position;
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief radius of our points
 //----------------------------------------------------------------------------------------------------------------------
-uniform float pointRadius;
+uniform float pointSize;
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief projection matrix
 //----------------------------------------------------------------------------------------------------------------------
@@ -39,14 +39,14 @@ void  main(){
     normal.y*=-1.0;
     float r2 = dot(normal.xy, normal.xy);
     if (r2 > 1.0) discard; // kill pixels outside circle
-    normal.z = -sqrt(r2) * 2;
+    normal.z = sqrt(1.0 - r2);
 
 
 
     // calculate depth
     // point radius calculated from inverse projection * 0.5*pointSize
-    vec4 pixelPos = vec4(position + (normal * pointRadius * 2), 1.0);
-    pixelPos.z -= 1.5;
+    vec4 pixelPos = vec4(position + (normal * pointSize * 0.5), 1.0);
+    //pixelPos.z -= 1.5;
     vec4 clipSpacePos = P * pixelPos;
     vec3 depth = vec3(clipSpacePos.z / clipSpacePos.w);
 

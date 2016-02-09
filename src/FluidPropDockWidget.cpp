@@ -29,6 +29,7 @@ FluidPropDockWidget::FluidPropDockWidget(OpenGLWidget *_fluidWidget, QWidget *pa
     m_fluidGLWidget->addFluidSim();
     m_instanceNo = m_instanceCount;
     m_instanceCount++;
+    m_numPartToAdd = 50000;
     //QObjects manage there children and will delete them when they are deleted
     //therefore no need to keep them all as members
     //Add a group box for our shader properties
@@ -270,10 +271,12 @@ FluidPropDockWidget::FluidPropDockWidget(OpenGLWidget *_fluidWidget, QWidget *pa
     connect(addParticlesBtn,SIGNAL(pressed()),this,SLOT(addPartToSim()));
     fluidSimLayout->addWidget(addParticlesBtn,8,0,1,1);
 
-    m_numPartToAddSpn = new QSpinBox(fluidSimProp);
-    m_numPartToAddSpn->setMaximum(INFINITY);
-    m_numPartToAddSpn->setValue(50000);
-    fluidSimLayout->addWidget(m_numPartToAddSpn,8,1,1,1);
+    QSpinBox *numPartSPn = new QSpinBox(fluidSimProp);
+    numPartSPn->setMaximum((int)1000000);
+    numPartSPn->setSingleStep(1000);
+    numPartSPn->setValue(50000);
+    connect(numPartSPn,SIGNAL(valueChanged(int)),this,SLOT(setNumPart(int)));
+    fluidSimLayout->addWidget(numPartSPn,8,1,1,1);
 
     //add a check box for showing the hud
     QLabel *tglHudLbl = new QLabel("Toggle HUD:",fluidSimProp);
@@ -301,23 +304,6 @@ FluidPropDockWidget::FluidPropDockWidget(OpenGLWidget *_fluidWidget, QWidget *pa
     timeStepSpn->setSingleStep(0.001);
     connect(timeStepSpn,SIGNAL(valueChanged(double)),this,SLOT(setTimeStep(double)));
     playBckLayout->addWidget(timeStepSpn,0,1,1,1);
-
-    //slider for play back speed
-    QLabel *playSpeedLbl = new QLabel("Play back speed:",playbackGrb);
-    playBckLayout->addWidget(playSpeedLbl,1,0,1,1);
-    QSlider *playSpeedSld = new QSlider(Qt::Horizontal,playbackGrb);
-    playSpeedSld->setMinimum(0);
-    playSpeedSld->setMaximum(200);
-    playSpeedSld->setValue(100);
-    connect(playSpeedSld,SIGNAL(valueChanged(int)),this,SLOT(setPlaybackSpeed(int)));
-    playBckLayout->addWidget(playSpeedSld,1,1,1,1);
-    QSpinBox *playSpeedSpn = new QSpinBox(playbackGrb);
-    playSpeedSpn->setMaximum(200);
-    playSpeedSpn->setMinimum(0);
-    playSpeedSpn->setValue(100);
-    playSpeedSpn->setEnabled(false);
-    connect(playSpeedSld,SIGNAL(sliderMoved(int)),playSpeedSpn,SLOT(setValue(int)));
-    playBckLayout->addWidget(playSpeedSpn,1,2,1,1);
 
     //Reset button
     QPushButton *resetButton = new QPushButton("Reset Simulation",playbackGrb);

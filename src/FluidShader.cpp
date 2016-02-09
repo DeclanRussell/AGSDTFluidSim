@@ -402,14 +402,8 @@ void FluidShader::draw(GLuint _positionVAO, int _numPoints, glm::mat4 _M, glm::m
     ShaderLib *shader=ShaderLib::getInstance();
     (*shader)["ParticleDepth"]->use();
 
-    //calculate the eyespace radius of our points
-    glm::vec4 esr(m_pointSize,0,0,1.0);
-    esr = Pinv * esr;
-    //std::cout<<"real world size: "<<esr.m_x<<" "<<esr.m_y<<" "<<esr.m_y<<" "<<esr.m_w<<std::endl;
-
     shader->setUniform("screenWidth",m_width);
     shader->setUniform("pointSize",m_pointSize);
-    shader->setUniform("pointRadius",esr.x/esr.w);
     shader->setUniform("P",_P);
     shader->setUniform("MV",MV);
     shader->setUniform("MVP",MVP);

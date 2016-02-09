@@ -35,7 +35,7 @@
 #include <QTime>
 #include <QColor>
 
-#include "SPHEngine.h"
+#include "SPHSolverCUDA.h"
 #include "FluidShader.h"
 
 class OpenGLWidget : public QGLWidget
@@ -104,7 +104,7 @@ public slots:
     /// @param _z - z position of our simualtion
     /// @param _simNo - simulation to set the position of
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setSimPosition(float _x, float _y, float _z,int _simNo = 0){m_fluidSimProps[_simNo].m_simPosition = glm::vec3(_x,_y,_z);}
+    inline void setSimPosition(float _x, float _y, float _z,int _simNo = 0){m_fluidSimProps[_simNo].m_simPosition = make_float3(_x,_y,_z);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief slot to add a fluid simulation to our scene
     //----------------------------------------------------------------------------------------------------------------------
@@ -161,25 +161,25 @@ public slots:
     /// @param _mass - desired mass of particles
     /// @param _simNo - which simulation we want to change
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setMass(float _mass, int _simNo = 0){m_SPHEngines[_simNo]->setParticleMass(_mass);}
+    inline void setMass(float _mass, int _simNo = 0){m_SPHEngines[_simNo]->setMass(_mass);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief set density of our fluid slot
     /// @param _den - desired rest density
     /// @param _simNo - which simulation we want to change
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setDensity(float _den, int _simNo = 0){m_SPHEngines[_simNo]->setDesity(_den);}
+    inline void setDensity(float _den, int _simNo = 0){m_SPHEngines[_simNo]->setRestDensity(_den);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief set viscoty coeficient of our fluid slot
     /// @param _visc - viscosity coeficient
     /// @param _simNo - which simulation we want to change
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setViscCoef(float _visc, int _simNo = 0){m_SPHEngines[_simNo]->setViscCoef(_visc);}
+    inline void setViscCoef(float _visc, int _simNo = 0){}//m_SPHEngines[_simNo]->setViscCoef(_visc);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief set gas constant of our fluid slot
     /// @param _gasConst - gas constant
     /// @param _simNo - which simulation we want to change
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setGasConst(double _gasConst, int _simNo = 0){m_SPHEngines[_simNo]->setGasConstant(_gasConst);}
+    inline void setGasConst(double _gasConst, int _simNo = 0){m_SPHEngines[_simNo]->setKConst(_gasConst);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief set smoothing length of our fluid slot
     /// @param _len - smoothing length
@@ -193,22 +193,16 @@ public slots:
     //----------------------------------------------------------------------------------------------------------------------
     inline void setFluidColor(QColor _col, int _simNo = 0){m_fluidShaders[_simNo]->setColor(_col.redF(),_col.greenF(),_col.blueF());}
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief a slot to set the playback speed of our simulation
-    /// @param _speed - the speed of play back as a percentage 100.f is real time
-    /// @param _simNo - which simulation we want to change the play back speed in
-    //----------------------------------------------------------------------------------------------------------------------
-    inline void setPlaybackSpeed(float _speed, int _simNo = 0){m_fluidSimProps[_simNo].m_playSpeed = _speed;}
-    //----------------------------------------------------------------------------------------------------------------------
     /// @brief a slot to set the time step of our simulation
     /// @param _timeStep - the timeStep of our simulation
     /// @param _simNo - which simulation we want to change the play back speed in
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setSimTimeStep(float _timeStep, int _simNo = 0){m_fluidSimProps[_simNo].m_timeStep = _timeStep;}
+    inline void setSimTimeStep(float _timeStep, int _simNo = 0){m_SPHEngines[_simNo]->setTimeStep( _timeStep);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a slot to reset our simulation and remove all particles
     /// @brief _simNo - simulation number to reset
     //----------------------------------------------------------------------------------------------------------------------
-    inline void resetSim(int _simNo){m_SPHEngines[_simNo]->signalReset();}
+    inline void resetSim(int _simNo){}//m_SPHEngines[_simNo]->signalReset();}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a slot to set the spawn box position in our simulation
     /// @param _x - x position of spawn box location
@@ -216,25 +210,25 @@ public slots:
     /// @param _z - z position of spawn box location
     /// @param _simNo - simulation number to set the spawn box location
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setSpawnBoxPosition(float _x, float _y, float _z,int _simNo = 0){m_SPHEngines[_simNo]->setSpawnBoxPos(_x,_y,_z);}
+    inline void setSpawnBoxPosition(float _x, float _y, float _z,int _simNo = 0){}//m_SPHEngines[_simNo]->setSpawnBoxPos(_x,_y,_z);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a slot to set the spawn box size in our simulation
     /// @param _size - desired spawn box size
     /// @param _simNo - simulation number to set the spawn box size
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setSpawnBoxSize(float _size,int _simNo = 0){m_SPHEngines[_simNo]->setSpawnBoxSize(_size);}
+    inline void setSpawnBoxSize(float _size,int _simNo = 0){}//m_SPHEngines[_simNo]->setSpawnBoxSize(_size);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief slot to add particles to our simulation
     /// @param _numParticles - number of particles to add to simulation
     /// @param _simNo - simulation to add particles to
     //----------------------------------------------------------------------------------------------------------------------
-    inline void addParticlesToSim(int _numParticles,int _simNo = 0){m_SPHEngines[_simNo]->signalAddParticles(_numParticles);}
+    void addParticlesToSim(int _numParticles,int _simNo = 0);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief slot to set the velocity correction of our simulation
     /// @param _val - value of velocity correction
     /// @param _simNo - simulation to set velocity correction in
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setVelCorrection(float _val, int _simNo = 0){m_SPHEngines[_simNo]->setVelocityCorrection(_val);}
+    inline void setVelCorrection(float _val, int _simNo = 0){}//m_SPHEngines[_simNo]->setVelocityCorrection(_val);}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief slot to toggle display of the hud of our simulatio
     /// @param _display - bool to indicate if we want to display it or not
@@ -255,23 +249,23 @@ private:
         //----------------------------------------------------------------------------------------------------------------------
         /// @brief vector of our simulation positions
         //----------------------------------------------------------------------------------------------------------------------
-        glm::vec3 m_simPosition;
+        float3 m_simPosition;
         //----------------------------------------------------------------------------------------------------------------------
-        /// @brief the timestep to increment ouf simulation
+        /// @brief vector of our simulation size
         //----------------------------------------------------------------------------------------------------------------------
-        float m_timeStep;
+        float3 m_simSize;
+        //----------------------------------------------------------------------------------------------------------------------
+        /// @brief vector for spawn box minimum
+        //----------------------------------------------------------------------------------------------------------------------
+        float3 m_spawnMin;
+        //----------------------------------------------------------------------------------------------------------------------
+        /// @brief vector for our spawn box dimension
+        //----------------------------------------------------------------------------------------------------------------------
+        float3 m_spawnDim;
         //----------------------------------------------------------------------------------------------------------------------
         /// @brief a bool to tell us if we need to update our simulation
         //----------------------------------------------------------------------------------------------------------------------
         bool m_update;
-        //----------------------------------------------------------------------------------------------------------------------
-        /// @brief play speed
-        //----------------------------------------------------------------------------------------------------------------------
-        float m_playSpeed;
-        //----------------------------------------------------------------------------------------------------------------------
-        /// @brief bool to indicate if we want to update with a set time step or with actual time
-        //----------------------------------------------------------------------------------------------------------------------
-        bool m_updateWithFixedTimeStep;
         //----------------------------------------------------------------------------------------------------------------------
         /// @brief bool to indicate if we want to display the HUD
         //----------------------------------------------------------------------------------------------------------------------
@@ -285,7 +279,7 @@ private:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief Our SPHEngine that manages our particles.
     //----------------------------------------------------------------------------------------------------------------------
-    std::vector<SPHEngine *> m_SPHEngines;
+    std::vector<SPHSolverCUDA *> m_SPHEngines;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief Our fluid shader
     //----------------------------------------------------------------------------------------------------------------------

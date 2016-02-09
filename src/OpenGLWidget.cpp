@@ -18,7 +18,7 @@ const static float INCREMENT=0.01f;
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief the increment for the wheel zoom
 //----------------------------------------------------------------------------------------------------------------------
-const static float ZOOM=0.1f;
+const static float ZOOM=0.5f;
 
 OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidget(_format,_parent){
     // set this widget to have the initial keyboard focus
@@ -77,14 +77,13 @@ void OpenGLWidget::initializeGL(){
     // Now we will create a basic Camera from the graphics library
     // This is a static camera so it only needs to be set once
     // First create Values for the camera position
-    glm::vec3 from(5,0,15);
-    glm::vec3 to(5,0,0);
+    glm::vec3 from(0,0,10);
+    glm::vec3 to(0,0,0);
     glm::vec3 up(0,1,0);
     m_cam= new Camera(from,to,up);
     // set the shape using FOV 45 Aspect Ratio based on Width and Height
     // The final two are near and far clipping planes of 0.1 and 100
-    m_cam->setShape(45,(float)width(),(float)height(),1,100);
-
+    m_cam->setShape(90.f,(float)width(),(float)height(),0.1f,30.f);
 
     //get an instance of our shader library
     ShaderLib *shader = ShaderLib::getInstance();
@@ -151,12 +150,7 @@ void OpenGLWidget::paintGL(){
     //update our fluid simulations with our time step
     for(unsigned int i=0;i<m_SPHEngines.size();i++){
         if(m_fluidSimProps[i].m_update){
-            if(m_fluidSimProps[i].m_updateWithFixedTimeStep){
-                m_SPHEngines[i]->update((m_fluidSimProps[i].m_timeStep) * m_fluidSimProps[i].m_playSpeed);
-            }
-            else{
-                m_SPHEngines[i]->update(((float)msecsPassed/1000.f) * m_fluidSimProps[i].m_playSpeed);
-            }
+            m_SPHEngines[i]->update();
         }
     }
 
@@ -182,12 +176,12 @@ void OpenGLWidget::paintGL(){
         M[3][0] += m_modelPos.x;
         M[3][1] += m_modelPos.y;
         M[3][2] += m_modelPos.z;
-        m_fluidShaders[i]->draw(m_SPHEngines[i]->getPositionBuffer(),m_SPHEngines[i]->getNumParticles(),M,V,P,rotXY,glm::vec4(m_cam->getPos(),1.0f));
+        m_fluidShaders[i]->draw(m_SPHEngines[i]->getPositionsVAO(),m_SPHEngines[i]->getNumParticles(),M,V,P,rotXY,glm::vec4(m_cam->getPos(),1.0f));
         if(m_fluidSimProps[i].m_displayHud){
             (*shader)["CuboidShader"]->use();
             shader->setUniform("color",1.f,0.f,0.f);
             shader->setUniform("cubeMin",0.f,0.f,0.f);
-            float boxSize = m_SPHEngines[i]->getGridSize();
+            float boxSize = 5.f;
             shader->setUniform("cubeMax",boxSize,boxSize,boxSize);
             glm::mat4 MVP = m_cam->getVPMatrix()*M;
             shader->setUniform("MVP",MVP);
@@ -195,9 +189,9 @@ void OpenGLWidget::paintGL(){
             glBindVertexArray(m_cubeVAO);
             glDrawArrays(GL_POINTS,0,1);
             shader->setUniform("color",0.f,1.f,0.f);
-            float3 spawnPos = m_SPHEngines[i]->getSpawnBoxPos();
+            float3 spawnPos = make_float3(1,1,1);
             shader->setUniform("cubeMin",spawnPos.x,spawnPos.y,spawnPos.z);
-            float spawnboxSize = m_SPHEngines[i]->getSpawnBoxSize();
+            float spawnboxSize = 3.f;
             shader->setUniform("cubeMax",spawnPos.x+spawnboxSize,spawnPos.y+spawnboxSize,spawnPos.z+spawnboxSize);
             glDisable(GL_DEPTH_TEST);
             glBindVertexArray(m_cubeVAO);
@@ -230,7 +224,13 @@ void OpenGLWidget::paintGL(){
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::resizeGL(QResizeEvent *_event)
 {
-    resizeGL(_event->size().width(),_event->size().height());
+    // set the viewport for openGL
+    glViewport(0,0,_event->size().width(),_event->size().height());
+    m_cam->setShape(45.f,(float)_event->size().width(),(float)_event->size().height(), m_cam->getNear(),m_cam->getFar());
+    m_text->setScreenSize(_event->size().width(),_event->size().height());
+    for(unsigned int i=0;i<m_fluidShaders.size();i++){
+        m_fluidShaders[i]->resize(_event->size().width(),_event->size().height());
+    }
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::loadCubeMap(QString _loc){
@@ -257,14 +257,46 @@ void OpenGLWidget::loadCubeMap(QString _loc){
 
 }
 //----------------------------------------------------------------------------------------------------------------------
+void OpenGLWidget::addParticlesToSim(int _numParticles, int _simNo)
+{
+    std::cout<<"sim num "<<_simNo<<std::endl;
+    std::cout<<"here"<<std::endl;
+    fluidSimProps props = m_fluidSimProps[_simNo];
+
+    // Create our particle positions
+    float tx,ty,tz;
+    float increment = pow((props.m_spawnDim.x*props.m_spawnDim.y*props.m_spawnDim.z)/_numParticles,1.f/3.f);
+    float3 min = props.m_spawnMin;
+    float3 max = props.m_spawnMin + props.m_spawnDim;
+    tx=1.f;
+    ty=1.f;
+    tz=1.f;
+    float3 tempF3;
+    std::vector<float3> particles;
+    std::cout<<"here2 num p"<<_numParticles<<std::endl;
+    for(unsigned int i=0; i<_numParticles; i++){
+        if(tx>=(max.x)){ tx=min.x; tz+=increment;}
+        if(tz>=(max.z)){ tz=min.z; ty+=increment;}
+        tempF3.x = tx;
+        tempF3.y = ty;
+        tempF3.z = tz;
+        particles.push_back(tempF3);
+        tx+=increment;
+    }
+std::cout<<"here3"<<std::endl;
+    // Add particles to sim
+    m_SPHEngines[_simNo]->setParticles(particles);
+    std::cout<<"here4"<<std::endl;
+}
+//----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::addFluidSim(){
     //set up some inofrmation for when we update these simulations
     fluidSimProps props;
-    props.m_simPosition = glm::vec3(0,0,0);
+    props.m_simPosition = make_float3(0,0,0);
+    props.m_simSize = make_float3(5,5,5);
+    props.m_spawnMin = make_float3(1,1,1);
+    props.m_spawnDim = make_float3(3,3,3);
     props.m_update = false;
-    props.m_timeStep = 0.004f;
-    props.m_updateWithFixedTimeStep = true;
-    props.m_playSpeed = 1.f;
     props.m_displayHud = false;
 
     m_fluidSimProps.push_back(props);
@@ -277,8 +309,12 @@ void OpenGLWidget::addFluidSim(){
     }
     m_fluidShaders[m_fluidShaders.size()-1]->init();
 
+    SPHSolverCUDA *sim = new SPHSolverCUDA();
+    sim->setHashPosAndDim(props.m_simPosition,props.m_simSize);
+    sim->setTensionConst(1.f);
+
     //allocate some space for our SPHEngine
-    m_SPHEngines.push_back(new SPHEngine());
+    m_SPHEngines.push_back(sim);
 }
 
 
@@ -289,7 +325,7 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *_event){
     }
     if(_event->key()==Qt::Key_E){
         for(unsigned int i=0;i<m_SPHEngines.size();i++){
-            m_SPHEngines[i]->update(0.001f);
+            m_SPHEngines[i]->update();
         }
     }
     if(_event->key()==Qt::Key_R){
