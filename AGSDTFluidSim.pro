@@ -145,7 +145,7 @@ LIBS += -lcudart -lcudadevrt
 CUDA_INC = $$join(INCLUDEPATH,'" -I"','-I"','"')
 
 # nvcc flags (ptxas option verbose is always useful)
-NVCCFLAGS = --compiler-options  -fno-strict-aliasing --ptxas-options=-v -maxrregcount 20
+NVCCFLAGS = --compiler-options  -fno-strict-aliasing --ptxas-options=-v -maxrregcount 20 --use_fast_math
 
 #On windows we must define if we are in debug mode or not
 CONFIG(debug, debug|release) {

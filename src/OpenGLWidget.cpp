@@ -288,7 +288,7 @@ void OpenGLWidget::addFluidSim(){
     //set up some inofrmation for when we update these simulations
     fluidSimProps props;
     props.m_simPosition = make_float3(0,0,0);
-    props.m_simSize = make_float3(5,5,5);
+    props.m_simSize = make_float3(10,10,10);
     props.m_spawnMin = make_float3(1,1,1);
     props.m_spawnDim = make_float3(3,3,3);
     props.m_update = false;

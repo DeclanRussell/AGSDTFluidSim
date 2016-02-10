@@ -191,7 +191,7 @@ __global__ void solveDensityKernal(int _numParticles, fluidBuffers _buff)
 //----------------------------------------------------------------------------------------------------------------------
 __global__ void solveForcesKernal(int _numParticles, fluidBuffers _buff)
 {
-    int idx = threadIdx.x + blockIdx.x * blockDim.x;
+    int idx = threadIdx.x + __mul24(blockIdx.x ,blockDim.x);
     if(idx<_numParticles)
     {
 

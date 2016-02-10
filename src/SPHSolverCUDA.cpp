@@ -47,7 +47,7 @@ SPHSolverCUDA::SPHSolverCUDA()
     m_simProperties.tension = 1.f;
     m_simProperties.viscosity = 0.3f;
     m_simProperties.mass = 1.f;//0.0002f;
-    m_simProperties.restDensity = 1000.f;
+    m_simProperties.restDensity = 500.f;
     // Send these to the GPU
     updateGPUSimProps();
 

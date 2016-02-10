@@ -172,7 +172,7 @@ FluidPropDockWidget::FluidPropDockWidget(OpenGLWidget *_fluidWidget, QWidget *pa
     QDoubleSpinBox *denSpnBx = new QDoubleSpinBox(fluidSimProp);
     denSpnBx->setDecimals(4);
     denSpnBx->setMaximum(INFINITY);
-    denSpnBx->setValue(1000.0);
+    denSpnBx->setValue(500.0);
     denSpnBx->setMinimum(0);
     denSpnBx->setSingleStep(1);
     denSpnBx->setDecimals(3);
