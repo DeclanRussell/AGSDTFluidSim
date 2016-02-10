@@ -180,19 +180,17 @@ void OpenGLWidget::paintGL(){
         if(m_fluidSimProps[i].m_displayHud){
             (*shader)["CuboidShader"]->use();
             shader->setUniform("color",1.f,0.f,0.f);
-            shader->setUniform("cubeMin",0.f,0.f,0.f);
-            float boxSize = 5.f;
-            shader->setUniform("cubeMax",boxSize,boxSize,boxSize);
+            shader->setUniform("cubeMin",m_fluidSimProps[i].m_simPosition.x,m_fluidSimProps[i].m_simPosition.y,m_fluidSimProps[i].m_simPosition.z);
+            float3 boxMax = m_fluidSimProps[i].m_simPosition + m_fluidSimProps[i].m_simSize;
+            shader->setUniform("cubeMax",boxMax.z,boxMax.y,boxMax.z);
             glm::mat4 MVP = m_cam->getVPMatrix()*M;
             shader->setUniform("MVP",MVP);
             glDisable(GL_DEPTH_TEST);
             glBindVertexArray(m_cubeVAO);
             glDrawArrays(GL_POINTS,0,1);
             shader->setUniform("color",0.f,1.f,0.f);
-            float3 spawnPos = make_float3(1,1,1);
-            shader->setUniform("cubeMin",spawnPos.x,spawnPos.y,spawnPos.z);
-            float spawnboxSize = 3.f;
-            shader->setUniform("cubeMax",spawnPos.x+spawnboxSize,spawnPos.y+spawnboxSize,spawnPos.z+spawnboxSize);
+            shader->setUniform("cubeMin",m_fluidSimProps[i].m_spawnMin.x,m_fluidSimProps[i].m_spawnMin.y,m_fluidSimProps[i].m_spawnMin.z);
+            shader->setUniform("cubeMax",m_fluidSimProps[i].m_spawnMin.x+m_fluidSimProps[i].m_spawnDim.x,m_fluidSimProps[i].m_spawnMin.y+m_fluidSimProps[i].m_spawnDim.y,m_fluidSimProps[i].m_spawnMin.z+m_fluidSimProps[i].m_spawnDim.z);
             glDisable(GL_DEPTH_TEST);
             glBindVertexArray(m_cubeVAO);
             glDrawArrays(GL_POINTS,0,1);
