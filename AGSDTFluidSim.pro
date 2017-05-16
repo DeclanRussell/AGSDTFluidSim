@@ -119,11 +119,11 @@ SOURCES-=cudaSrc/SPHSolverCUDAKernals.cu
 # Path to cuda SDK install
 macx:CUDA_DIR = /Developer/NVIDIA/CUDA-6.5
 linux:CUDA_DIR = /usr/local/cuda-6.5
-win32:CUDA_DIR = "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5"
+win32:CUDA_DIR = "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0"
 # Path to cuda toolkit install
 macx:CUDA_SDK = /Developer/NVIDIA/CUDA-6.5/samples
 linux:CUDA_SDK = /usr/local/cuda-6.5/samples
-win32:CUDA_SDK = "C:\ProgramData\NVIDIA Corporation\CUDA Samples\v7.5"
+win32:CUDA_SDK = "C:\ProgramData\NVIDIA Corporation\CUDA Samples\v8.0"
 
 #Cuda include paths
 INCLUDEPATH += $$CUDA_DIR/include

@@ -40,13 +40,14 @@ SPHSolverCUDA::SPHSolverCUDA()
 
     m_simProperties.gridDim = make_float3(0,0,0);
     setSmoothingLength(0.3f);
-    setHashPosAndDim(make_float3(0.f,0.f,0.f),make_float3(5.f,5.f,5.f));
+    setHashPosAndDim(make_float3(0.f,0.f,0.f),make_float3(10.f,10.f,10.f));
     m_simProperties.timeStep = 0.004f;
     m_simProperties.gravity = make_float3(0.f,-9.8f,0.f);
     m_simProperties.k = SpeedOfSound;//*SpeedOfSound;
     m_simProperties.tension = 1.f;
     m_simProperties.viscosity = 0.3f;
     m_simProperties.mass = 1.f;//0.0002f;
+    m_simProperties.invMass = 1.f/m_simProperties.mass;
     m_simProperties.restDensity = 500.f;
     // Send these to the GPU
     updateGPUSimProps();
@@ -172,6 +173,7 @@ void SPHSolverCUDA::setHashPosAndDim(float3 _gridMin, float3 _gridDim)
 {
     m_simProperties.gridMin = _gridMin;
     m_simProperties.gridDim = _gridDim;
+    m_simProperties.invGridDim = make_float3(1.f/_gridDim.x,1.f/_gridDim.y,1.f/_gridDim.z);
     m_simProperties.gridRes.x = (int)ceil(_gridDim.x/m_simProperties.h);
     m_simProperties.gridRes.y = (int)ceil(_gridDim.y/m_simProperties.h);
     m_simProperties.gridRes.z = (int)ceil(_gridDim.z/m_simProperties.h);

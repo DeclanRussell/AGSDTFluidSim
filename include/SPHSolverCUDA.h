@@ -65,7 +65,7 @@ public:
     /// @brief set the mass of our particles
     /// @param _m - mass of our particles (float)
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setMass(float _m){m_simProperties.mass = _m; updateGPUSimProps();}
+    inline void setMass(float _m){m_simProperties.mass = _m; m_simProperties.invMass = 1.f/_m; updateGPUSimProps();}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief accessor to the mass of our particles
     //----------------------------------------------------------------------------------------------------------------------

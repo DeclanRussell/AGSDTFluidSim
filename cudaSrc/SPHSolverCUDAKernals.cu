@@ -154,7 +154,7 @@ __global__ void solveDensityKernal(int _numParticles, fluidBuffers _buff)
     {
         // Get our particle position
         float3 pi = _buff.posPtr[idx];
-        int key = floor((pi.x/props.gridDim.x)*props.gridRes.x) + (floor((pi.y/props.gridDim.y)*props.gridRes.y)*props.gridRes.x) + (floor((pi.z/props.gridDim.z)*props.gridRes.z)*props.gridRes.x*props.gridRes.y);
+        int key = floor((pi.x*props.invGridDim.x)*props.gridRes.x) + (floor((pi.y*props.invGridDim.y)*props.gridRes.y)*props.gridRes.x) + (floor((pi.z*props.invGridDim.z)*props.gridRes.z)*props.gridRes.x*props.gridRes.y);
 
         // Get our neighbouring cell locations for this particle
         cellInfo nCells = _buff.hashMap[key];
@@ -198,14 +198,14 @@ __global__ void solveForcesKernal(int _numParticles, fluidBuffers _buff)
         // Get our particle position and density
         float3 pi = _buff.posPtr[idx];
         float di = _buff.denPtr[idx];
-        float3 acc = make_float3(0.f,0.f,0.f);
         float3 vel = _buff.velPtr[idx];
+        float3 acc = make_float3(0.f,0.f,0.f);
 
         // Put this in its own scope means we get some registers back at the end of it (I think)
         if(di>0.f)
         {
             // Calculate our hash key
-            int key = floor((pi.x/props.gridDim.x)*props.gridRes.x) + (floor((pi.y/props.gridDim.y)*props.gridRes.y)*props.gridRes.x) + (floor((pi.z/props.gridDim.z)*props.gridRes.z)*props.gridRes.x*props.gridRes.y);
+            int key = floor((pi.x*props.invGridDim.x)*props.gridRes.x) + (floor((pi.y*props.invGridDim.y)*props.gridRes.y)*props.gridRes.x) + (floor((pi.z*props.invGridDim.z)*props.gridRes.z)*props.gridRes.x*props.gridRes.y);
 
             // Get our neighbouring cell locations for this particle
             cellInfo nCells = _buff.hashMap[key];
@@ -267,7 +267,7 @@ __global__ void solveForcesKernal(int _numParticles, fluidBuffers _buff)
             // Complete our pressure force term
             presForce*=-1.f*props.mass;
 
-            acc = (presForce + coheForce + viscForce + props.gravity)/props.mass;
+            acc = (presForce + coheForce + viscForce + props.gravity)*props.invMass;
         }
 
         // Now lets integerate our acceleration using leapfrog to get our new position
